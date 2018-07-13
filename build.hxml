@@ -1,0 +1,16 @@
+-lib haxe-loader
+-lib react
+-lib react-router
+-lib redux
+
+-cp lib
+-cp src
+
+-D react_hot
+#-D redux_global
+
+-js crm.js
+-main App
+
+#--times
+#-D macro-times
