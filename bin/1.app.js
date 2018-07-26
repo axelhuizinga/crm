@@ -1,45 +1,37 @@
 webpackJsonp([1],{
 
-/***/ "./node_modules/haxe-loader/index.js?build/view_DashBoard!./":
+/***/ "./node_modules/haxe-loader/index.js?build/view_QC!./":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {/* eslint-disable */ 
 var $hx_exports = module.exports, $global = global;
 var $s = $global.$hx_scope;
-var React_Component = $s.a, $extend = $s.b, haxe_Log = $s.c, React = $s.d;
+var React_Component = $s.a, haxe_Log = $s.c, $extend = $s.b;
 $hx_exports["me"] = $hx_exports["me"] || {};
 $hx_exports["me"]["cunity"] = $hx_exports["me"]["cunity"] || {};
 $hx_exports["me"]["cunity"]["debug"] = $hx_exports["me"]["cunity"]["debug"] || {};
 $hx_exports["me"]["cunity"]["debug"]["Out"] = $hx_exports["me"]["cunity"]["debug"]["Out"] || {};
-var bulma_$components_Button = __webpack_require__("./node_modules/reactbulma/lib/components/index.js").Button;
-var Icon = __webpack_require__("./node_modules/reactbulma/lib/components/index.js").Icon;
 var react_redux_form_ControlText = __webpack_require__("./node_modules/react-redux-form/lib/index.js").Control.text;
-var view_DashBoard = $hx_exports["default"] = function(props,context) {
+var view_QC = $hx_exports["default"] = function(props,context) {
 	React_Component.call(this,props,context);
 };
-view_DashBoard.__name__ = ["view","DashBoard"];
-view_DashBoard.__super__ = React_Component;
-view_DashBoard.prototype = $extend(React_Component.prototype,{
-	dump: function(el) {
-		haxe_Log.trace(el,{ fileName : "DashBoard.hx", lineNumber : 22, className : "view.DashBoard", methodName : "dump"});
-		return "OK";
+view_QC.__name__ = ["view","QC"];
+view_QC.onLoad = function() {
+	haxe_Log.trace(666,{ fileName : "QC.hx", lineNumber : 13, className : "view.QC", methodName : "onLoad"});
+};
+view_QC.__super__ = React_Component;
+view_QC.prototype = $extend(React_Component.prototype,{
+	render: function() {
+		haxe_Log.trace(this.props,{ fileName : "QC.hx", lineNumber : 17, className : "view.QC", methodName : "render"});
+		return { "$$typeof" : $$tre, type : "div", props : { className : "tabComponent", children : { "$$typeof" : $$tre, type : "h3", props : { children : { "$$typeof" : $$tre, type : "div", props : { style : { color : "green"}, children : ["Route:",this.props.location.pathname]}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null};
 	}
-	,render: function() {
-		haxe_Log.trace(this.props,{ fileName : "DashBoard.hx", lineNumber : 27, className : "view.DashBoard", methodName : "render"});
-		var tmp = $$tre;
-		var tmp1 = { "$$typeof" : $$tre, type : "form", props : { id : "user-login", children : [{ "$$typeof" : $$tre, type : "label", props : { htmlFor : "user.firstName", children : "Vorname:"}, key : null, ref : null},React.createElement(react_redux_form_ControlText,{ id : "user.firstName", model : "user.firstName"}),{ "$$typeof" : $$tre, type : "button", props : { type : "submit", className : "mb-4 btn btn-primary", children : "Submit "}, key : null, ref : null},"\t\t\t\t\t"]}, key : null, ref : null};
-		var tmp2 = { "$$typeof" : $$tre, type : "span", props : { children : "Download"}, key : null, ref : null};
-		var tmp3 = React.createElement(Icon,{ small : true},{ "$$typeof" : $$tre, type : "i", props : { className : "fa fa-download"}, key : null, ref : null});
-		return { $$typeof : tmp, type : "div", props : { className : "dashboard", children : [tmp1,React.createElement(bulma_$components_Button,{ success : true},tmp2,tmp3)]}, key : null, ref : null};
-	}
-	,__class__: view_DashBoard
+	,__class__: view_QC
 });
 var $_, $fid = 0;
 var $$tre = (typeof Symbol === "function" && Symbol.for && Symbol.for("react.element")) || 0xeac7;
-view_DashBoard.user = { firstName : "dummy"};
-view_DashBoard.displayName = "DashBoard";
-$s.view_DashBoard = view_DashBoard; 
+view_QC.displayName = "QC";
+$s.view_QC = view_QC; 
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/global.js")))
 

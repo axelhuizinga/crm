@@ -1313,6 +1313,24 @@ react_router_bundle_BundleLoader3.render = function(props) {
 		return exports;
 	})}));
 };
+var react_router_bundle_BundleLoader4 = function() { };
+react_router_bundle_BundleLoader4.__name__ = ["react","router","bundle","BundleLoader4"];
+react_router_bundle_BundleLoader4.render = function(props) {
+	return React.createElement(react_router_bundle_BundleWrapper,react_ReactUtil.copy(props,{ loader : System.import("!haxe-loader?null/view_Contacts!").then(function(exports) {
+		view_Contacts = $s.view_Contacts;
+		var _ = view_Contacts;
+		return exports;
+	})}));
+};
+var react_router_bundle_BundleLoader5 = function() { };
+react_router_bundle_BundleLoader5.__name__ = ["react","router","bundle","BundleLoader5"];
+react_router_bundle_BundleLoader5.render = function(props) {
+	return React.createElement(react_router_bundle_BundleWrapper,react_ReactUtil.copy(props,{ loader : System.import("!haxe-loader?null/view_Contacts!").then(function(exports) {
+		view_Contacts = $s.view_Contacts;
+		var _ = view_Contacts;
+		return exports;
+	})}));
+};
 var react_router_bundle__$BundleWrapper_BundledComponent_$Impl_$ = {};
 react_router_bundle__$BundleWrapper_BundledComponent_$Impl_$.__name__ = ["react","router","bundle","_BundleWrapper","BundledComponent_Impl_"];
 react_router_bundle__$BundleWrapper_BundledComponent_$Impl_$.firstLoad = function(this1) {
@@ -1484,7 +1502,7 @@ view_Contacts.__name__ = ["view","Contacts"];
 view_Contacts.__super__ = React_Component;
 view_Contacts.prototype = $extend(React_Component.prototype,{
 	render: function() {
-		return { "$$typeof" : $$tre, type : "div", props : { className : "dashboard"}, key : null, ref : null};
+		return { "$$typeof" : $$tre, type : "div", props : { className : "tabComponent"}, key : null, ref : null};
 	}
 	,__class__: view_Contacts
 });
@@ -1504,7 +1522,7 @@ view_DashBoard.prototype = $extend(React_Component.prototype,{
 		var tmp1 = { "$$typeof" : $$tre, type : "form", props : { id : "user-login", children : [{ "$$typeof" : $$tre, type : "label", props : { htmlFor : "user.firstName", children : "Vorname:"}, key : null, ref : null},React.createElement(react_redux_form_ControlText,{ id : "user.firstName", model : "user.firstName"}),{ "$$typeof" : $$tre, type : "button", props : { type : "submit", className : "mb-4 btn btn-primary", children : "Submit "}, key : null, ref : null},"\t\t\t\t\t"]}, key : null, ref : null};
 		var tmp2 = { "$$typeof" : $$tre, type : "span", props : { children : "Download"}, key : null, ref : null};
 		var tmp3 = React.createElement(Icon,{ small : true},{ "$$typeof" : $$tre, type : "i", props : { className : "fa fa-download"}, key : null, ref : null});
-		return { $$typeof : tmp, type : "div", props : { className : "dashboard", children : [tmp1,React.createElement(bulma_$components_Button,{ success : true},tmp2,tmp3)]}, key : null, ref : null};
+		return { $$typeof : tmp, type : "div", props : { className : "tabComponent", children : [tmp1,React.createElement(bulma_$components_Button,{ success : true},tmp2,tmp3)]}, key : null, ref : null};
 	}
 	,__class__: view_DashBoard
 });
@@ -1523,14 +1541,16 @@ view_NavTabs.prototype = $extend(React_Component.prototype,{
 		var tmp = $$tre;
 		var tmp1 = { "$$typeof" : $$tre, type : $bind(this,this.TabLink), props : Object.assign({ },this.props,{ to : "/dashboard", children : "DashBoard"}), key : null, ref : null};
 		var tmp2 = { "$$typeof" : $$tre, type : $bind(this,this.TabLink), props : Object.assign({ },this.props,{ to : "/qc", children : "QC"}), key : null, ref : null};
-		var tmp3 = $$tre;
-		var tmp4 = Object.assign({ },this.props,{ to : "/contacts", children : "Contacts"});
-		var tmp5 = React.createElement(bulma_$components_Tabs,{ centered : true},"\t\t\t\t","\t\t\t\t",{ $$typeof : tmp, type : "ul", props : { children : [tmp1," ",tmp2,{ $$typeof : tmp3, type : $bind(this,this.TabLink), props : tmp4, key : null, ref : null}]}, key : null, ref : null});
-		return React.createElement(React.Fragment,{ },tmp5,"\t",this.props.children);
+		var tmp3 = { "$$typeof" : $$tre, type : $bind(this,this.TabLink), props : Object.assign({ },this.props,{ to : "/contacts", children : "Kontakte"}), key : null, ref : null};
+		var tmp4 = { "$$typeof" : $$tre, type : $bind(this,this.TabLink), props : Object.assign({ },this.props,{ to : "/accounting", children : "Buchhaltung"}), key : null, ref : null};
+		var tmp5 = $$tre;
+		var tmp6 = Object.assign({ },this.props,{ to : "/reports", children : "Berichte"});
+		var tmp7 = React.createElement(bulma_$components_Tabs,{ centered : true, boxed : true},"\t\t\t\t","\t\t\t\t",{ $$typeof : tmp, type : "ul", props : { children : [tmp1," ",tmp2,tmp3,tmp4,{ $$typeof : tmp5, type : $bind(this,this.TabLink), props : tmp6, key : null, ref : null}]}, key : null, ref : null});
+		return React.createElement(React.Fragment,{ },tmp7,"\t",this.props.children);
 	}
 	,TabLink: function(rprops) {
-		haxe_Log.trace(rprops,{ fileName : "NavTabs.hx", lineNumber : 47, className : "view.NavTabs", methodName : "TabLink"});
-		haxe_Log.trace(Reflect.fields(rprops),{ fileName : "NavTabs.hx", lineNumber : 48, className : "view.NavTabs", methodName : "TabLink"});
+		haxe_Log.trace(rprops,{ fileName : "NavTabs.hx", lineNumber : 49, className : "view.NavTabs", methodName : "TabLink"});
+		haxe_Log.trace(Reflect.fields(rprops),{ fileName : "NavTabs.hx", lineNumber : 50, className : "view.NavTabs", methodName : "TabLink"});
 		return { "$$typeof" : $$tre, type : "li", props : { className : rprops.to == rprops.location.pathname ? "is-active" : "", children : React.createElement(react_router_NavLink,{ to : rprops.to},rprops.children)}, key : null, ref : null};
 	}
 	,__class__: view_NavTabs
@@ -1546,7 +1566,7 @@ view_QC.__super__ = React_Component;
 view_QC.prototype = $extend(React_Component.prototype,{
 	render: function() {
 		haxe_Log.trace(this.props,{ fileName : "QC.hx", lineNumber : 17, className : "view.QC", methodName : "render"});
-		return { "$$typeof" : $$tre, type : "div", props : { className : "dashboard", children : { "$$typeof" : $$tre, type : "h3", props : { children : { "$$typeof" : $$tre, type : "div", props : { style : { color : "green"}, children : ["Route:",this.props.location.pathname]}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null};
+		return { "$$typeof" : $$tre, type : "div", props : { className : "tabComponent", children : { "$$typeof" : $$tre, type : "h3", props : { children : { "$$typeof" : $$tre, type : "div", props : { style : { color : "green"}, children : ["Route:",this.props.location.pathname]}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null};
 	}
 	,__class__: view_QC
 });
@@ -1563,19 +1583,19 @@ view_Statistics.prototype = $extend(React_Component.prototype,{
 });
 var view_UiView = function(props,state) {
 	this.tabList = [{ "id" : 1, "component" : view_DashBoard, "label" : "DashBoard", "url" : "/dashboard"},{ "id" : 2, "component" : view_Contacts, "label" : "Contacts", "url" : "/contacts"},{ "id" : 3, "component" : view_QC, "label" : "QC", "url" : "/qc"}];
-	haxe_Log.trace(props,{ fileName : "UiView.hx", lineNumber : 76, className : "view.UiView", methodName : "new"});
-	haxe_Log.trace(state,{ fileName : "UiView.hx", lineNumber : 77, className : "view.UiView", methodName : "new"});
+	haxe_Log.trace(props,{ fileName : "UiView.hx", lineNumber : 77, className : "view.UiView", methodName : "new"});
+	haxe_Log.trace(state,{ fileName : "UiView.hx", lineNumber : 78, className : "view.UiView", methodName : "new"});
 	this.state = { locale : props.locale, history : null, route : "", hasError : false};
 	React_Component.call(this,props,state);
-	haxe_Log.trace(this.props,{ fileName : "UiView.hx", lineNumber : 80, className : "view.UiView", methodName : "new"});
+	haxe_Log.trace(this.props,{ fileName : "UiView.hx", lineNumber : 81, className : "view.UiView", methodName : "new"});
 };
 view_UiView.__name__ = ["view","UiView"];
 view_UiView.mapStateToProps = function(state) {
-	haxe_Log.trace(state,{ fileName : "UiView.hx", lineNumber : 58, className : "view.UiView", methodName : "mapStateToProps"});
+	haxe_Log.trace(state,{ fileName : "UiView.hx", lineNumber : 59, className : "view.UiView", methodName : "mapStateToProps"});
 	return { locale : state.locale, themeColor : state.themeColor};
 };
 view_UiView.mapDispatchToProps = function(dispatch) {
-	haxe_Log.trace(dispatch,{ fileName : "UiView.hx", lineNumber : 67, className : "view.UiView", methodName : "mapDispatchToProps"});
+	haxe_Log.trace(dispatch,{ fileName : "UiView.hx", lineNumber : 68, className : "view.UiView", methodName : "mapDispatchToProps"});
 	return { onClick : function() {
 		return dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.SetTheme("violet")));
 	}, locale : "de"};
@@ -1585,7 +1605,7 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 	browserHistory: null
 	,componentDidCatch: function(error,info) {
 		this.setState({ hasError : true});
-		haxe_Log.trace(error,{ fileName : "UiView.hx", lineNumber : 88, className : "view.UiView", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "UiView.hx", lineNumber : 89, className : "view.UiView", methodName : "componentDidCatch"});
 	}
 	,componentDidMount: function() {
 	}
@@ -1595,8 +1615,10 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 		var tmp1 = React.createElement(react_router_Route,{ path : "/dashboard", component : react_router_bundle_BundleLoader1.render});
 		var tmp2 = React.createElement(react_router_Route,{ path : "/qc", component : react_router_bundle_BundleLoader2.render});
 		var tmp3 = React.createElement(react_router_Route,{ path : "/contacts", component : react_router_bundle_BundleLoader3.render});
-		var tmp4 = React.createElement(react_router_Switch,{ },{ $$typeof : tmp, type : view_NavTabs, props : { children : [tmp1,tmp2,tmp3]}, key : null, ref : null});
-		return React.createElement(react_router_BrowserRouter,{ },tmp4);
+		var tmp4 = React.createElement(react_router_Route,{ path : "/accounting", component : react_router_bundle_BundleLoader4.render});
+		var tmp5 = React.createElement(react_router_Route,{ path : "/reports", component : react_router_bundle_BundleLoader5.render});
+		var tmp6 = React.createElement(react_router_Switch,{ },{ $$typeof : tmp, type : view_NavTabs, props : { children : [tmp1,tmp2,tmp3,tmp4,tmp5]}, key : null, ref : null});
+		return React.createElement(react_router_BrowserRouter,{ },tmp6);
 	}
 	,renderContent: function() {
 		if(this.state.component == null) {
@@ -1609,15 +1631,15 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 		var nav = tabs.map(function(tab) {
 			return { "$$typeof" : $$tre, type : "ul", props : { children : { "$$typeof" : $$tre, type : "li", props : { children : { "$$typeof" : $$tre, type : "a", props : { href : tab.url, children : tab.label}, key : tab.id, ref : null}}, key : null, ref : null}}, key : null, ref : null};
 		});
-		haxe_Log.trace(nav,{ fileName : "UiView.hx", lineNumber : 196, className : "view.UiView", methodName : "navLinks"});
+		haxe_Log.trace(nav,{ fileName : "UiView.hx", lineNumber : 199, className : "view.UiView", methodName : "navLinks"});
 		return nav;
 	}
 	,navWrapper: function(tabList) {
 		var navWrap = { "$$typeof" : $$tre, type : "ul", props : { }, key : null, ref : null};
 		navWrap = React.Children.only(navWrap);
-		haxe_Log.trace(navWrap,{ fileName : "UiView.hx", lineNumber : 209, className : "view.UiView", methodName : "navWrapper"});
-		haxe_Log.trace(navWrap,{ fileName : "UiView.hx", lineNumber : 210, className : "view.UiView", methodName : "navWrapper"});
-		haxe_Log.trace("OK",{ fileName : "UiView.hx", lineNumber : 211, className : "view.UiView", methodName : "navWrapper"});
+		haxe_Log.trace(navWrap,{ fileName : "UiView.hx", lineNumber : 212, className : "view.UiView", methodName : "navWrapper"});
+		haxe_Log.trace(navWrap,{ fileName : "UiView.hx", lineNumber : 213, className : "view.UiView", methodName : "navWrapper"});
+		haxe_Log.trace("OK",{ fileName : "UiView.hx", lineNumber : 214, className : "view.UiView", methodName : "navWrapper"});
 		return navWrap;
 	}
 	,__class__: view_UiView

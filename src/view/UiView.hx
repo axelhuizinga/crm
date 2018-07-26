@@ -13,6 +13,7 @@ import redux.Store;
 import redux.Redux;
 //import router.RouteComponentProps;
 import react.router.NavLink;
+import react.router.Redirect;
 import react.router.RouterHistory;
 import react.router.Route;
 import react.router.Switch;
@@ -146,9 +147,9 @@ class UiView extends ReactComponentOfPropsAndState<Dynamic,ApplicationState>
 			<$BrowserRouter>
 			 <NavTabs/>
 				<$Switch>				
-					<$Route path="/dashboard" component=${DashBoard}/>
-					<$Route exact={true} path="/qc" component=${QC}/>
-					<$Route path="/contacts" component=${Contacts}/>
+					<$Route path="/dashboard" component=${Bundle.load(DashBoard)}/>
+					<$Route path="/qc" component=${Bundle.load(QC)}/>
+					<$Route path="/contacts" component=${Bundle.load(Contacts)}/>
 				</$Switch>
 			</$BrowserRouter>
 		');
@@ -161,9 +162,11 @@ class UiView extends ReactComponentOfPropsAndState<Dynamic,ApplicationState>
 			<$BrowserRouter>
 				<$Switch>
 					<NavTabs>
-					<$Route path="/dashboard" component=${DashBoard}/>
-					<$Route exact={true} path="/qc" component=${QC}/>
-					<$Route path="/contacts" component=${Contacts}/>
+					<$Route path="/dashboard" component=${Bundle.load(DashBoard)}/>
+					<$Route path="/qc" component=${Bundle.load(QC)}/>
+					<$Route path="/contacts" component=${Bundle.load(Contacts)}/>
+					<$Route path="/accounting" component=${Bundle.load(Accounting)}/>
+					<$Route path="/reports" component=${Bundle.load(Reports)}/>
 					</NavTabs>
 				</$Switch>
 			</$BrowserRouter>

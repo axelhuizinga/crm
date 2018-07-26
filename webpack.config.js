@@ -113,7 +113,9 @@ module.exports = {
 
         // Like generating the HTML page with links the generated JS files
         new HtmlWebpackPlugin({
-            title: 'Webpack + Haxe example'
+		filename: dist + '/crm.php',
+		template: './src/crm.php',
+		title: 'Xpress CRM'
         })
         // You may want to also:
         // - minify/uglify the output using UglifyJSPlugin,

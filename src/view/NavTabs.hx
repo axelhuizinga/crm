@@ -30,11 +30,13 @@ class NavTabs extends ReactComponentOfProps<RouteComponentProps>
 		trace(Reflect.fields(props));
 		return jsx('
 		<>
-			<Tabs centered={true}>				
+			<Tabs centered={true} boxed={true}>				
 				<ul>
 					<TabLink to="/dashboard" ${...props}>DashBoard</TabLink> 
 					<TabLink to="/qc" ${...props}>QC</TabLink>
-					<TabLink to="/contacts" ${...props}>Contacts</TabLink>
+					<TabLink to="/contacts" ${...props}>Kontakte</TabLink>
+					<TabLink to="/accounting" ${...props}>Buchhaltung</TabLink>
+					<TabLink to="/reports" ${...props}>Berichte</TabLink>
 				</ul>
 			</Tabs>	
 			${props.children}

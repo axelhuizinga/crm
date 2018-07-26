@@ -13,7 +13,7 @@ class Contacts extends ReactComponentOfProps<RouteRenderProps>
 {	
     override function render() {
         return jsx('
-            <div className="dashboard">
+            <div className="tabComponent">
 
             </div>
         ');

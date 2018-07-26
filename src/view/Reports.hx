@@ -3,21 +3,18 @@ package view;
 import react.ReactComponent;
 import react.ReactMacro.jsx;
 import react.router.Route.RouteRenderProps;
+//import react.form.Form;
+//import react.form.Text;
+
 
 import Webpack.*;
-
 @:expose('default')
-class QC extends ReactComponentOfProps<RouteRenderProps> 
-{
-    public static function onLoad() {
-		trace(666);
-    }	
-	
+class Reports extends ReactComponentOfProps<RouteRenderProps>
+{	
     override function render() {
-		trace(props);
         return jsx('
             <div className="tabComponent">
-			<h3>< div style = ${{color:'green'}} >Route:${props.location.pathname}</div></h3>
+
             </div>
         ');
     }

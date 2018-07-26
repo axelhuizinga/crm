@@ -1,4 +1,28 @@
 /******/ (function(modules) { // webpackBootstrap
+/******/ 	// install a JSONP callback for chunk loading
+/******/ 	var parentJsonpFunction = window["webpackJsonp"];
+/******/ 	window["webpackJsonp"] = function webpackJsonpCallback(chunkIds, moreModules, executeModules) {
+/******/ 		// add "moreModules" to the modules object,
+/******/ 		// then flag all "chunkIds" as loaded and fire callback
+/******/ 		var moduleId, chunkId, i = 0, resolves = [], result;
+/******/ 		for(;i < chunkIds.length; i++) {
+/******/ 			chunkId = chunkIds[i];
+/******/ 			if(installedChunks[chunkId]) {
+/******/ 				resolves.push(installedChunks[chunkId][0]);
+/******/ 			}
+/******/ 			installedChunks[chunkId] = 0;
+/******/ 		}
+/******/ 		for(moduleId in moreModules) {
+/******/ 			if(Object.prototype.hasOwnProperty.call(moreModules, moduleId)) {
+/******/ 				modules[moduleId] = moreModules[moduleId];
+/******/ 			}
+/******/ 		}
+/******/ 		if(parentJsonpFunction) parentJsonpFunction(chunkIds, moreModules, executeModules);
+/******/ 		while(resolves.length) {
+/******/ 			resolves.shift()();
+/******/ 		}
+/******/
+/******/ 	};
 /******/ 	function hotDisposeChunk(chunkId) {
 /******/ 		delete installedChunks[chunkId];
 /******/ 	}
@@ -61,7 +85,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "4eb79a366286fca9cf0c"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "838c2f039a4d553c7ac4"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -241,7 +265,7 @@
 /******/ 				};
 /******/ 			});
 /******/ 			hotUpdate = {};
-/******/ 			var chunkId = 0;
+/******/ 			for(var chunkId in installedChunks)
 /******/ 			{ // eslint-disable-line no-lone-blocks
 /******/ 				/*globals chunkId */
 /******/ 				hotEnsureUpdateChunk(chunkId);
@@ -658,6 +682,11 @@
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
+/******/ 	// objects to store loaded and loading chunks
+/******/ 	var installedChunks = {
+/******/ 		5: 0
+/******/ 	};
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/
@@ -685,6 +714,55 @@
 /******/ 		return module.exports;
 /******/ 	}
 /******/
+/******/ 	// This file contains only the entry chunk.
+/******/ 	// The chunk loading function for additional chunks
+/******/ 	__webpack_require__.e = function requireEnsure(chunkId) {
+/******/ 		var installedChunkData = installedChunks[chunkId];
+/******/ 		if(installedChunkData === 0) {
+/******/ 			return new Promise(function(resolve) { resolve(); });
+/******/ 		}
+/******/
+/******/ 		// a Promise means "currently loading".
+/******/ 		if(installedChunkData) {
+/******/ 			return installedChunkData[2];
+/******/ 		}
+/******/
+/******/ 		// setup Promise in chunk cache
+/******/ 		var promise = new Promise(function(resolve, reject) {
+/******/ 			installedChunkData = installedChunks[chunkId] = [resolve, reject];
+/******/ 		});
+/******/ 		installedChunkData[2] = promise;
+/******/
+/******/ 		// start chunk loading
+/******/ 		var head = document.getElementsByTagName('head')[0];
+/******/ 		var script = document.createElement('script');
+/******/ 		script.type = "text/javascript";
+/******/ 		script.charset = 'utf-8';
+/******/ 		script.async = true;
+/******/ 		script.timeout = 120000;
+/******/
+/******/ 		if (__webpack_require__.nc) {
+/******/ 			script.setAttribute("nonce", __webpack_require__.nc);
+/******/ 		}
+/******/ 		script.src = __webpack_require__.p + "" + chunkId + ".app.js";
+/******/ 		var timeout = setTimeout(onScriptComplete, 120000);
+/******/ 		script.onerror = script.onload = onScriptComplete;
+/******/ 		function onScriptComplete() {
+/******/ 			// avoid mem leaks in IE.
+/******/ 			script.onerror = script.onload = null;
+/******/ 			clearTimeout(timeout);
+/******/ 			var chunk = installedChunks[chunkId];
+/******/ 			if(chunk !== 0) {
+/******/ 				if(chunk) {
+/******/ 					chunk[1](new Error('Loading chunk ' + chunkId + ' failed.'));
+/******/ 				}
+/******/ 				installedChunks[chunkId] = undefined;
+/******/ 			}
+/******/ 		};
+/******/ 		head.appendChild(script);
+/******/
+/******/ 		return promise;
+/******/ 	};
 /******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
@@ -718,6 +796,9 @@
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/ 	// on error function for async loading
+/******/ 	__webpack_require__.oe = function(err) { console.error(err); throw err; };
+/******/
 /******/ 	// __webpack_hash__
 /******/ 	__webpack_require__.h = function() { return hotCurrentHash; };
 /******/
@@ -735,6 +816,7 @@
 /* eslint-disable */ 
 var $hx_exports = module.exports, $global = global;
 var $s = $global.$hx_scope = $global.$hx_scope || {};
+var view_DashBoard, view_Contacts, view_QC, view_Accounting, view_Reports;
 $hx_exports["me"] = $hx_exports["me"] || {};
 $hx_exports["me"]["cunity"] = $hx_exports["me"]["cunity"] || {};
 $hx_exports["me"]["cunity"]["debug"] = $hx_exports["me"]["cunity"]["debug"] || {};
@@ -1139,8 +1221,6 @@ action_HistoryAction.Back = ["Back",4];
 action_HistoryAction.Back.__enum__ = action_HistoryAction;
 action_HistoryAction.Forward = ["Forward",5];
 action_HistoryAction.Forward.__enum__ = action_HistoryAction;
-var bulma_$components_Button = __webpack_require__("./node_modules/reactbulma/lib/components/index.js").Button;
-var Icon = __webpack_require__("./node_modules/reactbulma/lib/components/index.js").Icon;
 var bulma_$components_Tabs = __webpack_require__("./node_modules/reactbulma/lib/components/index.js").Tabs;
 var haxe_StackItem = { __ename__ : ["haxe","StackItem"], __constructs__ : ["CFunction","Module","FilePos","Method","LocalFunction"] };
 haxe_StackItem.CFunction = ["CFunction",0];
@@ -2021,6 +2101,141 @@ var react_router_Route = __webpack_require__("./node_modules/react-router/es/ind
 var react_router_Switch = __webpack_require__("./node_modules/react-router/es/index.js").Switch;
 var react_router_bundle_Bundle = function() { };
 react_router_bundle_Bundle.__name__ = ["react","router","bundle","Bundle"];
+var react_router_bundle_BundleLoader1 = function() { };
+react_router_bundle_BundleLoader1.__name__ = ["react","router","bundle","BundleLoader1"];
+react_router_bundle_BundleLoader1.render = function(props) {
+	return React.createElement(react_router_bundle_BundleWrapper,react_ReactUtil.copy(props,{ loader : __webpack_require__.e/* import() */(2).then(__webpack_require__.bind(null, "./node_modules/haxe-loader/index.js?build/view_DashBoard!./")).then(function(exports) {
+		view_DashBoard = $s.view_DashBoard;
+		var _ = view_DashBoard;
+		return exports;
+	})}));
+};
+var react_router_bundle_BundleLoader2 = function() { };
+react_router_bundle_BundleLoader2.__name__ = ["react","router","bundle","BundleLoader2"];
+react_router_bundle_BundleLoader2.render = function(props) {
+	return React.createElement(react_router_bundle_BundleWrapper,react_ReactUtil.copy(props,{ loader : __webpack_require__.e/* import() */(1).then(__webpack_require__.bind(null, "./node_modules/haxe-loader/index.js?build/view_QC!./")).then(function(exports) {
+		view_QC = $s.view_QC;
+		var _ = view_QC;
+		return exports;
+	})}));
+};
+var react_router_bundle_BundleLoader3 = function() { };
+react_router_bundle_BundleLoader3.__name__ = ["react","router","bundle","BundleLoader3"];
+react_router_bundle_BundleLoader3.render = function(props) {
+	return React.createElement(react_router_bundle_BundleWrapper,react_ReactUtil.copy(props,{ loader : __webpack_require__.e/* import() */(3).then(__webpack_require__.bind(null, "./node_modules/haxe-loader/index.js?build/view_Contacts!./")).then(function(exports) {
+		view_Contacts = $s.view_Contacts;
+		var _ = view_Contacts;
+		return exports;
+	})}));
+};
+var react_router_bundle_BundleLoader4 = function() { };
+react_router_bundle_BundleLoader4.__name__ = ["react","router","bundle","BundleLoader4"];
+react_router_bundle_BundleLoader4.render = function(props) {
+	return React.createElement(react_router_bundle_BundleWrapper,react_ReactUtil.copy(props,{ loader : __webpack_require__.e/* import() */(4).then(__webpack_require__.bind(null, "./node_modules/haxe-loader/index.js?build/view_Accounting!./")).then(function(exports) {
+		view_Accounting = $s.view_Accounting;
+		var _ = view_Accounting;
+		return exports;
+	})}));
+};
+var react_router_bundle_BundleLoader5 = function() { };
+react_router_bundle_BundleLoader5.__name__ = ["react","router","bundle","BundleLoader5"];
+react_router_bundle_BundleLoader5.render = function(props) {
+	return React.createElement(react_router_bundle_BundleWrapper,react_ReactUtil.copy(props,{ loader : __webpack_require__.e/* import() */(0).then(__webpack_require__.bind(null, "./node_modules/haxe-loader/index.js?build/view_Reports!./")).then(function(exports) {
+		view_Reports = $s.view_Reports;
+		var _ = view_Reports;
+		return exports;
+	})}));
+};
+var react_router_bundle__$BundleWrapper_BundledComponent_$Impl_$ = {};
+react_router_bundle__$BundleWrapper_BundledComponent_$Impl_$.__name__ = ["react","router","bundle","_BundleWrapper","BundledComponent_Impl_"];
+react_router_bundle__$BundleWrapper_BundledComponent_$Impl_$.firstLoad = function(this1) {
+	var firstLoad = this1.__alreadyLoaded == null;
+	this1.__alreadyLoaded = true;
+	return firstLoad;
+};
+react_router_bundle__$BundleWrapper_BundledComponent_$Impl_$.getOnLoad = function(this1) {
+	return this1.onLoad;
+};
+react_router_bundle__$BundleWrapper_BundledComponent_$Impl_$.toCreateElementType = function(this1) {
+	if(this1.__jsxStatic != null) {
+		return this1.__jsxStatic;
+	}
+	return this1;
+};
+var react_router_bundle_BundleWrapper = function(props) {
+	React_Component.call(this,props);
+	this.state = { module : null, error : false, errorMessage : null};
+};
+react_router_bundle_BundleWrapper.__name__ = ["react","router","bundle","BundleWrapper"];
+react_router_bundle_BundleWrapper.DefaultLoader = function() {
+	return { "$$typeof" : $$tre, type : "div", props : { className : "loader"}, key : null, ref : null};
+};
+react_router_bundle_BundleWrapper.DefaultError = function() {
+	return { "$$typeof" : $$tre, type : "div", props : { className : "error"}, key : null, ref : null};
+};
+react_router_bundle_BundleWrapper.__super__ = React_Component;
+react_router_bundle_BundleWrapper.prototype = $extend(React_Component.prototype,{
+	available: null
+	,render: function() {
+		if(this.state.error) {
+			return React.createElement(this.props.error,{ error : this.state.errorMessage});
+		}
+		var moduleProps = { };
+		var _g = 0;
+		var _g1 = Reflect.fields(this.props);
+		while(_g < _g1.length) {
+			var field = _g1[_g];
+			++_g;
+			switch(field) {
+			case "error":case "loader":case "loading":
+				break;
+			default:
+				moduleProps[field] = Reflect.field(this.props,field);
+			}
+		}
+		if(this.state.module != null) {
+			return React.createElement(react_router_bundle__$BundleWrapper_BundledComponent_$Impl_$.toCreateElementType(this.state.module),moduleProps);
+		} else {
+			return React.createElement(this.props.loading,{ });
+		}
+	}
+	,componentWillMount: function() {
+		this.available = true;
+		this.loadBundle(this.props);
+	}
+	,componentWillUnmount: function() {
+		this.available = false;
+	}
+	,loadBundle: function(props) {
+		var _gthis = this;
+		this.setState({ module : null, error : false},function() {
+			props.loader.then(function(mod) {
+				if(!_gthis.available) {
+					return;
+				}
+				var module = mod;
+				while(mod != null) {
+					module = mod;
+					mod = mod["default"];
+				}
+				if(react_router_bundle__$BundleWrapper_BundledComponent_$Impl_$.firstLoad(module)) {
+					var onLoad = react_router_bundle__$BundleWrapper_BundledComponent_$Impl_$.getOnLoad(module);
+					if(onLoad != null) {
+						_gthis.setState({ module : module},onLoad);
+						return;
+					}
+				}
+				_gthis.setState({ module : module, error : false, errorMessage : null});
+			})["catch"](function(e) {
+				if(!_gthis.available) {
+					return;
+				}
+				_gthis.setState({ error : true, errorMessage : e});
+			});
+		});
+	}
+	,__class__: react_router_bundle_BundleWrapper
+});
 var redux_Redux = __webpack_require__("./node_modules/redux/es/redux.js");
 var redux__$Redux_Action_$Impl_$ = {};
 redux__$Redux_Action_$Impl_$.__name__ = ["redux","_Redux","Action_Impl_"];
@@ -2095,37 +2310,6 @@ redux_react_Provider.prototype = $extend(React_Component.prototype,{
 	}
 	,__class__: redux_react_Provider
 });
-var view_Contacts = $hx_exports["default"] = function(props,context) {
-	React_Component.call(this,props,context);
-};
-view_Contacts.__name__ = ["view","Contacts"];
-view_Contacts.__super__ = React_Component;
-view_Contacts.prototype = $extend(React_Component.prototype,{
-	render: function() {
-		return { "$$typeof" : $$tre, type : "div", props : { className : "dashboard"}, key : null, ref : null};
-	}
-	,__class__: view_Contacts
-});
-var view_DashBoard = $hx_exports["default"] = function(props,context) {
-	React_Component.call(this,props,context);
-};
-view_DashBoard.__name__ = ["view","DashBoard"];
-view_DashBoard.__super__ = React_Component;
-view_DashBoard.prototype = $extend(React_Component.prototype,{
-	dump: function(el) {
-		haxe_Log.trace(el,{ fileName : "DashBoard.hx", lineNumber : 22, className : "view.DashBoard", methodName : "dump"});
-		return "OK";
-	}
-	,render: function() {
-		haxe_Log.trace(this.props,{ fileName : "DashBoard.hx", lineNumber : 27, className : "view.DashBoard", methodName : "render"});
-		var tmp = $$tre;
-		var tmp1 = { "$$typeof" : $$tre, type : "form", props : { id : "user-login", children : [{ "$$typeof" : $$tre, type : "label", props : { htmlFor : "user.firstName", children : "Vorname:"}, key : null, ref : null},React.createElement(react_redux_form_ControlText,{ id : "user.firstName", model : "user.firstName"}),{ "$$typeof" : $$tre, type : "button", props : { type : "submit", className : "mb-4 btn btn-primary", children : "Submit "}, key : null, ref : null},"\t\t\t\t\t"]}, key : null, ref : null};
-		var tmp2 = { "$$typeof" : $$tre, type : "span", props : { children : "Download"}, key : null, ref : null};
-		var tmp3 = React.createElement(Icon,{ small : true},{ "$$typeof" : $$tre, type : "i", props : { className : "fa fa-download"}, key : null, ref : null});
-		return { $$typeof : tmp, type : "div", props : { className : "dashboard", children : [tmp1,React.createElement(bulma_$components_Button,{ success : true},tmp2,tmp3)]}, key : null, ref : null};
-	}
-	,__class__: view_DashBoard
-});
 var view_NavTabs = function(props,context) {
 	haxe_Log.trace(props,{ fileName : "NavTabs.hx", lineNumber : 21, className : "view.NavTabs", methodName : "new"});
 	haxe_Log.trace(context,{ fileName : "NavTabs.hx", lineNumber : 22, className : "view.NavTabs", methodName : "new"});
@@ -2141,32 +2325,19 @@ view_NavTabs.prototype = $extend(React_Component.prototype,{
 		var tmp = $$tre;
 		var tmp1 = { "$$typeof" : $$tre, type : $bind(this,this.TabLink), props : Object.assign({ },this.props,{ to : "/dashboard", children : "DashBoard"}), key : null, ref : null};
 		var tmp2 = { "$$typeof" : $$tre, type : $bind(this,this.TabLink), props : Object.assign({ },this.props,{ to : "/qc", children : "QC"}), key : null, ref : null};
-		var tmp3 = $$tre;
-		var tmp4 = Object.assign({ },this.props,{ to : "/contacts", children : "Contacts"});
-		var tmp5 = React.createElement(bulma_$components_Tabs,{ centered : true},"\t\t\t\t","\t\t\t\t",{ $$typeof : tmp, type : "ul", props : { children : [tmp1," ",tmp2,{ $$typeof : tmp3, type : $bind(this,this.TabLink), props : tmp4, key : null, ref : null}]}, key : null, ref : null});
-		return React.createElement(React.Fragment,{ },tmp5,"\t",this.props.children);
+		var tmp3 = { "$$typeof" : $$tre, type : $bind(this,this.TabLink), props : Object.assign({ },this.props,{ to : "/contacts", children : "Kontakte"}), key : null, ref : null};
+		var tmp4 = { "$$typeof" : $$tre, type : $bind(this,this.TabLink), props : Object.assign({ },this.props,{ to : "/accounting", children : "Buchhaltung"}), key : null, ref : null};
+		var tmp5 = $$tre;
+		var tmp6 = Object.assign({ },this.props,{ to : "/reports", children : "Berichte"});
+		var tmp7 = React.createElement(bulma_$components_Tabs,{ centered : true, boxed : true},"\t\t\t\t","\t\t\t\t",{ $$typeof : tmp, type : "ul", props : { children : [tmp1," ",tmp2,tmp3,tmp4,{ $$typeof : tmp5, type : $bind(this,this.TabLink), props : tmp6, key : null, ref : null}]}, key : null, ref : null});
+		return React.createElement(React.Fragment,{ },tmp7,"\t",this.props.children);
 	}
 	,TabLink: function(rprops) {
-		haxe_Log.trace(rprops,{ fileName : "NavTabs.hx", lineNumber : 47, className : "view.NavTabs", methodName : "TabLink"});
-		haxe_Log.trace(Reflect.fields(rprops),{ fileName : "NavTabs.hx", lineNumber : 48, className : "view.NavTabs", methodName : "TabLink"});
+		haxe_Log.trace(rprops,{ fileName : "NavTabs.hx", lineNumber : 49, className : "view.NavTabs", methodName : "TabLink"});
+		haxe_Log.trace(Reflect.fields(rprops),{ fileName : "NavTabs.hx", lineNumber : 50, className : "view.NavTabs", methodName : "TabLink"});
 		return { "$$typeof" : $$tre, type : "li", props : { className : rprops.to == rprops.location.pathname ? "is-active" : "", children : React.createElement(react_router_NavLink,{ to : rprops.to},rprops.children)}, key : null, ref : null};
 	}
 	,__class__: view_NavTabs
-});
-var view_QC = $hx_exports["default"] = function(props,context) {
-	React_Component.call(this,props,context);
-};
-view_QC.__name__ = ["view","QC"];
-view_QC.onLoad = function() {
-	haxe_Log.trace(666,{ fileName : "QC.hx", lineNumber : 13, className : "view.QC", methodName : "onLoad"});
-};
-view_QC.__super__ = React_Component;
-view_QC.prototype = $extend(React_Component.prototype,{
-	render: function() {
-		haxe_Log.trace(this.props,{ fileName : "QC.hx", lineNumber : 17, className : "view.QC", methodName : "render"});
-		return { "$$typeof" : $$tre, type : "div", props : { className : "dashboard", children : { "$$typeof" : $$tre, type : "h3", props : { children : { "$$typeof" : $$tre, type : "div", props : { style : { color : "green"}, children : ["Route:",this.props.location.pathname]}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null};
-	}
-	,__class__: view_QC
 });
 var view_Statistics = function(props,context) {
 	React_Component.call(this,props,context);
@@ -2181,19 +2352,19 @@ view_Statistics.prototype = $extend(React_Component.prototype,{
 });
 var view_UiView = function(props,state) {
 	this.tabList = [{ "id" : 1, "component" : view_DashBoard, "label" : "DashBoard", "url" : "/dashboard"},{ "id" : 2, "component" : view_Contacts, "label" : "Contacts", "url" : "/contacts"},{ "id" : 3, "component" : view_QC, "label" : "QC", "url" : "/qc"}];
-	haxe_Log.trace(props,{ fileName : "UiView.hx", lineNumber : 76, className : "view.UiView", methodName : "new"});
-	haxe_Log.trace(state,{ fileName : "UiView.hx", lineNumber : 77, className : "view.UiView", methodName : "new"});
+	haxe_Log.trace(props,{ fileName : "UiView.hx", lineNumber : 77, className : "view.UiView", methodName : "new"});
+	haxe_Log.trace(state,{ fileName : "UiView.hx", lineNumber : 78, className : "view.UiView", methodName : "new"});
 	this.state = { locale : props.locale, history : null, route : "", hasError : false};
 	React_Component.call(this,props,state);
-	haxe_Log.trace(this.props,{ fileName : "UiView.hx", lineNumber : 80, className : "view.UiView", methodName : "new"});
+	haxe_Log.trace(this.props,{ fileName : "UiView.hx", lineNumber : 81, className : "view.UiView", methodName : "new"});
 };
 view_UiView.__name__ = ["view","UiView"];
 view_UiView.mapStateToProps = function(state) {
-	haxe_Log.trace(state,{ fileName : "UiView.hx", lineNumber : 58, className : "view.UiView", methodName : "mapStateToProps"});
+	haxe_Log.trace(state,{ fileName : "UiView.hx", lineNumber : 59, className : "view.UiView", methodName : "mapStateToProps"});
 	return { locale : state.locale, themeColor : state.themeColor};
 };
 view_UiView.mapDispatchToProps = function(dispatch) {
-	haxe_Log.trace(dispatch,{ fileName : "UiView.hx", lineNumber : 67, className : "view.UiView", methodName : "mapDispatchToProps"});
+	haxe_Log.trace(dispatch,{ fileName : "UiView.hx", lineNumber : 68, className : "view.UiView", methodName : "mapDispatchToProps"});
 	return { onClick : function() {
 		return dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.SetTheme("violet")));
 	}, locale : "de"};
@@ -2203,18 +2374,20 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 	browserHistory: null
 	,componentDidCatch: function(error,info) {
 		this.setState({ hasError : true});
-		haxe_Log.trace(error,{ fileName : "UiView.hx", lineNumber : 88, className : "view.UiView", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "UiView.hx", lineNumber : 89, className : "view.UiView", methodName : "componentDidCatch"});
 	}
 	,componentDidMount: function() {
 	}
 	,tabList: null
 	,render: function() {
 		var tmp = $$tre;
-		var tmp1 = React.createElement(react_router_Route,{ path : "/dashboard", component : view_DashBoard});
-		var tmp2 = React.createElement(react_router_Route,{ path : "/qc", component : view_QC, exact : true});
-		var tmp3 = React.createElement(react_router_Route,{ path : "/contacts", component : view_Contacts});
-		var tmp4 = React.createElement(react_router_Switch,{ },{ $$typeof : tmp, type : view_NavTabs, props : { children : [tmp1,tmp2,tmp3]}, key : null, ref : null});
-		return React.createElement(react_router_BrowserRouter,{ },tmp4);
+		var tmp1 = React.createElement(react_router_Route,{ path : "/dashboard", component : react_router_bundle_BundleLoader1.render});
+		var tmp2 = React.createElement(react_router_Route,{ path : "/qc", component : react_router_bundle_BundleLoader2.render});
+		var tmp3 = React.createElement(react_router_Route,{ path : "/contacts", component : react_router_bundle_BundleLoader3.render});
+		var tmp4 = React.createElement(react_router_Route,{ path : "/accounting", component : react_router_bundle_BundleLoader4.render});
+		var tmp5 = React.createElement(react_router_Route,{ path : "/reports", component : react_router_bundle_BundleLoader5.render});
+		var tmp6 = React.createElement(react_router_Switch,{ },{ $$typeof : tmp, type : view_NavTabs, props : { children : [tmp1,tmp2,tmp3,tmp4,tmp5]}, key : null, ref : null});
+		return React.createElement(react_router_BrowserRouter,{ },tmp6);
 	}
 	,renderContent: function() {
 		if(this.state.component == null) {
@@ -2227,15 +2400,15 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 		var nav = tabs.map(function(tab) {
 			return { "$$typeof" : $$tre, type : "ul", props : { children : { "$$typeof" : $$tre, type : "li", props : { children : { "$$typeof" : $$tre, type : "a", props : { href : tab.url, children : tab.label}, key : tab.id, ref : null}}, key : null, ref : null}}, key : null, ref : null};
 		});
-		haxe_Log.trace(nav,{ fileName : "UiView.hx", lineNumber : 196, className : "view.UiView", methodName : "navLinks"});
+		haxe_Log.trace(nav,{ fileName : "UiView.hx", lineNumber : 199, className : "view.UiView", methodName : "navLinks"});
 		return nav;
 	}
 	,navWrapper: function(tabList) {
 		var navWrap = { "$$typeof" : $$tre, type : "ul", props : { }, key : null, ref : null};
 		navWrap = React.Children.only(navWrap);
-		haxe_Log.trace(navWrap,{ fileName : "UiView.hx", lineNumber : 209, className : "view.UiView", methodName : "navWrapper"});
-		haxe_Log.trace(navWrap,{ fileName : "UiView.hx", lineNumber : 210, className : "view.UiView", methodName : "navWrapper"});
-		haxe_Log.trace("OK",{ fileName : "UiView.hx", lineNumber : 211, className : "view.UiView", methodName : "navWrapper"});
+		haxe_Log.trace(navWrap,{ fileName : "UiView.hx", lineNumber : 212, className : "view.UiView", methodName : "navWrapper"});
+		haxe_Log.trace(navWrap,{ fileName : "UiView.hx", lineNumber : 213, className : "view.UiView", methodName : "navWrapper"});
+		haxe_Log.trace("OK",{ fileName : "UiView.hx", lineNumber : 214, className : "view.UiView", methodName : "navWrapper"});
 		return navWrap;
 	}
 	,__class__: view_UiView
@@ -2268,18 +2441,17 @@ me_cunity_debug_Out.skipFunctions = true;
 me_cunity_debug_Out.traceToConsole = false;
 me_cunity_debug_Out.traceTarget = me_cunity_debug_DebugOutput.NATIVE;
 me_cunity_debug_Out.aStack = haxe_CallStack.callStack;
+react_router_bundle_BundleWrapper.defaultProps = { loading : react_router_bundle_BundleWrapper.DefaultLoader, error : react_router_bundle_BundleWrapper.DefaultError};
+react_router_bundle_BundleWrapper.displayName = "BundleWrapper";
 redux_react_Provider.childContextTypes = { store : PropTypes.object.isRequired};
 redux_react_Provider.propTypes = { children : PropTypes.element.isRequired};
 redux_react_Provider.displayName = "Provider";
-view_Contacts.displayName = "Contacts";
-view_DashBoard.user = { firstName : "dummy"};
-view_DashBoard.displayName = "DashBoard";
 view_NavTabs.displayName = "NavTabs";
-view_QC.displayName = "QC";
 view_Statistics.CONFIG = __webpack_require__("./src/config.json");
 view_Statistics.displayName = "Statistics";
 view_UiView.displayName = "UiView";
 view_User.displayName = "User";
+$s.a = React_Component; $s.b = $extend; $s.c = haxe_Log; $s.d = React; 
 Go.main();
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/webpack/buildin/global.js")))
@@ -2432,7 +2604,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "html,body {\n    font-family: Arial;\n\tfont-size:18px;\n\tmargin: 0;\n\toverflow:hidden!important;\n\theight:100%;\n}\n.rootBox\n{\n\tmargin:0 1rem;\n}\n\nh1 {\n\tmargin: 10px;\n}\n\n.dashboard\n{\n\toverflow:auto;\n}\n\n.tabs a.active li{\n    /*background-color:green;*/\n}", ""]);
+exports.push([module.i, "html,body {\n    font-family: Arial;\n\tfont-size:18px;\n\tmargin: 0;\n\toverflow:hidden!important;\n\theight:100%;\n}\n.rootBox\n{\n\tmargin:0.3rem 1rem  1rem;\n}\n\nh1 {\n\tmargin: 10px;\n}\n\n.tabComponent\n{\n\toverflow:auto;\n}\n\n.tabs a.active li{\n    /*background-color:green;*/\n}", ""]);
 
 // exports
 

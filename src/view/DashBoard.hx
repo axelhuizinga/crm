@@ -26,7 +26,7 @@ class DashBoard extends ReactComponentOfProps<RouteRenderProps>
     override function render() {
 		trace(props);
         return jsx('
-            <div className="dashboard" >
+            <div className="tabComponent" >
 				<form  id="user-login">
 				 <label htmlFor="user.firstName">Vorname:</label>
 				 <ControlText model="user.firstName" id="user.firstName" />
