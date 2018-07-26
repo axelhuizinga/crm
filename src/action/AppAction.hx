@@ -1,6 +1,6 @@
 package action;
 
-import model.DataList;
+import model.AppWare;
 
 /**
  * @author axel@cunity.me
@@ -8,7 +8,9 @@ import model.DataList;
 enum AppAction 
 {
 	Load;
+	//AddContact(id:Int);
 	SetLocale(locale:String);
-	SetEntries(entries:Array<DataCell>);
+	SetTheme(color:String);
+	//SetEntries(entries:Array<DataCell>);
 	
 }

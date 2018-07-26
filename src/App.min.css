@@ -1,0 +1,5 @@
+html,body{font-family:Arial;font-size:18px;margin:0;overflow:hidden!important;height:100%;}
+.rootBox{margin:0 1rem;}
+h1{margin:10px;}
+.dashboard{overflow:auto;}
+.tabs a.active li{}

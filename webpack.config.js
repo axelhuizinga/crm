@@ -14,15 +14,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const buildMode = process.env.NODE_ENV || 'development';
 const debugMode = buildMode !== 'production';
 const dist = __dirname + '/bin/';
-//'H:\\\\httpdocs';
-//__dirname + '/bin/';H:\httpdocs
 
 // Sourcemaps: https://webpack.js.org/configuration/devtool/
 // - 'eval-source-map': fast, but JS bundle is somewhat obfuscated
 // - 'source-map': slow, but JS bundle is readable
 // - undefined: no map, and JS bundle is readable
-//const sourcemapsMode = debugMode ? 'source-map' : undefined;
-const sourcemapsMode =  'source-map';
+const sourcemapsMode = debugMode ? 'source-map' : undefined;
 
 //
 // Configuration:
@@ -38,8 +35,7 @@ module.exports = {
     // Generation options (destination, naming pattern,...)
     output: {
         path: dist,
-        filename: 'crm.js',
-	publicPath: '/'
+        filename: 'app.js'
     },
     // Module resolution options (alias, default paths,...)
     resolve: {
@@ -49,13 +45,18 @@ module.exports = {
     devtool: sourcemapsMode,
     // Live development server (serves from memory)
     devServer: {
-        contentBase: '/',
-	historyApiFallback: true,
+        contentBase: dist,
         compress: true,
-        port: 3030,
 	host:  '192.168.178.20',
+        port: 9000,
         overlay: true,
-        hot: true
+        hot: true,
+	watchOptions:{
+		aggregateTimeout:1500
+	},
+	historyApiFallback: {
+	      index: 'index.html'
+	}
     },
     // List all the processors
     module: {
@@ -81,15 +82,23 @@ module.exports = {
                     name: '[name].[hash:7].[ext]'
                 }
             },
+	    {
+                test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, 
+                loader: 'file-loader'
+	    },
+	    {
+                test:  /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, 
+		loader: "url-loader?limit=10000&mimetype=application/font-woff" 
+	    },	    
             // CSS processor/loader
             // - this is where you can add sass/less processing,
             // - also consider adding postcss-loader for autoprefixing
             {
                 test: /\.css$/,
                 use: [
-				'style-loader',
-				'css-loader'
-			]
+			'style-loader',
+			'css-loader'
+		]
             }
         ]
     },
@@ -104,8 +113,7 @@ module.exports = {
 
         // Like generating the HTML page with links the generated JS files
         new HtmlWebpackPlugin({
-            title: 'crm',
-	    baseHref: '/'
+            title: 'Webpack + Haxe example'
         })
         // You may want to also:
         // - minify/uglify the output using UglifyJSPlugin,

@@ -7,7 +7,7 @@ import react.ReactComponent;
  * @author axel@cunity.me
  */
 
-@:jsRequire('bulma-components', 'Columns')
+@:jsRequire('reactbulma', 'Columns')
 @:native('Columns')
 @:keepSub
 @:autoBuild(react.ReactMacro.buildComponent())

@@ -1,16 +1,14 @@
 -lib haxe-loader
 -lib react
--lib react-router
+-lib react-router-4
 -lib redux
+-lib redux-connect
+-lib CommentString
 
+-cp ..\lib
 -cp lib
 -cp src
+-js app.js
+-main Go
 
 -D react_hot
-#-D redux_global
-
--js crm.js
--main App
-
-#--times
-#-D macro-times

@@ -9,8 +9,9 @@
     <title>crm</title>
 	<link href="css/bulma.min.css" rel="stylesheet" />
 	<link href="css/bulma-extensions.min.css" rel="stylesheet" />
+	<link href="css/app.css" rel="stylesheet" />
 	<script type="text/javascript" src="js/bulma-extensions.min.js"></script>
   </head>
   <body>
-  <script type="text/javascript" src="/crm.js"></script></body>
+  <script type="text/javascript" src="/app.js"></script></body>
 </html>

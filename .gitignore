@@ -1,2 +1,6 @@
 node_modules/
-.temp/
+yarn-error.log
+vscode-project.hxml
+www/
+*.hxproj
+.haxelib/

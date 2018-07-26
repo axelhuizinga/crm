@@ -9,6 +9,6 @@ package dom;
 extern class History 
 {
 
-	public static function createBrowserHistory():Dynamic;
+	public static function createHistory():Dynamic;
 	
 }
