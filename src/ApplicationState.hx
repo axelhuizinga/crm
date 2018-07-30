@@ -14,5 +14,6 @@ typedef ApplicationState =
 	?hasError:Bool,
 	?component: react.React.CreateElementType,
 	?history:Dynamic,
-	?locale:String
+	?locale:String,
+	user:User
 }

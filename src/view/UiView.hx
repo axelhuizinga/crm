@@ -14,7 +14,7 @@ import redux.Redux;
 //import router.RouteComponentProps;
 import react.router.NavLink;
 import react.router.Redirect;
-import react.router.RouterHistory;
+//import react.router.RouterHistory;
 import react.router.Route;
 import react.router.Switch;
 import react.router.BrowserRouter;
@@ -54,29 +54,11 @@ class UiView extends ReactComponentOfPropsAndState<Dynamic,ApplicationState>
 	
 	var browserHistory:Dynamic;
 	
-	static function mapStateToProps(state:ApplicationState):Dynamic
-	{
-		trace(state);
-		return {
-			locale:state.locale,
-			themeColor:state.themeColor
-		};
-	}
-	
-	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
-	{
-		trace(dispatch);
-		return {
-			onClick: function() return dispatch(AppAction.SetTheme('violet')),
-			locale: 'de'
-		};
-	}
-	
 	public function new(props:Dynamic, state:ApplicationState) {
 		//this.state = {history: ReactRouter.browserHistory, route:''};?props:RouteComponentProps, 
 		trace(props);	
 		trace(state);	
-		this.state = {locale:props.locale, history: null, route:'', hasError:false};
+		//this.state = {locale:props.locale, history: null, route:'', hasError:false};
         super(props,state);
 		trace(this.props);	
     }
@@ -97,9 +79,11 @@ class UiView extends ReactComponentOfPropsAndState<Dynamic,ApplicationState>
 	//var e = React.createElement;
 	
 	var tabList:Array<Dynamic> = [
-		{ 'id': 1, 'component': DashBoard, 'label': 'DashBoard', 'url': '/dashboard' },
-		{ 'id': 2, 'component': Contacts, 'label': 'Contacts', 'url': '/contacts' },
-		{ 'id': 3, 'component': QC, 'label': 'QC', 'url': '/qc' },
+		{ 'key': 1, 'component': DashBoard, 'label': 'DashBoard', 'url': '/dashboard' },
+		{ 'key': 2, 'component': Contacts, 'label': 'Contacts', 'url': '/contacts' },
+		{ 'key': 3, 'component': QC, 'label': 'QC', 'url': '/qc' },
+		{ 'key': 4, 'component': Accounting, 'label': 'Buchhaltung', 'url': '/accounting' },
+		{ 'key': 5, 'component': Reports, 'label': 'Berichte', 'url': '/reports' },
 	];
 	//component=${pageWrapper}
 	/*
@@ -154,19 +138,33 @@ class UiView extends ReactComponentOfPropsAndState<Dynamic,ApplicationState>
 			</$BrowserRouter>
 		');
 	}
+					<$Route path="/dashboard" component=${Bundle.load(DashBoard)}/>
+					<$Route path="/qc" component=${Bundle.load(QC)}/>
+					<$Route path="/contacts" component=${Bundle.load(Contacts)}/>
+					<$Route path="/accounting" component=${Bundle.load(Accounting)}/>
+					<$Route path="/reports" component=${Bundle.load(Reports)}/>	
 	*/ 
-
+	function createRoutes()
+	{
+		var routes:Array<Dynamic> = tabList.map(
+		function(el) {
+			return jsx('
+			<Route path=${el.url} component=${el.component}/>
+			');
+		});
+		return routes;
+	}
 
 	override function render() {
 		return jsx('		
 			<$BrowserRouter>
 				<$Switch>
 					<NavTabs>
-					<$Route path="/dashboard" component=${Bundle.load(DashBoard)}/>
-					<$Route path="/qc" component=${Bundle.load(QC)}/>
-					<$Route path="/contacts" component=${Bundle.load(Contacts)}/>
-					<$Route path="/accounting" component=${Bundle.load(Accounting)}/>
-					<$Route path="/reports" component=${Bundle.load(Reports)}/>
+						<$Route path="/dashboard" component=${Bundle.load(DashBoard)}/>
+						<$Route path="/qc" component=${Bundle.load(QC)}/>
+						<$Route path="/contacts" component=${Bundle.load(Contacts)}/>
+						<$Route path="/accounting" component=${Bundle.load(Accounting)}/>
+						<$Route path="/reports" component=${Bundle.load(Reports)}/>						
 					</NavTabs>
 				</$Switch>
 			</$BrowserRouter>

@@ -10,7 +10,9 @@ import react.ReactComponent;
 typedef UserState =
 {
 	id:Int,
-	?name:String,
+	contact:Int,
+	?first_name:String,
+	?last_name:String,
 	?active:Bool,
 	?loggedIn:Bool,
 	?lastLoggedIn:Date

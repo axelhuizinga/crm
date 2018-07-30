@@ -34,6 +34,7 @@ class ApplicationStore
 	
 	static public function startup(store:Store<ApplicationState>)
 	{
+		trace(store);
 		// use regular 'store.dispatch' but passing Haxe Enums!
 		/*store.dispatch(TodoAction.Load)
 			.then(function(_) {

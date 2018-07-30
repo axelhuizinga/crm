@@ -4,6 +4,7 @@ import haxe.Http;
 import haxe.Json;
 import js.Browser;
 import js.Promise;
+import view.User;
 import react.ReactUtil.copy;
 import redux.IMiddleware;
 import redux.IReducer;
@@ -15,8 +16,6 @@ import react.router.RouterHistory;
  * @author axel@cunity.me
  */
 
-
- 
 class AppWare 
 	implements IReducer<AppAction, ApplicationState>
 	implements IMiddleware<AppAction, ApplicationState>
@@ -25,7 +24,8 @@ class AppWare
 		route:'',
 		themeColor: 'green',
 		locale: 'de',
-		history:null
+		history:null,
+		user:new User(null, {id:1000000666, contact:1000000666, first_name:'test', last_name:'agent'})
 	};
 	public var store:StoreMethods<ApplicationState>;
 
@@ -69,6 +69,7 @@ class AppWare
 	
 	public function middleware(action:AppAction, next:Void -> Dynamic)
 	{
+		trace(action);
 		return switch(action)
 		{
 			default: next();

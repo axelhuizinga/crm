@@ -18,16 +18,16 @@ class NavTabs extends ReactComponentOfProps<RouteComponentProps>
 {
 	public function new(?props:RouteComponentProps, ?context:Dynamic) 
 	{
-		trace(props);
-		trace(context);
+		//trace(props);
+		trace(Reflect.fields(props));
 		super(props, context);		
 	}
 	
 	override public function render()
 	{
-		trace(props);
+		//trace(props.children);
 		trace(Reflect.field(props,'computedMatch'));
-		trace(Reflect.fields(props));
+		//trace(Reflect.fields(props));
 		return jsx('
 		<>
 			<Tabs centered={true} boxed={true}>				
@@ -46,8 +46,8 @@ class NavTabs extends ReactComponentOfProps<RouteComponentProps>
 	
 	function TabLink(rprops)
 	{
-		trace(rprops);
-		trace(Reflect.fields(rprops));
+		//trace(rprops);
+		//trace(Reflect.fields(rprops));
 		return jsx('
 		<li className=${rprops.to == rprops.location.pathname?"is-active":""}><NavLink to=${rprops.to}>${rprops.children}</NavLink></li>
 		');

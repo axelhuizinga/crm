@@ -3,6 +3,7 @@ import me.cunity.debug.Out;
 import react.ReactMacro.jsx;
 import react.ReactComponent;
 import react.ReactEvent;
+import redux.StoreMethods;
 //import react.ReactPropTypes;
 import react.React;
 //import react.addon.router.Route;
@@ -34,15 +35,20 @@ class App  extends react.ReactComponentOfState<ApplicationState>
 	static var fa = require('../node_modules/font-awesome/css/font-awesome.min.css');
 	
 	//public static var AppContext = React.createContext(null);
+	public static var store:StoreMethods<ApplicationState>;
 
 	var backListener:Void->Void;
 	var browserHistory:Dynamic;	
 
     public function new() {
-        super();
+		store = ApplicationStore.create();
+		state = untyped store.getState().appWare;
+		//trace(state);
+		trace(Reflect.fields(state));
+        super(props, state);
 		//browserHistory = ReactRouter.browserHistory;//History.createHistory();
-		trace(browserHistory);
-        state = { route:'', themeColor:'red', locale:'de', hasError: false, history:browserHistory};
+		//trace(this.state);
+        //state = { route:'', themeColor:'red', locale:'de', hasError: false, history:browserHistory};
 		//browserHistory = History.createBrowserHistory();
     }
 
@@ -67,8 +73,7 @@ class App  extends react.ReactComponentOfState<ApplicationState>
 	
 	//store={store} data-debug={edump(props)}
     override function render() {
-		var store = ApplicationStore.create();
-		trace(store.getState());
+
         return jsx('
 			<Provider store={store}><UiView/></Provider>			
         ');

@@ -55,7 +55,7 @@ module.exports = {
 		aggregateTimeout:1500
 	},
 	historyApiFallback: {
-	      index: 'index.html'
+	      index: 'crm.html'
 	}
     },
     // List all the processors

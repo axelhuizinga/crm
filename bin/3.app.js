@@ -7,7 +7,7 @@ webpackJsonp([3],{
 /* WEBPACK VAR INJECTION */(function(global) {/* eslint-disable */ 
 var $hx_exports = module.exports, $global = global;
 var $s = $global.$hx_scope;
-var React_Component = $s.a, $extend = $s.b;
+var React_Component = $s.a, $extend = $s.f;
 $hx_exports["me"] = $hx_exports["me"] || {};
 $hx_exports["me"]["cunity"] = $hx_exports["me"]["cunity"] || {};
 $hx_exports["me"]["cunity"]["debug"] = $hx_exports["me"]["cunity"]["debug"] || {};
@@ -20,7 +20,7 @@ view_Contacts.__name__ = ["view","Contacts"];
 view_Contacts.__super__ = React_Component;
 view_Contacts.prototype = $extend(React_Component.prototype,{
 	render: function() {
-		return { "$$typeof" : $$tre, type : "div", props : { className : "tabComponent"}, key : null, ref : null};
+		return { "$$typeof" : $$tre, type : "div", props : { className : "tabComponent", children : "..."}, key : null, ref : null};
 	}
 	,__class__: view_Contacts
 });

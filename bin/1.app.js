@@ -7,7 +7,7 @@ webpackJsonp([1],{
 /* WEBPACK VAR INJECTION */(function(global) {/* eslint-disable */ 
 var $hx_exports = module.exports, $global = global;
 var $s = $global.$hx_scope;
-var React_Component = $s.a, haxe_Log = $s.c, $extend = $s.b;
+var React_Component = $s.a, haxe_Log = $s.b, $extend = $s.f;
 $hx_exports["me"] = $hx_exports["me"] || {};
 $hx_exports["me"]["cunity"] = $hx_exports["me"]["cunity"] || {};
 $hx_exports["me"]["cunity"]["debug"] = $hx_exports["me"]["cunity"]["debug"] || {};
