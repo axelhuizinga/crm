@@ -1,29 +1,34 @@
 import action.AppAction;
 import action.HistoryAction;
-import model.AppWare;
+import model.AppService;
+import model.StatusBarService;
 import redux.Redux;
 import redux.Store;
 import redux.StoreBuilder.*;
+import GlobalAppState;
 
 class ApplicationStore
 {
-	static public function create():Store<ApplicationState>
+	static public function create():Store<AppState>
 	{
 		// store model, implementing reducer and middleware logic
-		var appWare = new AppWare();
+		var appWare = new AppService();
+		var statusBarService = new StatusBarService();
 		
 		// create root reducer normally, excepted you must use 
 		// 'StoreBuilder.mapReducer' to wrap the Enum-based reducer
 		var rootReducer = Redux.combineReducers(
 			{
-				appWare: mapReducer(AppAction, appWare)
+				appWare: mapReducer(AppAction, appWare),
+				statusBar: mapReducer(StatusAction, statusBarService)
 			}
 		);
 		
 		// create middleware normally, excepted you must use 
 		// 'StoreBuilder.mapMiddleware' to wrap the Enum-based middleware
 		var middleware = Redux.applyMiddleware(
-			mapMiddleware(AppAction, appWare)
+			mapMiddleware(AppAction, appWare),
+			mapMiddleware(StatusAction, statusBarService)
 		);
 		
 		// user 'StoreBuilder.createStore' helper to automatically wire
@@ -32,7 +37,7 @@ class ApplicationStore
 		return createStore(rootReducer, null, middleware);
 	}
 	
-	static public function startup(store:Store<ApplicationState>)
+	static public function startup(store:Store<AppState>)
 	{
 		trace(store);
 		// use regular 'store.dispatch' but passing Haxe Enums!

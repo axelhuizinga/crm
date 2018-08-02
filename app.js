@@ -13,33 +13,36 @@ function $extend(from, fields) {
 var React_Component = require("react").Component;
 var App = function() {
 	App.store = ApplicationStore.create();
-	this.state = App.store.getState().appWare;
-	haxe_Log.trace(Reflect.fields(this.state),{ fileName : "App.hx", lineNumber : 47, className : "App", methodName : "new"});
+	this.state = App.store.getState();
+	haxe_Log.trace(Reflect.fields(this.state),{ fileName : "App.hx", lineNumber : 49, className : "App", methodName : "new"});
 	React_Component.call(this,this.props,this.state);
 };
 App.__name__ = ["App"];
 App.edump = function(el) {
-	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 72, className : "App", methodName : "edump"});
+	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 82, className : "App", methodName : "edump"});
 	return "OK";
-};
-App.renderContent = function(state) {
-	if(state.component == null) {
-		return { "$$typeof" : $$tre, type : "span", props : { children : "Loading..."}, key : null, ref : null};
-	} else {
-		return { "$$typeof" : $$tre, type : state.component, props : { }, key : null, ref : null};
-	}
 };
 App.__super__ = React_Component;
 App.prototype = $extend(React_Component.prototype,{
 	backListener: null
 	,browserHistory: null
 	,componentDidMount: function() {
-		var _g = this.state.route;
-		haxe_Log.trace(this.state.route,{ fileName : "App.hx", lineNumber : 61, className : "App", methodName : "componentDidMount"});
+		var d = new Date();
+		var s = d.getSeconds();
+		haxe_Log.trace("start delay at " + s + " set timer start in " + (60 - s) * 1000 + " seconds",{ fileName : "App.hx", lineNumber : 61, className : "App", methodName : "componentDidMount"});
+		haxe_Timer.delay(function() {
+			haxe_Log.trace("timer start at " + d.getSeconds(),{ fileName : "App.hx", lineNumber : 63, className : "App", methodName : "componentDidMount"});
+			App.store.dispatch(redux__$Redux_Action_$Impl_$.map(action_StatusAction.Tick(new Date())));
+			var t = new haxe_Timer(60000);
+			t.run = function() {
+				App.store.dispatch(redux__$Redux_Action_$Impl_$.map(action_StatusAction.Tick(new Date())));
+			};
+		},(60 - d.getSeconds()) * 1000);
+		var _g = this.state.appWare.route;
+		haxe_Log.trace(this.state.appWare.route,{ fileName : "App.hx", lineNumber : 71, className : "App", methodName : "componentDidMount"});
 	}
 	,componentDidCatch: function(error,info) {
-		this.setState({ hasError : true});
-		haxe_Log.trace(error,{ fileName : "App.hx", lineNumber : 69, className : "App", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "App.hx", lineNumber : 79, className : "App", methodName : "componentDidCatch"});
 	}
 	,render: function() {
 		return { "$$typeof" : $$tre, type : redux_react_Provider, props : { store : App.store, children : { "$$typeof" : $$tre, type : view_UiView, props : { }, key : null, ref : null}}, key : null, ref : null};
@@ -49,13 +52,14 @@ App.prototype = $extend(React_Component.prototype,{
 var ApplicationStore = function() { };
 ApplicationStore.__name__ = ["ApplicationStore"];
 ApplicationStore.create = function() {
-	var appWare = new model_AppWare();
-	var rootReducer = redux_Redux.combineReducers({ appWare : redux_StoreBuilder.mapReducer(action_AppAction,appWare)});
-	var middleware = redux_Redux.applyMiddleware(redux_StoreBuilder.mapMiddleware(action_AppAction,appWare));
+	var appWare = new model_AppService();
+	var statusBarService = new model_StatusBarService();
+	var rootReducer = redux_Redux.combineReducers({ appWare : redux_StoreBuilder.mapReducer(action_AppAction,appWare), statusBar : redux_StoreBuilder.mapReducer(action_StatusAction,statusBarService)});
+	var middleware = redux_Redux.applyMiddleware(redux_StoreBuilder.mapMiddleware(action_AppAction,appWare),redux_StoreBuilder.mapMiddleware(action_StatusAction,statusBarService));
 	return redux_StoreBuilder.createStore(rootReducer,null,middleware);
 };
 ApplicationStore.startup = function(store) {
-	haxe_Log.trace(store,{ fileName : "ApplicationStore.hx", lineNumber : 37, className : "ApplicationStore", methodName : "startup"});
+	haxe_Log.trace(store,{ fileName : "ApplicationStore.hx", lineNumber : 42, className : "ApplicationStore", methodName : "startup"});
 };
 var EReg = function(r,opt) {
 	this.r = new RegExp(r,opt.split("u").join(""));
@@ -391,6 +395,8 @@ action_AppAction.Load = ["Load",0];
 action_AppAction.Load.__enum__ = action_AppAction;
 action_AppAction.SetLocale = function(locale) { var $x = ["SetLocale",1,locale]; $x.__enum__ = action_AppAction; return $x; };
 action_AppAction.SetTheme = function(color) { var $x = ["SetTheme",2,color]; $x.__enum__ = action_AppAction; return $x; };
+var action_StatusAction = { __ename__ : ["action","StatusAction"], __constructs__ : ["Tick"] };
+action_StatusAction.Tick = function(date) { var $x = ["Tick",0,date]; $x.__enum__ = action_StatusAction; return $x; };
 var action_HistoryAction = { __ename__ : ["action","HistoryAction"], __constructs__ : ["Pop","Push","Replace","Go","Back","Forward"] };
 action_HistoryAction.Pop = ["Pop",0];
 action_HistoryAction.Pop.__enum__ = action_HistoryAction;
@@ -405,6 +411,17 @@ action_HistoryAction.Back.__enum__ = action_HistoryAction;
 action_HistoryAction.Forward = ["Forward",5];
 action_HistoryAction.Forward.__enum__ = action_HistoryAction;
 var bulma_$components_Button = require("reactbulma").Button;
+var bulma_$components_Footer = function(props,context) {
+	React_Component.call(this,props,context);
+};
+bulma_$components_Footer.__name__ = ["bulma_components","Footer"];
+bulma_$components_Footer.__super__ = React_Component;
+bulma_$components_Footer.prototype = $extend(React_Component.prototype,{
+	render: function() {
+		return { "$$typeof" : $$tre, type : "footer", props : { children : this.props.children, className : "footer"}, key : null, ref : null};
+	}
+	,__class__: bulma_$components_Footer
+});
 var Icon = require("reactbulma").Icon;
 var bulma_$components_Tabs = require("reactbulma").Tabs;
 var haxe_StackItem = { __ename__ : ["haxe","StackItem"], __constructs__ : ["CFunction","Module","FilePos","Method","LocalFunction"] };
@@ -635,6 +652,34 @@ var haxe_Log = function() { };
 haxe_Log.__name__ = ["haxe","Log"];
 haxe_Log.trace = function(v,infos) {
 	js_Boot.__trace(v,infos);
+};
+var haxe_Timer = function(time_ms) {
+	var me = this;
+	this.id = setInterval(function() {
+		me.run();
+	},time_ms);
+};
+haxe_Timer.__name__ = ["haxe","Timer"];
+haxe_Timer.delay = function(f,time_ms) {
+	var t = new haxe_Timer(time_ms);
+	t.run = function() {
+		t.stop();
+		f();
+	};
+	return t;
+};
+haxe_Timer.prototype = {
+	id: null
+	,stop: function() {
+		if(this.id == null) {
+			return;
+		}
+		clearInterval(this.id);
+		this.id = null;
+	}
+	,run: function() {
+	}
+	,__class__: haxe_Timer
 };
 var js__$Boot_HaxeError = function(val) {
 	Error.call(this);
@@ -1090,19 +1135,19 @@ redux_IReducer.prototype = {
 	,reduce: null
 	,__class__: redux_IReducer
 };
-var model_AppWare = function() {
+var model_AppService = function() {
 	this.ID = 0;
-	this.initState = { route : "", themeColor : "green", locale : "de", history : null, user : new view_User(null,{ id : 1000000666, contact : 1000000666, first_name : "test", last_name : "agent"})};
+	this.initState = { route : window.location.pathname, themeColor : "green", locale : "de", userList : [], user : new view_User(null,{ id : 1000000666, contact : 1000000666, first_name : "test", last_name : "agent"})};
 };
-model_AppWare.__name__ = ["model","AppWare"];
-model_AppWare.__interfaces__ = [redux_IMiddleware,redux_IReducer];
-model_AppWare.prototype = {
+model_AppService.__name__ = ["model","AppService"];
+model_AppService.__interfaces__ = [redux_IMiddleware,redux_IReducer];
+model_AppService.prototype = {
 	initState: null
 	,store: null
 	,ID: null
 	,loadPending: null
 	,reduce: function(state,action) {
-		haxe_Log.trace(action,{ fileName : "AppWare.hx", lineNumber : 42, className : "model.AppWare", methodName : "reduce"});
+		haxe_Log.trace(action,{ fileName : "AppService.hx", lineNumber : 45, className : "model.AppService", methodName : "reduce"});
 		switch(action[1]) {
 		case 0:
 			return react_ReactUtil.copy(state,{ loading : true});
@@ -1125,17 +1170,53 @@ model_AppWare.prototype = {
 		}
 	}
 	,middleware: function(action,next) {
-		haxe_Log.trace(action,{ fileName : "AppWare.hx", lineNumber : 72, className : "model.AppWare", methodName : "middleware"});
+		haxe_Log.trace(next,{ fileName : "AppService.hx", lineNumber : 76, className : "model.AppService", methodName : "middleware"});
 		return next();
 	}
-	,__class__: model_AppWare
+	,__class__: model_AppService
 };
+var model_StatusBarService = function() {
+	this.ID = 0;
+	this.initState = { route : window.location.pathname, date : new Date(), userList : [], user : new view_User(null,{ id : 1000000666, contact : 1000000666, first_name : "test", last_name : "agent"})};
+};
+model_StatusBarService.__name__ = ["model","StatusBarService"];
+model_StatusBarService.__interfaces__ = [redux_IMiddleware,redux_IReducer];
+model_StatusBarService.prototype = {
+	initState: null
+	,store: null
+	,ID: null
+	,loadPending: null
+	,reduce: function(state,action) {
+		haxe_Log.trace(action,{ fileName : "StatusBarService.hx", lineNumber : 40, className : "model.StatusBarService", methodName : "reduce"});
+		var date = action[2];
+		return react_ReactUtil.copy(state,{ date : date});
+	}
+	,middleware: function(action,next) {
+		haxe_Log.trace(next,{ fileName : "StatusBarService.hx", lineNumber : 54, className : "model.StatusBarService", methodName : "middleware"});
+		return next();
+	}
+	,__class__: model_StatusBarService
+};
+var DateTimePicker = require("react-datetime-picker").default;
 var react_Partial = function() { };
 react_Partial.__name__ = ["react","Partial"];
 var react_PartialMacro = function() { };
 react_PartialMacro.__name__ = ["react","PartialMacro"];
 var React = require("react");
 var ReactDOM = require("react-dom");
+var react_ReactDateTimeClock = function(props) {
+	haxe_Log.trace(props.value,{ fileName : "ReactDateTimeClock.hx", lineNumber : 27, className : "react.ReactDateTimeClock", methodName : "new"});
+	React_Component.call(this,props);
+};
+react_ReactDateTimeClock.__name__ = ["react","ReactDateTimeClock"];
+react_ReactDateTimeClock.__super__ = React_Component;
+react_ReactDateTimeClock.prototype = $extend(React_Component.prototype,{
+	render: function() {
+		haxe_Log.trace(Std.string(this.props.value),{ fileName : "ReactDateTimeClock.hx", lineNumber : 34, className : "react.ReactDateTimeClock", methodName : "render"});
+		return React.createElement(DateTimePicker,{ value : this.props.value, locale : "de-DE", clearIcon : null, disabled : true, calendarIcon : null, className : this.props.className});
+	}
+	,__class__: react_ReactDateTimeClock
+});
 var react_ReactMacro = function() { };
 react_ReactMacro.__name__ = ["react","ReactMacro"];
 var PropTypes = require("prop-types");
@@ -1317,15 +1398,24 @@ react_router_bundle_BundleLoader3.render = function(props) {
 var react_router_bundle_BundleLoader4 = function() { };
 react_router_bundle_BundleLoader4.__name__ = ["react","router","bundle","BundleLoader4"];
 react_router_bundle_BundleLoader4.render = function(props) {
-	return React.createElement(react_router_bundle_BundleWrapper,react_ReactUtil.copy(props,{ loader : System.import("!haxe-loader?null/view_Accounting!").then(function(exports) {
-		view_Accounting = $s.view_Accounting;
-		var _ = view_Accounting;
+	return React.createElement(react_router_bundle_BundleWrapper,react_ReactUtil.copy(props,{ loader : System.import("!haxe-loader?null/view_Contacts!").then(function(exports) {
+		view_Contacts = $s.view_Contacts;
+		var _ = view_Contacts;
 		return exports;
 	})}));
 };
 var react_router_bundle_BundleLoader5 = function() { };
 react_router_bundle_BundleLoader5.__name__ = ["react","router","bundle","BundleLoader5"];
 react_router_bundle_BundleLoader5.render = function(props) {
+	return React.createElement(react_router_bundle_BundleWrapper,react_ReactUtil.copy(props,{ loader : System.import("!haxe-loader?null/view_Accounting!").then(function(exports) {
+		view_Accounting = $s.view_Accounting;
+		var _ = view_Accounting;
+		return exports;
+	})}));
+};
+var react_router_bundle_BundleLoader6 = function() { };
+react_router_bundle_BundleLoader6.__name__ = ["react","router","bundle","BundleLoader6"];
+react_router_bundle_BundleLoader6.render = function(props) {
 	return React.createElement(react_router_bundle_BundleWrapper,react_ReactUtil.copy(props,{ loader : System.import("!haxe-loader?null/view_Reports!").then(function(exports) {
 		view_Reports = $s.view_Reports;
 		var _ = view_Reports;
@@ -1493,7 +1583,6 @@ redux_react_Provider.prototype = $extend(React_Component.prototype,{
 		return { store : this.props.store};
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.children,{ fileName : "Provider.hx", lineNumber : 37, className : "redux.react.Provider", methodName : "render"});
 		return React.Children.only(this.props.children);
 	}
 	,__class__: redux_react_Provider
@@ -1510,35 +1599,98 @@ view_Accounting.prototype = $extend(React_Component.prototype,{
 	,__class__: view_Accounting
 });
 var view_Contacts = $hx_exports["default"] = function(props,context) {
-	React_Component.call(this,props,context);
+	this.mounted = false;
+	haxe_Log.trace(context,{ fileName : "Contacts.hx", lineNumber : 25, className : "view.Contacts", methodName : "new"});
+	this.state = App.store.getState().appWare;
+	React_Component.call(this,props);
+	haxe_Log.trace(this.state,{ fileName : "Contacts.hx", lineNumber : 28, className : "view.Contacts", methodName : "new"});
+	this.__state = this.mapState(context.store.getState(),props);
+	this.state = this.state == null ? this.__state : react_ReactUtil.copy(this.state,this.__state);
 };
 view_Contacts.__name__ = ["view","Contacts"];
+view_Contacts.__interfaces__ = [redux_react_IConnectedComponent];
 view_Contacts.__super__ = React_Component;
 view_Contacts.prototype = $extend(React_Component.prototype,{
-	render: function() {
-		return { "$$typeof" : $$tre, type : "div", props : { className : "tabComponent", children : "..."}, key : null, ref : null};
+	mounted: null
+	,componentDidMount: function() {
+		this.mounted = true;
+		haxe_Log.trace(this.state,{ fileName : "Contacts.hx", lineNumber : 34, className : "view.Contacts", methodName : "componentDidMount"});
+		this.__unsubscribe = this.context.store.subscribe($bind(this,this.__connect));
+	}
+	,componentDidCatch: function(error,info) {
+		this.setState({ hasError : true});
+		haxe_Log.trace(error,{ fileName : "Contacts.hx", lineNumber : 42, className : "view.Contacts", methodName : "componentDidCatch"});
+	}
+	,isClean: function(newState) {
+		var _g = 0;
+		var _g1 = Reflect.fields(this.state);
+		while(_g < _g1.length) {
+			var f = _g1[_g];
+			++_g;
+			if(Reflect.field(this.state,f) != Reflect.field(newState,f)) {
+				haxe_Log.trace("" + f + ": " + Std.string(Reflect.field(this.state,f)) + " != " + Std.string(Reflect.field(newState,f)),{ fileName : "Contacts.hx", lineNumber : 51, className : "view.Contacts", methodName : "isClean"});
+				return false;
+			}
+		}
+		return true;
+	}
+	,mapState: function(state,props) {
+		haxe_Log.trace(Std.string(this.mounted) + " status unchanged? " + (this.isClean(state.appWare) ? "Y" : "N"),{ fileName : "Contacts.hx", lineNumber : 60, className : "view.Contacts", methodName : "mapState"});
+		if(this.mounted) {
+			if(!this.isClean(state.appWare)) {
+				haxe_Log.trace(state.appWare,{ fileName : "Contacts.hx", lineNumber : 65, className : "view.Contacts", methodName : "mapState"});
+				haxe_Log.trace(this.state,{ fileName : "Contacts.hx", lineNumber : 66, className : "view.Contacts", methodName : "mapState"});
+				this.setState(function(_) {
+					return { themeColor : state.appWare.themeColor, route : state.appWare.route};
+				});
+			}
+		} else {
+			haxe_Log.trace(state,{ fileName : "Contacts.hx", lineNumber : 76, className : "view.Contacts", methodName : "mapState"});
+			this.state = state.appWare;
+		}
+		haxe_Log.trace(this.state.userList.length + " status changed? " + (this.state != state.appWare ? "Y" : "N"),{ fileName : "Contacts.hx", lineNumber : 80, className : "view.Contacts", methodName : "mapState"});
+		return props;
+	}
+	,render: function() {
+		haxe_Log.trace(this.props.match,{ fileName : "Contacts.hx", lineNumber : 85, className : "view.Contacts", methodName : "render"});
+		var tmp = { "$$typeof" : $$tre, type : "div", props : { className : "tabComponent", children : "..."}, key : null, ref : null};
+		return React.createElement(React.Fragment,{ },tmp,{ "$$typeof" : $$tre, type : view_StatusBar, props : this.props, key : null, ref : null});
+	}
+	,dispatch: function(action) {
+		return this.context.store.dispatch(action);
+	}
+	,__unsubscribe: null
+	,__state: null
+	,__connect: function() {
+		if(this.__unsubscribe != null) {
+			var state = this.mapState(this.context.store.getState(),this.props);
+			if(this.__state == null || !react_ReactUtil.shallowCompare(this.__state,state)) {
+				this.__state = state;
+				this.setState(state);
+			}
+		}
+	}
+	,componentWillUnmount: function() {
+		if(this.__unsubscribe != null) {
+			this.__unsubscribe();
+			this.__unsubscribe = null;
+		}
+		this.__state = null;
 	}
 	,__class__: view_Contacts
 });
 var view_DashBoard = $hx_exports["default"] = function(props,context) {
 	this.mounted = false;
-	var s = App.store.getState().appWare;
-	this.state = { themeColor : s.themeColor};
-	React_Component.call(this,props,this.state);
-	haxe_Log.trace(this.props,{ fileName : "DashBoard.hx", lineNumber : 39, className : "view.DashBoard", methodName : "new"});
-	haxe_Log.trace(this.context,{ fileName : "DashBoard.hx", lineNumber : 40, className : "view.DashBoard", methodName : "new"});
-	haxe_Log.trace(this.state,{ fileName : "DashBoard.hx", lineNumber : 41, className : "view.DashBoard", methodName : "new"});
+	this.state = App.store.getState().appWare;
+	React_Component.call(this,props);
+	haxe_Log.trace(this.state.history,{ fileName : "DashBoard.hx", lineNumber : 33, className : "view.DashBoard", methodName : "new"});
 	this.__state = this.mapState(context.store.getState(),props);
 	this.state = this.state == null ? this.__state : react_ReactUtil.copy(this.state,this.__state);
 };
 view_DashBoard.__name__ = ["view","DashBoard"];
 view_DashBoard.__interfaces__ = [redux_react_IConnectedComponent];
-view_DashBoard.mapStateToProps = function(state) {
-	haxe_Log.trace(Reflect.fields(state),{ fileName : "DashBoard.hx", lineNumber : 70, className : "view.DashBoard", methodName : "mapStateToProps"});
-	return { locale : state.locale, themeColor : state.themeColor};
-};
 view_DashBoard.mapDispatchToProps = function(dispatch) {
-	haxe_Log.trace(dispatch,{ fileName : "DashBoard.hx", lineNumber : 79, className : "view.DashBoard", methodName : "mapDispatchToProps"});
+	haxe_Log.trace(dispatch,{ fileName : "DashBoard.hx", lineNumber : 69, className : "view.DashBoard", methodName : "mapDispatchToProps"});
 	return { onClick : function() {
 		return { };
 	}};
@@ -1546,38 +1698,36 @@ view_DashBoard.mapDispatchToProps = function(dispatch) {
 view_DashBoard.__super__ = React_Component;
 view_DashBoard.prototype = $extend(React_Component.prototype,{
 	mounted: null
-	,componentWillReceiveProps: function(nextProps) {
-		haxe_Log.trace(nextProps,{ fileName : "DashBoard.hx", lineNumber : 47, className : "view.DashBoard", methodName : "componentWillReceiveProps"});
-		React_Component.prototype.componentWillReceiveProps.call(this,nextProps);
-	}
 	,componentDidMount: function() {
 		this.mounted = true;
 		this.__unsubscribe = this.context.store.subscribe($bind(this,this.__connect));
 	}
+	,componentDidCatch: function(error,info) {
+		this.setState({ hasError : true});
+		haxe_Log.trace(error,{ fileName : "DashBoard.hx", lineNumber : 46, className : "view.DashBoard", methodName : "componentDidCatch"});
+	}
 	,mapState: function(state,props) {
-		var s = App.store.getState().appWare;
-		haxe_Log.trace(s.themeColor,{ fileName : "DashBoard.hx", lineNumber : 59, className : "view.DashBoard", methodName : "mapState"});
+		haxe_Log.trace(state.appWare.userList.length,{ fileName : "DashBoard.hx", lineNumber : 51, className : "view.DashBoard", methodName : "mapState"});
 		if(this.mounted) {
-			this.setState(function(_) {
-				return { themeColor : s.themeColor};
-			});
+			haxe_Log.trace(this.mounted,{ fileName : "DashBoard.hx", lineNumber : 53, className : "view.DashBoard", methodName : "mapState"});
+		} else {
+			this.state = state.appWare;
 		}
-		haxe_Log.trace(this.state,{ fileName : "DashBoard.hx", lineNumber : 64, className : "view.DashBoard", methodName : "mapState"});
+		haxe_Log.trace(this.state,{ fileName : "DashBoard.hx", lineNumber : 63, className : "view.DashBoard", methodName : "mapState"});
 		return props;
 	}
 	,setThemeColor: function() {
-		haxe_Log.trace("ok",{ fileName : "DashBoard.hx", lineNumber : 87, className : "view.DashBoard", methodName : "setThemeColor"});
+		haxe_Log.trace("ok",{ fileName : "DashBoard.hx", lineNumber : 77, className : "view.DashBoard", methodName : "setThemeColor"});
 		App.store.dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.SetTheme("violet")));
 	}
 	,render: function() {
-		haxe_Log.trace(this.state,{ fileName : "DashBoard.hx", lineNumber : 94, className : "view.DashBoard", methodName : "render"});
-		var c = this.state.themeColor;
+		haxe_Log.trace(this.state.user,{ fileName : "DashBoard.hx", lineNumber : 84, className : "view.DashBoard", methodName : "render"});
 		var tmp = $$tre;
-		var tmp1 = { "$$typeof" : $$tre, type : "h3", props : { children : { "$$typeof" : $$tre, type : "div", props : { style : { color : c}, children : ["Route:",this.props.location.pathname]}, key : null, ref : null}}, key : null, ref : null};
-		var tmp2 = { "$$typeof" : $$tre, type : "form", props : { id : "user-login", children : [{ "$$typeof" : $$tre, type : "label", props : { htmlFor : "user.firstName", children : "Vorname:"}, key : null, ref : null},React.createElement(react_redux_form_ControlText,{ id : "user.firstName", model : "user.firstName"}),{ "$$typeof" : $$tre, type : "button", props : { type : "submit", className : "mb-4 btn btn-primary", children : "Submit "}, key : null, ref : null},"\t\t\t\t\t"]}, key : null, ref : null};
-		var tmp3 = { "$$typeof" : $$tre, type : "span", props : { children : "Download"}, key : null, ref : null};
-		var tmp4 = React.createElement(Icon,{ small : true},{ "$$typeof" : $$tre, type : "i", props : { className : "fa fa-download"}, key : null, ref : null});
-		return { $$typeof : tmp, type : "div", props : { className : "tabComponent", children : [tmp1,tmp2,React.createElement(bulma_$components_Button,{ success : true, onClick : $bind(this,this.setThemeColor)},tmp3,tmp4)]}, key : null, ref : null};
+		var tmp1 = { "$$typeof" : $$tre, type : "form", props : { id : "user-login", children : [{ "$$typeof" : $$tre, type : "label", props : { htmlFor : "user.firstName", children : "Vorname:"}, key : null, ref : null},React.createElement(react_redux_form_ControlText,{ id : "user.firstName", model : "user.firstName"}),{ "$$typeof" : $$tre, type : "button", props : { type : "submit", className : "mb-4 btn btn-primary", children : "Submit "}, key : null, ref : null},"\t\t\t\t\t"]}, key : null, ref : null};
+		var tmp2 = { "$$typeof" : $$tre, type : "span", props : { children : "Download"}, key : null, ref : null};
+		var tmp3 = React.createElement(Icon,{ small : true},{ "$$typeof" : $$tre, type : "i", props : { className : "fa fa-download"}, key : null, ref : null});
+		var tmp4 = { $$typeof : tmp, type : "div", props : { className : "tabComponent", children : [tmp1,React.createElement(bulma_$components_Button,{ success : true, onClick : $bind(this,this.setThemeColor)},tmp2,tmp3)]}, key : null, ref : null};
+		return React.createElement(React.Fragment,{ },tmp4,{ "$$typeof" : $$tre, type : view_StatusBar, props : this.props, key : null, ref : null});
 	}
 	,dispatch: function(action) {
 		return this.context.store.dispatch(action);
@@ -1603,14 +1753,15 @@ view_DashBoard.prototype = $extend(React_Component.prototype,{
 	,__class__: view_DashBoard
 });
 var view_NavTabs = function(props,context) {
-	haxe_Log.trace(Reflect.fields(props),{ fileName : "NavTabs.hx", lineNumber : 22, className : "view.NavTabs", methodName : "new"});
-	React_Component.call(this,props,context);
+	haxe_Log.trace(context,{ fileName : "NavTabs.hx", lineNumber : 22, className : "view.NavTabs", methodName : "new"});
+	haxe_Log.trace(Reflect.fields(props),{ fileName : "NavTabs.hx", lineNumber : 23, className : "view.NavTabs", methodName : "new"});
+	React_Component.call(this,props);
 };
 view_NavTabs.__name__ = ["view","NavTabs"];
 view_NavTabs.__super__ = React_Component;
 view_NavTabs.prototype = $extend(React_Component.prototype,{
 	render: function() {
-		haxe_Log.trace(Reflect.field(this.props,"computedMatch"),{ fileName : "NavTabs.hx", lineNumber : 29, className : "view.NavTabs", methodName : "render"});
+		haxe_Log.trace(Reflect.field(this.props,"computedMatch"),{ fileName : "NavTabs.hx", lineNumber : 30, className : "view.NavTabs", methodName : "render"});
 		var tmp = $$tre;
 		var tmp1 = { "$$typeof" : $$tre, type : $bind(this,this.TabLink), props : Object.assign({ },this.props,{ to : "/dashboard", children : "DashBoard"}), key : null, ref : null};
 		var tmp2 = { "$$typeof" : $$tre, type : $bind(this,this.TabLink), props : Object.assign({ },this.props,{ to : "/qc", children : "QC"}), key : null, ref : null};
@@ -1622,22 +1773,65 @@ view_NavTabs.prototype = $extend(React_Component.prototype,{
 		return React.createElement(React.Fragment,{ },tmp7,"\t",this.props.children);
 	}
 	,TabLink: function(rprops) {
-		return { "$$typeof" : $$tre, type : "li", props : { className : rprops.to == rprops.location.pathname ? "is-active" : "", children : React.createElement(react_router_NavLink,{ to : rprops.to},rprops.children)}, key : null, ref : null};
+		return { "$$typeof" : $$tre, type : "li", props : { className : rprops.location.pathname.indexOf(rprops.to) == 0 ? "is-active" : "", children : React.createElement(react_router_NavLink,{ to : rprops.to},rprops.children)}, key : null, ref : null};
 	}
 	,__class__: view_NavTabs
 });
 var view_QC = $hx_exports["default"] = function(props,context) {
-	React_Component.call(this,props,context);
+	this.mounted = false;
+	this.state = App.store.getState().appWare;
+	React_Component.call(this,props);
+	haxe_Log.trace(this.state.themeColor,{ fileName : "QC.hx", lineNumber : 21, className : "view.QC", methodName : "new"});
+	this.__state = this.mapState(context.store.getState(),props);
+	this.state = this.state == null ? this.__state : react_ReactUtil.copy(this.state,this.__state);
 };
 view_QC.__name__ = ["view","QC"];
+view_QC.__interfaces__ = [redux_react_IConnectedComponent];
 view_QC.onLoad = function() {
-	haxe_Log.trace(666,{ fileName : "QC.hx", lineNumber : 13, className : "view.QC", methodName : "onLoad"});
+	haxe_Log.trace(666,{ fileName : "QC.hx", lineNumber : 42, className : "view.QC", methodName : "onLoad"});
 };
 view_QC.__super__ = React_Component;
 view_QC.prototype = $extend(React_Component.prototype,{
-	render: function() {
-		haxe_Log.trace(this.props,{ fileName : "QC.hx", lineNumber : 17, className : "view.QC", methodName : "render"});
-		return { "$$typeof" : $$tre, type : "div", props : { className : "tabComponent", children : { "$$typeof" : $$tre, type : "h3", props : { children : { "$$typeof" : $$tre, type : "div", props : { style : { color : "green"}, children : ["Route:",this.props.location.pathname]}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null};
+	mounted: null
+	,componentDidMount: function() {
+		this.mounted = true;
+		this.__unsubscribe = this.context.store.subscribe($bind(this,this.__connect));
+	}
+	,mapState: function(state,props) {
+		if(this.mounted) {
+			this.setState(function(_) {
+				return { themeColor : state.appWare.themeColor};
+			});
+		} else {
+			this.state = state.appWare;
+		}
+		haxe_Log.trace(this.state.themeColor,{ fileName : "QC.hx", lineNumber : 37, className : "view.QC", methodName : "mapState"});
+		return props;
+	}
+	,render: function() {
+		haxe_Log.trace(this.props,{ fileName : "QC.hx", lineNumber : 46, className : "view.QC", methodName : "render"});
+		return { "$$typeof" : $$tre, type : "div", props : { className : "tabComponent", children : { "$$typeof" : $$tre, type : "h3", props : { children : { "$$typeof" : $$tre, type : "div", props : { style : { color : this.state.themeColor}, children : ["Route:",this.props.location.pathname]}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null};
+	}
+	,dispatch: function(action) {
+		return this.context.store.dispatch(action);
+	}
+	,__unsubscribe: null
+	,__state: null
+	,__connect: function() {
+		if(this.__unsubscribe != null) {
+			var state = this.mapState(this.context.store.getState(),this.props);
+			if(this.__state == null || !react_ReactUtil.shallowCompare(this.__state,state)) {
+				this.__state = state;
+				this.setState(state);
+			}
+		}
+	}
+	,componentWillUnmount: function() {
+		if(this.__unsubscribe != null) {
+			this.__unsubscribe();
+			this.__unsubscribe = null;
+		}
+		this.__state = null;
 	}
 	,__class__: view_QC
 });
@@ -1663,12 +1857,71 @@ view_Statistics.prototype = $extend(React_Component.prototype,{
 	}
 	,__class__: view_Statistics
 });
-var view_UiView = function(props,state) {
+var view_StatusBar = function(props,context) {
+	this.mounted = false;
+	this.state = App.store.getState().statusBar;
+	React_Component.call(this,props);
+	haxe_Log.trace(this.state.user,{ fileName : "StatusBar.hx", lineNumber : 34, className : "view.StatusBar", methodName : "new"});
+	this.__state = this.mapState(context.store.getState(),props);
+	this.state = this.state == null ? this.__state : react_ReactUtil.copy(this.state,this.__state);
+};
+view_StatusBar.__name__ = ["view","StatusBar"];
+view_StatusBar.__interfaces__ = [redux_react_IConnectedComponent];
+view_StatusBar.__super__ = React_Component;
+view_StatusBar.prototype = $extend(React_Component.prototype,{
+	mounted: null
+	,componentDidMount: function() {
+		this.mounted = true;
+		this.__unsubscribe = this.context.store.subscribe($bind(this,this.__connect));
+	}
+	,componentDidCatch: function(error,info) {
+		this.setState({ hasError : true});
+		haxe_Log.trace(error,{ fileName : "StatusBar.hx", lineNumber : 47, className : "view.StatusBar", methodName : "componentDidCatch"});
+	}
+	,mapState: function(state,props) {
+		haxe_Log.trace(state.statusBar.route,{ fileName : "StatusBar.hx", lineNumber : 52, className : "view.StatusBar", methodName : "mapState"});
+		if(this.mounted) {
+			this.setState(function(_) {
+				return { date : state.statusBar.date, route : state.statusBar.route};
+			});
+		} else {
+			this.state = state.statusBar;
+		}
+		haxe_Log.trace(this.state.userList.length,{ fileName : "StatusBar.hx", lineNumber : 61, className : "view.StatusBar", methodName : "mapState"});
+		return props;
+	}
+	,render: function() {
+		return { "$$typeof" : $$tre, type : bulma_$components_Footer, props : { children : { "$$typeof" : $$tre, type : "div", props : { className : "statusbar", children : [{ "$$typeof" : $$tre, type : "span", props : { children : ["Pfad: ",this.props.match.url]}, key : null, ref : null},{ "$$typeof" : $$tre, type : react_ReactDateTimeClock, props : { value : this.state.date, className : "flex-end"}, key : null, ref : null}]}, key : null, ref : null}}, key : null, ref : null};
+	}
+	,dispatch: function(action) {
+		return this.context.store.dispatch(action);
+	}
+	,__unsubscribe: null
+	,__state: null
+	,__connect: function() {
+		if(this.__unsubscribe != null) {
+			var state = this.mapState(this.context.store.getState(),this.props);
+			if(this.__state == null || !react_ReactUtil.shallowCompare(this.__state,state)) {
+				this.__state = state;
+				this.setState(state);
+			}
+		}
+	}
+	,componentWillUnmount: function() {
+		if(this.__unsubscribe != null) {
+			this.__unsubscribe();
+			this.__unsubscribe = null;
+		}
+		this.__state = null;
+	}
+	,__class__: view_StatusBar
+});
+var view_UiView = function(props) {
 	this.tabList = [{ "key" : 1, "component" : view_DashBoard, "label" : "DashBoard", "url" : "/dashboard"},{ "key" : 2, "component" : view_Contacts, "label" : "Contacts", "url" : "/contacts"},{ "key" : 3, "component" : view_QC, "label" : "QC", "url" : "/qc"},{ "key" : 4, "component" : view_Accounting, "label" : "Buchhaltung", "url" : "/accounting"},{ "key" : 5, "component" : view_Reports, "label" : "Berichte", "url" : "/reports"}];
 	haxe_Log.trace(props,{ fileName : "UiView.hx", lineNumber : 59, className : "view.UiView", methodName : "new"});
-	haxe_Log.trace(state,{ fileName : "UiView.hx", lineNumber : 60, className : "view.UiView", methodName : "new"});
-	React_Component.call(this,props,state);
-	haxe_Log.trace(this.props,{ fileName : "UiView.hx", lineNumber : 63, className : "view.UiView", methodName : "new"});
+	haxe_Log.trace(this.state,{ fileName : "UiView.hx", lineNumber : 60, className : "view.UiView", methodName : "new"});
+	React_Component.call(this,props);
+	haxe_Log.trace(this.props,{ fileName : "UiView.hx", lineNumber : 62, className : "view.UiView", methodName : "new"});
 };
 view_UiView.__name__ = ["view","UiView"];
 view_UiView.__super__ = React_Component;
@@ -1676,7 +1929,7 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 	browserHistory: null
 	,componentDidCatch: function(error,info) {
 		this.setState({ hasError : true});
-		haxe_Log.trace(error,{ fileName : "UiView.hx", lineNumber : 71, className : "view.UiView", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "UiView.hx", lineNumber : 70, className : "view.UiView", methodName : "componentDidCatch"});
 	}
 	,componentDidMount: function() {
 	}
@@ -1691,33 +1944,12 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 		var tmp = $$tre;
 		var tmp1 = React.createElement(react_router_Route,{ path : "/dashboard", component : react_router_bundle_BundleLoader1.render});
 		var tmp2 = React.createElement(react_router_Route,{ path : "/qc", component : react_router_bundle_BundleLoader2.render});
-		var tmp3 = React.createElement(react_router_Route,{ path : "/contacts", component : react_router_bundle_BundleLoader3.render});
-		var tmp4 = React.createElement(react_router_Route,{ path : "/accounting", component : react_router_bundle_BundleLoader4.render});
-		var tmp5 = React.createElement(react_router_Route,{ path : "/reports", component : react_router_bundle_BundleLoader5.render});
-		var tmp6 = React.createElement(react_router_Switch,{ },{ $$typeof : tmp, type : view_NavTabs, props : { children : [tmp1,tmp2,tmp3,tmp4,tmp5,"\t\t\t\t\t\t"]}, key : null, ref : null});
-		return React.createElement(react_router_BrowserRouter,{ },tmp6);
-	}
-	,renderContent: function() {
-		if(this.state.component == null) {
-			return { "$$typeof" : $$tre, type : "span", props : { children : "Loading..."}, key : null, ref : null};
-		} else {
-			return { "$$typeof" : $$tre, type : this.state.component, props : { }, key : null, ref : null};
-		}
-	}
-	,navLinks: function(tabs) {
-		var nav = tabs.map(function(tab) {
-			return { "$$typeof" : $$tre, type : "ul", props : { children : { "$$typeof" : $$tre, type : "li", props : { children : { "$$typeof" : $$tre, type : "a", props : { href : tab.url, children : tab.label}, key : tab.id, ref : null}}, key : null, ref : null}}, key : null, ref : null};
-		});
-		haxe_Log.trace(nav,{ fileName : "UiView.hx", lineNumber : 197, className : "view.UiView", methodName : "navLinks"});
-		return nav;
-	}
-	,navWrapper: function(tabList) {
-		var navWrap = { "$$typeof" : $$tre, type : "ul", props : { }, key : null, ref : null};
-		navWrap = React.Children.only(navWrap);
-		haxe_Log.trace(navWrap,{ fileName : "UiView.hx", lineNumber : 210, className : "view.UiView", methodName : "navWrapper"});
-		haxe_Log.trace(navWrap,{ fileName : "UiView.hx", lineNumber : 211, className : "view.UiView", methodName : "navWrapper"});
-		haxe_Log.trace("OK",{ fileName : "UiView.hx", lineNumber : 212, className : "view.UiView", methodName : "navWrapper"});
-		return navWrap;
+		var tmp3 = React.createElement(react_router_Route,{ path : "/contacts", component : react_router_bundle_BundleLoader3.render, exact : true});
+		var tmp4 = React.createElement(react_router_Route,{ path : "/contacts/:contactid", component : react_router_bundle_BundleLoader4.render, exact : true});
+		var tmp5 = React.createElement(react_router_Route,{ path : "/accounting", component : react_router_bundle_BundleLoader5.render});
+		var tmp6 = React.createElement(react_router_Route,{ path : "/reports", component : react_router_bundle_BundleLoader6.render});
+		var tmp7 = React.createElement(react_router_Switch,{ },{ $$typeof : tmp, type : view_NavTabs, props : { children : [tmp1,tmp2,tmp3,tmp4,tmp5,tmp6,"\t\t\t\t\t\t"]}, key : null, ref : null});
+		return React.createElement(react_router_BrowserRouter,{ },tmp7);
 	}
 	,__class__: view_UiView
 });
@@ -1738,10 +1970,13 @@ var $$tre = (typeof Symbol === "function" && Symbol.for && Symbol.for("react.ele
 String.prototype.__class__ = String;
 String.__name__ = ["String"];
 Array.__name__ = ["Array"];
+Date.prototype.__class__ = Date;
+Date.__name__ = ["Date"];
 App.STYLES = require("./src/App.css");
 App.bulma = require("./node_modules/bulma/css/bulma.min.css");
 App.fa = require("./node_modules/font-awesome/css/font-awesome.min.css");
 App.displayName = "App";
+bulma_$components_Footer.displayName = "Footer";
 js_Boot.__toStr = ({ }).toString;
 me_cunity_debug_Out.suspended = false;
 me_cunity_debug_Out.skipFields = [];
@@ -1749,21 +1984,26 @@ me_cunity_debug_Out.skipFunctions = true;
 me_cunity_debug_Out.traceToConsole = false;
 me_cunity_debug_Out.traceTarget = me_cunity_debug_DebugOutput.NATIVE;
 me_cunity_debug_Out.aStack = haxe_CallStack.callStack;
+react_ReactDateTimeClock.displayName = "ReactDateTimeClock";
 react_router_bundle_BundleWrapper.defaultProps = { loading : react_router_bundle_BundleWrapper.DefaultLoader, error : react_router_bundle_BundleWrapper.DefaultError};
 react_router_bundle_BundleWrapper.displayName = "BundleWrapper";
 redux_react_Provider.childContextTypes = { store : PropTypes.object.isRequired};
 redux_react_Provider.propTypes = { children : PropTypes.element.isRequired};
 redux_react_Provider.displayName = "Provider";
 view_Accounting.displayName = "Accounting";
+view_Contacts.contextTypes = { store : PropTypes.object.isRequired};
 view_Contacts.displayName = "Contacts";
 view_DashBoard.user = { firstName : "dummy"};
 view_DashBoard.contextTypes = { store : PropTypes.object.isRequired};
 view_DashBoard.displayName = "DashBoard";
 view_NavTabs.displayName = "NavTabs";
+view_QC.contextTypes = { store : PropTypes.object.isRequired};
 view_QC.displayName = "QC";
 view_Reports.displayName = "Reports";
 view_Statistics.CONFIG = require("./src/config.json");
 view_Statistics.displayName = "Statistics";
+view_StatusBar.contextTypes = { store : PropTypes.object.isRequired};
+view_StatusBar.displayName = "StatusBar";
 view_UiView.displayName = "UiView";
 view_User.displayName = "User";
 Go.main();

@@ -1,5 +1,6 @@
 package view;
 
+import haxe.Timer;
 import me.cunity.debug.Out;
 import react.Fragment;
 import react.React;
@@ -48,18 +49,16 @@ typedef UiProps =
 
 //@:connect
 //@:wrap(react.router.ReactRouter.withRouter)
-class UiView extends ReactComponentOfPropsAndState<Dynamic,ApplicationState>
+class UiView extends ReactComponentOfPropsAndState<Dynamic,GlobalAppState>
 {
-	public static var store:Store<ApplicationState>;
+	//public static var store:Store<GlobalAppState>;
 	
 	var browserHistory:Dynamic;
 	
-	public function new(props:Dynamic, state:ApplicationState) {
-		//this.state = {history: ReactRouter.browserHistory, route:''};?props:RouteComponentProps, 
+	public function new(props:Dynamic) {
 		trace(props);	
 		trace(state);	
-		//this.state = {locale:props.locale, history: null, route:'', hasError:false};
-        super(props,state);
+        super(props);
 		trace(this.props);	
     }
 	
@@ -74,9 +73,6 @@ class UiView extends ReactComponentOfPropsAndState<Dynamic,ApplicationState>
     override function componentDidMount() {
 
     }
-	//return ReactChildren.only(
-	//<Route path="/" component={DashBoard}/><Tabs className="is-centered" ></Tabs>
-	//var e = React.createElement;
 	
 	var tabList:Array<Dynamic> = [
 		{ 'key': 1, 'component': DashBoard, 'label': 'DashBoard', 'url': '/dashboard' },
@@ -85,65 +81,7 @@ class UiView extends ReactComponentOfPropsAndState<Dynamic,ApplicationState>
 		{ 'key': 4, 'component': Accounting, 'label': 'Buchhaltung', 'url': '/accounting' },
 		{ 'key': 5, 'component': Reports, 'label': 'Berichte', 'url': '/reports' },
 	];
-	//component=${pageWrapper}
-	/*
-	override function render() {
-		return jsx('		
-			<Router history={ReactRouter.browserHistory}>
-				<Route path="/" component=$pageWrapper2>
-					<Route path="/dashboard" component=${DashBoard}/>
-					<Route path="/qc" component=${QC}/>
-					<Route path="/contacts" component=${Contacts}/>
-				</Route>  
-			</Router>${pageWrapper2}
-		');
-	}
-		override function render() {
-		return jsx('		
-			<$BrowserRouter>
-				<$Switch>
-					<$Route path="/dashboard" component=${Bundle.load(DashBoard)}/>
-					<$Route path="/qc" component=${Bundle.load(QC)}/>
-					<$Route path="/contacts" component=${Bundle.load(Contacts)}/>
-				</$Switch>
-			</$BrowserRouter><$Route path="/" component=/>
-		');
-	}
-						<$Route path="/dashboard" component=${DashBoard}/>
-					<$Route exact={true} path="/qc" component=${QC}/>
-					<$Route path="/contacts" component=${Contacts}/>
-			override function render() {
-		return jsx('		
-			<$BrowserRouter>
-			 <Fragment>
-				<$Switch>				
-			 <NavTabs/>
-					<$Route path="/dashboard" component=${DashBoard}/>
-					<$Route exact={true} path="/qc" component=${QC}/>
-					<$Route path="/contacts" component=${Contacts}/>
-				</$Switch>
-			 </Fragment>
-			</$BrowserRouter>
-		');
-	}	
-	function render2() {
-		return jsx('		
-			<$BrowserRouter>
-			 <NavTabs/>
-				<$Switch>				
-					<$Route path="/dashboard" component=${Bundle.load(DashBoard)}/>
-					<$Route path="/qc" component=${Bundle.load(QC)}/>
-					<$Route path="/contacts" component=${Bundle.load(Contacts)}/>
-				</$Switch>
-			</$BrowserRouter>
-		');
-	}
-					<$Route path="/dashboard" component=${Bundle.load(DashBoard)}/>
-					<$Route path="/qc" component=${Bundle.load(QC)}/>
-					<$Route path="/contacts" component=${Bundle.load(Contacts)}/>
-					<$Route path="/accounting" component=${Bundle.load(Accounting)}/>
-					<$Route path="/reports" component=${Bundle.load(Reports)}/>	
-	*/ 
+
 	function createRoutes()
 	{
 		var routes:Array<Dynamic> = tabList.map(
@@ -162,7 +100,8 @@ class UiView extends ReactComponentOfPropsAndState<Dynamic,ApplicationState>
 					<NavTabs>
 						<$Route path="/dashboard" component=${Bundle.load(DashBoard)}/>
 						<$Route path="/qc" component=${Bundle.load(QC)}/>
-						<$Route path="/contacts" component=${Bundle.load(Contacts)}/>
+						<$Route path="/contacts" component=${Bundle.load(Contacts)} exact={true}/>
+						<$Route path="/contacts/:contactid" component=${Bundle.load(Contacts)} exact={true}/>
 						<$Route path="/accounting" component=${Bundle.load(Accounting)}/>
 						<$Route path="/reports" component=${Bundle.load(Reports)}/>						
 					</NavTabs>
@@ -170,60 +109,4 @@ class UiView extends ReactComponentOfPropsAndState<Dynamic,ApplicationState>
 			</$BrowserRouter>
 		');
 	}
-	
-	//${props.route.path}this.props.appWare.themeColor${props.children}
-	
-	function renderContent() {
-        if (state.component == null)
-            return jsx('
-                <span>Loading...</span>
-            ');
-        else
-            return jsx('
-                <state.component />
-        ');
-    }
-	
-	function navLinks(tabs:Array<Dynamic>)
-	{
-		//var navLinks =  tabs.map( function(tab){${navLinks(tabList)} 
-		var nav =  tabs.map( function(tab){
-			return jsx(
-			'<ul>
-				<li><a href={tab.url} key={tab.id}>{tab.label}</a></li>
-			</ul>'
-			);
-		});
-		trace(nav);
-		return nav;
-	}
-	
-	function navWrapper(tabList:Array<Dynamic>):ReactElement
-	{
-		//var navWrap:ReactElement = React.createElement('div', null, 'Hello World');
-		//var navWrap:ReactElement = React.createElement('ul', null, navLinks(tabList));
-		var navWrap:ReactElement = cast jsx('
-			<ul>
-					
-			</ul>
-		');
-		trace(navWrap = React.Children.only(navWrap));
-		trace(navWrap);
-		trace('OK');
-		return navWrap;
-	}	//${props.children}
-	
-	/*function pageWrapper(props:RouteComponentProps)
-	{
-		trace(props);
-		return jsx('
-				<div><nav>
-						<Link to="/dashboard">DashBoard</Link> 
-						<Link to="/qc" >QC</Link>
-						<Link to="/contacts">Contacts</Link>
-					</nav>
-				${props.children}
-				</div>
-		');
-	}*/
 }

@@ -5,6 +5,7 @@
 ?>
 <html>
   <head>
+	  <base href="/" />
     <meta charset="UTF-8">
     <title><%= htmlWebpackPlugin.options.title %></title>
 	<script type="text/javascript" src="js/bulma-extensions.min.js"></script>

@@ -1,8 +1,8 @@
 package view;
 
 import action.AppAction;
-import bulma_components.Button;
 import bulma_components.*;
+import react.Partial;
 import react.ReactComponent;
 import react.ReactComponent.*;
 import react.ReactPropTypes;
@@ -12,20 +12,14 @@ import react.router.Route.RouteRenderProps;
 import react.redux.form.Control.ControlProps;
 import react.redux.form.Control;
 import redux.Redux;
-import redux.react.ReactRedux.connect;
+//import redux.react.ReactRedux.connect;
 import redux.react.IConnectedComponent;
 
 import Webpack.*;
+import GlobalAppState;
 
-typedef ModuleProps =
-{
-	> RouteRenderProps,
-	themeColor:String
-}
-
-//@:connect
 @:expose('default')
-class DashBoard extends ReactComponentOfProps<RouteRenderProps>
+class DashBoard extends ReactComponentOfPropsAndState<RouteRenderProps, GlobalAppState>
 	implements IConnectedComponent
 {
 	static var user = {firstName:'dummy'};
@@ -33,19 +27,10 @@ class DashBoard extends ReactComponentOfProps<RouteRenderProps>
 	
 	public function new(?props:Dynamic)
 	{
-		var s:ApplicationState = untyped App.store.getState().appWare;
-		state = {themeColor:s.themeColor};
-		super(props,state);
-		trace(this.props);
-		trace(this.context);
-		trace(this.state);
-		//unsubscribe = App.store.subscribe(handleChange)
-	}
-	
-	override public function componentWillReceiveProps(nextProps:Dynamic):Void 
-	{
-		trace(nextProps);
-		super.componentWillReceiveProps(nextProps);
+		state = App.store.getState().appWare;
+		//trace(props);
+		super(props);
+		trace(untyped this.state.history);
 	}
 	
 	override public function componentDidMount():Void 
@@ -53,25 +38,30 @@ class DashBoard extends ReactComponentOfProps<RouteRenderProps>
 		mounted = true;
 	}
 	
-	public function mapState(state:ApplicationState, props:Dynamic):Dynamic
+	override function componentDidCatch(error, info) {
+		// Display fallback UI
+		this.setState({ hasError: true });
+		// You can also log the error to an error reporting service
+		//logErrorToMyService(error, info);
+		trace(error);
+	}	
+	
+	public function mapState(state:AppState, props:Dynamic):Partial<GlobalAppState>
 	{
-		var s:ApplicationState = untyped App.store.getState().appWare;
-		trace(s.themeColor);
-		if(mounted)
-		this.setState(function(_) return {themeColor:s.themeColor});		
-		//trace(state);
-		//props.themeColor = s.themeColor;
+		trace(state.appWare.userList.length);
+		if (mounted){
+			trace(mounted);//do nothing4now
+			/*this.setState(//function(_){
+				//return 
+				{
+					user:state.appWare.user,  userList:state.appWare.userList, route:state.appWare.route				
+				//};				
+			});	*/
+		}
+		else
+			this.state = state.appWare;
 		trace(this.state);
 		return props;
-	}
-	
-	static function mapStateToProps(state:ApplicationState):Dynamic
-	{
-		trace(Reflect.fields(state));
-		return {
-			locale:state.locale,
-			themeColor:state.themeColor
-		};
 	}	
 	
 	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
@@ -91,11 +81,10 @@ class DashBoard extends ReactComponentOfProps<RouteRenderProps>
     override function render() {
 		//trace(props);
 		//var s:ApplicationState = untyped App.store.getState().appWare;
-		trace(state);
-		var c = state.themeColor;// 'red';
+		trace(this.state.user);
         return jsx('
+		<>
             <div className="tabComponent" >
-			<h3>< div style = ${{color:c}} >Route:${props.location.pathname}</div></h3>
 				<form  id="user-login" >
 				 <label htmlFor="user.firstName">Vorname:</label>
 				 <ControlText model="user.firstName" id="user.firstName" />
@@ -105,6 +94,8 @@ class DashBoard extends ReactComponentOfProps<RouteRenderProps>
 				</form>
 				<Button success={true} onClick={setThemeColor} ><span>Download</span><Icon small={true}><i className="fa fa-download"/></Icon></Button>
             </div>
+			<StatusBar {...props}/>
+		</>
         ');
     }
 }

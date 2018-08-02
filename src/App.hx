@@ -1,4 +1,5 @@
 //import dom.History;
+import haxe.Timer;
 import me.cunity.debug.Out;
 import react.ReactMacro.jsx;
 import react.ReactComponent;
@@ -21,28 +22,29 @@ import bulma_components.Tabs;
 //import redux.react.IConnectedComponent;
 
 import Webpack.*;
-
+import GlobalAppState;
+import action.AppAction;
 import view.Contacts;
 import view.DashBoard;
 import view.QC;
 import view.Statistics;
 import view.UiView;
 
-class App  extends react.ReactComponentOfState<ApplicationState>
+class App  extends react.ReactComponentOfState<AppState>
 {
     static var STYLES = require('./App.css');
 	static var bulma = require('../node_modules/bulma/css/bulma.min.css');
 	static var fa = require('../node_modules/font-awesome/css/font-awesome.min.css');
 	
 	//public static var AppContext = React.createContext(null);
-	public static var store:StoreMethods<ApplicationState>;
+	public static var store:StoreMethods<AppState>;
 
 	var backListener:Void->Void;
 	var browserHistory:Dynamic;	
 
     public function new() {
 		store = ApplicationStore.create();
-		state = untyped store.getState().appWare;
+		state = store.getState();
 		//trace(state);
 		trace(Reflect.fields(state));
         super(props, state);
@@ -52,19 +54,27 @@ class App  extends react.ReactComponentOfState<ApplicationState>
 		//browserHistory = History.createBrowserHistory();
     }
 
-    override function componentDidMount() {
-		switch (state.route) {
+    override function componentDidMount() 
+	{
+		var d:Date = Date.now();
+		var s:Int = d.getSeconds();
+		trace('start delay at $s set timer start in ${(60 - s ) * 1000} seconds');
+		Timer.delay(function(){
+			trace('timer start at ${d.getSeconds()}');
+			store.dispatch(Tick(Date.now()));
+			var t:Timer = new Timer(60000);
+			t.run = function() store.dispatch(Tick(Date.now()));//this.setState({appWare:{ date: Date.now() }});
+		}, (60 - d.getSeconds()) * 1000);
+		
+		switch (state.appWare.route) {
 			default:
-				/*Webpack.load(DashBoard).then(function(_) { 
-					setState( { component:DashBoard, route:'/dashboard' });
-				});*/
-				trace(state.route);
+				trace(state.appWare.route);
 		}
     }
 	
 	override function   componentDidCatch(error, info) {
 		// Display fallback UI
-		this.setState({ hasError: true });
+		//this.setState(function(_) return {appWare:{ hasError: true }});
 		// You can also log the error to an error reporting service
 		trace(error);
 	  }
@@ -78,20 +88,4 @@ class App  extends react.ReactComponentOfState<ApplicationState>
 			<Provider store={store}><UiView/></Provider>			
         ');
     }
-
-    public static function renderContent(?state:Dynamic) {
-        if (state.component == null)
-            return jsx('
-                <span>Loading...</span>
-            ');
-        else
-            return jsx('
-                <state.component />
-        ');
-    }
 } 
-//<UiView />
-/*				<Router history={browserHistory}>history={browserHistory}
-					<Route to="/"><div>hi</div></Route>
-				</Router>
-*/

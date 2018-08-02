@@ -1,7 +1,6 @@
 package bulma_components;
 
 import react.ReactComponent;
-import react.ReactMacro.jsx;
 
 /**
  * ...

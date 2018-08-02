@@ -13,14 +13,15 @@ import bulma_components.Tabs;
  * @author axel@cunity.me
  */
 
-@:wrap(react.router.ReactRouter.withRouter)
+//@:wrap(react.router.ReactRouter.withRouter)
 class NavTabs extends ReactComponentOfProps<RouteComponentProps>
 {
 	public function new(?props:RouteComponentProps, ?context:Dynamic) 
 	{
 		//trace(props);
+		trace(context);
 		trace(Reflect.fields(props));
-		super(props, context);		
+		super(props);		
 	}
 	
 	override public function render()
@@ -49,7 +50,7 @@ class NavTabs extends ReactComponentOfProps<RouteComponentProps>
 		//trace(rprops);
 		//trace(Reflect.fields(rprops));
 		return jsx('
-		<li className=${rprops.to == rprops.location.pathname?"is-active":""}><NavLink to=${rprops.to}>${rprops.children}</NavLink></li>
+		<li className=${rprops.location.pathname.indexOf(rprops.to) == 0 ?"is-active":""}><NavLink to=${rprops.to}>${rprops.children}</NavLink></li>
 		');
 	}
 }

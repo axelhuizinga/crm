@@ -10,24 +10,27 @@ import redux.IMiddleware;
 import redux.IReducer;
 import redux.StoreMethods;
 import react.router.ReactRouter;
-import react.router.RouterHistory;
+import history.History;
+import GlobalAppState;
+
 /**
  * ...
  * @author axel@cunity.me
  */
 
-class AppWare 
-	implements IReducer<AppAction, ApplicationState>
-	implements IMiddleware<AppAction, ApplicationState>
+class AppService 
+	implements IReducer<AppAction, GlobalAppState>
+	implements IMiddleware<AppAction, AppState>
 {
-	public var initState:ApplicationState = {
-		route:'',
+	public var initState:GlobalAppState = {
+		route: Browser.location.pathname,// '',
 		themeColor: 'green',
 		locale: 'de',
-		history:null,
+		//history:null,
+		userList:[],
 		user:new User(null, {id:1000000666, contact:1000000666, first_name:'test', last_name:'agent'})
 	};
-	public var store:StoreMethods<ApplicationState>;
+	public var store:StoreMethods<AppState>;
 
 	var ID = 0;
 	var loadPending:Promise<Bool>;
@@ -37,7 +40,7 @@ class AppWare
 		
 	}
 	
-	public function reduce(state:ApplicationState, action:AppAction):ApplicationState
+	public function reduce(state:GlobalAppState, action:AppAction):GlobalAppState
 	{
 		trace(action);
 		return switch(action)
@@ -62,6 +65,7 @@ class AppWare
 					});
 				}
 				else state;
+
 			default:
 				state;
 		}
@@ -69,7 +73,7 @@ class AppWare
 	
 	public function middleware(action:AppAction, next:Void -> Dynamic)
 	{
-		trace(action);
+		trace(next);
 		return switch(action)
 		{
 			default: next();
