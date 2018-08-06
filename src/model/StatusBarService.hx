@@ -23,7 +23,7 @@ class StatusBarService implements IReducer<StatusAction, StatusBarState>
 		route: Browser.location.pathname,// '',
 		date:Date.now(),
 		userList:[],
-		user:new User(null, {id:1000000666, contact:1000000666, first_name:'test', last_name:'agent'})
+		user:null
 	};
 	public var store:StoreMethods<AppState>;
 
@@ -32,7 +32,7 @@ class StatusBarService implements IReducer<StatusAction, StatusBarState>
 	
 	public function new() 
 	{ 
-		
+		trace('ok');
 	}
 	
 	public function reduce(state:StatusBarState, action:StatusAction):StatusBarState
@@ -51,7 +51,7 @@ class StatusBarService implements IReducer<StatusAction, StatusBarState>
 	
 	public function middleware(action:StatusAction, next:Void -> Dynamic)
 	{
-		trace(next);
+		//trace(action);
 		return switch(action)
 		{
 			default: next();

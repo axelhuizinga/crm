@@ -4,6 +4,10 @@
 -lib redux
 -lib redux-connect
 -lib CommentString
+-lib reselect
+-lib event-types
+-lib js-object
+-lib tink_hxx
 
 -cp ..\lib
 -cp lib
@@ -12,3 +16,5 @@
 -main Go
 
 -D react_hot
+-D modular_nomaps
+-D webpack

@@ -24,14 +24,14 @@ class ReactDateTimeClock extends ReactComponentOfProps<DateTimeProps>
 	
 	public function new(props) 
 	{
-		trace( props.value );
+		//trace( props.value );
 		super(props);
 		
 	}
 	
 	override public function render()
 	{
-		trace( props.value );
+		//trace( props.value );
 		return jsx('
 			<DateTimePicker value={props.value} className={props.className} locale="de-DE" disabled={true} clearIcon={null} calendarIcon={null} />
 		');

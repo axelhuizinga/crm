@@ -1,6 +1,8 @@
 package view;
 
 import react.ReactComponent;
+import react.ReactMacro.jsx;
+
 
 /**
  * ...
@@ -15,17 +17,25 @@ typedef UserState =
 	?last_name:String,
 	?active:Bool,
 	?loggedIn:Bool,
-	?lastLoggedIn:Date
+	?lastLoggedIn:Date,
+	?jwt:String
 }
 
 class User extends ReactComponentOfState<UserState> 
 {
 
-	public function new(props:Dynamic, state:UserState, ?context:Dynamic)
+	public function new(?props:Dynamic,state:UserState)
 	{
-		super(null, state);
-		trace(props);
-		trace(state);
+		super();
+		this.state = state;
+		//super(props, state);
+		//trace(props);
+		trace(this.state);
+	}
+	
+	override function render()
+	{
+		return jsx('<div />');
 	}
 	
 }

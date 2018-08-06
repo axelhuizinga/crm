@@ -1,53 +1,58 @@
 package view;
 
-import react.Partial;
+import bulma_components.*;
 import react.ReactComponent;
+import react.ReactDateTimeClock;
 import react.ReactMacro.jsx;
+import react.Partial;
 import react.router.Route.RouteRenderProps;
 import redux.react.IConnectedComponent;
+import redux.StoreMethods;
+//import react.form.Form;
+//import react.form.Text;
+
+
 import Webpack.*;
 import GlobalAppState;
 
-@:expose('default')
-class QC extends ReactComponentOfPropsAndState<RouteRenderProps, GlobalAppState>
-	implements IConnectedComponent
+@:connect
+class QC extends ReactComponentOfProps<RouteRenderProps>
+	
 {
 	var mounted:Bool = false;
 	
-	public function new(?props:Dynamic)
+	public function new(?props:Dynamic, context:Dynamic)
 	{
-		state = App.store.getState().appWare;
+		trace(context);
+		//this.state = App.store.getState().appWare;
 		super(props);
-		trace(this.state.themeColor);
+		///trace(this.state);
 	}
 	
 	override public function componentDidMount():Void 
 	{
 		mounted = true;
+		//trace(this);
 	}
 	
-	public function mapState(state:AppState, props:Dynamic):Dynamic
-	{
-		//trace(state);
-		if(mounted)
-			this.setState(function(_):Partial<GlobalAppState>{ return {themeColor:state.appWare.themeColor};});		
-		else
-			this.state = state.appWare;
-		//trace(state);
-		trace(this.state.themeColor);
-		return props;
-	}
-	
-    public static function onLoad() {
-		trace(666);
-    }	
+	override function componentDidCatch(error, info) {
+		// Display fallback UI
+		//this.setState({ hasError: true });
+		// You can also log the error to an error reporting service
+		//logErrorToMyService(error, info);
+		trace(error);
+	}	
+		
 	
     override function render() {
 		trace(props);
         return jsx('
+		<>
             <div className="tabComponent">
-			<h3>< div style = ${{color:state.themeColor}} >Route:${props.location.pathname}</div></h3>
+				...
             </div>
+			<StatusBar {...props}/>
+        </>
         ');
     }
 }

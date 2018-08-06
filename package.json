@@ -10,6 +10,7 @@
     "file-loader": "^0.11.2",
     "font-awesome": "^4.7.0",
     "haxe-loader": "^0.7.4",
+    "haxe-modular": "^0.10.15",
     "html-webpack-plugin": "^2.29.0",
     "prop-types": "^15.5.10",
     "react": "^16.4.1",

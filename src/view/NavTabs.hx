@@ -12,11 +12,16 @@ import bulma_components.Tabs;
  * ...
  * @author axel@cunity.me
  */
+typedef NavProps =
+{
+	> RouteComponentProps,
+	debug:String
+}
 
 //@:wrap(react.router.ReactRouter.withRouter)
-class NavTabs extends ReactComponentOfProps<RouteComponentProps>
+class NavTabs extends ReactComponentOfProps<NavProps>
 {
-	public function new(?props:RouteComponentProps, ?context:Dynamic) 
+	public function new(?props:NavProps, ?context:Dynamic) 
 	{
 		//trace(props);
 		trace(context);

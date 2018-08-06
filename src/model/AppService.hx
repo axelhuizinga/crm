@@ -20,7 +20,6 @@ import GlobalAppState;
 
 class AppService 
 	implements IReducer<AppAction, GlobalAppState>
-	implements IMiddleware<AppAction, AppState>
 {
 	public var initState:GlobalAppState = {
 		route: Browser.location.pathname,// '',
@@ -28,7 +27,7 @@ class AppService
 		locale: 'de',
 		//history:null,
 		userList:[],
-		user:new User(null, {id:1000000666, contact:1000000666, first_name:'test', last_name:'agent'})
+		user:new User(null, {id:1000000666, contact:1000000666, first_name:'test', last_name:'admin', jwt:''})
 	};
 	public var store:StoreMethods<AppState>;
 
@@ -37,7 +36,7 @@ class AppService
 	
 	public function new() 
 	{ 
-		
+		trace('OK');
 	}
 	
 	public function reduce(state:GlobalAppState, action:AppAction):GlobalAppState

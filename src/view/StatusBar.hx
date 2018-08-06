@@ -2,12 +2,15 @@ package view;
 
 import bulma_components.*;
 import react.Partial;
-import react.ReactComponent.ReactComponentOfPropsAndState;
+import react.ReactComponent.ReactComponentOfProps;
 import react.ReactComponentMacro;
 import react.ReactDateTimeClock;
 
 import react.ReactMacro.jsx;
 import redux.react.IConnectedComponent;
+import redux.Redux;
+import redux.StoreMethods;
+import action.AppAction;
 import GlobalAppState;
 
 /**
@@ -18,20 +21,23 @@ import GlobalAppState;
 typedef StatusBarProps =
 {
 	date:Date,
-	match:Dynamic
+	match:Dynamic,
+	user:User
 }
 
-class StatusBar extends ReactComponentOfPropsAndState<StatusBarProps, StatusBarState>
-	implements IConnectedComponent
+@:connect
+class StatusBar extends ReactComponentOfProps<StatusBarProps>
+	
 {
 	var mounted:Bool = false;
 	
 	public function new(?props:Dynamic)
 	{
-		state = App.store.getState().statusBar;
+		//state = App.store.getState().statusBar;
 		//trace(props);
+		trace('ok');
 		super(props);
-		trace(this.state.user);
+		//trace(this);
 	}
 	
 	override public function componentDidMount():Void 
@@ -39,36 +45,34 @@ class StatusBar extends ReactComponentOfPropsAndState<StatusBarProps, StatusBarS
 		mounted = true;
 	}
 	
-	override function componentDidCatch(error, info) {
-		// Display fallback UI
-		this.setState({ hasError: true });
-		// You can also log the error to an error reporting service
-		//logErrorToMyService(error, info);
-		trace(error);
-	}	
-	
-	public function mapState(state:AppState, props:Dynamic):Dynamic
-	{
-		trace(state.statusBar.route);
-		if(mounted)
-			this.setState(function(_):Partial<StatusBarState>{ return {
-					date:state.statusBar.date, route:state.statusBar.route				
-				};				
-			});		
-		else
-			this.state = state.statusBar;
-		//trace(state);
-		trace(this.state.userList.length);
-		return props;
+	static function mapStateToProps() {
+
+		return function(state:AppState) {
+			trace(state.statusBar.date);
+			return {
+				date:state.statusBar.date,
+				userList:state.appWare.userList,
+				user:state.appWare.user
+			};
+		};
+	}
+
+	static function mapDispatchToProps(dispatch:Dispatch, ownProps:Dynamic) {
+		trace(ownProps.date);
+		return {dummy:666};
+		/*	onTodoClick: function(id:Int) return dispatch(AppAction.SetTheme('orange'))
+		};*/
 	}	
 	
 	override public function render()
 	{
+		//trace(props);
 		return jsx('
 		<Footer>
 			<div className = "statusbar">
 				<span>Pfad: ${props.match.url}</span>
-				<ReactDateTimeClock value={state.date}  className="flex-end" />
+				<span>Benutzer: ${props.user != null ? props.user.state.last_name : '' }</span>
+				<ReactDateTimeClock value={props.date}  className="flex-end" />
 			</div>
 		</Footer>
 		');

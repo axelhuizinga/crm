@@ -52,12 +52,17 @@ module.exports = {
         overlay: true,
         hot: true,
 	watchOptions:{
-		aggregateTimeout:1500
-	},
+		aggregateTimeout:1500,
+		ignored:'.tmp.drivedownload'
+	},	    
 	historyApiFallback: {
 	      index: 'crm.html'
 	}
     },
+	watchOptions:{
+		aggregateTimeout:1500,
+		ignored:['node_modules', '.tmp.drivedownload']
+	},    
     // List all the processors
     module: {
         rules: [

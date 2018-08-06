@@ -18,19 +18,19 @@ import redux.react.IConnectedComponent;
 import Webpack.*;
 import GlobalAppState;
 
-@:expose('default')
-class DashBoard extends ReactComponentOfPropsAndState<RouteRenderProps, GlobalAppState>
-	implements IConnectedComponent
+@:connect
+class DashBoard extends ReactComponentOfProps<RouteRenderProps>
+	
 {
 	static var user = {firstName:'dummy'};
 	var mounted:Bool = false;
 	
 	public function new(?props:Dynamic)
 	{
-		state = App.store.getState().appWare;
+		//state = App.store.getState().appWare;
 		//trace(props);
 		super(props);
-		trace(untyped this.state.history);
+		//trace(untyped this.state.history);
 	}
 	
 	override public function componentDidMount():Void 
@@ -40,36 +40,16 @@ class DashBoard extends ReactComponentOfPropsAndState<RouteRenderProps, GlobalAp
 	
 	override function componentDidCatch(error, info) {
 		// Display fallback UI
-		this.setState({ hasError: true });
+		//this.setState({ hasError: true });
 		// You can also log the error to an error reporting service
 		//logErrorToMyService(error, info);
 		trace(error);
-	}	
-	
-	public function mapState(state:AppState, props:Dynamic):Partial<GlobalAppState>
-	{
-		trace(state.appWare.userList.length);
-		if (mounted){
-			trace(mounted);//do nothing4now
-			/*this.setState(//function(_){
-				//return 
-				{
-					user:state.appWare.user,  userList:state.appWare.userList, route:state.appWare.route				
-				//};				
-			});	*/
-		}
-		else
-			this.state = state.appWare;
-		trace(this.state);
-		return props;
-	}	
+	}		
 	
 	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
     {
 		trace(dispatch);
-        return {
-            onClick: function() return {}// dispatch(SetTheme('grey'))
-        };
+        return {};
     }
 	
 	function setThemeColor()
@@ -81,7 +61,7 @@ class DashBoard extends ReactComponentOfPropsAndState<RouteRenderProps, GlobalAp
     override function render() {
 		//trace(props);
 		//var s:ApplicationState = untyped App.store.getState().appWare;
-		trace(this.state.user);
+		//trace(this.state);
         return jsx('
 		<>
             <div className="tabComponent" >

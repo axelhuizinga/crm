@@ -49,17 +49,17 @@ typedef UiProps =
 
 //@:connect
 //@:wrap(react.router.ReactRouter.withRouter)
-class UiView extends ReactComponentOfPropsAndState<Dynamic,GlobalAppState>
+class UiView extends ReactComponentOf<Dynamic,GlobalAppState>
 {
 	//public static var store:Store<GlobalAppState>;
 	
 	var browserHistory:Dynamic;
 	
 	public function new(props:Dynamic) {
-		trace(props);	
-		trace(state);	
+		//trace(props);	
+		//trace(state);	
         super(props);
-		trace(this.props);	
+		trace(this.props.appWare.user.state.last_name);	
     }
 	
 	override function componentDidCatch(error, info) {
@@ -92,8 +92,8 @@ class UiView extends ReactComponentOfPropsAndState<Dynamic,GlobalAppState>
 		});
 		return routes;
 	}
-
-	override function render() {
+	
+	/*function render2() {
 		return jsx('		
 			<$BrowserRouter>
 				<$Switch>
@@ -104,6 +104,29 @@ class UiView extends ReactComponentOfPropsAndState<Dynamic,GlobalAppState>
 						<$Route path="/contacts/:contactid" component=${Bundle.load(Contacts)} exact={true}/>
 						<$Route path="/accounting" component=${Bundle.load(Accounting)}/>
 						<$Route path="/reports" component=${Bundle.load(Reports)}/>						
+					</NavTabs>debug=${App.jsxDump(props)}
+				</$Switch>
+			</$BrowserRouter>
+		');
+	}*/
+	
+	override function render() {
+		if (props.appWare.user.state.jwt == '')
+		{
+			//trace(props);
+			// WE NEED TO LOGIN FIRST
+			return jsx('<Login/>');
+		}
+		return jsx('		
+			<$BrowserRouter basename="/">
+				<$Switch>
+					<NavTabs >
+						<$Route path="/dashboard" component=${DashBoard}/>
+						<$Route path="/qc" component=${QC}/>
+						<$Route path="/contacts" component=${Contacts} exact={true}/>
+						<$Route path="/contacts/:contactid" component=${Contacts} exact={true}/>
+						<$Route path="/accounting" component=${Accounting}/>
+						<$Route path="/reports" component=${Reports}/>						
 					</NavTabs>
 				</$Switch>
 			</$BrowserRouter>

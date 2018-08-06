@@ -47,7 +47,8 @@ class App  extends react.ReactComponentOfState<AppState>
 		state = store.getState();
 		//trace(state);
 		trace(Reflect.fields(state));
-        super(props, state);
+        //TODO: CALL WITH WHATß super(_, state);
+		super();
 		//browserHistory = ReactRouter.browserHistory;//History.createHistory();
 		//trace(this.state);
         //state = { route:'', themeColor:'red', locale:'de', hasError: false, history:browserHistory};
@@ -60,7 +61,7 @@ class App  extends react.ReactComponentOfState<AppState>
 		var s:Int = d.getSeconds();
 		trace('start delay at $s set timer start in ${(60 - s ) * 1000} seconds');
 		Timer.delay(function(){
-			trace('timer start at ${d.getSeconds()}');
+			trace('timer start at ${Date.now().getSeconds()}');
 			store.dispatch(Tick(Date.now()));
 			var t:Timer = new Timer(60000);
 			t.run = function() store.dispatch(Tick(Date.now()));//this.setState({appWare:{ date: Date.now() }});
@@ -85,7 +86,13 @@ class App  extends react.ReactComponentOfState<AppState>
     override function render() {
 
         return jsx('
-			<Provider store={store}><UiView/></Provider>			
+			<Provider store={store}><UiView {...state} /></Provider>			
         ');
     }
+	
+	public static function jsxDump(el:Dynamic):String
+	{
+		Out.dumpObject(el);
+		return 'OK';
+	}
 } 

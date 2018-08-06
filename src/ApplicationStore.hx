@@ -5,6 +5,8 @@ import model.StatusBarService;
 import redux.Redux;
 import redux.Store;
 import redux.StoreBuilder.*;
+import redux.thunk.Thunk;
+import redux.thunk.ThunkMiddleware;
 import GlobalAppState;
 
 class ApplicationStore
@@ -27,8 +29,10 @@ class ApplicationStore
 		// create middleware normally, excepted you must use 
 		// 'StoreBuilder.mapMiddleware' to wrap the Enum-based middleware
 		var middleware = Redux.applyMiddleware(
-			mapMiddleware(AppAction, appWare),
+			mapMiddleware(Thunk, new ThunkMiddleware({custom: "data"})),
 			mapMiddleware(StatusAction, statusBarService)
+			/*mapMiddleware(AppAction, appWare),
+			*/
 		);
 		
 		// user 'StoreBuilder.createStore' helper to automatically wire
