@@ -97,7 +97,7 @@ class App  extends react.ReactComponentOfState<AppState>
 		return 'OK';
 	}
 	
-	public static function queryString(params) 
+	public static function queryString(params:Dynamic) 
 	{
 		   var query = Reflect.fields(params)
 					.map(function(k){

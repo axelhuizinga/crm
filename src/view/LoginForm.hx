@@ -64,7 +64,8 @@ class LoginForm extends ReactComponentOf<LoginProps,UserState>
 				loggedIn:uState.loggedIn,
 				loginError:uState.loginError,
 				lastLoggedIn:uState.lastLoggedIn,
-				firstName:uState.firstName
+				firstName:uState.firstName,
+				waiting:uState.waiting
 			};
 		};
 	}	
@@ -83,10 +84,13 @@ class LoginForm extends ReactComponentOf<LoginProps,UserState>
 	{
 		e.preventDefault();
 		
-		//this.setState({submitted:true});
+		//this.setState({waiting:true});
 		//props.dispatch(AppAction.Login("{id:state.id,pass:state.pass}"));
 		//trace(props.dispatch);
 		//trace(props.dispatch == App.store.dispatch);
+		trace(props.dispatch(AsyncUserAction.loginReq(state, props)));
+		//trace(props.dispatch(AppAction.LoginReq(state)));
+		return;
 		var req:XMLHttpRequest = new XMLHttpRequest();
 		var url:String = '${props.appConfig.api}?' + App.queryString({id:state.id, pass: state.pass});
 		//var url:String = props.appConfig.api;
@@ -128,13 +132,24 @@ class LoginForm extends ReactComponentOf<LoginProps,UserState>
 			maxWidth:'22rem'
 		};
 		
+		if (props.waiting)
+		{
+			return jsx('
+			<section className="hero is-alt is-fullheight">
+			  <div className="hero-body">
+			  <div className="loader"  style=${{width:'7rem', height:'7rem', margin:'auto', borderWidth:'0.58rem'}}/>
+			  </div>
+			</section>
+			');		
+		}
+		
 		return jsx('
 		<section className="hero is-alt is-fullheight">
 		  <div className="hero-body">
 			<div className="container" style=${style}>
 			  <article className="card is-rounded" >
 				<div className="card-content">
-				  <h2 className="title">
+				  <h2 className="title is-5">
 				  <img src="img/schutzengelwerk-logo.png" style=${{width:'100%'}}/>
 				  crm 2.0
 				  </h2>

@@ -43,7 +43,7 @@ class StatusBarService implements IReducer<StatusAction, StatusBarState>
 	
 	public function reduce(state:StatusBarState, action:StatusAction):StatusBarState
 	{
-		trace(action);
+		trace(state);
 		return switch(action)
 		{
 			case Tick(date):

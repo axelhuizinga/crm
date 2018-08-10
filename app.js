@@ -38,6 +38,7 @@ App.queryString = function(params) {
 		var s = Reflect.field(params,k);
 		return query1 + encodeURIComponent(s);
 	}).join("&");
+	haxe_Log.trace(query,{ fileName : "App.hx", lineNumber : 116, className : "App", methodName : "queryString"});
 	return query;
 };
 App.__super__ = React_Component;
@@ -409,11 +410,12 @@ Type["typeof"] = function(v) {
 };
 var Webpack = function() { };
 Webpack.__name__ = ["Webpack"];
-var action_AppAction = { __ename__ : ["action","AppAction"], __constructs__ : ["Load","SetLocale","SetTheme"] };
+var action_AppAction = { __ename__ : ["action","AppAction"], __constructs__ : ["Load","LoginReq","SetLocale","SetTheme"] };
 action_AppAction.Load = ["Load",0];
 action_AppAction.Load.__enum__ = action_AppAction;
-action_AppAction.SetLocale = function(locale) { var $x = ["SetLocale",1,locale]; $x.__enum__ = action_AppAction; return $x; };
-action_AppAction.SetTheme = function(color) { var $x = ["SetTheme",2,color]; $x.__enum__ = action_AppAction; return $x; };
+action_AppAction.LoginReq = function(state) { var $x = ["LoginReq",1,state]; $x.__enum__ = action_AppAction; return $x; };
+action_AppAction.SetLocale = function(locale) { var $x = ["SetLocale",2,locale]; $x.__enum__ = action_AppAction; return $x; };
+action_AppAction.SetTheme = function(color) { var $x = ["SetTheme",3,color]; $x.__enum__ = action_AppAction; return $x; };
 var action_StatusAction = { __ename__ : ["action","StatusAction"], __constructs__ : ["Tick"] };
 action_StatusAction.Tick = function(date) { var $x = ["Tick",0,date]; $x.__enum__ = action_StatusAction; return $x; };
 var action_HistoryAction = { __ename__ : ["action","HistoryAction"], __constructs__ : ["Pop","Push","Replace","Go","Back","Forward"] };
@@ -431,10 +433,26 @@ action_HistoryAction.Forward = ["Forward",5];
 action_HistoryAction.Forward.__enum__ = action_HistoryAction;
 var action_async_AsyncUserAction = function() { };
 action_async_AsyncUserAction.__name__ = ["action","async","AsyncUserAction"];
-action_async_AsyncUserAction.login = function(userState) {
+action_async_AsyncUserAction.loginReq = function(state,props) {
 	return redux_thunk_Thunk.Action(function(dispatch,getState) {
-		haxe_Log.trace(getState(),{ fileName : "AsyncUserAction.hx", lineNumber : 26, className : "action.async.AsyncUserAction", methodName : "login"});
-		return null;
+		haxe_Log.trace(getState(),{ fileName : "AsyncUserAction.hx", lineNumber : 24, className : "action.async.AsyncUserAction", methodName : "loginReq"});
+		if(state.pass == "" || state.id == null) {
+			return dispatch(redux__$Redux_Action_$Impl_$.map(model_UserAction.LoginError({ id : state.id, loginError : { requestError : "Passwort und UserId eintragen!"}})));
+		}
+		var req = new XMLHttpRequest();
+		var tmp = "" + Std.string(props.appConfig.api) + "?" + App.queryString({ action : "login", className : "auth.User", id : state.id, pass : state.pass});
+		req.open("GET",tmp);
+		req.onload = function() {
+			if(req.status == 200) {
+				haxe_Log.trace(req.response,{ fileName : "AsyncUserAction.hx", lineNumber : 34, className : "action.async.AsyncUserAction", methodName : "loginReq"});
+				return dispatch(redux__$Redux_Action_$Impl_$.map(model_UserAction.LoginComplete({ id : state.id, jwt : req.response.jwt})));
+			} else {
+				return dispatch(redux__$Redux_Action_$Impl_$.map(model_UserAction.LoginError({ id : state.id, loginError : { requestError : req.statusText}})));
+			}
+		};
+		var spin = dispatch(redux__$Redux_Action_$Impl_$.map(model_UserAction.LoginWait));
+		req.send();
+		return spin;
 	});
 };
 var bulma_$components_Button = require("reactbulma").Button;
@@ -1165,8 +1183,9 @@ redux_IReducer.prototype = {
 var model_AppService = function() {
 	this.ID = 0;
 	this.initState = { config : null, route : window.location.pathname, themeColor : "green", locale : "de", userList : [], user : null};
-	haxe_Log.trace("OK",{ fileName : "AppService.hx", lineNumber : 43, className : "model.AppService", methodName : "new"});
-	this.initState.config = require("./bin/app.config.js");
+	var appCconf = require("./bin/app.config.js");
+	haxe_Log.trace("OK",{ fileName : "AppService.hx", lineNumber : 44, className : "model.AppService", methodName : "new"});
+	this.initState.config = Reflect.field(appCconf,"default");
 };
 model_AppService.__name__ = ["model","AppService"];
 model_AppService.__interfaces__ = [redux_IMiddleware,redux_IReducer];
@@ -1176,11 +1195,11 @@ model_AppService.prototype = {
 	,ID: null
 	,loadPending: null
 	,reduce: function(state,action) {
-		haxe_Log.trace(action,{ fileName : "AppService.hx", lineNumber : 50, className : "model.AppService", methodName : "reduce"});
+		haxe_Log.trace(action,{ fileName : "AppService.hx", lineNumber : 51, className : "model.AppService", methodName : "reduce"});
 		switch(action[1]) {
 		case 0:
 			return react_ReactUtil.copy(state,{ loading : true});
-		case 1:
+		case 2:
 			var locale = action[2];
 			if(locale != state.locale) {
 				return react_ReactUtil.copy(state,{ locale : locale});
@@ -1188,7 +1207,7 @@ model_AppService.prototype = {
 				return state;
 			}
 			break;
-		case 2:
+		case 3:
 			var color = action[2];
 			if(color != state.themeColor) {
 				return react_ReactUtil.copy(state,{ themeColor : color});
@@ -1196,11 +1215,20 @@ model_AppService.prototype = {
 				return state;
 			}
 			break;
+		default:
+			return state;
 		}
 	}
 	,middleware: function(action,next) {
-		haxe_Log.trace(action,{ fileName : "AppService.hx", lineNumber : 80, className : "model.AppService", methodName : "middleware"});
-		return next();
+		haxe_Log.trace(action,{ fileName : "AppService.hx", lineNumber : 84, className : "model.AppService", methodName : "middleware"});
+		if(action[1] == 1) {
+			var uState = action[2];
+			var n = next();
+			haxe_Log.trace(n,{ fileName : "AppService.hx", lineNumber : 90, className : "model.AppService", methodName : "middleware"});
+			return n;
+		} else {
+			return next();
+		}
 	}
 	,__class__: model_AppService
 };
@@ -1217,7 +1245,7 @@ model_StatusBarService.prototype = {
 	,ID: null
 	,loadPending: null
 	,reduce: function(state,action) {
-		haxe_Log.trace(action,{ fileName : "StatusBarService.hx", lineNumber : 46, className : "model.StatusBarService", methodName : "reduce"});
+		haxe_Log.trace(state,{ fileName : "StatusBarService.hx", lineNumber : 46, className : "model.StatusBarService", methodName : "reduce"});
 		var date = action[2];
 		return react_ReactUtil.copy(state,{ date : date});
 	}
@@ -1226,21 +1254,25 @@ model_StatusBarService.prototype = {
 	}
 	,__class__: model_StatusBarService
 };
-var model_UserAction = { __ename__ : ["model","UserAction"], __constructs__ : ["LoginReq","LoginComplete","LoginError","LogOut"] };
-model_UserAction.LoginReq = function(state) { var $x = ["LoginReq",0,state]; $x.__enum__ = model_UserAction; return $x; };
+var model_UserAction = { __ename__ : ["model","UserAction"], __constructs__ : ["LoginWait","LoginComplete","LoginError","LogOut"] };
+model_UserAction.LoginWait = ["LoginWait",0];
+model_UserAction.LoginWait.__enum__ = model_UserAction;
 model_UserAction.LoginComplete = function(state) { var $x = ["LoginComplete",1,state]; $x.__enum__ = model_UserAction; return $x; };
 model_UserAction.LoginError = function(state) { var $x = ["LoginError",2,state]; $x.__enum__ = model_UserAction; return $x; };
 model_UserAction.LogOut = function(state) { var $x = ["LogOut",3,state]; $x.__enum__ = model_UserAction; return $x; };
 var model_UserService = function() {
-	this.initState = { id : "", pass : "", submitted : false, jwt : ""};
+	this.initState = { id : "", pass : "", waiting : false, jwt : ""};
 };
 model_UserService.__name__ = ["model","UserService"];
-model_UserService.__interfaces__ = [redux_IReducer];
+model_UserService.__interfaces__ = [redux_IMiddleware,redux_IReducer];
 model_UserService.prototype = {
 	initState: null
+	,store: null
 	,reduce: function(state,action) {
-		haxe_Log.trace(action,{ fileName : "UserService.hx", lineNumber : 48, className : "model.UserService", methodName : "reduce"});
+		haxe_Log.trace(state,{ fileName : "UserService.hx", lineNumber : 52, className : "model.UserService", methodName : "reduce"});
 		switch(action[1]) {
+		case 0:
+			return react_ReactUtil.copy(state,{ waiting : true});
 		case 1:
 			var lco = action[2];
 			return react_ReactUtil.copy(state,lco);
@@ -1255,6 +1287,10 @@ model_UserService.prototype = {
 		default:
 			return state;
 		}
+	}
+	,middleware: function(action,next) {
+		haxe_Log.trace(action,{ fileName : "UserService.hx", lineNumber : 74, className : "model.UserService", methodName : "middleware"});
+		return next();
 	}
 	,__class__: model_UserService
 };
@@ -1646,16 +1682,18 @@ view_DashBoard.prototype = $extend(React_Component.prototype,{
 	}
 	,__class__: view_DashBoard
 });
-var view_LoginForm = function(props,state) {
+var view_LoginForm = function(props) {
+	haxe_Log.trace(props,{ fileName : "LoginForm.hx", lineNumber : 34, className : "view.LoginForm", methodName : "new"});
 	React_Component.call(this,props);
-	haxe_Log.trace(state,{ fileName : "LoginForm.hx", lineNumber : 40, className : "view.LoginForm", methodName : "new"});
-	haxe_Log.trace(this.state,{ fileName : "LoginForm.hx", lineNumber : 43, className : "view.LoginForm", methodName : "new"});
+	haxe_Log.trace(this.props,{ fileName : "LoginForm.hx", lineNumber : 36, className : "view.LoginForm", methodName : "new"});
+	this.state = { id : props.id, pass : props.pass};
 };
 view_LoginForm.__name__ = ["view","LoginForm"];
 view_LoginForm.mapStateToProps = function() {
-	return function(state) {
-		haxe_Log.trace(state,{ fileName : "LoginForm.hx", lineNumber : 55, className : "view.LoginForm", methodName : "mapStateToProps"});
-		return { id : state.id, pass : state.pass, jwt : state.jwt, loggedIn : state.loggedIn, loginError : state.loginError, lastLoggedIn : state.lastLoggedIn, firstName : state.firstName};
+	return function(aState) {
+		var uState = aState.userService;
+		haxe_Log.trace(aState.userService,{ fileName : "LoginForm.hx", lineNumber : 57, className : "view.LoginForm", methodName : "mapStateToProps"});
+		return { appConfig : aState.appWare.config, id : uState.id, pass : uState.pass, jwt : uState.jwt, loggedIn : uState.loggedIn, loginError : uState.loginError, lastLoggedIn : uState.lastLoggedIn, firstName : uState.firstName, waiting : uState.waiting};
 	};
 };
 view_LoginForm.__super__ = React_Component;
@@ -1663,31 +1701,25 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 	handleChange: function(e) {
 		var s = { };
 		var t = e.target;
+		haxe_Log.trace(t.name,{ fileName : "LoginForm.hx", lineNumber : 77, className : "view.LoginForm", methodName : "handleChange"});
 		s[t.name] = t.value;
 		this.setState(s);
-		haxe_Log.trace(this.state,{ fileName : "LoginForm.hx", lineNumber : 75, className : "view.LoginForm", methodName : "handleChange"});
+		haxe_Log.trace(this.state,{ fileName : "LoginForm.hx", lineNumber : 80, className : "view.LoginForm", methodName : "handleChange"});
 	}
 	,handleSubmit: function(e) {
 		var _gthis = this;
 		e.preventDefault();
-		this.setState({ submitted : true});
-		haxe_Log.trace(this.props.dispatch,{ fileName : "LoginForm.hx", lineNumber : 84, className : "view.LoginForm", methodName : "handleSubmit"});
-		haxe_Log.trace(this.props.dispatch == ($_=App.store,$bind($_,$_.dispatch)),{ fileName : "LoginForm.hx", lineNumber : 85, className : "view.LoginForm", methodName : "handleSubmit"});
-		var req = new XMLHttpRequest();
-		var tmp = "" + Std.string(App.store.getState().appWare.config.api) + App.queryString(this.state);
-		req.open("GET",tmp);
-		req.onload = function() {
-			if(req.status == 200) {
-				haxe_Log.trace(req.response,{ fileName : "LoginForm.hx", lineNumber : 92, className : "view.LoginForm", methodName : "handleSubmit"});
-				_gthis.props.dispatch(redux__$Redux_Action_$Impl_$.map(model_UserAction.LoginComplete({ id : _gthis.state.id, jwt : req.response.jwt})));
-			} else {
-				_gthis.props.dispatch(redux__$Redux_Action_$Impl_$.map(model_UserAction.LoginError({ id : _gthis.state.id, loginError : { requestError : req.statusText}})));
-			}
-		};
+		var tmp = this.props;
+		var tmp1 = action_async_AsyncUserAction.loginReq(this.state,this.props);
+		haxe_Log.trace(tmp.dispatch(redux__$Redux_Action_$Impl_$.map(tmp1)),{ fileName : "LoginForm.hx", lineNumber : 91, className : "view.LoginForm", methodName : "handleSubmit"});
+		return;
 	}
 	,render: function() {
 		var style = { maxWidth : "22rem"};
-		return { "$$typeof" : $$tre, type : "section", props : { className : "hero is-alt is-fullheight", children : { "$$typeof" : $$tre, type : "div", props : { className : "hero-body", children : { "$$typeof" : $$tre, type : "div", props : { className : "container", style : style, children : { "$$typeof" : $$tre, type : "article", props : { className : "card is-rounded", children : { "$$typeof" : $$tre, type : "div", props : { className : "card-content", children : [{ "$$typeof" : $$tre, type : "h2", props : { className : "title", children : [{ "$$typeof" : $$tre, type : "img", props : { src : "img/schutzengelwerk-logo.png", style : { width : "100%"}}, key : null, ref : null},"crm 2.0"]}, key : null, ref : null},{ "$$typeof" : $$tre, type : "form", props : { name : "form", onSubmit : $bind(this,this.handleSubmit), children : [{ "$$typeof" : $$tre, type : "p", props : { className : "control has-icon", children : [{ "$$typeof" : $$tre, type : "input", props : { name : "id", className : "input", type : "text", placeholder : "ViciDial User ID", value : this.state.id, onChange : $bind(this,this.handleChange)}, key : null, ref : null},{ "$$typeof" : $$tre, type : "i", props : { className : "fa fa-user"}, key : null, ref : null}]}, key : null, ref : null},{ "$$typeof" : $$tre, type : "p", props : { className : "control has-icon", children : [{ "$$typeof" : $$tre, type : "input", props : { name : "pass", className : "input", type : "password", placeholder : "Password", value : this.state.pass, onChange : $bind(this,this.handleChange)}, key : null, ref : null},{ "$$typeof" : $$tre, type : "i", props : { className : "fa fa-lock"}, key : null, ref : null}]}, key : null, ref : null},{ "$$typeof" : $$tre, type : "p", props : { className : "control", children : { "$$typeof" : $$tre, type : "button", props : { className : "button is-medium is-fullwidth is-warning", children : "Login"}, key : null, ref : null}}, key : null, ref : null}]}, key : null, ref : null}]}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null};
+		if(this.props.waiting) {
+			return { "$$typeof" : $$tre, type : "section", props : { className : "hero is-alt is-fullheight", children : { "$$typeof" : $$tre, type : "div", props : { className : "hero-body", children : { "$$typeof" : $$tre, type : "div", props : { className : "loader", style : { width : "7rem", height : "7rem", margin : "auto", borderWidth : "0.58rem"}}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null};
+		}
+		return { "$$typeof" : $$tre, type : "section", props : { className : "hero is-alt is-fullheight", children : { "$$typeof" : $$tre, type : "div", props : { className : "hero-body", children : { "$$typeof" : $$tre, type : "div", props : { className : "container", style : style, children : { "$$typeof" : $$tre, type : "article", props : { className : "card is-rounded", children : { "$$typeof" : $$tre, type : "div", props : { className : "card-content", children : [{ "$$typeof" : $$tre, type : "h2", props : { className : "title is-5", children : [{ "$$typeof" : $$tre, type : "img", props : { src : "img/schutzengelwerk-logo.png", style : { width : "100%"}}, key : null, ref : null},"crm 2.0"]}, key : null, ref : null},{ "$$typeof" : $$tre, type : "form", props : { name : "form", onSubmit : $bind(this,this.handleSubmit), autoComplete : "new-password", children : [{ "$$typeof" : $$tre, type : "p", props : { className : "control has-icon", children : [{ "$$typeof" : $$tre, type : "input", props : { name : "id", className : "input", type : "text", placeholder : "ViciDial User ID", value : this.state.id, onChange : $bind(this,this.handleChange)}, key : null, ref : null},{ "$$typeof" : $$tre, type : "i", props : { className : "fa fa-user"}, key : null, ref : null}]}, key : null, ref : null},{ "$$typeof" : $$tre, type : "p", props : { className : "control has-icon", children : [{ "$$typeof" : $$tre, type : "input", props : { name : "pass", className : "input", type : "password", placeholder : "Password", value : this.state.pass, onChange : $bind(this,this.handleChange)}, key : null, ref : null},{ "$$typeof" : $$tre, type : "i", props : { className : "fa fa-lock"}, key : null, ref : null}]}, key : null, ref : null},{ "$$typeof" : $$tre, type : "p", props : { className : "control", children : { "$$typeof" : $$tre, type : "button", props : { className : "button is-medium is-fullwidth is-warning", children : "Login"}, key : null, ref : null}}, key : null, ref : null}]}, key : null, ref : null}]}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null};
 	}
 	,__class__: view_LoginForm
 });

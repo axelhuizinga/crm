@@ -11,6 +11,7 @@ import model.UserService.UserState;
 enum AppAction 
 {
 	Load;
+	LoginReq(state:UserState);
 	//AddContact(id:Int);
 	SetLocale(locale:String);
 	SetTheme(color:String);

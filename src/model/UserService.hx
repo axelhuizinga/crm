@@ -2,6 +2,7 @@ package model;
 
 import react.ReactUtil.copy;
 import redux.IReducer;
+import redux.IMiddleware;
 import redux.StoreMethods;
 
 /**
@@ -21,31 +22,34 @@ typedef UserState =
 	?loginError:Dynamic,
 	?jwt:String,
 	?pass:String,
-	?submitted:Bool
+	?waiting:Bool
 }
 
 enum UserAction
 {
-	LoginReq(state:UserState);
+	LoginWait;
 	LoginComplete(state:UserState);
 	LoginError(state:UserState);
 	LogOut(state:UserState);	
 }
 
 class UserService implements IReducer<UserAction, UserState>
+	implements IMiddleware<UserAction, AppState>
 {
 	public var initState:UserState = {
 		id:'',
 		pass:'',
-		submitted:false,
+		waiting:false,
 		jwt:''			
 	};
+	
+	public var store:StoreMethods<AppState>;
 	
 	public function new() {}
 	
 	public function reduce(state:UserState, action:UserAction):UserState
 	{
-		trace(action);
+		trace(state);
 		return switch(action)
 		{
 			case LoginError(err):
@@ -55,8 +59,26 @@ class UserService implements IReducer<UserAction, UserState>
 					state;
 			case LoginComplete(lco):
 				copy(state, lco);
+				
+			/*case LoginReq(uState):
+				copy(state, uState);*/
+			case LoginWait:
+				copy(state, {waiting:true});
 			default:
 				state;
 		}
 	}
+
+	public function middleware(action:UserAction, next:Void -> Dynamic)
+	{
+		trace(action);
+		return switch(action)
+		{
+			/*case LoginReq(state):
+				var n:Dynamic = next();
+				trace(n);
+				n;	*/			
+			default: next();
+		}
+	}		
 }

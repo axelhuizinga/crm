@@ -33,7 +33,7 @@ class AppService
 		userList:[],
 		user:null
 	};
-	public var store:StoreMethods<AppState>;
+		public var store:StoreMethods<AppState>;
 
 	var ID = 0;
 	var loadPending:Promise<Bool>;
@@ -55,6 +55,7 @@ class AppService
 				copy(state, {
 					loading:true
 				});
+				
 			case SetLocale(locale):
 				if (locale != state.locale)
 				{
@@ -63,6 +64,7 @@ class AppService
 					});
 				}
 				else state;
+				
 			case SetTheme(color):
 				if (color != state.themeColor)
 				{
@@ -71,6 +73,7 @@ class AppService
 					});
 				}
 				else state;
+				
 			default:
 				state;
 		}
@@ -81,6 +84,12 @@ class AppService
 		trace(action);
 		return switch(action)
 		{
+			case LoginReq(uState):
+				//store.getState().userService.
+				var n:Dynamic = next();
+				trace(n);
+				n;
+			
 			default: next();
 		}
 	}
