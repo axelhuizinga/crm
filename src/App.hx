@@ -22,13 +22,14 @@ import bulma_components.Tabs;
 //import redux.react.IConnectedComponent;
 
 import Webpack.*;
-import GlobalAppState;
+import AppState;
 import action.AppAction;
 import view.Contacts;
 import view.DashBoard;
 import view.QC;
 import view.Statistics;
 import view.UiView;
+using StringTools;
 
 class App  extends react.ReactComponentOfState<AppState>
 {
@@ -95,4 +96,25 @@ class App  extends react.ReactComponentOfState<AppState>
 		Out.dumpObject(el);
 		return 'OK';
 	}
+	
+	public static function queryString(params) 
+	{
+		   var query = Reflect.fields(params)
+					.map(function(k){
+						 if (Std.is(Reflect.field(params, k), Array)) 
+						 {
+							return Reflect.field(params, k)
+							  .map(function(val){
+								  k.urlEncode() + '[]=' + val.urlEncode();
+							  })
+							  .join('&');
+					 }
+
+					 return k.urlEncode() + '=' + StringTools.urlEncode(Reflect.field(params, k));
+		})
+		.join('&');
+		trace(query);
+		return query;
+	}
+		
 } 

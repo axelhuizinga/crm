@@ -35,7 +35,8 @@ module.exports = {
     // Generation options (destination, naming pattern,...)
     output: {
         path: dist,
-        filename: 'app.js'
+        filename: 'app.js',
+	publicPath: '/'
     },
     // Module resolution options (alias, default paths,...)
     resolve: {
@@ -48,9 +49,10 @@ module.exports = {
         contentBase: dist,
         compress: true,
 	host:  '192.168.178.20',
+	https: true,
         port: 9000,
         overlay: true,
-        hot: true,
+        hot: true,	    
 	watchOptions:{
 		aggregateTimeout:1500,
 		ignored:'.tmp.drivedownload'

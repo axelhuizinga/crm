@@ -2,24 +2,14 @@ package view;
 
 import react.ReactComponent;
 import react.ReactMacro.jsx;
-
+import model.UserService.UserState;
 
 /**
  * ...
  * @author axel@cunity.me
  */
 
-typedef UserState =
-{
-	id:Int,
-	contact:Int,
-	?first_name:String,
-	?last_name:String,
-	?active:Bool,
-	?loggedIn:Bool,
-	?lastLoggedIn:Date,
-	?jwt:String
-}
+typedef UserFilter = Dynamic;
 
 class User extends ReactComponentOfState<UserState> 
 {

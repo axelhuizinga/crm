@@ -13,7 +13,6 @@ import redux.StoreMethods;
 
 
 import Webpack.*;
-import GlobalAppState;
 
 @:connect
 class QC extends ReactComponentOfProps<RouteRenderProps>

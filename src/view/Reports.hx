@@ -13,7 +13,7 @@ import redux.StoreMethods;
 
 
 import Webpack.*;
-import GlobalAppState;
+
 @:connect
 class Reports extends ReactComponentOfProps<RouteRenderProps>
 	

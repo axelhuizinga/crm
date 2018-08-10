@@ -16,7 +16,7 @@ import redux.Redux;
 import redux.react.IConnectedComponent;
 
 import Webpack.*;
-import GlobalAppState;
+import AppState;
 
 @:connect
 class DashBoard extends ReactComponentOfProps<RouteRenderProps>

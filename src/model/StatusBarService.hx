@@ -9,7 +9,15 @@ import react.ReactUtil.copy;
 import redux.IMiddleware;
 import redux.IReducer;
 import redux.StoreMethods;
-import GlobalAppState;
+
+
+typedef StatusBarState =
+{
+	route: String,
+	date:Date,
+	?hasError:Bool
+}
+
 
 /**
  * ...
@@ -17,13 +25,11 @@ import GlobalAppState;
  */
 
 class StatusBarService implements IReducer<StatusAction, StatusBarState>
-	implements IMiddleware<StatusAction, AppState>
+//	implements IMiddleware<StatusAction, AppState>
 {
 	public var initState:StatusBarState = {
 		route: Browser.location.pathname,// '',
-		date:Date.now(),
-		userList:[],
-		user:null
+		date:Date.now()
 	};
 	public var store:StoreMethods<AppState>;
 

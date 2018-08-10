@@ -11,7 +11,7 @@ import redux.react.IConnectedComponent;
 import redux.Redux;
 import redux.StoreMethods;
 import action.AppAction;
-import GlobalAppState;
+import AppState;
 
 /**
  * ...
@@ -26,7 +26,7 @@ typedef StatusBarProps =
 }
 
 @:connect
-class StatusBar extends ReactComponentOfProps<StatusBarProps>
+class StatusBar extends ReactComponentOfProps<Dynamic>
 	
 {
 	var mounted:Bool = false;
@@ -43,6 +43,7 @@ class StatusBar extends ReactComponentOfProps<StatusBarProps>
 	override public function componentDidMount():Void 
 	{
 		mounted = true;
+		trace(props.dispatch);
 	}
 	
 	static function mapStateToProps() {
@@ -66,12 +67,12 @@ class StatusBar extends ReactComponentOfProps<StatusBarProps>
 	
 	override public function render()
 	{
-		//trace(props);
+		
 		return jsx('
 		<Footer>
 			<div className = "statusbar">
 				<span>Pfad: ${props.match.url}</span>
-				<span>Benutzer: ${props.user != null ? props.user.state.last_name : '' }</span>
+				<span>Benutzer: ${props.user != null ? props.user.state.lastName : '' }</span>
 				<ReactDateTimeClock value={props.date}  className="flex-end" />
 			</div>
 		</Footer>

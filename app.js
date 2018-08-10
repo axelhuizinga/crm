@@ -14,17 +14,31 @@ var React_Component = require("react").Component;
 var App = function() {
 	App.store = ApplicationStore.create();
 	this.state = App.store.getState();
-	haxe_Log.trace(Reflect.fields(this.state),{ fileName : "App.hx", lineNumber : 49, className : "App", methodName : "new"});
+	haxe_Log.trace(Reflect.fields(this.state),{ fileName : "App.hx", lineNumber : 50, className : "App", methodName : "new"});
 	React_Component.call(this);
 };
 App.__name__ = ["App"];
 App.edump = function(el) {
-	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 83, className : "App", methodName : "edump"});
+	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 84, className : "App", methodName : "edump"});
 	return "OK";
 };
 App.jsxDump = function(el) {
-	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 95, className : "App", methodName : "jsxDump"});
+	me_cunity_debug_Out.dumpObject(el,{ fileName : "App.hx", lineNumber : 96, className : "App", methodName : "jsxDump"});
 	return "OK";
+};
+App.queryString = function(params) {
+	var query = Reflect.fields(params).map(function(k) {
+		if((Reflect.field(params,k) instanceof Array) && Reflect.field(params,k).__enum__ == null) {
+			return Reflect.field(params,k).map(function(val) {
+				encodeURIComponent(k);
+				val.urlEncode();
+			}).join("&");
+		}
+		var query1 = encodeURIComponent(k) + "=";
+		var s = Reflect.field(params,k);
+		return query1 + encodeURIComponent(s);
+	}).join("&");
+	return query;
 };
 App.__super__ = React_Component;
 App.prototype = $extend(React_Component.prototype,{
@@ -33,9 +47,9 @@ App.prototype = $extend(React_Component.prototype,{
 	,componentDidMount: function() {
 		var d = new Date();
 		var s = d.getSeconds();
-		haxe_Log.trace("start delay at " + s + " set timer start in " + (60 - s) * 1000 + " seconds",{ fileName : "App.hx", lineNumber : 62, className : "App", methodName : "componentDidMount"});
+		haxe_Log.trace("start delay at " + s + " set timer start in " + (60 - s) * 1000 + " seconds",{ fileName : "App.hx", lineNumber : 63, className : "App", methodName : "componentDidMount"});
 		haxe_Timer.delay(function() {
-			haxe_Log.trace("timer start at " + new Date().getSeconds(),{ fileName : "App.hx", lineNumber : 64, className : "App", methodName : "componentDidMount"});
+			haxe_Log.trace("timer start at " + new Date().getSeconds(),{ fileName : "App.hx", lineNumber : 65, className : "App", methodName : "componentDidMount"});
 			App.store.dispatch(redux__$Redux_Action_$Impl_$.map(action_StatusAction.Tick(new Date())));
 			var t = new haxe_Timer(60000);
 			t.run = function() {
@@ -43,10 +57,10 @@ App.prototype = $extend(React_Component.prototype,{
 			};
 		},(60 - d.getSeconds()) * 1000);
 		var _g = this.state.appWare.route;
-		haxe_Log.trace(this.state.appWare.route,{ fileName : "App.hx", lineNumber : 72, className : "App", methodName : "componentDidMount"});
+		haxe_Log.trace(this.state.appWare.route,{ fileName : "App.hx", lineNumber : 73, className : "App", methodName : "componentDidMount"});
 	}
 	,componentDidCatch: function(error,info) {
-		haxe_Log.trace(error,{ fileName : "App.hx", lineNumber : 80, className : "App", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "App.hx", lineNumber : 81, className : "App", methodName : "componentDidCatch"});
 	}
 	,render: function() {
 		return { "$$typeof" : $$tre, type : redux_react_Provider, props : { store : App.store, children : { "$$typeof" : $$tre, type : view_UiView, props : this.state, key : null, ref : null}}, key : null, ref : null};
@@ -58,12 +72,13 @@ ApplicationStore.__name__ = ["ApplicationStore"];
 ApplicationStore.create = function() {
 	var appWare = new model_AppService();
 	var statusBarService = new model_StatusBarService();
-	var rootReducer = redux_Redux.combineReducers({ appWare : redux_StoreBuilder.mapReducer(action_AppAction,appWare), statusBar : redux_StoreBuilder.mapReducer(action_StatusAction,statusBarService)});
-	var middleware = redux_Redux.applyMiddleware(redux_StoreBuilder.mapMiddleware(redux_thunk_Thunk,new redux_thunk_ThunkMiddleware({ custom : "data"})),redux_StoreBuilder.mapMiddleware(action_StatusAction,statusBarService));
+	var userService = new model_UserService();
+	var rootReducer = redux_Redux.combineReducers({ appWare : redux_StoreBuilder.mapReducer(action_AppAction,appWare), statusBar : redux_StoreBuilder.mapReducer(action_StatusAction,statusBarService), userService : redux_StoreBuilder.mapReducer(model_UserAction,userService)});
+	var middleware = redux_Redux.applyMiddleware(redux_StoreBuilder.mapMiddleware(redux_thunk_Thunk,new redux_thunk_ThunkMiddleware({ custom : "data"})),redux_StoreBuilder.mapMiddleware(action_AppAction,appWare));
 	return redux_StoreBuilder.createStore(rootReducer,null,middleware);
 };
 ApplicationStore.startup = function(store) {
-	haxe_Log.trace(store,{ fileName : "ApplicationStore.hx", lineNumber : 46, className : "ApplicationStore", methodName : "startup"});
+	haxe_Log.trace(store,{ fileName : "ApplicationStore.hx", lineNumber : 48, className : "ApplicationStore", methodName : "startup"});
 };
 var EReg = function(r,opt) {
 	this.r = new RegExp(r,opt.split("u").join(""));
@@ -414,6 +429,14 @@ action_HistoryAction.Back = ["Back",4];
 action_HistoryAction.Back.__enum__ = action_HistoryAction;
 action_HistoryAction.Forward = ["Forward",5];
 action_HistoryAction.Forward.__enum__ = action_HistoryAction;
+var action_async_AsyncUserAction = function() { };
+action_async_AsyncUserAction.__name__ = ["action","async","AsyncUserAction"];
+action_async_AsyncUserAction.login = function(userState) {
+	return redux_thunk_Thunk.Action(function(dispatch,getState) {
+		haxe_Log.trace(getState(),{ fileName : "AsyncUserAction.hx", lineNumber : 26, className : "action.async.AsyncUserAction", methodName : "login"});
+		return null;
+	});
+};
 var bulma_$components_Button = require("reactbulma").Button;
 var bulma_$components_Footer = function(props,context) {
 	React_Component.call(this,props,context);
@@ -1125,6 +1148,13 @@ me_cunity_debug_Out.fTrace = function(str,arr,i) {
 	}
 	me_cunity_debug_Out._trace(str_buf_b,i);
 };
+var redux_IMiddleware = function() { };
+redux_IMiddleware.__name__ = ["redux","IMiddleware"];
+redux_IMiddleware.prototype = {
+	store: null
+	,middleware: null
+	,__class__: redux_IMiddleware
+};
 var redux_IReducer = function() { };
 redux_IReducer.__name__ = ["redux","IReducer"];
 redux_IReducer.prototype = {
@@ -1134,18 +1164,19 @@ redux_IReducer.prototype = {
 };
 var model_AppService = function() {
 	this.ID = 0;
-	this.initState = { route : window.location.pathname, themeColor : "green", locale : "de", userList : [], user : new view_User(null,{ id : 1000000666, contact : 1000000666, first_name : "test", last_name : "admin", jwt : ""})};
-	haxe_Log.trace("OK",{ fileName : "AppService.hx", lineNumber : 39, className : "model.AppService", methodName : "new"});
+	this.initState = { config : null, route : window.location.pathname, themeColor : "green", locale : "de", userList : [], user : null};
+	haxe_Log.trace("OK",{ fileName : "AppService.hx", lineNumber : 43, className : "model.AppService", methodName : "new"});
+	this.initState.config = require("./bin/app.config.js");
 };
 model_AppService.__name__ = ["model","AppService"];
-model_AppService.__interfaces__ = [redux_IReducer];
+model_AppService.__interfaces__ = [redux_IMiddleware,redux_IReducer];
 model_AppService.prototype = {
 	initState: null
 	,store: null
 	,ID: null
 	,loadPending: null
 	,reduce: function(state,action) {
-		haxe_Log.trace(action,{ fileName : "AppService.hx", lineNumber : 44, className : "model.AppService", methodName : "reduce"});
+		haxe_Log.trace(action,{ fileName : "AppService.hx", lineNumber : 50, className : "model.AppService", methodName : "reduce"});
 		switch(action[1]) {
 		case 0:
 			return react_ReactUtil.copy(state,{ loading : true});
@@ -1168,32 +1199,25 @@ model_AppService.prototype = {
 		}
 	}
 	,middleware: function(action,next) {
-		haxe_Log.trace(next,{ fileName : "AppService.hx", lineNumber : 75, className : "model.AppService", methodName : "middleware"});
+		haxe_Log.trace(action,{ fileName : "AppService.hx", lineNumber : 80, className : "model.AppService", methodName : "middleware"});
 		return next();
 	}
 	,__class__: model_AppService
 };
-var redux_IMiddleware = function() { };
-redux_IMiddleware.__name__ = ["redux","IMiddleware"];
-redux_IMiddleware.prototype = {
-	store: null
-	,middleware: null
-	,__class__: redux_IMiddleware
-};
 var model_StatusBarService = function() {
 	this.ID = 0;
-	this.initState = { route : window.location.pathname, date : new Date(), userList : [], user : null};
-	haxe_Log.trace("ok",{ fileName : "StatusBarService.hx", lineNumber : 35, className : "model.StatusBarService", methodName : "new"});
+	this.initState = { route : window.location.pathname, date : new Date()};
+	haxe_Log.trace("ok",{ fileName : "StatusBarService.hx", lineNumber : 41, className : "model.StatusBarService", methodName : "new"});
 };
 model_StatusBarService.__name__ = ["model","StatusBarService"];
-model_StatusBarService.__interfaces__ = [redux_IMiddleware,redux_IReducer];
+model_StatusBarService.__interfaces__ = [redux_IReducer];
 model_StatusBarService.prototype = {
 	initState: null
 	,store: null
 	,ID: null
 	,loadPending: null
 	,reduce: function(state,action) {
-		haxe_Log.trace(action,{ fileName : "StatusBarService.hx", lineNumber : 40, className : "model.StatusBarService", methodName : "reduce"});
+		haxe_Log.trace(action,{ fileName : "StatusBarService.hx", lineNumber : 46, className : "model.StatusBarService", methodName : "reduce"});
 		var date = action[2];
 		return react_ReactUtil.copy(state,{ date : date});
 	}
@@ -1201,6 +1225,38 @@ model_StatusBarService.prototype = {
 		return next();
 	}
 	,__class__: model_StatusBarService
+};
+var model_UserAction = { __ename__ : ["model","UserAction"], __constructs__ : ["LoginReq","LoginComplete","LoginError","LogOut"] };
+model_UserAction.LoginReq = function(state) { var $x = ["LoginReq",0,state]; $x.__enum__ = model_UserAction; return $x; };
+model_UserAction.LoginComplete = function(state) { var $x = ["LoginComplete",1,state]; $x.__enum__ = model_UserAction; return $x; };
+model_UserAction.LoginError = function(state) { var $x = ["LoginError",2,state]; $x.__enum__ = model_UserAction; return $x; };
+model_UserAction.LogOut = function(state) { var $x = ["LogOut",3,state]; $x.__enum__ = model_UserAction; return $x; };
+var model_UserService = function() {
+	this.initState = { id : "", pass : "", submitted : false, jwt : ""};
+};
+model_UserService.__name__ = ["model","UserService"];
+model_UserService.__interfaces__ = [redux_IReducer];
+model_UserService.prototype = {
+	initState: null
+	,reduce: function(state,action) {
+		haxe_Log.trace(action,{ fileName : "UserService.hx", lineNumber : 48, className : "model.UserService", methodName : "reduce"});
+		switch(action[1]) {
+		case 1:
+			var lco = action[2];
+			return react_ReactUtil.copy(state,lco);
+		case 2:
+			var err = action[2];
+			if(err.id == state.id) {
+				return react_ReactUtil.copy(state,err);
+			} else {
+				return state;
+			}
+			break;
+		default:
+			return state;
+		}
+	}
+	,__class__: model_UserService
 };
 var DateTimePicker = require("react-datetime-picker").default;
 var react_Partial = function() { };
@@ -1535,7 +1591,7 @@ view_Accounting.prototype = $extend(React_Component.prototype,{
 });
 var view_Contacts = function(props,context) {
 	this.mounted = false;
-	haxe_Log.trace(context,{ fileName : "Contacts.hx", lineNumber : 26, className : "view.Contacts", methodName : "new"});
+	haxe_Log.trace(context,{ fileName : "Contacts.hx", lineNumber : 25, className : "view.Contacts", methodName : "new"});
 	React_Component.call(this,props);
 };
 view_Contacts.__name__ = ["view","Contacts"];
@@ -1546,10 +1602,10 @@ view_Contacts.prototype = $extend(React_Component.prototype,{
 		this.mounted = true;
 	}
 	,componentDidCatch: function(error,info) {
-		haxe_Log.trace(error,{ fileName : "Contacts.hx", lineNumber : 43, className : "view.Contacts", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "Contacts.hx", lineNumber : 42, className : "view.Contacts", methodName : "componentDidCatch"});
 	}
 	,render: function() {
-		me_cunity_debug_Out.dumpObjectTree(this.props,null,{ fileName : "Contacts.hx", lineNumber : 48, className : "view.Contacts", methodName : "render"});
+		me_cunity_debug_Out.dumpObjectTree(this.props,null,{ fileName : "Contacts.hx", lineNumber : 47, className : "view.Contacts", methodName : "render"});
 		var tmp = react__$ReactNode_ReactNode_$Impl_$.fromComp(React.Fragment);
 		var tmp1 = { "$$typeof" : $$tre, type : "div", props : { className : "tabComponent", children : "..."}, key : null, ref : null};
 		return React.createElement(tmp,{ },tmp1,{ "$$typeof" : $$tre, type : view_StatusBar._connected, props : this.props, key : null, ref : null});
@@ -1590,33 +1646,50 @@ view_DashBoard.prototype = $extend(React_Component.prototype,{
 	}
 	,__class__: view_DashBoard
 });
-var view_Login = function(props,state) {
+var view_LoginForm = function(props,state) {
 	React_Component.call(this,props);
-	haxe_Log.trace(state,{ fileName : "Login.hx", lineNumber : 30, className : "view.Login", methodName : "new"});
-	this.state = { user : "", pass : "", submitted : false, jwt : ""};
-	haxe_Log.trace(this.state,{ fileName : "Login.hx", lineNumber : 38, className : "view.Login", methodName : "new"});
+	haxe_Log.trace(state,{ fileName : "LoginForm.hx", lineNumber : 40, className : "view.LoginForm", methodName : "new"});
+	haxe_Log.trace(this.state,{ fileName : "LoginForm.hx", lineNumber : 43, className : "view.LoginForm", methodName : "new"});
 };
-view_Login.__name__ = ["view","Login"];
-view_Login.__super__ = React_Component;
-view_Login.prototype = $extend(React_Component.prototype,{
+view_LoginForm.__name__ = ["view","LoginForm"];
+view_LoginForm.mapStateToProps = function() {
+	return function(state) {
+		haxe_Log.trace(state,{ fileName : "LoginForm.hx", lineNumber : 55, className : "view.LoginForm", methodName : "mapStateToProps"});
+		return { id : state.id, pass : state.pass, jwt : state.jwt, loggedIn : state.loggedIn, loginError : state.loginError, lastLoggedIn : state.lastLoggedIn, firstName : state.firstName};
+	};
+};
+view_LoginForm.__super__ = React_Component;
+view_LoginForm.prototype = $extend(React_Component.prototype,{
 	handleChange: function(e) {
 		var s = { };
 		var t = e.target;
 		s[t.name] = t.value;
 		this.setState(s);
-		haxe_Log.trace(this.state,{ fileName : "Login.hx", lineNumber : 48, className : "view.Login", methodName : "handleChange"});
+		haxe_Log.trace(this.state,{ fileName : "LoginForm.hx", lineNumber : 75, className : "view.LoginForm", methodName : "handleChange"});
 	}
 	,handleSubmit: function(e) {
+		var _gthis = this;
 		e.preventDefault();
 		this.setState({ submitted : true});
-		haxe_Log.trace(this.props.dispatch,{ fileName : "Login.hx", lineNumber : 56, className : "view.Login", methodName : "handleSubmit"});
+		haxe_Log.trace(this.props.dispatch,{ fileName : "LoginForm.hx", lineNumber : 84, className : "view.LoginForm", methodName : "handleSubmit"});
+		haxe_Log.trace(this.props.dispatch == ($_=App.store,$bind($_,$_.dispatch)),{ fileName : "LoginForm.hx", lineNumber : 85, className : "view.LoginForm", methodName : "handleSubmit"});
+		var req = new XMLHttpRequest();
+		var tmp = "" + Std.string(App.store.getState().appWare.config.api) + App.queryString(this.state);
+		req.open("GET",tmp);
+		req.onload = function() {
+			if(req.status == 200) {
+				haxe_Log.trace(req.response,{ fileName : "LoginForm.hx", lineNumber : 92, className : "view.LoginForm", methodName : "handleSubmit"});
+				_gthis.props.dispatch(redux__$Redux_Action_$Impl_$.map(model_UserAction.LoginComplete({ id : _gthis.state.id, jwt : req.response.jwt})));
+			} else {
+				_gthis.props.dispatch(redux__$Redux_Action_$Impl_$.map(model_UserAction.LoginError({ id : _gthis.state.id, loginError : { requestError : req.statusText}})));
+			}
+		};
 	}
 	,render: function() {
-		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "Login.hx", lineNumber : 61, className : "view.Login", methodName : "render"});
 		var style = { maxWidth : "22rem"};
-		return { "$$typeof" : $$tre, type : "section", props : { className : "hero is-alt is-fullheight", children : { "$$typeof" : $$tre, type : "div", props : { className : "hero-body", children : { "$$typeof" : $$tre, type : "div", props : { className : "container", style : style, children : { "$$typeof" : $$tre, type : "article", props : { className : "card is-rounded", children : { "$$typeof" : $$tre, type : "div", props : { className : "card-content", children : [{ "$$typeof" : $$tre, type : "h1", props : { className : "title", children : [{ "$$typeof" : $$tre, type : "img", props : { src : "img/schutzengelwerk-logo.png", style : { width : "100%"}}, key : null, ref : null},"crm 2.0"]}, key : null, ref : null},{ "$$typeof" : $$tre, type : "form", props : { name : "form", onSubmit : $bind(this,this.handleSubmit), children : [{ "$$typeof" : $$tre, type : "p", props : { className : "control has-icon", children : [{ "$$typeof" : $$tre, type : "input", props : { name : "user", className : "input", type : "text", placeholder : "ViciDial User ID", value : this.state.user, onChange : $bind(this,this.handleChange)}, key : null, ref : null},{ "$$typeof" : $$tre, type : "i", props : { className : "fa fa-user"}, key : null, ref : null}]}, key : null, ref : null},{ "$$typeof" : $$tre, type : "p", props : { className : "control has-icon", children : [{ "$$typeof" : $$tre, type : "input", props : { name : "pass", className : "input", type : "password", placeholder : "Password", value : this.state.pass, onChange : $bind(this,this.handleChange)}, key : null, ref : null},{ "$$typeof" : $$tre, type : "i", props : { className : "fa fa-lock"}, key : null, ref : null}]}, key : null, ref : null},{ "$$typeof" : $$tre, type : "p", props : { className : "control", children : { "$$typeof" : $$tre, type : "button", props : { className : "button is-medium is-fullwidth is-warning", children : "Login"}, key : null, ref : null}}, key : null, ref : null}]}, key : null, ref : null}]}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null};
+		return { "$$typeof" : $$tre, type : "section", props : { className : "hero is-alt is-fullheight", children : { "$$typeof" : $$tre, type : "div", props : { className : "hero-body", children : { "$$typeof" : $$tre, type : "div", props : { className : "container", style : style, children : { "$$typeof" : $$tre, type : "article", props : { className : "card is-rounded", children : { "$$typeof" : $$tre, type : "div", props : { className : "card-content", children : [{ "$$typeof" : $$tre, type : "h2", props : { className : "title", children : [{ "$$typeof" : $$tre, type : "img", props : { src : "img/schutzengelwerk-logo.png", style : { width : "100%"}}, key : null, ref : null},"crm 2.0"]}, key : null, ref : null},{ "$$typeof" : $$tre, type : "form", props : { name : "form", onSubmit : $bind(this,this.handleSubmit), children : [{ "$$typeof" : $$tre, type : "p", props : { className : "control has-icon", children : [{ "$$typeof" : $$tre, type : "input", props : { name : "id", className : "input", type : "text", placeholder : "ViciDial User ID", value : this.state.id, onChange : $bind(this,this.handleChange)}, key : null, ref : null},{ "$$typeof" : $$tre, type : "i", props : { className : "fa fa-user"}, key : null, ref : null}]}, key : null, ref : null},{ "$$typeof" : $$tre, type : "p", props : { className : "control has-icon", children : [{ "$$typeof" : $$tre, type : "input", props : { name : "pass", className : "input", type : "password", placeholder : "Password", value : this.state.pass, onChange : $bind(this,this.handleChange)}, key : null, ref : null},{ "$$typeof" : $$tre, type : "i", props : { className : "fa fa-lock"}, key : null, ref : null}]}, key : null, ref : null},{ "$$typeof" : $$tre, type : "p", props : { className : "control", children : { "$$typeof" : $$tre, type : "button", props : { className : "button is-medium is-fullwidth is-warning", children : "Login"}, key : null, ref : null}}, key : null, ref : null}]}, key : null, ref : null}]}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null};
 	}
-	,__class__: view_Login
+	,__class__: view_LoginForm
 });
 var view_NavTabs = function(props,context) {
 	haxe_Log.trace(context,{ fileName : "NavTabs.hx", lineNumber : 27, className : "view.NavTabs", methodName : "new"});
@@ -1647,7 +1720,7 @@ view_NavTabs.prototype = $extend(React_Component.prototype,{
 });
 var view_QC = function(props,context) {
 	this.mounted = false;
-	haxe_Log.trace(context,{ fileName : "QC.hx", lineNumber : 26, className : "view.QC", methodName : "new"});
+	haxe_Log.trace(context,{ fileName : "QC.hx", lineNumber : 25, className : "view.QC", methodName : "new"});
 	React_Component.call(this,props);
 };
 view_QC.__name__ = ["view","QC"];
@@ -1658,10 +1731,10 @@ view_QC.prototype = $extend(React_Component.prototype,{
 		this.mounted = true;
 	}
 	,componentDidCatch: function(error,info) {
-		haxe_Log.trace(error,{ fileName : "QC.hx", lineNumber : 43, className : "view.QC", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "QC.hx", lineNumber : 42, className : "view.QC", methodName : "componentDidCatch"});
 	}
 	,render: function() {
-		haxe_Log.trace(this.props,{ fileName : "QC.hx", lineNumber : 48, className : "view.QC", methodName : "render"});
+		haxe_Log.trace(this.props,{ fileName : "QC.hx", lineNumber : 47, className : "view.QC", methodName : "render"});
 		var tmp = react__$ReactNode_ReactNode_$Impl_$.fromComp(React.Fragment);
 		var tmp1 = { "$$typeof" : $$tre, type : "div", props : { className : "tabComponent", children : "..."}, key : null, ref : null};
 		return React.createElement(tmp,{ },tmp1,{ "$$typeof" : $$tre, type : view_StatusBar._connected, props : this.props, key : null, ref : null});
@@ -1709,12 +1782,12 @@ var view_StatusBar = function(props) {
 view_StatusBar.__name__ = ["view","StatusBar"];
 view_StatusBar.mapStateToProps = function() {
 	return function(state) {
-		haxe_Log.trace(state.statusBar.date,{ fileName : "StatusBar.hx", lineNumber : 51, className : "view.StatusBar", methodName : "mapStateToProps"});
+		haxe_Log.trace(state.statusBar.date,{ fileName : "StatusBar.hx", lineNumber : 52, className : "view.StatusBar", methodName : "mapStateToProps"});
 		return { date : state.statusBar.date, userList : state.appWare.userList, user : state.appWare.user};
 	};
 };
 view_StatusBar.mapDispatchToProps = function(dispatch,ownProps) {
-	haxe_Log.trace(ownProps.date,{ fileName : "StatusBar.hx", lineNumber : 61, className : "view.StatusBar", methodName : "mapDispatchToProps"});
+	haxe_Log.trace(ownProps.date,{ fileName : "StatusBar.hx", lineNumber : 62, className : "view.StatusBar", methodName : "mapDispatchToProps"});
 	return { dummy : 666};
 };
 view_StatusBar.__super__ = React_Component;
@@ -1722,12 +1795,13 @@ view_StatusBar.prototype = $extend(React_Component.prototype,{
 	mounted: null
 	,componentDidMount: function() {
 		this.mounted = true;
+		haxe_Log.trace(this.props.dispatch,{ fileName : "StatusBar.hx", lineNumber : 46, className : "view.StatusBar", methodName : "componentDidMount"});
 	}
 	,render: function() {
 		var tmp = $$tre;
 		var tmp1 = $$tre;
 		var tmp2 = { "$$typeof" : $$tre, type : "span", props : { children : ["Pfad: ",this.props.match.url]}, key : null, ref : null};
-		var tmp3 = this.props.user != null ? this.props.user.state.last_name : "";
+		var tmp3 = this.props.user != null ? this.props.user.state.lastName : "";
 		return { $$typeof : tmp, type : bulma_$components_Footer, props : { children : { $$typeof : tmp1, type : "div", props : { className : "statusbar", children : [tmp2,{ "$$typeof" : $$tre, type : "span", props : { children : ["Benutzer: ",tmp3]}, key : null, ref : null},{ "$$typeof" : $$tre, type : react_ReactDateTimeClock, props : { value : this.props.date, className : "flex-end"}, key : null, ref : null}]}, key : null, ref : null}}, key : null, ref : null};
 	}
 	,__class__: view_StatusBar
@@ -1735,7 +1809,7 @@ view_StatusBar.prototype = $extend(React_Component.prototype,{
 var view_UiView = function(props) {
 	this.tabList = [{ "key" : 1, "component" : view_DashBoard, "label" : "DashBoard", "url" : "/dashboard"},{ "key" : 2, "component" : view_Contacts, "label" : "Contacts", "url" : "/contacts"},{ "key" : 3, "component" : view_QC, "label" : "QC", "url" : "/qc"},{ "key" : 4, "component" : view_Accounting, "label" : "Buchhaltung", "url" : "/accounting"},{ "key" : 5, "component" : view_Reports, "label" : "Berichte", "url" : "/reports"}];
 	React_Component.call(this,props);
-	haxe_Log.trace(this.props.appWare.user.state.last_name,{ fileName : "UiView.hx", lineNumber : 62, className : "view.UiView", methodName : "new"});
+	haxe_Log.trace(this.props,{ fileName : "UiView.hx", lineNumber : 62, className : "view.UiView", methodName : "new"});
 };
 view_UiView.__name__ = ["view","UiView"];
 view_UiView.__super__ = React_Component;
@@ -1755,8 +1829,8 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 		return routes;
 	}
 	,render: function() {
-		if(this.props.appWare.user.state.jwt == "") {
-			return { "$$typeof" : $$tre, type : view_Login._connected, props : { }, key : null, ref : null};
+		if(this.props.appWare.user == null || this.props.appWare.user.jwt == "") {
+			return { "$$typeof" : $$tre, type : view_LoginForm._connected, props : { }, key : null, ref : null};
 		}
 		var tmp = react__$ReactNode_ReactNode_$Impl_$.fromComp(react_router_BrowserRouter);
 		var tmp1 = react__$ReactNode_ReactNode_$Impl_$.fromComp(react_router_Switch);
@@ -1775,7 +1849,7 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 var view_User = function(props,state) {
 	React_Component.call(this);
 	this.state = state;
-	haxe_Log.trace(this.state,{ fileName : "User.hx", lineNumber : 33, className : "view.User", methodName : "new"});
+	haxe_Log.trace(this.state,{ fileName : "User.hx", lineNumber : 23, className : "view.User", methodName : "new"});
 };
 view_User.__name__ = ["view","User"];
 view_User.__super__ = React_Component;
@@ -1820,9 +1894,9 @@ view_DashBoard.user = { firstName : "dummy"};
 view_DashBoard.displayName = "DashBoard";
 view_DashBoard._connected = (redux_react_ReactRedux.connect(null,view_DashBoard.mapDispatchToProps))(react__$ReactNode_ReactNode_$Impl_$.fromComp(view_DashBoard));
 view_DashBoard.__jsxStatic = view_DashBoard._connected;
-view_Login.displayName = "Login";
-view_Login._connected = (redux_react_ReactRedux.connect())(react__$ReactNode_ReactNode_$Impl_$.fromComp(view_Login));
-view_Login.__jsxStatic = view_Login._connected;
+view_LoginForm.displayName = "LoginForm";
+view_LoginForm._connected = (redux_react_ReactRedux.connect(view_LoginForm.mapStateToProps))(react__$ReactNode_ReactNode_$Impl_$.fromComp(view_LoginForm));
+view_LoginForm.__jsxStatic = view_LoginForm._connected;
 view_NavTabs.displayName = "NavTabs";
 view_QC.displayName = "QC";
 view_QC._connected = (redux_react_ReactRedux.connect())(react__$ReactNode_ReactNode_$Impl_$.fromComp(view_QC));

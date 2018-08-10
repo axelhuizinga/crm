@@ -14,7 +14,7 @@ import redux.StoreMethods;
 
 
 import Webpack.*;
-import GlobalAppState;
+import AppState;
 
 @:connect
 class Accounting extends ReactComponentOfProps<RouteRenderProps>

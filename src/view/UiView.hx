@@ -25,7 +25,7 @@ import react.router.bundle.Bundle;
 import bulma_components.Tabs;
 
 import action.AppAction;
-import view.User;
+import view.LoginForm;
 
 /**
  * ...
@@ -40,16 +40,15 @@ typedef  NavLinks =
 	url:String
 }
 
-typedef UiProps = 
+typedef UiState = 
 {
-	onClick: Dynamic, //ReactPropTypes.func.isRequired,
-	locale: Dynamic,
-	?themeColor: ReactPropTypes
+	> AppState,
+	hasError:Bool
 }
 
 //@:connect
 //@:wrap(react.router.ReactRouter.withRouter)
-class UiView extends ReactComponentOf<Dynamic,GlobalAppState>
+class UiView extends ReactComponentOf<AppState, UiState>
 {
 	//public static var store:Store<GlobalAppState>;
 	
@@ -59,7 +58,8 @@ class UiView extends ReactComponentOf<Dynamic,GlobalAppState>
 		//trace(props);	
 		//trace(state);	
         super(props);
-		trace(this.props.appWare.user.state.last_name);	
+		//trace(this.props.appWare.user.state.lastName);	
+		trace(this.props);	
     }
 	
 	override function componentDidCatch(error, info) {
@@ -111,11 +111,11 @@ class UiView extends ReactComponentOf<Dynamic,GlobalAppState>
 	}*/
 	
 	override function render() {
-		if (props.appWare.user.state.jwt == '')
+		if (props.appWare.user == null || props.appWare.user.jwt == '')
 		{
 			//trace(props);
 			// WE NEED TO LOGIN FIRST
-			return jsx('<Login/>');
+			return jsx('<LoginForm />');
 		}
 		return jsx('		
 			<$BrowserRouter basename="/">

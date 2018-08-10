@@ -11,7 +11,8 @@ import redux.IReducer;
 import redux.StoreMethods;
 import react.router.ReactRouter;
 import history.History;
-import GlobalAppState;
+import model.GlobalAppState;
+import Webpack.*;
 
 /**
  * ...
@@ -20,14 +21,17 @@ import GlobalAppState;
 
 class AppService 
 	implements IReducer<AppAction, GlobalAppState>
+	implements IMiddleware<AppAction, AppState>
 {
+	
 	public var initState:GlobalAppState = {
+		config:null,
 		route: Browser.location.pathname,// '',
 		themeColor: 'green',
 		locale: 'de',
-		//history:null,
+		//history:null, 
 		userList:[],
-		user:new User(null, {id:1000000666, contact:1000000666, first_name:'test', last_name:'admin', jwt:''})
+		user:null
 	};
 	public var store:StoreMethods<AppState>;
 
@@ -35,8 +39,11 @@ class AppService
 	var loadPending:Promise<Bool>;
 	
 	public function new() 
-	{ 
+	{
+		var appCconf:Dynamic = Webpack.require('../../bin/app.config.js');
 		trace('OK');
+		initState.config = Reflect.field(appCconf, 'default');
+		
 	}
 	
 	public function reduce(state:GlobalAppState, action:AppAction):GlobalAppState
@@ -64,7 +71,6 @@ class AppService
 					});
 				}
 				else state;
-
 			default:
 				state;
 		}
@@ -72,7 +78,7 @@ class AppService
 	
 	public function middleware(action:AppAction, next:Void -> Dynamic)
 	{
-		trace(next);
+		trace(action);
 		return switch(action)
 		{
 			default: next();

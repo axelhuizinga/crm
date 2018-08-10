@@ -2,12 +2,13 @@ import action.AppAction;
 import action.HistoryAction;
 import model.AppService;
 import model.StatusBarService;
+import model.UserService;
 import redux.Redux;
 import redux.Store;
 import redux.StoreBuilder.*;
 import redux.thunk.Thunk;
 import redux.thunk.ThunkMiddleware;
-import GlobalAppState;
+import AppState;
 
 class ApplicationStore
 {
@@ -16,13 +17,15 @@ class ApplicationStore
 		// store model, implementing reducer and middleware logic
 		var appWare = new AppService();
 		var statusBarService = new StatusBarService();
+		var userService = new UserService();
 		
 		// create root reducer normally, excepted you must use 
 		// 'StoreBuilder.mapReducer' to wrap the Enum-based reducer
 		var rootReducer = Redux.combineReducers(
 			{
 				appWare: mapReducer(AppAction, appWare),
-				statusBar: mapReducer(StatusAction, statusBarService)
+				statusBar: mapReducer(StatusAction, statusBarService),
+				userService: mapReducer(UserAction, userService)
 			}
 		);
 		
@@ -30,9 +33,8 @@ class ApplicationStore
 		// 'StoreBuilder.mapMiddleware' to wrap the Enum-based middleware
 		var middleware = Redux.applyMiddleware(
 			mapMiddleware(Thunk, new ThunkMiddleware({custom: "data"})),
-			mapMiddleware(StatusAction, statusBarService)
-			/*mapMiddleware(AppAction, appWare),
-			*/
+			//mapMiddleware(StatusAction, statusBarService)
+			mapMiddleware(AppAction, appWare)
 		);
 		
 		// user 'StoreBuilder.createStore' helper to automatically wire
