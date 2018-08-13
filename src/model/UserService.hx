@@ -22,13 +22,14 @@ typedef UserState =
 	?loginError:Dynamic,
 	?jwt:String,
 	?pass:String,
+	?redirectAfterLogin:String,
 	?waiting:Bool
 }
 
 enum UserAction
 {
 	LoginWait;
-	LoginComplete(state:UserState);
+
 	LoginError(state:UserState);
 	LogOut(state:UserState);	
 }
@@ -57,8 +58,6 @@ class UserService implements IReducer<UserAction, UserState>
 					copy(state, err);
 				else
 					state;
-			case LoginComplete(lco):
-				copy(state, lco);
 				
 			/*case LoginReq(uState):
 				copy(state, uState);*/

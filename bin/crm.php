@@ -10,5 +10,5 @@
     <title>Xpress CRM</title>
 	<script type="text/javascript" src="js/bulma-extensions.min.js"></script>
   </head>
-  <body><script type="text/javascript" src="app.js"></script></body>
+  <body><script type="text/javascript" src="/app.js"></script></body>
 </html>

@@ -5,7 +5,8 @@ import model.UserService.UserState;
 typedef GlobalAppState = 
 {
 	config:Dynamic,
-	route: String,
+	route:String,
+	?redirectAfterLogin:String,
 	?hasError:Bool,
 	?themeColor:String,
 	?locale:String,

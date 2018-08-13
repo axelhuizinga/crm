@@ -55,6 +55,9 @@ class AppService
 				copy(state, {
 					loading:true
 				});
+
+			case LoginComplete(uState):
+				copy(state, {userService:uState});
 				
 			case SetLocale(locale):
 				if (locale != state.locale)

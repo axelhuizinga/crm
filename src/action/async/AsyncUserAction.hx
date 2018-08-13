@@ -32,7 +32,7 @@ class AsyncUserAction
 				 if (req.status == 200) {
 					 // OK
 					trace(req.response);
-					return dispatch(UserAction.LoginComplete({id:state.id, jwt:req.response.jwt, waiting:false}));
+					return dispatch(AppAction.LoginComplete({id:state.id, jwt:req.response.jwt, waiting:false}));
 				} else {
 					  // Otherwise reject with the status text
 					  // which will hopefully be a meaningful error

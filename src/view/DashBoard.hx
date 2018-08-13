@@ -19,7 +19,7 @@ import Webpack.*;
 import AppState;
 
 @:connect
-class DashBoard extends ReactComponentOfProps<RouteRenderProps>
+class DashBoard extends ReactComponentOfProps<Dynamic>
 	
 {
 	static var user = {firstName:'dummy'};
@@ -28,7 +28,7 @@ class DashBoard extends ReactComponentOfProps<RouteRenderProps>
 	public function new(?props:Dynamic)
 	{
 		//state = App.store.getState().appWare;
-		//trace(props);
+		trace(props);
 		super(props);
 		//trace(untyped this.state.history);
 	}
@@ -49,19 +49,26 @@ class DashBoard extends ReactComponentOfProps<RouteRenderProps>
 	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
     {
 		trace(dispatch);
+		return {dispatch:dispatch};
         return {};
     }
 	
 	function setThemeColor()
 	{
-		trace('ok');	
+		trace('ok: ${props.dispatch}');	
 		App.store.dispatch(AppAction.SetTheme('violet'));
 	}
 	
-    override function render() {
-		//trace(props);
+    override function render() 
+	{	
 		//var s:ApplicationState = untyped App.store.getState().appWare;
 		//trace(this.state);
+		if (props.id == null || props.id == '' || props.jwt == null || props.jwt == '')
+		{
+			// WE NEED TO LOGIN FIRST
+			return jsx('<LoginForm />');
+		}
+		else		
         return jsx('
 		<>
             <div className="tabComponent" >

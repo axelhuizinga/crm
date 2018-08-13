@@ -18,13 +18,15 @@ typedef NavProps =
 	debug:String
 }
 
-//@:wrap(react.router.ReactRouter.withRouter)
+@:wrap(react.router.ReactRouter.withRouter)
 class NavTabs extends ReactComponentOfProps<NavProps>
 {
+	static var tabsRendered:Int=0;
+	
 	public function new(?props:NavProps, ?context:Dynamic) 
 	{
 		//trace(props);
-		trace(context);
+		//trace(context);
 		trace(Reflect.fields(props));
 		super(props);		
 	}
@@ -33,9 +35,8 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 	{
 		//trace(props.children);
 		trace(Reflect.field(props,'computedMatch'));
-		//trace(Reflect.fields(props));
+		//trace(Reflect.fields(props));${props.children}
 		return jsx('
-		<>
 			<Tabs centered={true} boxed={true}>				
 				<ul>
 					<TabLink to="/dashboard" ${...props}>DashBoard</TabLink> 
@@ -44,9 +45,7 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 					<TabLink to="/accounting" ${...props}>Buchhaltung</TabLink>
 					<TabLink to="/reports" ${...props}>Berichte</TabLink>
 				</ul>
-			</Tabs>	
-			${props.children}
-		</>		
+			</Tabs>		
 		');
 	}	
 	

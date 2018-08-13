@@ -28,6 +28,7 @@ import view.Contacts;
 import view.DashBoard;
 import view.QC;
 import view.Statistics;
+import view.LoginForm;
 import view.UiView;
 using StringTools;
 
@@ -60,7 +61,8 @@ class App  extends react.ReactComponentOfState<AppState>
 	{
 		var d:Date = Date.now();
 		var s:Int = d.getSeconds();
-		trace('start delay at $s set timer start in ${(60 - s ) * 1000} seconds');
+		trace('start delay at $s set timer start in ${(60 - s ) } seconds');
+		//return;
 		Timer.delay(function(){
 			trace('timer start at ${Date.now().getSeconds()}');
 			store.dispatch(Tick(Date.now()));
@@ -83,11 +85,11 @@ class App  extends react.ReactComponentOfState<AppState>
 	// Use trace from props
 	public static function edump(el:Dynamic){Out.dumpObject(el); return 'OK'; };
 	
-	//store={store} data-debug={edump(props)}
+	//store={store} data-debug={edump(props)}{...state}
     override function render() {
-
+		trace(state.appWare.route);
         return jsx('
-			<Provider store={store}><UiView {...state} /></Provider>			
+			<Provider store={store}><UiView/></Provider>			
         ');
     }
 	

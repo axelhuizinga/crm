@@ -60,7 +60,7 @@ class StatusBar extends ReactComponentOfProps<Dynamic>
 
 	static function mapDispatchToProps(dispatch:Dispatch, ownProps:Dynamic) {
 		trace(ownProps.date);
-		return {dummy:666};
+		return {dispatch:dispatch};
 		/*	onTodoClick: function(id:Int) return dispatch(AppAction.SetTheme('orange'))
 		};*/
 	}	

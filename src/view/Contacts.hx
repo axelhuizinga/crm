@@ -15,7 +15,7 @@ import redux.StoreMethods;
 import Webpack.*;
 
 @:connect
-class Contacts extends ReactComponentOfProps<RouteRenderProps>
+class Contacts extends ReactComponentOfProps<Dynamic>
 	
 {
 	var mounted:Bool = false;
@@ -42,9 +42,39 @@ class Contacts extends ReactComponentOfProps<RouteRenderProps>
 		trace(error);
 	}	
 	
+	static function mapStateToProps() {
+
+		return function(aState:AppState) 
+		{
+			var uState = aState.userService;
+
+			//trace(aState.userService);
+			
+			return {
+				appConfig:aState.appWare.config,
+				id:uState.id,
+				pass:uState.pass,
+				jwt:uState.jwt,
+				loggedIn:uState.loggedIn,
+				loginError:uState.loginError,
+				lastLoggedIn:uState.lastLoggedIn,
+				firstName:uState.firstName,
+				waiting:uState.waiting
+			};
+		};
+	}	
+	
     override function render() {
 		//trace(props.match);
-		Out.dumpObjectTree(props);
+		//Out.dumpObjectTree(props);
+		trace(Reflect.fields(props));
+		trace('${props.id} => ${props.jwt}');
+		if (props.id == null || props.id == '' || props.jwt == null || props.jwt == '')
+		{
+			// WE NEED TO LOGIN FIRST
+			return jsx('<LoginForm />');
+		}
+		else		
         return jsx('
 		<>
             <div className="tabComponent">
