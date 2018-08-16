@@ -1,6 +1,7 @@
 import haxe.Log;
 import js.Browser;
 import js.html.DivElement;
+import me.cunity.debug.Out;
 import react.ReactDOM;
 import react.ReactMacro.jsx;
 
@@ -9,7 +10,8 @@ class Go
 
 	public static function main()
 	{
-		//Log.trace = Out._trace;
+		Log.trace = Out._trace;
+		trace('hi :)');
 		render(createRoot());
 	}
 
@@ -31,6 +33,7 @@ class Go
 		//trace(app);
 		
 		#if (debug && react_hot)
+		trace('calling ReactHMR.autoRefresh');
 		ReactHMR.autoRefresh(app);
 		#end
 	}

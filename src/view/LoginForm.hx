@@ -1,6 +1,6 @@
 package view;
 
-import action.async.AsyncUserAction;
+//import action.async.AsyncUserAction;
 import js.html.InputElement;
 import js.html.InputEvent;
 import js.html.XMLHttpRequest;
@@ -9,18 +9,24 @@ import react.ReactComponent.ReactComponentOf;
 import react.ReactMacro.jsx;
 import redux.Redux;
 import react.router.Route.RouteRenderProps;
-import action.AppAction;
-import model.UserService.UserAction;
-import model.UserService.UserState;
+import action.async.AsyncUserAction;
+import view.shared.RouteTabProps;
 
-typedef LoginProps = 
+typedef LoginState = 
 {
-	> RouteRenderProps,
-	?appConfig:Dynamic,
-	?dispatch: Dispatch,
+	//> RouteRenderProps,
+	?api:Dynamic,
+	//?dispatch: Dispatch,
 	?waiting:Bool,
 	?id:String,
-	?pass:String
+	?pass:String,
+	?jwt:String
+}
+
+typedef LoginProps =
+{
+	>RouteTabProps,
+	submitLogin:LoginState->Dispatch
 }
 
 /**
@@ -28,15 +34,19 @@ typedef LoginProps =
  * @author axel@cunity.me
  */
 
+@:expose('default')
 @:connect
-class LoginForm extends ReactComponentOfProps<Dynamic>
+class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 {
 	
-	public function new(?props:Dynamic)
+	public function new(?props:LoginProps)
 	{
 		trace(Reflect.fields(props));
-		if(props.match != null)
-		trace(props.match.path + ':' + props.match.url);
+		if (props.match != null)
+		{
+			trace(props.match.path + ':' + props.match.url);	
+		}
+		state = {api:props.appConfig.api, pass:'', id:''};
 		trace(props.dispatch);
 		super(props);
 	}
@@ -44,11 +54,8 @@ class LoginForm extends ReactComponentOfProps<Dynamic>
 	static function mapDispatchToProps(dispatch:Dispatch) {
 		trace(dispatch);
 		return {
-			//submitLogin: function(userState:UserState) return dispatch(AsyncUserAction.login(userState))
-			dispatch:function(userState:UserState){
-				trace(userState);
-				return null;
-			}
+			submitLogin: function(lState:LoginState) return dispatch(AsyncUserAction.loginReq(lState))
+			//dispatch:dispatch
 		};
 	}
 	
@@ -56,9 +63,9 @@ class LoginForm extends ReactComponentOfProps<Dynamic>
 
 		return function(aState:AppState) 
 		{
-			var uState = aState.userService;
+			var uState = aState.appWare.user;
 
-			trace(aState.userService);
+			trace(uState);
 			
 			return {
 				appConfig:aState.appWare.config,
@@ -69,6 +76,7 @@ class LoginForm extends ReactComponentOfProps<Dynamic>
 				loginError:uState.loginError,
 				lastLoggedIn:uState.lastLoggedIn,
 				firstName:uState.firstName,
+				redirectAfterLogin:aState.appWare.redirectAfterLogin,
 				waiting:uState.waiting
 			};
 		};
@@ -79,20 +87,24 @@ class LoginForm extends ReactComponentOfProps<Dynamic>
 		var s:Dynamic = {};
 		var t:InputElement = cast e.target;
 		trace(t.name);
+		trace(t.value);
 		Reflect.setField(s, t.name, t.value);
-		//this.setState(s);
+		trace(props.dispatch == App.store.dispatch);
+		//App.store.dispatch(AppAction.LoginChange(s));
+		this.setState(s);
 		//trace(this.state);
 	}
 	
 	dynamic function handleSubmit(e:InputEvent)
 	{
 		e.preventDefault();
-		trace(props.dispatch); return;
+		trace(props.dispatch); //return;
 		//this.setState({waiting:true});
 		//props.dispatch(AppAction.Login("{id:state.id,pass:state.pass}"));
 		//trace(props.dispatch);
-		//trace(props.dispatch == App.store.dispatch);
-		//trace(props.dispatch(AsyncUserAction.loginReq(state, props)));
+		props.submitLogin(state);
+		//trace(_dispatch == App.store.dispatch);
+		//trace(App.store.dispatch(AsyncUserAction.loginReq(state)));
 		//trace(props.dispatch(AppAction.LoginReq(state)));
 	}	
 
@@ -127,11 +139,11 @@ class LoginForm extends ReactComponentOfProps<Dynamic>
 				  </h2>
 				  <form name="form" onSubmit={handleSubmit} autoComplete="new-password" >
 					  <p className="control has-icon">
-						<input name="id" className="input" type="text" placeholder="ViciDial User ID"  value={props.id} onChange={handleChange} />
+						<input name="id" className="input" type="text" placeholder="ViciDial User ID"  value={state.id} onChange={handleChange} />
 						<i className="fa fa-user"></i>
 					  </p>
 					  <p className="control has-icon">
-						<input name="pass" className="input" type="password" placeholder="Password"  value={props.pass} onChange={handleChange} />
+						<input name="pass" className="input" type="password" placeholder="Password"  value={state.pass} onChange={handleChange} />
 						<i className="fa fa-lock"></i>
 					  </p>
 					  <p className="control">

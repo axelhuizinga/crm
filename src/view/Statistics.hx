@@ -2,10 +2,13 @@ package view;
 
 import react.ReactComponent;
 import react.ReactMacro.jsx;
+import redux.Redux.Dispatch;
 
 
 import Webpack.*;
 
+@:expose('default')
+@:connect
 class Statistics extends ReactComponent {
 
    /* static var STYLES = require('./Foo.css');

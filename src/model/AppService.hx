@@ -3,6 +3,7 @@ import action.AppAction;
 import haxe.Http;
 import haxe.Json;
 import js.Browser;
+import js.Cookie;
 import js.Promise;
 import view.User;
 import react.ReactUtil.copy;
@@ -23,15 +24,20 @@ class AppService
 	implements IReducer<AppAction, GlobalAppState>
 	implements IMiddleware<AppAction, AppState>
 {
-	
+
 	public var initState:GlobalAppState = {
 		config:null,
 		route: Browser.location.pathname,// '',
 		themeColor: 'green',
 		locale: 'de',
-		//history:null, 
+		redirectAfterLogin: Browser.location.pathname, 
 		userList:[],
-		user:null
+		user:{
+			id:App.id,
+			pass:'',
+			waiting:false,
+			jwt:App.jwt
+		}
 	};
 		public var store:StoreMethods<AppState>;
 
@@ -55,9 +61,23 @@ class AppService
 				copy(state, {
 					loading:true
 				});
-
+			
+			case LoginChange(uState):
+				copy(state, {
+					user:{id:uState.id, pass:uState.pass}
+				});
+				
+			case LoginError(err):
+				if(err.id==state.user.id)
+					copy(state, err);
+				else
+					state;
+					
+			case LoginWait:
+				copy(state, {waiting:true});
+				
 			case LoginComplete(uState):
-				copy(state, {userService:uState});
+				copy(state, {user:uState});
 				
 			case SetLocale(locale):
 				if (locale != state.locale)

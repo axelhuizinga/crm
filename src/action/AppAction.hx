@@ -12,7 +12,12 @@ enum AppAction
 {
 	Load;
 	LoginReq(state:UserState);
-	LoginComplete(state:UserState);	
+	LoginChange(state:UserState);
+	LoginComplete(state:UserState);
+	LoginWait;
+
+	LoginError(state:UserState);
+	LogOut(state:UserState);	
 	//AddContact(id:Int);
 	SetLocale(locale:String);
 	SetTheme(color:String);

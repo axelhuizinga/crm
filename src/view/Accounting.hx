@@ -9,6 +9,7 @@ import react.router.Route.RouteRenderProps;
 import redux.react.IConnectedComponent;
 import redux.Redux;
 import redux.StoreMethods;
+import view.shared.RouteTabProps;
 //import react.form.Form;
 //import react.form.Text;
 
@@ -16,8 +17,9 @@ import redux.StoreMethods;
 import Webpack.*;
 import AppState;
 
+@:expose('default')
 @:connect
-class Accounting extends ReactComponentOfProps<RouteRenderProps>
+class Accounting extends ReactComponentOfProps<RouteTabProps>
 	
 {
 	var mounted:Bool = false;
@@ -28,17 +30,6 @@ class Accounting extends ReactComponentOfProps<RouteRenderProps>
 		//this.state = App.store.getState().appWare;
 		super(props);
 		//trace(this.state);
-	}
-		
-	static function mapStateToProps() {
-		//var getVisibleTodos = TodoSelector.makeGetVisibleTodos();
-
-		return function(state:AppState) {
-			trace(state);
-			return {
-				
-			};
-		};
 	}
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
@@ -61,8 +52,37 @@ class Accounting extends ReactComponentOfProps<RouteRenderProps>
 		trace(error);
 	}	
 	
+	static function mapStateToProps() {
+
+		return function(aState:AppState) 
+		{
+			var uState = aState.appWare.user;
+
+			//trace(uState);
+			
+			return {
+				appConfig:aState.appWare.config,
+				id:uState.id,
+				pass:uState.pass,
+				jwt:uState.jwt,
+				loggedIn:uState.loggedIn,
+				loginError:uState.loginError,
+				lastLoggedIn:uState.lastLoggedIn,
+				firstName:uState.firstName,
+				redirectAfterLogin:aState.appWare.redirectAfterLogin,
+				waiting:uState.waiting
+			};
+		};
+	}	
+	
     override function render() {
-        return jsx('
+		if (props.id == null || props.id == '' || props.jwt == null || props.jwt == '')
+		{
+			// WE NEED TO LOGIN FIRST
+			return jsx('<LoginForm {...props}/>');
+		}
+		else
+		return jsx('
 		<>
             <div className="tabComponent">
 				...

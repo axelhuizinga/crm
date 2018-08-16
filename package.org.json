@@ -1,0 +1,26 @@
+{
+  "scripts": {
+    "postinstall": "haxelib newrepo && haxelib install --always install.hxml",
+    "start": "webpack-dev-server"
+  },
+  "dependencies": {
+    "bulma": "^0.7.1",
+    "bulma-extensions": "^2.2.1",
+    "css-loader": "^0.28.11",
+    "font-awesome": "^4.7.0",
+    "prop-types": "^15.6.1",
+    "react": "^16.4.2",
+    "react-datetime-picker": "^1.4.2",
+    "react-dom": "^16.4.0",
+    "react-redux": "^5.0.7",
+    "react-redux-form": "^1.16.9",
+    "react-router-dom": "^4.2.2",
+    "reactbulma": "^3.0.4",
+    "redux": "^3.7.2",
+    "style-loader": "^0.18.2",
+    "url-loader": "^1.0.1"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^3.1.4"
+  }
+}

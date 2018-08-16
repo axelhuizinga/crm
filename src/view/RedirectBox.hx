@@ -2,14 +2,13 @@ package view;
 
 import react.ReactComponent.ReactComponentOfProps;
 import react.ReactMacro.jsx;
-import view.DashBoard;
-
+import react.router.Redirect;
 /**
  * ...
  * @author axel@cunity.me
  */
 
-class DashBoardBox extends ReactComponentOfProps<Dynamic>
+class RedirectBox extends ReactComponentOfProps<Dynamic>
 {
 
 	public function new(?props:Dynamic, ?context:Dynamic) 
@@ -20,7 +19,8 @@ class DashBoardBox extends ReactComponentOfProps<Dynamic>
 	
 	override public function render()
 	{
-		return jsx('<DashBoard {...props}/>');
+		trace(props);
+		return jsx('<Redirect to="/dashboard"/>');
 	}
 	
 }

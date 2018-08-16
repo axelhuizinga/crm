@@ -4,18 +4,21 @@ import me.cunity.debug.Out;
 import react.ReactComponent;
 import react.ReactDateTimeClock;
 import react.ReactMacro.jsx;
+import redux.Redux.Dispatch;
 import react.Partial;
 import react.router.Route.RouteRenderProps;
 import redux.react.IConnectedComponent;
 import redux.StoreMethods;
+import view.shared.RouteTabProps;
 //import react.form.Form;
 //import react.form.Text;
 
 
 import Webpack.*;
 
+@:expose('default')
 @:connect
-class Contacts extends ReactComponentOfProps<Dynamic>
+class Contacts extends ReactComponentOfProps<RouteTabProps>
 	
 {
 	var mounted:Bool = false;
@@ -46,7 +49,7 @@ class Contacts extends ReactComponentOfProps<Dynamic>
 
 		return function(aState:AppState) 
 		{
-			var uState = aState.userService;
+			var uState = aState.appWare.user;
 
 			//trace(aState.userService);
 			
@@ -59,6 +62,7 @@ class Contacts extends ReactComponentOfProps<Dynamic>
 				loginError:uState.loginError,
 				lastLoggedIn:uState.lastLoggedIn,
 				firstName:uState.firstName,
+				redirectAfterLogin:aState.appWare.redirectAfterLogin,
 				waiting:uState.waiting
 			};
 		};
@@ -68,11 +72,11 @@ class Contacts extends ReactComponentOfProps<Dynamic>
 		//trace(props.match);
 		//Out.dumpObjectTree(props);
 		trace(Reflect.fields(props));
-		trace('${props.id} => ${props.jwt}');
+		trace('${props.id} => ${props.jwt}' + (( props.jwt == null )?' should Login' : ' Login OK' ));
 		if (props.id == null || props.id == '' || props.jwt == null || props.jwt == '')
 		{
 			// WE NEED TO LOGIN FIRST
-			return jsx('<LoginForm />');
+			return jsx('<LoginForm  {...props}/>');
 		}
 		else		
         return jsx('

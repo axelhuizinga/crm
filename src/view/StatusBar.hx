@@ -60,19 +60,16 @@ class StatusBar extends ReactComponentOfProps<Dynamic>
 
 	static function mapDispatchToProps(dispatch:Dispatch, ownProps:Dynamic) {
 		trace(ownProps.date);
-		return {dispatch:dispatch};
-		/*	onTodoClick: function(id:Int) return dispatch(AppAction.SetTheme('orange'))
-		};*/
+		return {};
 	}	
 	
 	override public function render()
-	{
-		
+	{		
 		return jsx('
 		<Footer>
 			<div className = "statusbar">
-				<span>Pfad: ${props.match.url}</span>
-				<span>Benutzer: ${props.user != null ? props.user.state.lastName : '' }</span>
+				<span className="column is-one-fifth">Pfad: ${props.match.url}</span>
+				<span className="column is-one-fifth">Benutzer: ${props.user.lastName != null ? props.user.lastName : '' }</span>
 				<ReactDateTimeClock value={props.date}  className="flex-end" />
 			</div>
 		</Footer>

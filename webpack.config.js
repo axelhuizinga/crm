@@ -9,6 +9,7 @@
 // Plugins
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+//const CSPWebpackPlugin = require('csp-webpack-plugin');
 
 // Options
 const buildMode = process.env.NODE_ENV || 'development';
@@ -32,6 +33,7 @@ module.exports = {
     entry: {
         app: './build.hxml'
     },
+    mode: buildMode,
     // Generation options (destination, naming pattern,...)
     output: {
         path: dist,
@@ -49,22 +51,27 @@ module.exports = {
         contentBase: dist,
         compress: true,
 	host:  '192.168.178.20',
-	https: true,
+	https: false,
         port: 9000,
         overlay: true,
         hot: true,	    
+	inline: true,
 	watchOptions:{
-		aggregateTimeout:1500,
-		ignored:'.tmp.drivedownload'
+		aggregateTimeout:1500
 	},	    
 	historyApiFallback: {
-	      index: 'crm.html'
+	      index: 'index.html',
+		rewrites:[
+		{from: /./, to: '/index.html'}
+		]
 	}
     },
+    watch: true,    
 	watchOptions:{
 		aggregateTimeout:1500,
-		ignored:['node_modules', '.tmp.drivedownload']
+		poll: 1500
 	},    
+    
     // List all the processors
     module: {
         rules: [
@@ -120,8 +127,8 @@ module.exports = {
 
         // Like generating the HTML page with links the generated JS files
         new HtmlWebpackPlugin({
-		filename: dist + '/crm.php',
-		template: './src/crm.php',
+		filename: dist + './index.html',
+		template: __dirname + '/src/index.html',
 		title: 'Xpress CRM'
         })
         // You may want to also:

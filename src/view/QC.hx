@@ -4,18 +4,21 @@ import bulma_components.*;
 import react.ReactComponent;
 import react.ReactDateTimeClock;
 import react.ReactMacro.jsx;
+import redux.Redux.Dispatch;
 import react.Partial;
 import react.router.Route.RouteRenderProps;
 import redux.react.IConnectedComponent;
 import redux.StoreMethods;
+import view.shared.RouteTabProps;
 //import react.form.Form;
 //import react.form.Text;
 
 
 import Webpack.*;
 
+@:expose('default')
 @:connect
-class QC extends ReactComponentOfProps<RouteRenderProps>
+class QC extends ReactComponentOfProps<RouteTabProps>
 	
 {
 	var mounted:Bool = false;
@@ -42,9 +45,37 @@ class QC extends ReactComponentOfProps<RouteRenderProps>
 		trace(error);
 	}	
 		
+	static function mapStateToProps() {
+
+		return function(aState:AppState) 
+		{
+			var uState = aState.appWare.user;
+
+			//trace(uState);
+			
+			return {
+				appConfig:aState.appWare.config,
+				id:uState.id,
+				pass:uState.pass,
+				jwt:uState.jwt,
+				loggedIn:uState.loggedIn,
+				loginError:uState.loginError,
+				lastLoggedIn:uState.lastLoggedIn,
+				firstName:uState.firstName,
+				redirectAfterLogin:aState.appWare.redirectAfterLogin,
+				waiting:uState.waiting
+			};
+		};
+	}	
 	
     override function render() {
 		trace(props);
+		if (props.id == null || props.id == '' || props.jwt == null || props.jwt == '')
+		{
+			// WE NEED TO LOGIN FIRST
+			return jsx('<LoginForm {...props}/>');
+		}
+		else		
         return jsx('
 		<>
             <div className="tabComponent">

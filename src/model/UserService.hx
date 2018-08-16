@@ -58,11 +58,10 @@ class UserService implements IReducer<UserAction, UserState>
 					copy(state, err);
 				else
 					state;
-				
-			/*case LoginReq(uState):
-				copy(state, uState);*/
+					
 			case LoginWait:
 				copy(state, {waiting:true});
+				
 			default:
 				state;
 		}

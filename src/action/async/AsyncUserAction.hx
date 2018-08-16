@@ -2,14 +2,14 @@ package action.async;
 
 //import buddy.internal.sys.Js;
 
-import js.Promise;
+import haxe.Json;
+import js.Cookie;
+
 import js.html.XMLHttpRequest;
-import model.UserService;
-import model.UserService.UserAction.*;
-import model.UserService.UserState;
+
 import redux.Redux.Dispatch;
 import redux.thunk.Thunk;
-import view.LoginForm.LoginProps;
+import view.LoginForm.LoginState;
 /**
  * ...
  * @author axel@cunity.me
@@ -18,29 +18,33 @@ import view.LoginForm.LoginProps;
 class AsyncUserAction 
 {
 
-	public static function loginReq(state:UserState, props:LoginProps) 
+	public static function loginReq(props:LoginState) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
 			trace(getState());
-			if (state.pass == '' || state.id == null) 
-				return dispatch(UserAction.LoginError({id:state.id, loginError:{requestError:'Passwort und UserId eintragen!'}}));
+			if (props.pass == '' || props.id == '') 
+				return dispatch(AppAction.LoginError({id:props.id, loginError:{requestError:'Passwort und UserId eintragen!'}}));
 			
 			var req:XMLHttpRequest = new XMLHttpRequest();
-			req.open('GET', '${props.appConfig.api}?' + App.queryString({action:'login', className:'auth.User', id:state.id, pass: state.pass}));
+			req.open('GET', '${props.api}?' + App.queryString2({action:'login', className:'auth.User', id:props.id, pass: props.pass}));
 			req.onload = function()
 			{
 				 if (req.status == 200) {
 					 // OK
-					trace(req.response);
-					return dispatch(AppAction.LoginComplete({id:state.id, jwt:req.response.jwt, waiting:false}));
+					var jRes:LoginState = Json.parse( req.response);
+					trace(jRes.jwt);
+					Cookie.set('user.id', props.id);
+					Cookie.set('user.jwt', jRes.jwt);
+					return dispatch(AppAction.LoginComplete({id:props.id, jwt:jRes.jwt, waiting:false}));
 				} else {
 					  // Otherwise reject with the status text
 					  // which will hopefully be a meaningful error
-					return dispatch(UserAction.LoginError({id:state.id, loginError:{requestError:req.statusText}}));
+					return dispatch(AppAction.LoginError({id:props.id, loginError:{requestError:req.statusText}}));
 				}
 			};
-			var spin:Dynamic = dispatch(UserAction.LoginWait);
+			var spin:Dynamic = dispatch(AppAction.LoginWait);
 			req.send();
+			trace(spin);
 			return spin;			
 		});
 	}

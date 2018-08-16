@@ -17,22 +17,22 @@ class ApplicationStore
 		// store model, implementing reducer and middleware logic
 		var appWare = new AppService();
 		var statusBarService = new StatusBarService();
-		var userService = new UserService();
+		//var userService = new UserService();
 		
 		// create root reducer normally, excepted you must use 
 		// 'StoreBuilder.mapReducer' to wrap the Enum-based reducer
 		var rootReducer = Redux.combineReducers(
 			{
 				appWare: mapReducer(AppAction, appWare),
-				statusBar: mapReducer(StatusAction, statusBarService),
-				userService: mapReducer(UserAction, userService)
+				statusBar: mapReducer(StatusAction, statusBarService)
+				//userService: mapReducer(UserAction, userService)
 			}
 		);
 		
 		// create middleware normally, excepted you must use 
 		// 'StoreBuilder.mapMiddleware' to wrap the Enum-based middleware
 		var middleware = Redux.applyMiddleware(
-			mapMiddleware(Thunk, new ThunkMiddleware({custom: "data"})),
+			mapMiddleware(Thunk, new ThunkMiddleware()),
 			//mapMiddleware(StatusAction, statusBarService)
 			mapMiddleware(AppAction, appWare)
 		);

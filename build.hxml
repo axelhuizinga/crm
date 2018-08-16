@@ -11,10 +11,12 @@
 
 -cp ..\lib
 -cp lib
--cp src
+-cp .\src
 -js app.js
 -main Go
 
+-D debug
 -D react_hot
 -D modular_nomaps
 -D webpack
+-D react_deprecated_refs

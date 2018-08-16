@@ -3,14 +3,14 @@ package view;
 import react.ReactComponent.ReactComponentOfProps;
 import react.ReactMacro.jsx;
 import react.router.Route.RouteRenderProps;
-import view.Contacts;
+import view.QC;
 
 /**
  * ...
  * @author axel@cunity.me
  */
 
-class ContactsBox extends ReactComponentOfProps<RouteRenderProps>
+class QCBox extends ReactComponentOfProps<RouteRenderProps>
 {
 
 	public function new(?props:RouteRenderProps, ?context:Dynamic) 
@@ -22,7 +22,7 @@ class ContactsBox extends ReactComponentOfProps<RouteRenderProps>
 	override public function render()
 	{
 		//trace(props);
-		return jsx('<Contacts {...props}/>');
+		return jsx('<QC {...props}/>');
 	}
 	
 }
