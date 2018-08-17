@@ -89,7 +89,7 @@ class DashBoard extends ReactComponentOfProps<DashBoardProps>
 	{	
 		//var s:ApplicationState = untyped App.store.getState().appWare;
 		//trace(this.state);
-		trace(props);
+		trace(props.match);
 		if (props.id == null || props.id == '' || props.jwt == null || props.jwt == '')
 		{
 			// WE NEED TO LOGIN FIRST

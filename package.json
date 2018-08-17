@@ -21,7 +21,7 @@
     "redux": "^4.0.0",
     "style-loader": "^0.18.2",
     "url-loader": "^1.0.1",
-    "webpack": "^4.10.2"
+    "webpack": "^4.16.5"
   },
   "devDependencies": {
     "connect-history-api-fallback": "^1.5.0",
@@ -40,8 +40,8 @@
     "yargs-parser": "^10.1.0"
   },
   "scripts": {
-    "start1": "webpack-dev-server --progress",
-    "start": "webpack-serve serve.config.js",
+    "start": "webpack-dev-server --progress",
+    "starts": "webpack-serve serve.config.js",
     "build:dev": "webpack",
     "build": "cross-env NODE_ENV=production webpack"
   }

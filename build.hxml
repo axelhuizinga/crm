@@ -11,7 +11,7 @@
 
 -cp ..\lib
 -cp lib
--cp .\src
+-cp src
 -js app.js
 -main Go
 

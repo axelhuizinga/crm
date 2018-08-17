@@ -18,7 +18,6 @@ import react.React;
 //import react.addon.intl.FormattedDate;
 //import react.addon.router.Router;
 import redux.react.Provider;
-import bulma_components.Tabs;
 //import react.tabs.RoutedTabs;
 //import redux.react.IConnectedComponent;
 
@@ -100,6 +99,12 @@ class App  extends react.ReactComponentOfState<AppState>
 	{
 		Out.dumpObject(el);
 		return 'OK';
+	}
+	
+	public static function logOut()
+	{
+		trace(id);
+		//return id;
 	}
 
 	public static function queryString2(params:Dynamic)

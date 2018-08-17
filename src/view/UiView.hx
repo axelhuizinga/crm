@@ -102,46 +102,8 @@ class UiView extends ReactComponentOf<Dynamic, Dynamic>
 		return routes;
 	}
 
-	/*function render2() {
-		return jsx('
-			<$BrowserRouter>
-				<$Switch>
-					<NavTabs>
-						<$Route path="/dashboard" component=${Bundle.load(DashBoard)}/>
-						<$Route path="/qc" component=${Bundle.load(QC)}/>
-						<$Route path="/contacts" component=${Bundle.load(Contacts)} exact={true}/>
-						<$Route path="/contacts/:contactid" component=${Bundle.load(Contacts)} exact={true}/>
-						<$Route path="/accounting" component=${Bundle.load(Accounting)}/>
-						<$Route path="/reports" component=${Bundle.load(Reports)}/>
-					</NavTabs>debug=${App.jsxDump(props)}
-				</$Switch>
-			</$BrowserRouter>
-		');
-	}*/
-
 	override function render()
 	{
-		/*if (props.appWare.user == null || props.appWare.user.jwt == '')
-		{
-			return jsx('<LoginForm />');
-
-						..<$Switch></$Switch>
-				<NavTabs >							</NavTabs>		<$Route path="/login"  {...props} component=${LoginForm}/>
-				<section>
-				<$Route path="/dashboard" {...props} component=${NavTabs}/>
-				<$Route path="/qc" {...props} component=${NavTabs}/>
-				<$Route path="/contacts" {...props} component=${NavTabs}/>
-				<$Route path="/accounting" {...props} component=${NavTabs}/>
-				<$Route path="/reports" {...props} component=${NavTabs}/>
-			</section>
-			<Switch></Switch><$Route path="/" component=${Bundle.load(DashBoard)} exact={true}/>
-				<$Route path="/" {...props} component=${AuthRoute}/>
-				<$Route path="/qc" component=${QC}/>
-				<$Route path="/contacts" component=${Contacts} exact={true}/>
-				<$Route path="/contacts/:contactid" component=${Contacts} exact={true}/>
-				<$Route path="/accounting" component=${Accounting}/>
-				<$Route path="/reports" component=${Reports}/>	<NavTabs />		<$BrowserRouter basename="/"><$Route path="/" component=${Bundle.load(LoginForm)}/>	</$BrowserRouter>
-		}*/
 		trace(props.dispatch == dispatchInitial);
 		if (state.hasError) {
 		  return jsx('<h1>Something went wrong.</h1>');

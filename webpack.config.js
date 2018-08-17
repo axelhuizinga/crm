@@ -66,10 +66,10 @@ module.exports = {
 		]
 	}
     },
-    watch: true,    
+    //watch: true,    
 	watchOptions:{
 		aggregateTimeout:1500,
-		poll: 1500
+		//poll: 1500
 	},    
     
     // List all the processors

@@ -34,6 +34,8 @@ class AppService
 		userList:[],
 		user:{
 			id:App.id,
+			firstName:'',
+			lastName:'',
 			pass:'',
 			waiting:false,
 			jwt:App.jwt

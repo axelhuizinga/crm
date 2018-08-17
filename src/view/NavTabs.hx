@@ -25,7 +25,7 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 	
 	public function new(?props:NavProps, ?context:Dynamic) 
 	{
-		//trace(props);
+		trace(Reflect.fields(props));
 		//trace(context);
 		trace(Reflect.fields(props));
 		super(props);		
@@ -33,28 +33,42 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 	
 	override public function render()
 	{
-		//trace(props.children);
-		trace(Reflect.field(props,'computedMatch'));
-		//trace(Reflect.fields(props));${props.children}
 		return jsx('
 			<Tabs centered={true} boxed={true}>				
-				<ul>
-					<TabLink to="/dashboard" ${...props}>DashBoard</TabLink> 
-					<TabLink to="/qc" ${...props}>QC</TabLink>
-					<TabLink to="/contacts" ${...props}>Kontakte</TabLink>
-					<TabLink to="/accounting" ${...props}>Buchhaltung</TabLink>
-					<TabLink to="/reports" ${...props}>Berichte</TabLink>
-				</ul>
+				${buildNav()}
 			</Tabs>		
 		');
 	}	
 	
 	function TabLink(rprops)
 	{
-		//trace(rprops);
-		//trace(Reflect.fields(rprops));
 		return jsx('
 		<li className=${rprops.location.pathname.indexOf(rprops.to) == 0 ?"is-active":""}><NavLink to=${rprops.to}>${rprops.children}</NavLink></li>
+		');
+	}
+	
+	function buildNav()
+	{
+		var state = App.store.getState().appWare.user;
+		trace(state);
+		if (state.id == null || state.id == '' || state.jwt == null || state.jwt == '')
+		{
+			// WE NEED TO LOGIN FIRST
+			return null;
+		}
+		else		
+		return jsx('
+		<>
+			<ul>
+				<TabLink to="/dashboard" ${...props}>DashBoard</TabLink> 
+				<TabLink to="/contacts" ${...props}>Kontakte</TabLink>
+				<TabLink to="/qc" ${...props}>QC</TabLink>
+				<TabLink to="/accounting" ${...props}>Buchhaltung</TabLink>
+				<TabLink to="/reports" ${...props}>Berichte</TabLink>
+			</ul>		
+			 <i className = "icon is-pulled-right fa fa-sign-out"  title = "Abmelden"  onClick=${App.logOut}
+			 style={{margin:"0.1rem .8rem 0rem .5rem",fontSize:"1.8rem", cursor:"pointer", color:"#801111"}}></i>
+		</>
 		');
 	}
 }
