@@ -2,6 +2,7 @@ package model;
 import action.AppAction;
 import haxe.Http;
 import haxe.Json;
+import haxe.ds.StringMap;
 import js.Browser;
 import js.Cookie;
 import js.Promise;
@@ -11,7 +12,9 @@ import redux.IMiddleware;
 import redux.IReducer;
 import redux.StoreMethods;
 import react.router.ReactRouter;
+import history.BrowserHistory;
 import history.History;
+import model.CState;
 import model.GlobalAppState;
 import Webpack.*;
 
@@ -22,15 +25,17 @@ import Webpack.*;
 
 class AppService 
 	implements IReducer<AppAction, GlobalAppState>
-	implements IMiddleware<AppAction, AppState>
+	implements IMiddleware<AppAction, model.AppState>
 {
 
 	public var initState:GlobalAppState = {
+		compState: new StringMap(),
 		config:null,
-		route: Browser.location.pathname,// '',
+		history:BrowserHistory.create({basename:"/", getUserConfirmation:CState.handleTransition, listen:CState.historyChange}),
 		themeColor: 'green',
 		locale: 'de',
 		redirectAfterLogin: Browser.location.pathname, 
+		routeHistory: new Array(),
 		userList:[],
 		user:{
 			id:App.id,
@@ -41,7 +46,7 @@ class AppService
 			jwt:App.jwt
 		}
 	};
-		public var store:StoreMethods<AppState>;
+		public var store:StoreMethods<model.AppState>;
 
 	var ID = 0;
 	var loadPending:Promise<Bool>;
@@ -50,8 +55,7 @@ class AppService
 	{
 		var appCconf:Dynamic = Webpack.require('../../bin/app.config.js');
 		trace('OK');
-		initState.config = Reflect.field(appCconf, 'default');
-		
+		initState.config = Reflect.field(appCconf, 'default');		
 	}
 	
 	public function reduce(state:GlobalAppState, action:AppAction):GlobalAppState

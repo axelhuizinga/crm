@@ -1,6 +1,7 @@
 package view;
 import bulma_components.*;
 import me.cunity.debug.Out;
+import model.AppState;
 import react.ReactComponent;
 import react.ReactDateTimeClock;
 import react.ReactMacro.jsx;
@@ -47,7 +48,7 @@ class Contacts extends ReactComponentOfProps<RouteTabProps>
 	
 	static function mapStateToProps() {
 
-		return function(aState:AppState) 
+		return function(aState:model.AppState) 
 		{
 			var uState = aState.appWare.user;
 
@@ -69,7 +70,8 @@ class Contacts extends ReactComponentOfProps<RouteTabProps>
 	}	
 	
     override function render() {
-		//trace(props.match);
+		trace(props.match);
+		trace(props.history.location.pathname);
 		//Out.dumpObjectTree(props);
 		trace(Reflect.fields(props));
 		trace('${props.id} => ${props.jwt}' + (( props.jwt == null )?' should Login' : ' Login OK' ));

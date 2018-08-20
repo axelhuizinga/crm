@@ -1,5 +1,6 @@
 package view.dashboard;
 
+import model.AppState;
 import react.ReactComponent.ReactComponentOfProps;
 import react.ReactMacro.jsx;
 import redux.Redux.Dispatch;
@@ -23,7 +24,7 @@ class BaseForm extends ReactComponentOfProps<RouteTabProps>
 	
 	static function mapStateToProps() {
 
-		return function(aState:AppState) 
+		return function(aState:model.AppState) 
 		{
 			var uState = aState.appWare.user;
 			//trace(uState);			

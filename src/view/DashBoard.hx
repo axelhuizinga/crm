@@ -2,6 +2,7 @@ package view;
 
 import action.AppAction;
 import bulma_components.*;
+import model.LocationState;
 import react.Partial;
 import react.ReactComponent;
 import react.ReactComponent.*;
@@ -19,7 +20,7 @@ import react.redux.form.Control;
 import redux.Redux;
 
 import Webpack.*;
-import AppState;
+import model.AppState;
 
 typedef DashBoardProps = 
 {
@@ -27,17 +28,22 @@ typedef DashBoardProps =
 	?setThemeColor:Void->Dispatch
 }
 
+typedef DashBoardState =
+{
+	route:String
+}
+
 @:expose('default')
 @:connect
-class DashBoard extends ReactComponentOfProps<DashBoardProps>
+class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 {
 	static var user = {firstName:'dummy'};
 	var mounted:Bool = false;
 	
 	public function new(?props:Dynamic)
 	{
-		//state = App.store.getState().appWare;
-		//trace(props);
+		//state = {route:props.route};
+		trace(props.history);
 		super(props);
 		//trace(untyped this.state.history);
 	}
@@ -46,6 +52,7 @@ class DashBoard extends ReactComponentOfProps<DashBoardProps>
 	{
 		mounted = true;
 		trace(mounted);
+		trace(props.history.listen);
 	}
 	
 	override function componentDidCatch(error, info) {
@@ -53,6 +60,13 @@ class DashBoard extends ReactComponentOfProps<DashBoardProps>
 		//this.setState({ hasError: true });
 		trace(error);
 	}		
+	
+	override public function componentWillUnmount():Void 
+	{
+		trace('leaving...');
+		return;
+		super.componentWillUnmount();
+	}
 	
 	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
     {
@@ -64,11 +78,12 @@ class DashBoard extends ReactComponentOfProps<DashBoardProps>
 
 	static function mapStateToProps() {
 
-		return function(aState:AppState) 
+		return function(aState:model.AppState) 
 		{
 			var uState = aState.appWare.user;
 
 			//trace(uState);
+			trace(' ${aState.appWare.history.location.pathname}');
 			
 			return {
 				appConfig:aState.appWare.config,
@@ -80,6 +95,7 @@ class DashBoard extends ReactComponentOfProps<DashBoardProps>
 				lastLoggedIn:uState.lastLoggedIn,
 				firstName:uState.firstName,
 				redirectAfterLogin:aState.appWare.redirectAfterLogin,
+				//locationHistory:aState.appWare.history,
 				waiting:uState.waiting
 			};
 		};
@@ -89,7 +105,7 @@ class DashBoard extends ReactComponentOfProps<DashBoardProps>
 	{	
 		//var s:ApplicationState = untyped App.store.getState().appWare;
 		//trace(this.state);
-		trace(props.match);
+		trace(props.history.location.pathname);
 		if (props.id == null || props.id == '' || props.jwt == null || props.jwt == '')
 		{
 			// WE NEED TO LOGIN FIRST
@@ -103,6 +119,7 @@ class DashBoard extends ReactComponentOfProps<DashBoardProps>
 				<Tabs  boxed={true} >
 					<ul>
 						<TabLink to="/dashboard/roles" ${...props}>Berechtigungen</TabLink>
+						<TabLink to="/dashboard/settings" ${...props}>Einstellungen</TabLink>
 					</ul>
 				</Tabs>		
 			</Route>

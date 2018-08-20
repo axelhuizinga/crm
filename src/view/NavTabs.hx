@@ -7,6 +7,7 @@ import react.router.Route.RouteComponentProps;
 import react.router.Link;
 import react.router.NavLink;
 import bulma_components.Tabs;
+import view.shared.SLink;
 
 /**
  * ...
@@ -34,7 +35,7 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 	override public function render()
 	{
 		return jsx('
-			<Tabs centered={true} boxed={true}>				
+			<Tabs centered={true} boxed={false}>				
 				${buildNav()}
 			</Tabs>		
 		');
@@ -46,7 +47,8 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 		<li className=${rprops.location.pathname.indexOf(rprops.to) == 0 ?"is-active":""}><NavLink to=${rprops.to}>${rprops.children}</NavLink></li>
 		');
 	}
-	
+	//<li className=${rprops.location.pathname.indexOf(rprops.to) == 0 ?"is-active":""}><NavLink to=${rprops.to}>${rprops.children}</NavLink></li>
+	//<li className=${rprops.location.pathname.indexOf(rprops.to) == 0 ?"is-active":""}><SLink {...rprops}/></li>
 	function buildNav()
 	{
 		var state = App.store.getState().appWare.user;
@@ -67,7 +69,7 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 				<TabLink to="/reports" ${...props}>Berichte</TabLink>
 			</ul>		
 			 <i className = "icon is-pulled-right fa fa-sign-out"  title = "Abmelden"  onClick=${App.logOut}
-			 style={{margin:"0.1rem .8rem 0rem .5rem",fontSize:"1.8rem", cursor:"pointer", color:"#801111"}}></i>
+			 style={{margin:"0.1rem .8rem 0rem .5rem",fontSize:"1.7rem", cursor:"pointer", color:"#801111"}}></i>
 		</>
 		');
 	}

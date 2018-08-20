@@ -1,6 +1,13 @@
+package model;
+
 import action.AppAction;
-import action.HistoryAction;
+import action.LocationAction;
+import history.Action;
+import history.History;
+import history.Location;
+import history.TransitionManager;
 import model.AppService;
+import model.LocationService;
 import model.StatusBarService;
 import model.UserService;
 import redux.Redux;
@@ -8,14 +15,15 @@ import redux.Store;
 import redux.StoreBuilder.*;
 import redux.thunk.Thunk;
 import redux.thunk.ThunkMiddleware;
-import AppState;
+import model.AppState;
 
 class ApplicationStore
 {
-	static public function create():Store<AppState>
+	static public function create():Store<model.AppState>
 	{
 		// store model, implementing reducer and middleware logic
 		var appWare = new AppService();
+		var locationService = new LocationService();
 		var statusBarService = new StatusBarService();
 		//var userService = new UserService();
 		
@@ -24,6 +32,7 @@ class ApplicationStore
 		var rootReducer = Redux.combineReducers(
 			{
 				appWare: mapReducer(AppAction, appWare),
+				//locationService: mapReducer(LocationAction, locationService),
 				statusBar: mapReducer(StatusAction, statusBarService)
 				//userService: mapReducer(UserAction, userService)
 			}
@@ -32,9 +41,10 @@ class ApplicationStore
 		// create middleware normally, excepted you must use 
 		// 'StoreBuilder.mapMiddleware' to wrap the Enum-based middleware
 		var middleware = Redux.applyMiddleware(
-			mapMiddleware(Thunk, new ThunkMiddleware()),
+			//mapMiddleware(Thunk, new ThunkMiddleware()),
 			//mapMiddleware(StatusAction, statusBarService)
 			mapMiddleware(AppAction, appWare)
+			//mapMiddleware(LocationAction, locationService)
 		);
 		
 		// user 'StoreBuilder.createStore' helper to automatically wire
@@ -43,15 +53,27 @@ class ApplicationStore
 		return createStore(rootReducer, null, middleware);
 	}
 	
-	static public function startup(store:Store<AppState>)
+	static public function startHistoryListener(store:Store<model.AppState>, history:History):TUnlisten
 	{
 		trace(store);
-		// use regular 'store.dispatch' but passing Haxe Enums!
-		/*store.dispatch(TodoAction.Load)
-			.then(function(_) {
-				store.dispatch(TodoAction.Add('Item 5 (auto)'));
-				store.dispatch(TodoAction.Toggle('4'));
-			});*/
+		store.dispatch(InitHistory(history));
+		/*store.dispatch(LocationChange({
+			pathname:location.pathname,
+			search: location.search,
+			hash: location.hash
+		}));	*/
+		
+		return history.listen( function(location:Location, action:history.Action){
+			trace(action);
+			trace(location);
+			store.dispatch(LocationChange({
+				pathname:location.pathname,
+				search: location.search,
+				hash: location.hash,
+				key:null,
+				state:null
+			}));
+		});
 	}
 	
 }

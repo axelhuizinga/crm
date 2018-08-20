@@ -13,7 +13,7 @@ import redux.StoreMethods;
 
 typedef StatusBarState =
 {
-	route: String,
+	pathname: String,
 	date:Date,
 	?hasError:Bool
 }
@@ -28,10 +28,10 @@ class StatusBarService implements IReducer<StatusAction, StatusBarState>
 //	implements IMiddleware<StatusAction, AppState>
 {
 	public var initState:StatusBarState = {
-		route: Browser.location.pathname,// '',
+		pathname: Browser.location.pathname,// '',
 		date:Date.now()
 	};
-	public var store:StoreMethods<AppState>;
+	public var store:StoreMethods<model.AppState>;
 
 	var ID = 0;
 	var loadPending:Promise<Bool>;
@@ -57,7 +57,7 @@ class StatusBarService implements IReducer<StatusAction, StatusBarState>
 	
 	public function middleware(action:StatusAction, next:Void -> Dynamic)
 	{
-		//trace(action);
+		trace(action);
 		return switch(action)
 		{
 			default: next();

@@ -25,7 +25,7 @@ h1 {
 .footer
 {
 	display:flex;
-	padding:0.2rem 0.5rem 0rem;
+	padding:0rem 0.5rem 0rem;
 	border: 1px solid #ddd;
 }
 .footer .column
@@ -50,10 +50,22 @@ h1 {
 	 flex-grow:1; 
 	 justify-content:space-between;
  } 
+.topNav .tabs ul
+{
+	border-bottom:none;
+}
+.topNav .tabs li a
+{
+	border-bottom:0.3rem solid transparent;
+}
+.topNav .tabs li.is-active a
+{
+	border-bottom-color:orange;
+}
 .topNav .tabs 
 {
 	padding-top:0.3rem;
-	background:linear-gradient(#fff,#ddd);
+	/*background:linear-gradient(#fff,#ddd);*/
 	font-size: 1.05rem;
 }  
 
@@ -71,6 +83,14 @@ h1 {
 .tabNav2
 {
 	width:100%;
+}
+.tabNav2 .tabs ul li:first-child
+{
+	margin-left:1rem;
+}
+.tabNav2 .tabs ul li:last-child
+{
+	margin-right:1rem;
 }
 .tabNav2 .tabs
 {

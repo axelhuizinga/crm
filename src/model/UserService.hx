@@ -35,7 +35,7 @@ enum UserAction
 }
 
 class UserService implements IReducer<UserAction, UserState>
-	implements IMiddleware<UserAction, AppState>
+	implements IMiddleware<UserAction, model.AppState>
 {
 	public var initState:UserState = {
 		id:'',
@@ -44,7 +44,7 @@ class UserService implements IReducer<UserAction, UserState>
 		jwt:''			
 	};
 	
-	public var store:StoreMethods<AppState>;
+	public var store:StoreMethods<model.AppState>;
 	
 	public function new() {}
 	

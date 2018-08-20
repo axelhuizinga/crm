@@ -21,6 +21,7 @@ typedef RouteTabProps =
 	?loginError:Dynamic,
 	?jwt:String,
 	?pass:String,
+	?route:String,
 	?redirectAfterLogin:String,
 	?waiting:Bool
 }

@@ -40,7 +40,8 @@
     "yargs-parser": "^10.1.0"
   },
   "scripts": {
-    "start": "webpack-dev-server --progress",
+    "start": "webpack-dev-server",
+    "pstart": "webpack-dev-server --progress",
     "starts": "webpack-serve serve.config.js",
     "build:dev": "webpack",
     "build": "cross-env NODE_ENV=production webpack"

@@ -4,12 +4,14 @@ package action.async;
 
 import haxe.Json;
 import js.Cookie;
+import model.AppState;
 
 import js.html.XMLHttpRequest;
 
 import redux.Redux.Dispatch;
 import redux.thunk.Thunk;
 import view.LoginForm.LoginState;
+
 /**
  * ...
  * @author axel@cunity.me
@@ -20,7 +22,7 @@ class AsyncUserAction
 
 	public static function loginReq(props:LoginState) 
 	{
-		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
+		return Thunk.Action(function(dispatch:Dispatch, getState:Void->model.AppState){
 			trace(getState());
 			if (props.pass == '' || props.id == '') 
 				return dispatch(AppAction.LoginError({id:props.id, loginError:{requestError:'Passwort und UserId eintragen!'}}));
@@ -51,7 +53,7 @@ class AsyncUserAction
 
 	public static function logOff(props:LoginState) 
 	{
-		return Thunk.Action(function(dispatch:Dispatch, getState:Void->AppState){
+		return Thunk.Action(function(dispatch:Dispatch, getState:Void->model.AppState){
 			trace(getState());
 			if (props.id == '') 
 				return dispatch(AppAction.LoginError({id:props.id, loginError:{requestError:'UserId fehlt!'}}));

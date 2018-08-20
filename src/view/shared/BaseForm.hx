@@ -1,5 +1,6 @@
 package view.shared;
 
+import model.AppState;
 import react.ReactComponent.ReactComponentOfProps;
 import react.ReactMacro.jsx;
 import redux.Redux.Dispatch;
@@ -17,13 +18,12 @@ class BaseForm extends ReactComponentOfProps<RouteTabProps>
 
 	public function new(?props:RouteTabProps, ?context:Dynamic) 
 	{
-		super(props);
-		
+		super(props);		
 	}
 	
 	static function mapStateToProps() {
 
-		return function(aState:AppState) 
+		return function(aState:model.AppState) 
 		{
 			var uState = aState.appWare.user;
 			//trace(uState);			
@@ -38,11 +38,9 @@ class BaseForm extends ReactComponentOfProps<RouteTabProps>
     override function render() {
 		trace(Reflect.fields(props));
         return jsx('
-		<>
-            <div className="tabComponentForm">
+            <form className="tabComponentForm">
 				...
-            </div>
-        </>
+            </form>
         ');
     }	
 	

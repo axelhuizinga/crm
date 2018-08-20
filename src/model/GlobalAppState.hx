@@ -1,15 +1,25 @@
 package model;
+import haxe.Json;
+import haxe.ds.StringMap;
+import history.History;
+import history.Location;
 import model.UserService.UserState;
 
+typedef CompState = 
+{
+	
+}
 
 typedef GlobalAppState = 
 {
+	compState:StringMap<CompState>,
 	config:Dynamic,
-	route:String,
-	?redirectAfterLogin:String,
 	?hasError:Bool,
-	?themeColor:String,
+	history:History,
 	?locale:String,
+	?redirectAfterLogin:String,
+	?routeHistory:Array<Location>,
+	?themeColor:String,
 	userList:Array<UserState>,
 	user:UserState
 }

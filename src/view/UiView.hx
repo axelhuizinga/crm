@@ -1,7 +1,10 @@
 package view;
 
 import haxe.Timer;
+import history.History;
+import history.BrowserHistory;
 import me.cunity.debug.Out;
+import model.AppState;
 import react.Fragment;
 import react.ReactComponent.ReactFragment;
 import react.React;
@@ -16,11 +19,10 @@ import redux.Redux;
 //import router.RouteComponentProps;
 import react.router.NavLink;
 import react.router.Redirect;
-//import react.router.RouterHistory;
 import react.router.Route;
 //import react.addon.router.Route;
 import react.router.Switch;
-import react.router.BrowserRouter;
+import react.router.Router;
 //import react.addon.router.BrowserRouter;
 //import react.router.Route.RouteComponentProps;
 //import react.router.Route.RouteRenderProps;
@@ -58,7 +60,7 @@ class UiView extends ReactComponentOf<Dynamic, Dynamic>
 {
 	//public static var store:Store<GlobalAppState>;
 
-	var browserHistory:Dynamic;
+	var browserHistory:History;
 	var dispatchInitial:Dispatch;
 
 	public function new(props:Dynamic) {
@@ -66,6 +68,8 @@ class UiView extends ReactComponentOf<Dynamic, Dynamic>
 		//trace(state);
         super(props);
 		state = {hasError:false};
+		browserHistory = App.store.getState().appWare.history;// BrowserHistory.create({basename:"/"});
+		//ApplicationStore.startHistoryListener(App.store, browserHistory);
 		//trace(this.props.appWare.user.state.lastName);
 		dispatchInitial = props.dispatch;
 		//trace(this.props);
@@ -109,7 +113,7 @@ class UiView extends ReactComponentOf<Dynamic, Dynamic>
 		  return jsx('<h1>Something went wrong.</h1>');
 		}
 		return jsx('
-			<$BrowserRouter basename="/">
+			<$Router history={browserHistory} >
 			<>
 				<section className="topNav">
 					<$Route path="/dashboard" {...props} component=${NavTabs}/>
@@ -117,15 +121,18 @@ class UiView extends ReactComponentOf<Dynamic, Dynamic>
 					<$Route path="/contacts" {...props} component=${NavTabs}/>
 					<$Route path="/qc" {...props} component=${NavTabs}/>
 					<$Route path="/reports" {...props} component=${NavTabs}/>
-				</section>			
+				</section>
+				<Switch>
 				<Route path="/" component=${RedirectBox} exact={true}/>
 				<Route path="/dashboard" component=${Bundle.load(DashBoardBox)}/>
 				<Route path="/accounting" component=${Bundle.load(AccountingBox)}/>
+				<Route path="/contacts/:id" component=${Bundle.load(ContactsBox)}/>
 				<Route path="/contacts" component=${Bundle.load(ContactsBox)}/>
 				<Route path="/qc" component=${Bundle.load(QCBox)}/>
 				<Route path="/reports" component=${Bundle.load(ReportsBox)}/>
+				</Switch>
 			</>
-			</$BrowserRouter>
+			</$Router>
 		');
 	}
 	/*<Route exact={true} path="/" render=${routeBox(props)} />

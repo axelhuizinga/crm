@@ -9,9 +9,10 @@ import react.ReactDateTimeClock;
 import react.ReactMacro.jsx;
 import redux.react.IConnectedComponent;
 import redux.Redux;
+import react.router.Route.RouteComponentProps;
 import redux.StoreMethods;
 import action.AppAction;
-import AppState;
+import model.AppState;
 
 /**
  * ...
@@ -20,9 +21,11 @@ import AppState;
 
 typedef StatusBarProps =
 {
+	> RouteComponentProps,
 	date:Date,
-	match:Dynamic,
-	user:User
+	pathname:String,
+	user:User,
+	userList:Array<User>
 }
 
 @:connect
@@ -48,12 +51,13 @@ class StatusBar extends ReactComponentOfProps<Dynamic>
 	
 	static function mapStateToProps() {
 
-		return function(state:AppState) {
-			trace(state.statusBar.date);
+		return function(state:model.AppState) {
+			//trace(state.appWare.history);
 			return {
 				date:state.statusBar.date,
 				userList:state.appWare.userList,
-				user:state.appWare.user
+				user:state.appWare.user,
+				pathname: state.appWare.history.location.pathname
 			};
 		};
 	}
@@ -75,7 +79,7 @@ class StatusBar extends ReactComponentOfProps<Dynamic>
 		return jsx('
 		<Footer>
 			<div className="statusbar">
-				<span className="column is-one-fifth" > Pfad: ${props.match.url}</span>				
+				<span className="column is-one-fifth" > Pfad: ${props.pathname}</span>				
 				<span className="column is-one-fifth">
 				<i className={userIcon}></i> ${userName}
 				</span>
