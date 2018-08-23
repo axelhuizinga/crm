@@ -28,6 +28,7 @@ typedef StatusBarProps =
 	userList:Array<User>
 }
 
+@:expose('default')
 @:connect
 class StatusBar extends ReactComponentOfProps<Dynamic>
 	
@@ -49,9 +50,9 @@ class StatusBar extends ReactComponentOfProps<Dynamic>
 		trace(props.dispatch);
 	}
 	
-	static function mapStateToProps() {
+	static function mapStateToProps(state:AppState) {
 
-		return function(state:model.AppState) {
+		//return function(state:model.AppState) {
 			//trace(state.appWare.history);
 			return {
 				date:state.statusBar.date,
@@ -59,7 +60,7 @@ class StatusBar extends ReactComponentOfProps<Dynamic>
 				user:state.appWare.user,
 				pathname: state.appWare.history.location.pathname
 			};
-		};
+		//};
 	}
 
 	static function mapDispatchToProps(dispatch:Dispatch, ownProps:Dynamic) {

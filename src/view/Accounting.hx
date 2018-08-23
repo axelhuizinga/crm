@@ -84,7 +84,7 @@ class Accounting extends ReactComponentOfProps<RouteTabProps>
 		else
 		return jsx('
 		<>
-            <div className="tabComponent">
+            <div className="tabContent2">
 				...
             </div>
 			<StatusBar {...props}/>

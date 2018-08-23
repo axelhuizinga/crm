@@ -1,4 +1,5 @@
 package model;
+import App;
 import action.AppAction;
 import haxe.Http;
 import haxe.Json;
@@ -31,7 +32,7 @@ class AppService
 	public var initState:GlobalAppState = {
 		compState: new StringMap(),
 		config:null,
-		history:BrowserHistory.create({basename:"/", getUserConfirmation:CState.handleTransition, listen:CState.historyChange}),
+		history:BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}),
 		themeColor: 'green',
 		locale: 'de',
 		redirectAfterLogin: Browser.location.pathname, 
@@ -61,8 +62,15 @@ class AppService
 	public function reduce(state:GlobalAppState, action:AppAction):GlobalAppState
 	{
 		trace(action);
+		trace(state.compState.get('dashboard'));
 		return switch(action)
 		{
+			/*case AddComponent(path, cState):
+				if (state.compState.exists(path))
+				{
+					var sComp:CompState = state.compState.get(path);
+					sComp.lastMounted = cState.lastMounted;
+				}*/
 			case Load:
 				copy(state, {
 					loading:true
@@ -113,6 +121,18 @@ class AppService
 		trace(action);
 		return switch(action)
 		{
+			case AddComponent(path, cState):
+				//function(){
+					trace('?');
+					var state:GlobalAppState = store.getState().appWare;
+					if (!state.compState.exists(path))
+					{
+						state.compState.set(path, cState);
+					}
+					trace('$path isMounted:${state.compState.get(path).isMounted}');
+					return next();
+				
+				
 			case LoginReq(uState):
 				//store.getState().userService.
 				var n:Dynamic = next();

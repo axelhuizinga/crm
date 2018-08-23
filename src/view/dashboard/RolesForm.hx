@@ -11,39 +11,37 @@ import view.shared.RouteTabProps;
  * @author axel@cunity.me
  */
 
-@:expose('default')
+//@:expose('default')
 @:connect
-class BaseForm extends ReactComponentOfProps<RouteTabProps> 
+class RolesForm extends ReactComponentOfProps<Dynamic> 
 {
 
-	public function new(?props:RouteTabProps, ?context:Dynamic) 
+	public function new(?props:Dynamic) 
 	{
 		super(props);
-		
+		trace(Reflect.fields(props));
 	}
 	
-	static function mapStateToProps() {
-
-		return function(aState:model.AppState) 
-		{
+	static function mapStateToProps(aState:AppState) {
+		trace('?');
+	
 			var uState = aState.appWare.user;
-			//trace(uState);			
+			trace(uState);			
 			return {
 				appConfig:aState.appWare.config,
 				id:uState.id,
 				firstName:uState.firstName
-			};
+			
 		};
 	}	
 	
     override function render() {
 		trace(Reflect.fields(props));
+		trace(props.match);
         return jsx('
-		<>
-            <div className="tabComponentForm">
-				...
-            </div>
-        </>
+		<div className="tabComponentForm2">
+			<h3>Berechtigungen</h3>
+		</div>
         ');
     }	
 	

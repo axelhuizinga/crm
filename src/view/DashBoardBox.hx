@@ -1,5 +1,5 @@
 package view;
-
+import react.React;
 import react.ReactComponent.ReactComponentOfProps;
 import react.ReactMacro.jsx;
 import view.DashBoard;
@@ -12,14 +12,15 @@ import view.DashBoard;
 class DashBoardBox extends ReactComponentOfProps<Dynamic>
 {
 
-	public function new(?props:Dynamic, ?context:Dynamic) 
+	public function new(?props:Dynamic) 
 	{
-		super(props, context);
-		
+		trace(Reflect.fields(props));
+		super(props);
 	}
 	
 	override public function render()
 	{
+		trace(Reflect.fields(props));
 		return jsx('<DashBoard {...props}/>');
 	}
 	

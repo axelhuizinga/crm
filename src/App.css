@@ -25,6 +25,7 @@ h1 {
 .footer
 {
 	display:flex;
+	flex-direction:column;
 	padding:0rem 0.5rem 0rem;
 	border: 1px solid #ddd;
 }
@@ -72,9 +73,10 @@ h1 {
 .tabComponent
 {
 	display:flex;
+	flex-direction:column;
 	overflow-y:auto;
 	flex: auto;
-	margin:0px 1rem;
+	margin:0px;
 }
 .tabComponentForm
 {
@@ -99,7 +101,8 @@ h1 {
 
 .tabContent2
 {
-	
+	flex:1;
+	padding:0.5rem 1.1rem;
 }
 
 .tabs a 

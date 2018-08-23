@@ -30,7 +30,7 @@ class App  extends react.ReactComponentOfState<AppState>
 	static var fa = require('../node_modules/font-awesome/css/font-awesome.min.css');
     static var STYLES = require('./App.css');
 
-	public static var store:Store<model.AppState>;
+	public static var store:Store<AppState>;
 
 	public static var id:String = Cookie.get('user.id');
 	public static var jwt:String = Cookie.get('user.jwt');
@@ -43,9 +43,9 @@ class App  extends react.ReactComponentOfState<AppState>
 		CState.init(store);
 		
 		//state.appWare.history.listen(CState.historyChange);
-		trace(state);
+		//trace(state);
 		//trace(Type.typeof(state.appWare.user.jwt));
-		trace(state.appWare.user.jwt);
+		//trace(state.appWare.user.jwt);
 		trace(Reflect.fields(state));
 		super();
 		//trace(this.state);

@@ -41,13 +41,13 @@ class ApplicationStore
 		// create middleware normally, excepted you must use 
 		// 'StoreBuilder.mapMiddleware' to wrap the Enum-based middleware
 		var middleware = Redux.applyMiddleware(
-			//mapMiddleware(Thunk, new ThunkMiddleware()),
+			mapMiddleware(Thunk, new ThunkMiddleware()),
 			//mapMiddleware(StatusAction, statusBarService)
 			mapMiddleware(AppAction, appWare)
 			//mapMiddleware(LocationAction, locationService)
 		);
 		
-		// user 'StoreBuilder.createStore' helper to automatically wire
+		// use 'StoreBuilder.createStore' helper to automatically wire
 		// the Redux devtools browser extension:
 		// https://github.com/zalmoxisus/redux-devtools-extension
 		return createStore(rootReducer, null, middleware);

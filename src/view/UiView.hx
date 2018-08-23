@@ -25,15 +25,15 @@ import react.router.Switch;
 import react.router.Router;
 //import react.addon.router.BrowserRouter;
 //import react.router.Route.RouteComponentProps;
-//import react.router.Route.RouteRenderProps;
+import react.router.Route.RouteRenderProps;
 import react.router.bundle.Bundle;
 import bulma_components.Tabs;
 
 import action.AppAction;
-import view.ContactsBox;
-import view.DashBoardBox;
-import view.AccountingBox;
-import view.ReportsBox;
+//import view.ContactsBox;
+//import view.DashBoardBox;
+//import view.AccountingBox;
+//import view.ReportsBox;
 
 /**
  * ...
@@ -48,15 +48,14 @@ typedef  NavLinks =
 	url:String
 }
 
-typedef UiState =
+typedef UIProps =
 {
-	> AppState,
-	hasError:Bool
+	store:Store<AppState>
 }
 
-@:connect
+//@:connect
 //@:wrap(react.router.ReactRouter.withRouter)
-class UiView extends ReactComponentOf<Dynamic, Dynamic>
+class UiView extends ReactComponentOf<UIProps, Dynamic>
 {
 	//public static var store:Store<GlobalAppState>;
 
@@ -65,13 +64,12 @@ class UiView extends ReactComponentOf<Dynamic, Dynamic>
 
 	public function new(props:Dynamic) {
 		trace(Reflect.fields(props));
-		//trace(state);
+		trace(props.store == App.store);
         super(props);
 		state = {hasError:false};
 		browserHistory = App.store.getState().appWare.history;// BrowserHistory.create({basename:"/"});
 		//ApplicationStore.startHistoryListener(App.store, browserHistory);
 		//trace(this.props.appWare.user.state.lastName);
-		dispatchInitial = props.dispatch;
 		//trace(this.props);
     }
 
@@ -108,7 +106,6 @@ class UiView extends ReactComponentOf<Dynamic, Dynamic>
 
 	override function render()
 	{
-		trace(props.dispatch == dispatchInitial);
 		if (state.hasError) {
 		  return jsx('<h1>Something went wrong.</h1>');
 		}
@@ -122,20 +119,46 @@ class UiView extends ReactComponentOf<Dynamic, Dynamic>
 					<$Route path="/qc" {...props} component=${NavTabs}/>
 					<$Route path="/reports" {...props} component=${NavTabs}/>
 				</section>
-				<Switch>
-				<Route path="/" component=${RedirectBox} exact={true}/>
-				<Route path="/dashboard" component=${Bundle.load(DashBoardBox)}/>
+				<div className="tabComponent">
+				<Route path="/"  component={RedirectBox} exact={true}/>
+				
+				<Route path="/dashboard/*" component=${Bundle.load(DashBoardBox)}/>
 				<Route path="/accounting" component=${Bundle.load(AccountingBox)}/>
-				<Route path="/contacts/:id" component=${Bundle.load(ContactsBox)}/>
+				<Route path="/contacts/edit/:id" component=${Bundle.load(ContactsBox)}/>
 				<Route path="/contacts" component=${Bundle.load(ContactsBox)}/>
 				<Route path="/qc" component=${Bundle.load(QCBox)}/>
 				<Route path="/reports" component=${Bundle.load(ReportsBox)}/>
-				</Switch>
+				</div>
 			</>
 			</$Router>
 		');
+		
+	}
+	
+	function renderRedirect(p:Dynamic)
+	{
+		return jsx('<RedirectBox a="1" {...p}/>');
 	}
 	/*<Route exact={true} path="/" render=${routeBox(props)} />
+	 * <Redirect path="/dashboard" to="/dashboard/roles" exact={true}/>
+	 * 				<div className="tabComponent">
+				<Route path="/"  component={RedirectBox} exact={true}/>
+				<Route path="/dashboard" component=${Bundle.load(DashBoardBox)}/>
+				<Route path="/accounting" component=${Bundle.load(AccountingBox)}/>
+				<Route path="/contacts/edit/:id" component=${Bundle.load(ContactsBox)}/>
+				<Route path="/contacts" component=${Bundle.load(ContactsBox)}/>
+				<Route path="/qc" component=${Bundle.load(QCBox)}/>
+				<Route path="/reports" component=${Bundle.load(ReportsBox)}/>
+				</div>
+								<div className="tabComponent">
+				<Route path="/"  component={RedirectBox} exact={true}/>
+				<Route path="/dashboard" component=${DashBoardBox}/>
+				<Route path="/accounting" component=${AccountingBox}/>
+				<Route path="/contacts/edit/:id" component=${ContactsBox}/>
+				<Route path="/contacts" component=${ContactsBox}/>
+				<Route path="/qc" component=${QCBox}/>
+				<Route path="/reports" component=${ReportsBox}/>
+				</div>
 	 * 
 	 *<Redirect from="/" to="/dashboard" exact={true}/><Route path="/dasboard" component=${Bundle.load(DashBoard)} exact={true}/>
 				<Route path="/" component=${DashBoardBox} exact={true}/>

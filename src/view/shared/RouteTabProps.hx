@@ -1,5 +1,5 @@
 package view.shared;
-import react.router.Route.RouteRenderProps;
+import react.router.Route.RouteComponentProps;
 import redux.Redux.Dispatch;
 
 /**
@@ -8,7 +8,7 @@ import redux.Redux.Dispatch;
  */
 typedef RouteTabProps =
 {
-	>RouteRenderProps,
+	>RouteComponentProps,
 	?appConfig:Dynamic,
 	?dispatch:Dispatch,
 	?id:Dynamic,

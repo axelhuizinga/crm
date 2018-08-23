@@ -1,11 +1,9 @@
-package view.shared;
+package view.dashboard;
 
 import model.AppState;
 import react.ReactComponent.ReactComponentOfProps;
 import react.ReactMacro.jsx;
-import react.router.Route.RouteRenderProps;
 import redux.Redux.Dispatch;
-import redux.Store;
 import view.shared.RouteTabProps;
 
 /**
@@ -13,14 +11,8 @@ import view.shared.RouteTabProps;
  * @author axel@cunity.me
  */
 
- typedef BaseFormProps =
- {
-	 > RouteRenderProps,
-	 formData:Dynamic,
-	 store:Store<AppState>
- }
-
-class BaseForm extends ReactComponentOfProps<RouteTabProps> 
+@:connect
+class SettingsForm extends ReactComponentOfProps<RouteTabProps> 
 {
 
 	public function new(?props:RouteTabProps, ?context:Dynamic) 
@@ -42,12 +34,13 @@ class BaseForm extends ReactComponentOfProps<RouteTabProps>
 		};
 	}	
 	
-    override function render() {
+    override public function render() {
 		trace(Reflect.fields(props));
+		trace(props.history == App.store.getState().appWare.history);
         return jsx('
-            <form className="tabComponentForm">
-				...
-            </form>
+			<div className="tabComponentForm">
+				<h3>Einstellungen</h3>
+			</div>
         ');
     }	
 	

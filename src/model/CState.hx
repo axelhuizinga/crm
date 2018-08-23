@@ -1,9 +1,14 @@
 package model;
+import action.AppAction;
+import haxe.ds.StringMap;
 import history.Action;
 import history.Location;
 import model.AppState;
 import react.ReactComponent;
+import react.ReactUtil.copy;
 import redux.Store;
+import js.Promise;
+import js.Promise.PromiseCallback;
 
 /**
  * ...
@@ -11,11 +16,15 @@ import redux.Store;
  */
 class CState 
 {
-	static var getState:Dynamic;
+	static var store:Store<AppState>;
 	
-	public static function handleTransition(message:String, callback:Bool->Void)
+	public static function confirmTransition(message:String, callback:Bool->Void)
 	{
 		trace(message);
+		if (store.getState().appWare.history.location.pathname == '/')
+		{
+			return callback(true);
+		}
 		callback(true);
 	}
 	
@@ -35,13 +44,40 @@ class CState
 	
 	public static function addComponent(comp:ReactComponent):Void
 	{
-		
+		var state:AppState = store.getState();
+		var d:Promise<Dynamic> = store.dispatch(AppAction.AddComponent(
+			comp.props.match.url.split('/')[1],
+			{
+				clean:true,
+				matchUrl:comp.props.match.url,
+				pathname:comp.props.history.location.pathname,
+				formFields:new StringMap(),
+				isMounted:true,
+				lastMounted:Date.now()
+			}
+		));
+		trace(Promise.resolve(d));
+			//function(t:Dynamic){trace(t); }, 
+			//function(t){trace ('oops:$t');}));
+		/*d.then(fulFill, reject);
+		{
+			trace(fulFill);
+			trace(reject);
+			trace('OK');
+		};*/
+		trace(comp.props.history.location);
 	}
+	
+	//function fulFill(
 	
 	public static function init(store:Store<AppState>)
 	{
-		getState = store.getState;
-		getState().appWare.history.block(blockTransition);
+		CState.store = store;
+		var state:AppState = store.getState();
+		var unblock = store.getState().appWare.history.block(blockTransition);
+		trace(unblock);
+		state.appWare.history.listen(CState.historyChange);
 	}
 
 }
+//		)).then(fulFill:PromiseCallback<Dynamic, Dynamic>, ?reject:EitherType<Dynamic->Void,PromiseCallback<Dynamic, Dynamic>>)

@@ -2,11 +2,12 @@
 -lib haxe-loader:git:git@github.com:kLabz/webpack-haxe-loader.git#fork
 
 # Using "next" version of haxe-react, with strict typing and new features
--lib react:git:https://github.com/kLabz/haxe-react.git#next
+-lib react:git:git@github.com/kLabz/haxe-react.git#next
+-lib redux:git:git@github.com:elsassph/haxe-redux.git
 
 # From haxelib
 -lib react-router-4
--lib redux
+#-lib redux
 -lib redux-connect
 
 -lib tink_macro:0.16.5

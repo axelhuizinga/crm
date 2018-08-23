@@ -1,6 +1,7 @@
 package action;
 
 //import model.AppService;
+import model.GlobalAppState.CompState;
 import model.UserService.UserAction;
 import model.UserService.UserState;
 
@@ -10,7 +11,10 @@ import model.UserService.UserState;
 
 enum AppAction 
 {
+	// COMPONENTS
+	AddComponent(path:String, cState:CompState);
 	Load;
+	// LOGIN TODO: MOVE TO USERACTIONS
 	LoginReq(state:UserState);
 	LoginChange(state:UserState);
 	LoginComplete(state:UserState);
@@ -18,6 +22,8 @@ enum AppAction
 
 	LoginError(state:UserState);
 	LogOut(state:UserState);	
+	// LOGINEND
+	
 	//AddContact(id:Int);
 	SetLocale(locale:String);
 	SetTheme(color:String);

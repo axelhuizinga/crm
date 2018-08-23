@@ -2,7 +2,7 @@ html,body{font-size:16px;margin:0;overflow:hidden!important;height:100%;}
 .rootBox{height:100%;display:flex;flex:auto;flex-direction:column;}
 h1{margin:10px;}
 .flex-end{align-self:flex-end;}
-.footer{display:flex;padding:0rem 0.5rem 0rem;border:1px solid #ddd;}
+.footer{display:flex;flex-direction:column;padding:0rem 0.5rem 0rem;border:1px solid #ddd;}
 .footer .column{padding:0px;}
 .react-datetime-picker--disabled{background-color:transparent!important;}
 .react-datetime-picker__button{border:none!important;}
@@ -12,12 +12,12 @@ h1{margin:10px;}
 .topNav .tabs li a{border-bottom:0.3rem solid transparent;}
 .topNav .tabs li.is-active a{border-bottom-color:orange;}
 .topNav .tabs{padding-top:0.3rem;font-size:1.05rem;}
-.tabComponent{display:flex;overflow-y:auto;flex:auto;margin:0px 1rem;}
+.tabComponent{display:flex;flex-direction:column;overflow-y:auto;flex:auto;margin:0px;}
 .tabComponentForm{}
 .tabNav2{width:100%;}
 .tabNav2 .tabs ul li:first-child{margin-left:1rem;}
 .tabNav2 .tabs ul li:last-child{margin-right:1rem;}
 .tabNav2 .tabs{background:solid #fff!important;}
-.tabContent2{}
+.tabContent2{flex:1;padding:0.5rem 1.1rem;}
 .tabs a{padding:.25em 1em;}
 .tabs a.active li{}
