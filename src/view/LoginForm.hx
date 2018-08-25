@@ -1,6 +1,7 @@
 package view;
 
 //import action.async.AsyncUserAction;
+import comments.StringTransform;
 import js.html.InputElement;
 import js.html.InputEvent;
 import js.html.XMLHttpRequest;
@@ -27,7 +28,8 @@ typedef LoginState =
 typedef LoginProps =
 {
 	>RouteTabProps,
-	submitLogin:LoginState->Dispatch
+	submitLogin:LoginState-> Dispatch,
+	api:String
 }
 
 /**
@@ -35,7 +37,7 @@ typedef LoginProps =
  * @author axel@cunity.me
  */
 
-@:expose('default')
+//@:expose('default')
 @:connect
 class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 {
@@ -47,15 +49,16 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 		{
 			trace(props.match.path + ':' + props.match.url);	
 		}
-		state = {api:props.appConfig.api, pass:'', id:''};
-		trace(props.dispatch);
+		trace(props);
+		state = {api:props.api,id:'',pass:''};
 		super(props);
 	}
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
 		trace(dispatch);
 		return {
-			submitLogin: function(lState:LoginState) return dispatch(AsyncUserAction.loginReq(lState))
+			submitLogin: function(lState:LoginState) return dispatch(AsyncUserAction.loginReq(
+			lState))
 			//dispatch:dispatch
 		};
 	}
@@ -67,9 +70,10 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 			var uState = aState.appWare.user;
 
 			trace(uState);
+			trace(aState.appWare.config);
 			
 			return {
-				appConfig:aState.appWare.config,
+				api:aState.appWare.config.api,
 				id:uState.id,
 				pass:uState.pass,
 				jwt:uState.jwt,
@@ -103,7 +107,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 		//this.setState({waiting:true});
 		//props.dispatch(AppAction.Login("{id:state.id,pass:state.pass}"));
 		//trace(props.dispatch);
-		props.submitLogin(state);
+		props.submitLogin({id:state.id, pass:state.pass,api:props.api});
 		//trace(_dispatch == App.store.dispatch);
 		//trace(App.store.dispatch(AsyncUserAction.loginReq(state)));
 		//trace(props.dispatch(AppAction.LoginReq(state)));
@@ -140,7 +144,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 				  </h2>
 				  <form name="form" onSubmit={handleSubmit} autoComplete="new-password" >
 					  <p className="control has-icon">
-						<input name="id" className="input" type="text" placeholder="ViciDial User ID"  value={state.id} onChange={handleChange} />
+						<input name="id" className="input" type="text" placeholder="User ID"  value={state.id} onChange={handleChange} />
 						<i className="fa fa-user"></i>
 					  </p>
 					  <p className="control has-icon">

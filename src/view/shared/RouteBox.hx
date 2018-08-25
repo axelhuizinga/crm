@@ -50,7 +50,7 @@ class RouteBox extends ReactComponentOf<RouteBoxProps, Dynamic>
 		trace(parentIsMounted);
 		if ( !parentIsMounted)
 		return null;
-		return jsx('<div><RolesForm.__jsxStatic {...props}/></div>');
+		return jsx('<div><RolesForm {...props}/></div>');
 	}
 	
 }

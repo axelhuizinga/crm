@@ -17,7 +17,7 @@ import view.LoginForm.LoginState;
  * @author axel@cunity.me
  */
 
-class AsyncUserAction 
+class AsyncTransition 
 {
 
 	public static function loginReq(props:LoginState) 

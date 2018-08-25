@@ -1,10 +1,12 @@
 package view;
 
+import comments.StringTransform;
 import haxe.Timer;
 import history.History;
 import history.BrowserHistory;
 import me.cunity.debug.Out;
 import model.AppState;
+import model.UserService.UserState;
 import react.Fragment;
 import react.ReactComponent.ReactFragment;
 import react.React;
@@ -50,10 +52,11 @@ typedef  NavLinks =
 
 typedef UIProps =
 {
-	store:Store<AppState>
+	?store:Store<AppState>,
+	?user:UserState
 }
 
-//@:connect
+@:connect
 //@:wrap(react.router.ReactRouter.withRouter)
 class UiView extends ReactComponentOf<UIProps, Dynamic>
 {
@@ -62,6 +65,14 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 	var browserHistory:History;
 	var dispatchInitial:Dispatch;
 
+	static function mapStateToProps(aState:AppState) {
+			var uState:UserState = aState.appWare.user;
+			trace(uState);
+			return {
+				user:uState
+			};
+	}
+	
 	public function new(props:Dynamic) {
 		trace(Reflect.fields(props));
 		trace(props.store == App.store);
@@ -106,10 +117,18 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 
 	override function render()
 	{
+		trace(props);
 		if (state.hasError) {
 		  return jsx('<h1>Something went wrong.</h1>');
 		}
-		return jsx('
+		if (props.user.id == null || props.user.id == '' || props.user.jwt == null || props.user.jwt == '')
+		{
+			// WE NEED TO LOGIN FIRST
+			return jsx('<LoginForm {...props.user}/>');
+		}
+		else
+		{			
+			return jsx('
 			<$Router history={browserHistory} >
 			<>
 				<section className="topNav">
@@ -131,7 +150,8 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 				</div>
 			</>
 			</$Router>
-		');
+			');
+		}
 		
 	}
 	

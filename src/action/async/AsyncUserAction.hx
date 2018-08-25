@@ -23,7 +23,8 @@ class AsyncUserAction
 	public static function loginReq(props:LoginState) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->model.AppState){
-			trace(getState());
+			trace(props);
+			//trace(getState());
 			if (props.pass == '' || props.id == '') 
 				return dispatch(AppAction.LoginError({id:props.id, loginError:{requestError:'Passwort und UserId eintragen!'}}));
 			

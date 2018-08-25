@@ -31,7 +31,7 @@ class AppService
 
 	public var initState:GlobalAppState = {
 		compState: new StringMap(),
-		config:null,
+		config:App.config,
 		history:BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}),
 		themeColor: 'green',
 		locale: 'de',
@@ -47,16 +47,19 @@ class AppService
 			jwt:App.jwt
 		}
 	};
-		public var store:StoreMethods<model.AppState>;
+		
+	public var store:StoreMethods<model.AppState>;
 
 	var ID = 0;
 	var loadPending:Promise<Bool>;
 	
 	public function new() 
 	{
-		var appCconf:Dynamic = Webpack.require('../../bin/app.config.js');
+		//var appCconf:Dynamic = App.config;//Webpack.require('../../bin/config.js');
 		trace('OK');
-		initState.config = Reflect.field(appCconf, 'default');		
+		//initState.config = Reflect.field(appCconf, 'default');		
+		//initState.config = appCconf;		
+		trace(initState.config);
 	}
 	
 	public function reduce(state:GlobalAppState, action:AppAction):GlobalAppState
@@ -80,6 +83,10 @@ class AppService
 				copy(state, {
 					user:{id:uState.id, pass:uState.pass}
 				});
+			case LoginRequired(uState):
+				copy(state, {
+					user:{jwt:null}
+				});
 				
 			case LoginError(err):
 				if(err.id==state.user.id)
@@ -91,6 +98,11 @@ class AppService
 				copy(state, {waiting:true});
 				
 			case LoginComplete(uState):
+				trace(uState);
+				copy(state, {user:uState});
+				
+			case LogOut(uState):
+				trace(uState);
 				copy(state, {user:uState});
 				
 			case SetLocale(locale):
@@ -130,14 +142,14 @@ class AppService
 						state.compState.set(path, cState);
 					}
 					trace('$path isMounted:${state.compState.get(path).isMounted}');
-					return next();
+					next();
 				
 				
-			case LoginReq(uState):
+			/*case LoginReq(uState):
 				//store.getState().userService.
 				var n:Dynamic = next();
 				trace(n);
-				n;
+				n;*/
 			
 			default: next();
 		}

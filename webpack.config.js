@@ -51,11 +51,14 @@ module.exports = {
         contentBase: dist,
         compress: true,
 	host:  '192.168.178.20',
-	https: false,
+	https: true,
         port: 9000,
         overlay: true,
         hot: true,	    
 	inline: true,
+	headers: {
+		    "Access-Control-Allow-Origin": "https://pitverwaltung.de"
+		},	    
 	watchOptions:{
 		aggregateTimeout:1500
 	},	    

@@ -6,7 +6,12 @@
 
 import haxe.Timer;
 import history.BrowserHistory;
+import history.History;
+import history.Location;
 import js.Cookie;
+import js.Error;
+import js.Promise;
+import js.html.XMLHttpRequest;
 import me.cunity.debug.Out;
 import model.ApplicationStore;
 import model.CState;
@@ -21,26 +26,31 @@ import Webpack.*;
 import model.AppState;
 import action.AppAction;
 
+import view.LoginForm;
 import view.UiView;
 using StringTools;
 
 class App  extends react.ReactComponentOfState<AppState>
 {
+	static var _app:App;
 	static var bulma = require('../node_modules/bulma/css/bulma.min.css');
 	static var fa = require('../node_modules/font-awesome/css/font-awesome.min.css');
     static var STYLES = require('./App.css');
 
 	public static var store:Store<AppState>;
 
+	public static var config:Dynamic = Webpack.require('../bin/config.js').config;
 	public static var id:String = Cookie.get('user.id');
 	public static var jwt:String = Cookie.get('user.jwt');
 
     public function new() {
-		if (id == null || id == 'undefined' ) id = '';
-		if (jwt == null || jwt == 'undefined') jwt = '';
+		//if (id == null || id == 'undefined' ) id = '';
+		//if (jwt == null || jwt == 'undefined') jwt = '';
+		_app = this;
 		store = model.ApplicationStore.create();
 		state = store.getState();
 		CState.init(store);
+		trace(config);
 		
 		//state.appWare.history.listen(CState.historyChange);
 		//trace(state);
@@ -79,9 +89,10 @@ class App  extends react.ReactComponentOfState<AppState>
 
     override function render() {
 		trace(state.appWare.history.location.pathname);
+			
         return jsx('
 			<Provider store={store}><UiView store={store}/></Provider>
-        ');
+        ');		
     }
 
 	public static function jsxDump(el:Dynamic):String
@@ -92,7 +103,14 @@ class App  extends react.ReactComponentOfState<AppState>
 	
 	public static function logOut()
 	{
+		store.dispatch(AppAction.LogOut({id:id, jwt:null}));
+		//_app.forceUpdate();
+	}
+	
+	public static function logIn()
+	{
 		trace(id);
+		//_app.forceUpdate();
 		//return id;
 	}
 

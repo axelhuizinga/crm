@@ -15,13 +15,14 @@ enum AppAction
 	AddComponent(path:String, cState:CompState);
 	Load;
 	// LOGIN TODO: MOVE TO USERACTIONS
-	LoginReq(state:UserState);
+	//LoginReq(state:UserState);
 	LoginChange(state:UserState);
 	LoginComplete(state:UserState);
 	LoginWait;
 
 	LoginError(state:UserState);
 	LogOut(state:UserState);	
+	LoginRequired(state:UserState);	
 	// LOGINEND
 	
 	//AddContact(id:Int);

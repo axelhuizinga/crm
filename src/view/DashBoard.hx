@@ -116,18 +116,12 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 		//var s:ApplicationState = untyped App.store.getState().appWare;
 		//trace(this.state);
 		trace(props.history.location.pathname);
-		trace(props.isMounted);
+		trace(props.jwt);
 		if (state.hasError)
 			return jsx('<h1>Fehler in ${Type.getClassName(Type.getClass(this))}.</h1>');
-		if (props.id == null || props.id == '' || props.jwt == null || props.jwt == '')
-		{
-			// WE NEED TO LOGIN FIRST
-			return jsx('<LoginForm {...props}/>');
-		}
-		else
-		{
 
-			return jsx('
+
+		return jsx('
 		<>
 			<div className="tabNav2" >
 				<Tabs  boxed={true} >
@@ -139,14 +133,13 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 			</div>
             <div className="tabContent2" >
 			
-				<Route path="/dashboard/roles"  {...props} component={RolesForm.__jsxStatic}/>
-				<Route path="/dashboard/settings"  {...props} component={SettingsForm.__jsxStatic}/>
+				<Route path="/dashboard/roles"  {...props} component={RolesForm}/>
+				<Route path="/dashboard/settings"  {...props} component={SettingsForm}/>
 											
             </div>
 			<StatusBar {...props}/>
 		</>
 			');
-		}
 		/**					<Switch></Switch>{...props} 	<section className="tabContent2path="/dashboard"> </section>	<Route path="/dashboard"  {...props} ><Route path="/dashboard/roles" ><RolesForm  {...props}/></Route>
 			<Switch>
 				<Route path="/dashboard/settings"  {...props} component={RolesForm}/>
