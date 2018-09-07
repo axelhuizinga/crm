@@ -9,6 +9,7 @@
     "csp-webpack-plugin": "^1.0.2",
     "css-loader": "^0.28.11",
     "font-awesome": "^4.7.0",
+    "formik": "^1.1.2",
     "lean-redux": "^3.3.1",
     "prop-types": "^15.5.10",
     "react": "^16.4.2",

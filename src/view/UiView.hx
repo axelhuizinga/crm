@@ -57,11 +57,8 @@ typedef UIProps =
 }
 
 @:connect
-//@:wrap(react.router.ReactRouter.withRouter)
 class UiView extends ReactComponentOf<UIProps, Dynamic>
 {
-	//public static var store:Store<GlobalAppState>;
-
 	var browserHistory:History;
 	var dispatchInitial:Dispatch;
 

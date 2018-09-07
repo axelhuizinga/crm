@@ -47,8 +47,7 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 		<li className=${rprops.location.pathname.indexOf(rprops.to) == 0 ?"is-active":""}><NavLink to=${rprops.to}>${rprops.children}</NavLink></li>
 		');
 	}
-	//<li className=${rprops.location.pathname.indexOf(rprops.to) == 0 ?"is-active":""}><NavLink to=${rprops.to}>${rprops.children}</NavLink></li>
-	//<li className=${rprops.location.pathname.indexOf(rprops.to) == 0 ?"is-active":""}><SLink {...rprops}/></li>
+
 	function buildNav()
 	{
 		var state = App.store.getState().appWare.user;

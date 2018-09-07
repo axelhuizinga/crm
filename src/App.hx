@@ -5,6 +5,8 @@
  */
 
 import haxe.Timer;
+import haxe.http.HttpJs;
+import haxe.Json;
 import history.BrowserHistory;
 import history.History;
 import history.Location;
@@ -30,7 +32,12 @@ import view.LoginForm;
 import view.UiView;
 using StringTools;
 
-class App  extends react.ReactComponentOfState<AppState>
+typedef AppProps =
+{
+	?waiting:Bool
+}
+
+class App  extends react.ReactComponentOf<AppProps, AppState>
 {
 	static var _app:App;
 	static var bulma = require('../node_modules/bulma/css/bulma.min.css');
@@ -43,10 +50,31 @@ class App  extends react.ReactComponentOfState<AppState>
 	public static var id:String = Cookie.get('user.id');
 	public static var jwt:String = Cookie.get('user.jwt');
 
-    public function new() {
-		//if (id == null || id == 'undefined' ) id = '';
-		//if (jwt == null || jwt == 'undefined') jwt = '';
+    public function new() 
+	{
 		_app = this;
+		if (!(App.id == '' || App.jwt == ''))
+		{
+			props = { waiting:true};
+			var verifyRequest = new HttpJs('${App.config.api}?jwt=${App.jwt}&user=${App.id}&className=auth.User&action=clientVerify');
+			verifyRequest.onData = function(data:String)
+			{
+				var verifyData = Json.parse(data);
+				if (verifyData.error != null)
+				{
+					App.jwt = null;
+					trace(verifyData.error);
+				}
+				if (verifyData.content == 'OK')
+				{
+					_app.props = { waiting:false};
+				}
+			}
+			
+		}
+		else
+			props = { waiting:false};
+		
 		store = model.ApplicationStore.create();
 		state = store.getState();
 		CState.init(store);
@@ -75,7 +103,7 @@ class App  extends react.ReactComponentOfState<AppState>
 			t.run = function() store.dispatch(Tick(Date.now()));//this.setState({appWare:{ date: Date.now() }});
 		}, (60 - d.getSeconds()) * 1000);
 
-		trace(state.appWare.history);
+		//trace(state.appWare.history);
     }
 
 	override function   componentDidCatch(error, info) {
@@ -88,10 +116,19 @@ class App  extends react.ReactComponentOfState<AppState>
 	public static function edump(el:Dynamic){Out.dumpObject(el); return 'OK'; };
 
     override function render() {
-		trace(state.appWare.history.location.pathname);
-			
+		//trace(state.appWare.history.location.pathname);
+		if (props.waiting)
+		{
+			return jsx('
+			<section className="hero is-alt is-fullheight">
+			  <div className="hero-body">
+			  <div className="loader"  style=${{width:'7rem', height:'7rem', margin:'auto', borderWidth:'0.58rem'}}/>
+			  </div>
+			</section>
+			');		
+		}			
         return jsx('
-			<Provider store={store}><UiView store={store}/></Provider>
+			<Provider store={store}><UiView/></Provider>
         ');		
     }
 

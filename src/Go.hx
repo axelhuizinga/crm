@@ -25,17 +25,6 @@ class Go
 		//state = store.getState();
 		//CState.init(store);
 		trace(App.config);
-		if (!(App.id == '' || App.jwt == ''))
-		{
-			var verifyRequest = haxe.Json.parse(haxe.Http.requestUrl('${App.config.api}?jwt=${App.jwt}&user=${App.id}&className=auth.User&action=clientVerify'));
-			trace(verifyRequest);
-			if (verifyRequest.error != null)
-			{
-				App.jwt = null;
-				//store.dispatch(LoginRequired({id:id,jwt:null}));
-				trace(App.jwt);
-			}	
-		}
 		
 		render(createRoot());
 	}
@@ -52,7 +41,7 @@ class Go
 	{
 
 		var app = ReactDOM.render(jsx('
-					<App />
+					<App/>
 		'), root);
 		
 		//trace(app);

@@ -12,7 +12,7 @@ import view.shared.RouteTabProps;
  */
 
 //@:expose('default')
-@:connect
+//@:connect
 class RolesForm extends ReactComponentOfProps<Dynamic> 
 {
 

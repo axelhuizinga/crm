@@ -26,6 +26,7 @@ import Webpack.*;
 import model.AppState;
 import view.dashboard.RolesForm;
 import view.dashboard.SettingsForm;
+import view.dashboard.SetUpForm;
 
 using model.CState;
 
@@ -128,6 +129,7 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 					<ul>
 						<TabLink to="/dashboard/roles" ${...props}>Berechtigungen</TabLink>
 						<TabLink to="/dashboard/settings" ${...props}>Einstellungen</TabLink>
+						<TabLink to="/dashboard/setup" ${...props}>Setup</TabLink>
 					</ul>
 				</Tabs>		
 			</div>
@@ -135,6 +137,7 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 			
 				<Route path="/dashboard/roles"  {...props} component={RolesForm}/>
 				<Route path="/dashboard/settings"  {...props} component={SettingsForm}/>
+				<Route path="/dashboard/setup"  {...props} component={SetUpForm}/>
 											
             </div>
 			<StatusBar {...props}/>

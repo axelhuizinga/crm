@@ -36,8 +36,9 @@ class AsyncUserAction
 					 // OK
 					var jRes:LoginState = Json.parse( req.response);
 					trace(jRes.jwt);
-					Cookie.set('user.id', props.id);
-					Cookie.set('user.jwt', jRes.jwt);
+					Cookie.set('user.id', props.id, null, '/');
+					Cookie.set('user.jwt', jRes.jwt, null, '/');
+					trace(Cookie.get('user.jwt'));
 					return dispatch(AppAction.LoginComplete({id:props.id, jwt:jRes.jwt, waiting:false}));
 				} else {
 					  // Otherwise reject with the status text

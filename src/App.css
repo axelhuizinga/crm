@@ -18,6 +18,11 @@ html,body {
 h1 {
 	margin: 10px;
 }
+
+.autoscroll
+{
+	overflow:auto;
+}
 .flex-end
 {
 	align-self:flex-end;
@@ -74,13 +79,15 @@ h1 {
 {
 	display:flex;
 	flex-direction:column;
-	overflow-y:auto;
 	flex: auto;
 	margin:0px;
 }
 .tabComponentForm
 {
-	
+	display:flex;
+	flex-direction:column;
+	flex: auto;
+	margin:0.8rem;	
 }
 .tabNav2
 {
@@ -101,8 +108,11 @@ h1 {
 
 .tabContent2
 {
-	flex:1;
-	padding:0.5rem 1.1rem;
+	display:flex;
+	flex-direction:column;
+	/*overflow-y:auto;*/
+	flex: auto;
+	padding:0px;/*.5rem 1.1rem;*/
 }
 
 .tabs a 
@@ -111,4 +121,9 @@ h1 {
 }
 .tabs a.active li{
     /*background-color:orange;*/
+}
+/*bulma overrides*/
+.is-fullheight
+{
+	flex:auto;
 }
