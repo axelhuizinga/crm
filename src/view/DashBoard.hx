@@ -11,6 +11,7 @@ import react.ReactPropTypes;
 import react.ReactMacro.jsx;
 import redux.Redux.Dispatch;
 import react.router.Route;
+import react.router.Redirect;
 import react.router.Route.RouteRenderProps;
 import react.router.Switch;
 import react.router.NavLink;
@@ -56,7 +57,13 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 		state = {hasError:false};
 		trace('location.pathname:${props.history.location.pathname} match.url: ${props.match.url}');
 		super(props);
+		if (props.match.url == '/dashboard')
+		{
+			props.history.push('/dashboard/settings');
+			trace('pushed2/dashboard/settings');
+		}
 		//trace(untyped this.state.history);
+		//trace(props);
 	}
 	
 	override public function componentDidMount():Void 
@@ -91,13 +98,12 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 
 	static function mapStateToProps(aState:AppState) {
 			var uState:UserState = aState.appWare.user;
-			trace('???');
 			trace(aState.appWare.compState);
 			trace(' ${aState.appWare.history.location.pathname + (aState.appWare.compState.exists('dashboard') && aState.appWare.compState.get('dashboard').isMounted ? "Y":"N")}');
 			
 			return {
 				appConfig:aState.appWare.config,
-				id:uState.id,
+				userName:uState.userName,
 				pass:uState.pass,
 				jwt:uState.jwt,
 				isMounted:(aState.appWare.compState.exists('dashboard') && aState.appWare.compState.get('dashboard').isMounted),
@@ -134,7 +140,6 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 				</Tabs>		
 			</div>
             <div className="tabContent2" >
-			
 				<Route path="/dashboard/roles"  {...props} component={RolesForm}/>
 				<Route path="/dashboard/settings"  {...props} component={SettingsForm}/>
 				<Route path="/dashboard/setup"  {...props} component={SetUpForm}/>
@@ -143,6 +148,7 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 			<StatusBar {...props}/>
 		</>
 			');
+			
 		/**					<Switch></Switch>{...props} 	<section className="tabContent2path="/dashboard"> </section>	<Route path="/dashboard"  {...props} ><Route path="/dashboard/roles" ><RolesForm  {...props}/></Route>
 			<Switch>
 				<Route path="/dashboard/settings"  {...props} component={RolesForm}/>
@@ -157,6 +163,12 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 					<Route path="/dashboard/settings"  {...props} >Settings</Route>
 		**/
     }
+	
+	function internalRedirect()
+	{
+		props.history.push('/dashboard/settings');
+		return null;
+	}
 	
 	function connectChild(name:String):Void
 	{

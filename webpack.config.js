@@ -1,18 +1,26 @@
-//
-// Webpack documentation is fairly extensive,
-// just search on https://webpack.js.org/
-//
-// Be careful: there are a lot of outdated examples/samples,
-// so always check the official documentation!
-//
+const path = require('path');
+
+const buildMode = process.env.NODE_ENV || 'development';
+const buildTarget = process.env.TARGET || 'web';
+
+const isProd = buildMode === 'production';
+
+const sourcemapsMode = isProd ? 'eval-source-map' : undefined;
 
 // Plugins
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 //const CSPWebpackPlugin = require('csp-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+const useFriendly = true;
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const haxeFormatter = require('haxe-loader/errorFormatter');
+const haxeTransformer = require('haxe-loader/errorTransformer');
+
+const extractCSS = new ExtractTextPlugin('app.css');
 // Options
-const buildMode = process.env.NODE_ENV || 'development';
 const debugMode = buildMode !== 'production';
 const dist = __dirname + '/bin/';
 
@@ -20,8 +28,7 @@ const dist = __dirname + '/bin/';
 // - 'eval-source-map': fast, but JS bundle is somewhat obfuscated
 // - 'source-map': slow, but JS bundle is readable
 // - undefined: no map, and JS bundle is readable
-const sourcemapsMode = debugMode ? 'source-map' : undefined;
-
+console.log('isProd:' + isProd);
 //
 // Configuration:
 // This configuration is still relatively minimalistic;
@@ -42,6 +49,7 @@ module.exports = {
     },
     // Module resolution options (alias, default paths,...)
     resolve: {
+	modules: [path.resolve(__dirname, 'res/scss'), 'node_modules'],
         extensions: ['.js', '.json']
     },
     // Sourcemaps option for development
@@ -116,7 +124,36 @@ module.exports = {
 			'style-loader',
 			'css-loader'
 		]
-            }
+		},
+		isProd
+		? {
+			test: /\.scss$/,
+			loader: extractCSS.extract({
+				fallback: "style-loader",
+				use: [
+					{loader: 'css-loader'},
+					{
+						loader: 'sass-loader',
+						options: {
+							includePaths: [path.resolve(__dirname, 'res/scss'), path.resolve(__dirname, 'src')]
+						}
+					}
+				]
+			})
+		}
+		: {
+			test: /\.scss$/,
+			use: [
+				{loader: 'style-loader'},
+				{loader: 'css-loader'},
+				{
+					loader: 'sass-loader',
+					options: {
+						includePaths: [path.resolve(__dirname, 'res/scss'), path.resolve(__dirname, 'src')]
+					}
+				}
+			]
+		}
         ]
     },
     // Plugins can hook to the compiler lifecycle and handle extra tasks
@@ -139,5 +176,16 @@ module.exports = {
         // - extract the small CSS chunks into a single file using ExtractTextPlugin
         // - avoid modules duplication using CommonsChunkPlugin
         // - inspect your JS output weight using BundleAnalyzerPlugin
-    ],
+    ].concat(useFriendly ? [
+		new FriendlyErrorsWebpackPlugin({
+			compilationSuccessInfo: {
+				messages: [
+					`Your application is running here: https://localhost:${9050}`
+				]
+			},
+			additionalTransformers: [haxeTransformer],
+			additionalFormatters: [haxeFormatter]
+		})
+	] : [])
+	.concat(isProd ? [extractCSS] : []),
 };

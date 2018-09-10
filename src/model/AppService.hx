@@ -39,11 +39,12 @@ class AppService
 		routeHistory: new Array(),
 		userList:[],
 		user:{
-			id:App.id,
+			//id:App.id,
 			firstName:'',
 			lastName:'',
+			userName:App.userName,
 			pass:'',
-			waiting:false,
+			waiting:true,
 			jwt:App.jwt
 		}
 	};
@@ -81,15 +82,15 @@ class AppService
 			
 			case LoginChange(uState):
 				copy(state, {
-					user:{id:uState.id, pass:uState.pass}
+					user:{userName:uState.userName, pass:uState.pass}
 				});
 			case LoginRequired(uState):
 				copy(state, {
-					user:{jwt:null}
+					user:{jwt:null,waiting:false}
 				});
 				
 			case LoginError(err):
-				if(err.id==state.user.id)
+				if(err.userName==state.user.userName)
 					copy(state, err);
 				else
 					state;
@@ -99,7 +100,7 @@ class AppService
 				
 			case LoginComplete(uState):
 				trace(uState);
-				copy(state, {user:uState});
+				copy(state, {user:uState});			
 				
 			case LogOut(uState):
 				trace(uState);

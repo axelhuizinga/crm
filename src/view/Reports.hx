@@ -55,7 +55,7 @@ class Reports extends ReactComponentOfProps<RouteTabProps>
 			
 			return {
 				appConfig:aState.appWare.config,
-				id:uState.id,
+				userName:uState.userName,
 				pass:uState.pass,
 				jwt:uState.jwt,
 				loggedIn:uState.loggedIn,
@@ -70,7 +70,7 @@ class Reports extends ReactComponentOfProps<RouteTabProps>
 	
     override function render() {
 		//trace(props);
-		if (props.id == null || props.id == '' || props.jwt == null || props.jwt == '')
+		if (props.waiting || props.userName == '' || props.jwt == null || props.jwt == '')
 		{
 			// WE NEED TO LOGIN FIRST
 			return jsx('<LoginForm {...props}/>');

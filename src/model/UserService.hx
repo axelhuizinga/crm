@@ -12,7 +12,6 @@ import redux.StoreMethods;
 
 typedef UserState =
 {
-	id:Dynamic,
 	?contact:Int,
 	?firstName:String,
 	?lastName:String,
@@ -22,10 +21,11 @@ typedef UserState =
 	?loginError:Dynamic,
 	?jwt:String,
 	?pass:String,
+	userName:String,
 	?redirectAfterLogin:String,
 	?waiting:Bool
 }
-
+/*
 enum UserAction
 {
 	LoginWait;
@@ -71,12 +71,8 @@ class UserService implements IReducer<UserAction, UserState>
 	{
 		trace(action);
 		return switch(action)
-		{
-			/*case LoginReq(state):
-				var n:Dynamic = next();
-				trace(n);
-				n;	*/			
+		{		
 			default: next();
 		}
-	}		
-}
+	}	
+}*/	

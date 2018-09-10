@@ -6,6 +6,7 @@ import history.History;
 import history.BrowserHistory;
 import me.cunity.debug.Out;
 import model.AppState;
+import model.GlobalAppState;
 import model.UserService.UserState;
 import react.Fragment;
 import react.ReactComponent.ReactFragment;
@@ -56,17 +57,24 @@ typedef UIProps =
 	?user:UserState
 }
 
+@:expose('default')
 @:connect
 class UiView extends ReactComponentOf<UIProps, Dynamic>
 {
 	var browserHistory:History;
 	var dispatchInitial:Dispatch;
+	static var _me:UiView;
 
 	static function mapStateToProps(aState:AppState) {
+			trace(aState.appWare.user);
+			if(_me != null)
+				trace(_me.props);
 			var uState:UserState = aState.appWare.user;
-			trace(uState);
-			return {
+			trace({
 				user:uState
+			});
+			return {
+				user:{waiting:aState.appWare.user.waiting}
 			};
 	}
 	
@@ -79,6 +87,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 		//ApplicationStore.startHistoryListener(App.store, browserHistory);
 		//trace(this.props.appWare.user.state.lastName);
 		//trace(this.props);
+		_me = this;
     }
 
 	override function componentDidCatch(error, info) {
@@ -118,7 +127,18 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 		if (state.hasError) {
 		  return jsx('<h1>Something went wrong.</h1>');
 		}
-		if (props.user.id == null || props.user.id == '' || props.user.jwt == null || props.user.jwt == '')
+		if (props.user.waiting)
+		{
+			return jsx('
+			<section className="hero is-alt is-fullheight">
+			  <div className="hero-body">
+			  <div className="loader"  style=${{width:'7rem', height:'7rem', margin:'auto', borderWidth:'0.58rem'}}/>
+			  </div>
+			</section>
+			');		
+		}
+		
+		if(props.user.userName == null || props.user.userName == '' || props.user.jwt == null || props.user.jwt == '')
 		{
 			// WE NEED TO LOGIN FIRST
 			return jsx('<LoginForm {...props.user}/>');
@@ -138,6 +158,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 				<div className="tabComponent">
 				<Route path="/"  component={RedirectBox} exact={true}/>
 				
+				<Route path="/dashboard" exact={true} component=${Bundle.load(DashBoardBox)}/>
 				<Route path="/dashboard/*" component=${Bundle.load(DashBoardBox)}/>
 				<Route path="/accounting" component=${Bundle.load(AccountingBox)}/>
 				<Route path="/contacts/edit/:id" component=${Bundle.load(ContactsBox)}/>

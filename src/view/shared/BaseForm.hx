@@ -4,6 +4,7 @@ import haxe.ds.StringMap;
 import js.html.Event;
 import model.AppState;
 import react.ReactComponent.ReactComponentOf;
+import react.ReactComponent.ReactFragment;
 import react.ReactMacro.jsx;
 import react.router.Route.RouteRenderProps;
 import redux.Redux.Dispatch;
@@ -49,6 +50,7 @@ typedef FormState =
 	?content:Array<String>,
 	dirty:Bool,
 	fields:StringMap<FormField>,
+	data:StringMap<Dynamic>,
 	submitted:Bool,
 	errors:StringMap<String>,
 	hasError:Bool
@@ -64,6 +66,7 @@ class BaseForm extends ReactComponentOf<BaseFormProps, FormState>
 			content:new Array(),
 			dirty:false,
 			errors:new StringMap(),
+			data:new StringMap(),
 			fields:new StringMap(),
 			submitted:false,
 			hasError:false			
@@ -78,5 +81,21 @@ class BaseForm extends ReactComponentOf<BaseFormProps, FormState>
             </form>
         ');
     }	
+	
+	function displayDebug(fieldName:String):ReactFragment
+	{
+		if (state.data.exists(fieldName))
+		{
+			return jsx('
+			<div className="level-item" >						
+				<div className="pBlock" style={{border:"1px solid #801111", borderRadius:"1rem", padding:"1rem"}}>
+					<pre className="debug">{state.data.get(fieldName)}</pre>
+				</div>							
+			</div>
+			');
+		}
+		
+		return null;
+	}
 	
 }

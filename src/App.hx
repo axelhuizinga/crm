@@ -17,6 +17,7 @@ import js.html.XMLHttpRequest;
 import me.cunity.debug.Out;
 import model.ApplicationStore;
 import model.CState;
+import model.UserService.UserState;
 import react.ReactMacro.jsx;
 import react.ReactComponent;
 import react.ReactEvent;
@@ -40,45 +41,64 @@ typedef AppProps =
 class App  extends react.ReactComponentOf<AppProps, AppState>
 {
 	static var _app:App;
-	static var bulma = require('../node_modules/bulma/css/bulma.min.css');
+	//static var bulma = require('../node_modules/bulma/css/bulma.min.css');
 	static var fa = require('../node_modules/font-awesome/css/font-awesome.min.css');
-    static var STYLES = require('./App.css');
+    static var STYLES = require('App.scss');
 
 	public static var store:Store<AppState>;
 
 	public static var config:Dynamic = Webpack.require('../bin/config.js').config;
-	public static var id:String = Cookie.get('user.id');
+	public static var userName:String = Cookie.get('user.userName');
 	public static var jwt:String = Cookie.get('user.jwt');
 
     public function new() 
 	{
 		_app = this;
-		if (!(App.id == '' || App.jwt == ''))
-		{
-			props = { waiting:true};
-			var verifyRequest = new HttpJs('${App.config.api}?jwt=${App.jwt}&user=${App.id}&className=auth.User&action=clientVerify');
-			verifyRequest.onData = function(data:String)
-			{
-				var verifyData = Json.parse(data);
-				if (verifyData.error != null)
-				{
-					App.jwt = null;
-					trace(verifyData.error);
-				}
-				if (verifyData.content == 'OK')
-				{
-					_app.props = { waiting:false};
-				}
-			}
-			
-		}
-		else
-			props = { waiting:false};
-		
+		//props = { waiting:true};
+		trace('userName:$userName jwt:$jwt ' + (!(App.userName == '' || App.jwt == '')?'Y':'N' ));
 		store = model.ApplicationStore.create();
 		state = store.getState();
-		CState.init(store);
+		CState.init(store);		
+		if (!(App.userName == '' || App.jwt == ''))
+		{
+			
+			trace(props);
+			var verifyRequest = new HttpJs('${App.config.api}?jwt=${App.jwt}&userName=${App.userName}&className=auth.User&action=clientVerify');
+			verifyRequest.addHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
+			verifyRequest.addHeader('Access-Control-Allow-Origin','*');
+			//verifyRequest.addHeader('Access-Control-Request-Headers','X-Requested-With, accept, content-type');
+			//verifyRequest.addHeader('access-control-allow-headers','*');
+			verifyRequest.onData = function(data:String)
+			{
+				trace(data);
+				var verifyData = Json.parse(data);
+				if (verifyData.error.length>0)
+				{
+					App.jwt = null;
+					store.dispatch(AppAction.LoginRequired(state.appWare.user));
+					//_app.props = { waiting:false};
+					trace(verifyData);
+				}
+				if (verifyData.data.content == 'OK')
+				{
+					trace('verifyData:{verifyData.content}');
+					var uState:UserState = state.appWare.user;
+					uState.waiting = false;
+					store.dispatch(AppAction.LoginComplete(uState));
+					//setState({appware:{user:uState}});
+					//_app.props = { waiting:false};
+				}			
+			}
+			verifyRequest.request();
+		}
+		else
+		{// WE HAVE EITHER NO JWT OR USERNAME
+			store.dispatch(AppAction.LoginRequired(state.appWare.user));
+			//props = { waiting:false};
+		}
 		trace(config);
+		trace(props);
+		trace(state.appWare.user);
 		
 		//state.appWare.history.listen(CState.historyChange);
 		//trace(state);
@@ -117,7 +137,10 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 
     override function render() {
 		//trace(state.appWare.history.location.pathname);
-		if (props.waiting)
+		trace(props);
+		//trace(props.waiting);
+		trace(false && state.appWare.user.waiting);
+		if (false && state.appWare.user.waiting)
 		{
 			return jsx('
 			<section className="hero is-alt is-fullheight">
@@ -128,7 +151,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 			');		
 		}			
         return jsx('
-			<Provider store={store}><UiView/></Provider>
+			<Provider store={store}><UiView store={store}/></Provider>
         ');		
     }
 
@@ -140,15 +163,15 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	
 	public static function logOut()
 	{
-		store.dispatch(AppAction.LogOut({id:id, jwt:null}));
+		store.dispatch(AppAction.LogOut({userName:userName, jwt:null}));
 		//_app.forceUpdate();
 	}
 	
 	public static function logIn()
 	{
-		trace(id);
+		trace(userName);
 		//_app.forceUpdate();
-		//return id;
+		//return userName;
 	}
 
 	public static function queryString2(params:Dynamic)

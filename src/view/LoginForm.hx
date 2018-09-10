@@ -20,7 +20,7 @@ typedef LoginState =
 	?api:Dynamic,
 	//?dispatch: Dispatch,
 	?waiting:Bool,
-	?id:String,
+	?userName:String,
 	?pass:String,
 	?jwt:String
 }
@@ -50,7 +50,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 			trace(props.match.path + ':' + props.match.url);	
 		}
 		trace(props);
-		state = {api:props.api,id:'',pass:''};
+		state = {api:props.api,userName:'',pass:''};
 		super(props);
 	}
 
@@ -74,13 +74,13 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 			
 			return {
 				api:aState.appWare.config.api,
-				id:uState.id,
 				pass:uState.pass,
 				jwt:uState.jwt,
 				loggedIn:uState.loggedIn,
 				loginError:uState.loginError,
 				lastLoggedIn:uState.lastLoggedIn,
 				firstName:uState.firstName,
+				userName:uState.userName,
 				redirectAfterLogin:aState.appWare.redirectAfterLogin,
 				waiting:uState.waiting
 			};
@@ -105,9 +105,9 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 		e.preventDefault();
 		trace(props.dispatch); //return;
 		//this.setState({waiting:true});
-		//props.dispatch(AppAction.Login("{id:state.id,pass:state.pass}"));
+		//props.dispatch(AppAction.Login("{userName:state.userName,pass:state.pass}"));
 		//trace(props.dispatch);
-		props.submitLogin({id:state.id, pass:state.pass,api:props.api});
+		props.submitLogin({userName:state.userName, pass:state.pass,api:props.api});
 		//trace(_dispatch == App.store.dispatch);
 		//trace(App.store.dispatch(AsyncUserAction.loginReq(state)));
 		//trace(props.dispatch(AppAction.LoginReq(state)));
@@ -144,7 +144,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 				  </h2>
 				  <form name="form" onSubmit={handleSubmit} autoComplete="new-password" >
 					  <p className="control has-icon">
-						<input name="id" className="input" type="text" placeholder="User ID"  value={state.id} onChange={handleChange} />
+						<input name="userName" className="input" type="text" placeholder="User ID"  value={state.userName} onChange={handleChange} />
 						<i className="fa fa-user"></i>
 					  </p>
 					  <p className="control has-icon">

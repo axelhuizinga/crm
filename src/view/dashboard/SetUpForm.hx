@@ -1,6 +1,7 @@
 package view.dashboard;
 
 import comments.StringTransform;
+import haxe.ds.StringMap;
 import haxe.http.HttpJs;
 import haxe.Json;
 import js.html.XMLHttpRequest;
@@ -27,7 +28,6 @@ class SetUpForm extends BaseForm//ReactComponentOf<RouteTabProps, Dynamic>
 	public function new(?props:BaseFormProps) 
 	{
 		super(props);	
-		
 	}
 	
 	static function mapStateToProps() {
@@ -38,7 +38,7 @@ class SetUpForm extends BaseForm//ReactComponentOf<RouteTabProps, Dynamic>
 			trace(uState);			
 			return {
 				appConfig:aState.appWare.config,
-				id:uState.id,
+				userName:uState.userName,
 				jwt:uState.jwt,
 				firstName:uState.firstName
 			};
@@ -54,7 +54,7 @@ class SetUpForm extends BaseForm//ReactComponentOf<RouteTabProps, Dynamic>
 	override public function componentDidMount():Void 
 	{
 		//super.componentDidMount();
-		var url:String = 'https://pitverwaltung.de/server.php?className=admin.CreateHistoryTrigger&action=run&jwt=${props.jwt}&user=${props.id}';
+		var url:String = 'https://pitverwaltung.de/server.php?className=admin.CreateHistoryTrigger&action=run&jwt=${props.jwt}&userName=${props.userName}';
 		trace(url);
 		//var req:HttpJs = new HttpJs(url);
 		var req:XMLHttpRequest = new XMLHttpRequest('');
@@ -69,6 +69,20 @@ class SetUpForm extends BaseForm//ReactComponentOf<RouteTabProps, Dynamic>
 			}
 		};
 		req.send();
+		var ureq:XMLHttpRequest = new XMLHttpRequest('');
+		ureq.open('GET', 'https://pitverwaltung.de/server.php?className=admin.CreateUsers&action=fromViciDial&jwt=${props.jwt}&userName=${props.userName}', true);
+		ureq.onerror = function(err:Dynamic) trace(err);
+		ureq.onreadystatechange = function(){
+			trace(ureq.responseText); 
+			if (ureq.responseText.length > 0)
+			{
+				trace(Json.parse(ureq.responseText)); 	
+				var sData:StringMap<Dynamic> = state.data;
+				sData.set('userGroups', Json.parse(ureq.responseText).rows);
+				setState(ReactUtil.copy(state, {data:sData}));				
+			}
+		};
+		ureq.send();		
 	}
 	//style=${{display:'flex',flexBasis: "auto", flexGrow: 1, flexShrink:0 }}
     override public function render() {
@@ -79,11 +93,12 @@ class SetUpForm extends BaseForm//ReactComponentOf<RouteTabProps, Dynamic>
         return jsx('
 				<div className="columns  is-flex is-fullheight">
 					<div className="tabComponentForm column level">
-							<div className="level-item" >
-							<p style={{border:"1px solid #801111", borderRadius:"1rem", padding:"1rem"}}>
+						<div className="level-item" >
+							<div className="pBlock" style={{border:"1px solid #801111", borderRadius:"1rem", padding:"1rem"}}>
 								${renderContent(state.content)}
-							</p>
 							</div>
+						</div>
+						${displayDebug('userGroups')}
 					</div>
 					<div className="column is-2 is-sidebar-menu is-right is-hidden-mobile">
 						<aside className="menu">
@@ -104,9 +119,10 @@ class SetUpForm extends BaseForm//ReactComponentOf<RouteTabProps, Dynamic>
 		if (content.length == 0)
 			return null;
 		var rC:Array<ReactFragment> = new Array();
+		var k:Int = 1;
 		for (c in content)
 		{
-			rC.push(jsx('<div>$c</div>'));
+			rC.push(jsx('<div key=${k++}>$c</div>'));
 		}
 		return rC;
 	}

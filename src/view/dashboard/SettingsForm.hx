@@ -28,7 +28,7 @@ class SettingsForm extends ReactComponentOfProps<RouteTabProps>
 			//trace(uState);			
 			return {
 				appConfig:aState.appWare.config,
-				id:uState.id,
+				userName:uState.userName,
 				firstName:uState.firstName
 			};
 		};
