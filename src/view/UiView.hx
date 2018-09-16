@@ -57,7 +57,7 @@ typedef UIProps =
 	?user:UserState
 }
 
-@:expose('default')
+//@:expose('default')
 @:connect
 class UiView extends ReactComponentOf<UIProps, Dynamic>
 {
@@ -67,14 +67,15 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 
 	static function mapStateToProps(aState:AppState) {
 			trace(aState.appWare.user);
-			if(_me != null)
-				trace(_me.props);
+			//if(_me != null)
+				//trace(_me.props);
 			var uState:UserState = aState.appWare.user;
-			trace({
-				user:uState
-			});
 			return {
-				user:{waiting:aState.appWare.user.waiting}
+				user:{
+					waiting:aState.appWare.user.waiting,
+					userName:uState.userName,
+					jwt:uState.jwt
+				}
 			};
 	}
 	
@@ -123,7 +124,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 
 	override function render()
 	{
-		trace(props);
+		trace(props.user);
 		if (state.hasError) {
 		  return jsx('<h1>Something went wrong.</h1>');
 		}
@@ -148,13 +149,13 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 			return jsx('
 			<$Router history={browserHistory} >
 			<>
-				<section className="topNav">
+				<div className="topNav">
 					<$Route path="/dashboard" {...props} component=${NavTabs}/>
 					<$Route path="/accounting" {...props} component=${NavTabs}/>
 					<$Route path="/contacts" {...props} component=${NavTabs}/>
 					<$Route path="/qc" {...props} component=${NavTabs}/>
 					<$Route path="/reports" {...props} component=${NavTabs}/>
-				</section>
+				</div>
 				<div className="tabComponent">
 				<Route path="/"  component={RedirectBox} exact={true}/>
 				

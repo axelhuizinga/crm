@@ -18,7 +18,7 @@ typedef RouteTabProps =
 	?active:Bool,
 	?loggedIn:Bool,
 	?lastLoggedIn:Date,
-	?loginError:Dynamic,
+	?loginError:String,
 	?jwt:String,
 	?pass:String,
 	?route:String,

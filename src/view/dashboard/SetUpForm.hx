@@ -2,7 +2,6 @@ package view.dashboard;
 
 import comments.StringTransform;
 import haxe.ds.StringMap;
-import haxe.http.HttpJs;
 import haxe.Json;
 import js.html.XMLHttpRequest;
 import model.AppState;
@@ -13,6 +12,7 @@ import react.ReactComponent.ReactFragment;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
 import redux.Redux.Dispatch;
+import view.shared.AjaxLoader;
 import view.shared.BaseForm;
 import view.shared.BaseForm.BaseFormProps;
 
@@ -22,7 +22,7 @@ import view.shared.BaseForm.BaseFormProps;
  */
 
 @:connect
-class SetUpForm extends BaseForm//ReactComponentOf<RouteTabProps, Dynamic> 
+class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 {
 
 	public function new(?props:BaseFormProps) 
@@ -37,7 +37,7 @@ class SetUpForm extends BaseForm//ReactComponentOf<RouteTabProps, Dynamic>
 			var uState = aState.appWare.user;
 			trace(uState);			
 			return {
-				appConfig:aState.appWare.config,
+				//appConfig:aState.appWare.config,
 				userName:uState.userName,
 				jwt:uState.jwt,
 				firstName:uState.firstName
@@ -54,51 +54,55 @@ class SetUpForm extends BaseForm//ReactComponentOf<RouteTabProps, Dynamic>
 	override public function componentDidMount():Void 
 	{
 		//super.componentDidMount();
-		var url:String = 'https://pitverwaltung.de/server.php?className=admin.CreateHistoryTrigger&action=run&jwt=${props.jwt}&userName=${props.userName}';
+		var url:String = '${App.config.api}?className=admin.CreateHistoryTrigger&action=run&jwt=${props.jwt}&userName=${props.userName}';
 		trace(url);
-		//var req:HttpJs = new HttpJs(url);
-		var req:XMLHttpRequest = new XMLHttpRequest('');
-		req.open('GET', url, true);
-		req.onerror = function(err:Dynamic) trace(err);
-		req.onreadystatechange = function(){
-			trace(req.responseText); 
-			if (req.responseText.length > 0)
+		AjaxLoader.load(url, function(data:String){
+			trace(data); 
+			if (data != null && data.length > 0)
 			{
-				trace(Json.parse(req.responseText)); 	
-				setState(ReactUtil.copy(state, Json.parse(req.responseText)));				
-			}
-		};
-		req.send();
-		var ureq:XMLHttpRequest = new XMLHttpRequest('');
-		ureq.open('GET', 'https://pitverwaltung.de/server.php?className=admin.CreateUsers&action=fromViciDial&jwt=${props.jwt}&userName=${props.userName}', true);
-		ureq.onerror = function(err:Dynamic) trace(err);
-		ureq.onreadystatechange = function(){
-			trace(ureq.responseText); 
-			if (ureq.responseText.length > 0)
-			{
-				trace(Json.parse(ureq.responseText)); 	
+				//trace(Json.parse(data)); 
 				var sData:StringMap<Dynamic> = state.data;
-				sData.set('userGroups', Json.parse(ureq.responseText).rows);
+				sData.set('historyTrigger', Json.parse(data).data.rows);
 				setState(ReactUtil.copy(state, {data:sData}));				
 			}
-		};
-		ureq.send();		
+		});
+		
+		/*AjaxLoader.load( '${App.config.api}?className=admin.CreateUsers&action=fromViciDial&jwt=${props.jwt}&userName=${props.userName}',
+		function(data){
+			trace(data); 
+			if (data.length > 0)
+			{
+				//trace(Json.parse(data)); 	
+				var sData:StringMap<Dynamic> = state.data;
+				sData.set('userGroups', Json.parse(data).data.rows);
+				setState(ReactUtil.copy(state, {data:sData}));				
+			}
+		});		*/
 	}
-	//style=${{display:'flex',flexBasis: "auto", flexGrow: 1, flexShrink:0 }}
+	//style=${{display:'flex',flexBasis: "auto", flexGrow: 1, flexShrink:0 }}is-flex is-fullheight
     override public function render() {
 		trace(Reflect.fields(props));
 		if (state.hasError)
 			return jsx('<h1>Fehler in ${Type.getClassName(Type.getClass(this))}.</h1>');		
 		trace(props.history == App.store.getState().appWare.history);
         return jsx('
-				<div className="columns  is-flex is-fullheight">
-					<div className="tabComponentForm column level">
+				<div className="columns  ">
+					<div className="tabComponentForm column">
 						<div className="level-item" >
 							<div className="pBlock" style={{border:"1px solid #801111", borderRadius:"1rem", padding:"1rem"}}>
-								${renderContent(state.content)}
+								${renderContent(state.data.get('historyTrigger'))}
 							</div>
 						</div>
-						${displayDebug('userGroups')}
+						<div className="level-item" >
+							<div className="pBlock" style={{border:"1px solid #801111", borderRadius:"1rem", padding:"1rem"}}>
+								${renderContent(state.data.get('historyTrigger'))}
+							</div>
+						</div>
+						<div className="level-item" >
+							<div className="pBlock" style={{border:"1px solid #801111", borderRadius:"1rem", padding:"1rem"}}>
+								${renderContent(state.data.get('historyTrigger'))}
+							</div>
+						</div>						
 					</div>
 					<div className="column is-2 is-sidebar-menu is-right is-hidden-mobile">
 						<aside className="menu">
@@ -113,11 +117,12 @@ class SetUpForm extends BaseForm//ReactComponentOf<RouteTabProps, Dynamic>
 				</div>
         ');
     }	
-	
+	//${displayDebug('userGroups')}
 	function renderContent(content:Array<String>):ReactFragment
 	{
-		if (content.length == 0)
+		if (content == null || content.length == 0)
 			return null;
+		trace(content.length);
 		var rC:Array<ReactFragment> = new Array();
 		var k:Int = 1;
 		for (c in content)

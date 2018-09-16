@@ -1,4 +1,5 @@
 package view.shared;
+import haxe.http.HttpJs;
 
 /**
  * ...
@@ -7,10 +8,16 @@ package view.shared;
 
  class AjaxLoader 
 {
-
-	public function new(url:String, cB:Void->Void, async:Bool = true) 
+	
+	public static function load(url:String, ?cB:String->Void)
 	{
-		js.Browser.window.fetch(url).then(cB);
+		var req = new HttpJs(url); 
+		req.addHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
+		req.addHeader('Access-Control-Allow-Origin','*');
+		if(cB != null)
+		req.onData = cB;
+		req.onError = function(err:String) trace(err);
+		req.request();
 	}
 	
 }

@@ -26,7 +26,7 @@ class AsyncUserAction
 			trace(props);
 			//trace(getState());
 			if (props.pass == '' || props.userName == '') 
-				return dispatch(AppAction.LoginError({userName:props.userName, loginError:{requestError:'Passwort und UserName eintragen!'}}));
+				return dispatch(AppAction.LoginError({userName:props.userName, loginError:'Passwort und UserName eintragen!'}));
 			
 			var req:XMLHttpRequest = new XMLHttpRequest();
 			req.open('GET', '${props.api}?' + App.queryString2({action:'login', className:'auth.User', userName:props.userName, pass: props.pass}));
@@ -37,7 +37,11 @@ class AsyncUserAction
 				 if (req.status == 200) {
 					 // OK
 					var jRes:LoginState = Json.parse( req.response);
-					trace(jRes.jwt);
+					trace(jRes);
+					if (jRes.error != null)
+					{
+						return dispatch(AppAction.LoginError({userName:props.userName, loginError:jRes.error}));
+					}
 					Cookie.set('user.userName', props.userName, null, '/');
 					Cookie.set('user.jwt', jRes.jwt, null, '/');
 					trace(Cookie.get('user.jwt'));
@@ -45,7 +49,7 @@ class AsyncUserAction
 				} else {
 					  // Otherwise reject with the status text
 					  // which will hopefully be a meaningful error
-					return dispatch(AppAction.LoginError({userName:props.userName, loginError:{requestError:req.statusText}}));
+					return dispatch(AppAction.LoginError({userName:props.userName, loginError:'?'}));
 				}
 			};
 			var spin:Dynamic = dispatch(AppAction.LoginWait);
@@ -60,7 +64,7 @@ class AsyncUserAction
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->model.AppState){
 			trace(getState());
 			if (props.userName == '') 
-				return dispatch(AppAction.LoginError({userName:props.userName, loginError:{requestError:'UserId fehlt!'}}));
+				return dispatch(AppAction.LoginError({userName:props.userName, loginError:'UserId fehlt!'}));
 			
 			var req:XMLHttpRequest = new XMLHttpRequest();
 			req.open('GET', '${props.api}?' + App.queryString2({action:'logout', className:'auth.User', userName:props.userName, pass: props.pass}));
@@ -76,7 +80,7 @@ class AsyncUserAction
 				} else {
 					  // Otherwise reject with the status text
 					  // which will hopefully be a meaningful error
-					return dispatch(AppAction.LoginError({userName:props.userName, loginError:{requestError:req.statusText}}));
+					return dispatch(AppAction.LoginError({userName:props.userName, loginError:req.statusText}));
 				}
 			};
 			var spin:Dynamic = dispatch(AppAction.LoginWait);

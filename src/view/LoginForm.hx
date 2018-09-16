@@ -20,6 +20,7 @@ typedef LoginState =
 	?api:Dynamic,
 	//?dispatch: Dispatch,
 	?waiting:Bool,
+	?error:Dynamic,
 	?userName:String,
 	?pass:String,
 	?jwt:String
@@ -57,8 +58,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 	static function mapDispatchToProps(dispatch:Dispatch) {
 		trace(dispatch);
 		return {
-			submitLogin: function(lState:LoginState) return dispatch(AsyncUserAction.loginReq(
-			lState))
+			submitLogin: function(lState:LoginState) return dispatch(AsyncUserAction.loginReq(lState))
 			//dispatch:dispatch
 		};
 	}
@@ -93,6 +93,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 		var t:InputElement = cast e.target;
 		trace(t.name);
 		trace(t.value);
+		t.className = 'input';
 		Reflect.setField(s, t.name, t.value);
 		trace(props.dispatch == App.store.dispatch);
 		//App.store.dispatch(AppAction.LoginChange(s));
@@ -144,11 +145,11 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 				  </h2>
 				  <form name="form" onSubmit={handleSubmit} autoComplete="new-password" >
 					  <p className="control has-icon">
-						<input name="userName" className="input" type="text" placeholder="User ID"  value={state.userName} onChange={handleChange} />
+						<input name="userName" className=${errorStyle("userName")} type="text" placeholder="User ID"  value={state.userName} onChange={handleChange} />
 						<i className="fa fa-user"></i>
 					  </p>
 					  <p className="control has-icon">
-						<input name="pass" className="input" type="password" placeholder="Password"  value={state.pass} onChange={handleChange} />
+						<input name="pass" className=${errorStyle("pass")} type="password" placeholder="Password"  value={state.pass} onChange={handleChange} />
 						<i className="fa fa-lock"></i>
 					  </p>
 					  <p className="control">
@@ -163,6 +164,23 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 		  </div>
 		</section>		
 		');
+	}
+	
+	function errorStyle(name:String):String
+	{
+		return switch(name)
+		{
+			case "pass":
+				var res = props.loginError == "password"?"input error":"input";
+				trace(res);
+				res;
+				
+			case "userName":
+				props.loginError == "userName"?"input error":"input";
+			
+			default:
+				'';
+		}
 	}
 	
 }

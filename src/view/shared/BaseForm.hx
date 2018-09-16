@@ -73,6 +73,15 @@ class BaseForm extends ReactComponentOf<BaseFormProps, FormState>
 		};
 	}
 	
+	function cache(key:String):Dynamic
+	{
+		if (state.data.exists(key))
+		{
+			return state.data.get(key);
+		}
+		return null;
+	}
+	
     override function render() {
 		trace(Reflect.fields(props));
         return jsx('
@@ -84,18 +93,33 @@ class BaseForm extends ReactComponentOf<BaseFormProps, FormState>
 	
 	function displayDebug(fieldName:String):ReactFragment
 	{
+		//trace (state.data.get(fieldName));
 		if (state.data.exists(fieldName))
 		{
 			return jsx('
 			<div className="level-item" >						
 				<div className="pBlock" style={{border:"1px solid #801111", borderRadius:"1rem", padding:"1rem"}}>
-					<pre className="debug">{state.data.get(fieldName)}</pre>
+					<pre className="debug">${renderDataTable(state.data.get(fieldName))}</pre>
 				</div>							
 			</div>
 			');
 		}
 		
 		return null;
+	}
+	
+	function renderDataTable(content:Array<Dynamic>):ReactFragment
+	{
+		//trace(content);
+		if (content == null || content.length == 0)
+			return null;
+		var rC:Array<ReactFragment> = new Array();
+		var k:Int = 1;
+		for (c in content)
+		{
+			rC.push(jsx('<div key=${k++}>${c.user_group}</div>'));
+		}
+		return rC;
 	}
 	
 }

@@ -60,26 +60,24 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		state = store.getState();
 		CState.init(store);		
 		if (!(App.userName == '' || App.jwt == ''))
-		{
-			
+		{			
 			trace(props);
 			var verifyRequest = new HttpJs('${App.config.api}?jwt=${App.jwt}&userName=${App.userName}&className=auth.User&action=clientVerify');
 			verifyRequest.addHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
 			verifyRequest.addHeader('Access-Control-Allow-Origin','*');
-			//verifyRequest.addHeader('Access-Control-Request-Headers','X-Requested-With, accept, content-type');
-			//verifyRequest.addHeader('access-control-allow-headers','*');
 			verifyRequest.onData = function(data:String)
 			{
 				trace(data);
 				var verifyData = Json.parse(data);
-				if (verifyData.error.length>0)
+				trace(verifyData);
+				if (verifyData.error != null && verifyData.error !='')
 				{
 					App.jwt = null;
-					store.dispatch(AppAction.LoginRequired(state.appWare.user));
+					store.dispatch(AppAction.LoginRequired({jwt:'',loginError:verifyData.error,userName:App.userName,waiting:false}));
 					//_app.props = { waiting:false};
 					trace(verifyData);
 				}
-				if (verifyData.data.content == 'OK')
+				else if (verifyData.data != null && verifyData.data.content == 'OK')
 				{
 					trace('verifyData:{verifyData.content}');
 					var uState:UserState = state.appWare.user;
@@ -93,7 +91,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		}
 		else
 		{// WE HAVE EITHER NO JWT OR USERNAME
-			store.dispatch(AppAction.LoginRequired(state.appWare.user));
+			store.dispatch(AppAction.LoginRequired({jwt:App.jwt,userName:App.userName,waiting:false}));
 			//props = { waiting:false};
 		}
 		trace(config);

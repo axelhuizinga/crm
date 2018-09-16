@@ -85,15 +85,17 @@ class AppService
 					user:{userName:uState.userName, pass:uState.pass}
 				});
 			case LoginRequired(uState):
+				trace(uState);
 				copy(state, {
-					user:{jwt:null,waiting:false}
+					user:uState
 				});
 				
 			case LoginError(err):
-				if(err.userName==state.user.userName)
-					copy(state, err);
-				else
-					state;
+				trace(err);
+				//if(err.userName==state.user.userName)
+				copy(state, {user:{loginError:err.loginError}});
+				//else
+					///state;
 					
 			case LoginWait:
 				copy(state, {waiting:true});
