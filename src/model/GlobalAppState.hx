@@ -3,7 +3,7 @@ import haxe.Json;
 import haxe.ds.StringMap;
 import history.History;
 import history.Location;
-import model.UserService.UserState;
+import view.User.UserState;
 import model.BaseFormData.FormElement;
 
 typedef CompState = 

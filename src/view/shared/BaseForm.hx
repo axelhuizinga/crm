@@ -9,7 +9,9 @@ import react.ReactMacro.jsx;
 import react.router.Route.RouteRenderProps;
 import redux.Redux.Dispatch;
 import redux.Store;
+import view.shared.AjaxLoader;
 import view.shared.RouteTabProps;
+
 
 enum FormElement
 {
@@ -97,11 +99,7 @@ class BaseForm extends ReactComponentOf<BaseFormProps, FormState>
 		if (state.data.exists(fieldName))
 		{
 			return jsx('
-			<div className="level-item" >						
-				<div className="pBlock" style={{border:"1px solid #801111", borderRadius:"1rem", padding:"1rem"}}>
 					<pre className="debug">${renderDataTable(state.data.get(fieldName))}</pre>
-				</div>							
-			</div>
 			');
 		}
 		

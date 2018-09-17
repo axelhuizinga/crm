@@ -3,7 +3,7 @@ package view;
 import action.AppAction;
 import bulma_components.*;
 import model.LocationState;
-import model.UserService.UserState;
+import view.User.UserState;
 import react.Partial;
 import react.ReactComponent;
 import react.ReactComponent.*;

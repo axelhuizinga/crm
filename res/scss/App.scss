@@ -1,7 +1,14 @@
-$primary: #601111;
+/**
+@mixin tabsradius($br){
+	$br $br 0 0;
+}
+*/
 
-/**/@charset "utf-8";
-@import "../../node_modules/bulma/bulma.sass";
+$primary: #601111;
+$tabs-boxed-link-radius: 5px;//@include tabsradius(5);
+
+@charset "utf-8";
+@import "../bulma/bulma.sass";
 
 *{
 	
@@ -49,6 +56,9 @@ h1 {
 .pBlock
 {
 	display:inline-block;
+	border: 1px solid #601111;
+	border-radius:0.5rem;
+	padding:0.5rem 0.8rem;
 }
 .react-datetime-picker--disabled
 {
@@ -112,7 +122,7 @@ h1 {
 	display:flex;
 	flex-direction:column;
 	flex: auto;
-	/*margin:1.25rem auto 0.8rem;	*/
+	margin:0.8rem 1.25rem;	
 	overflow-y:auto;
 	min-height: 0;
 }
@@ -155,6 +165,7 @@ h1 {
 {
 	display:flex;
 	flex-direction:row;
+	justify-content:space-between;
 	/*flex-direction:column;
 	overflow:hidden;
 	overflow-y:auto;*/

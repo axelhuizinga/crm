@@ -17,7 +17,7 @@ import js.html.XMLHttpRequest;
 import me.cunity.debug.Out;
 import model.ApplicationStore;
 import model.CState;
-import model.UserService.UserState;
+import view.User.UserState;
 import react.ReactMacro.jsx;
 import react.ReactComponent;
 import react.ReactEvent;
@@ -29,7 +29,6 @@ import Webpack.*;
 import model.AppState;
 import action.AppAction;
 
-import view.LoginForm;
 import view.UiView;
 using StringTools;
 

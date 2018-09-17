@@ -68,7 +68,7 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 				<TabLink to="/reports" ${...props}>Berichte</TabLink>
 			</ul>		
 			 <i className = "icon is-pulled-right fa fa-sign-out"  title = "Abmelden"  onClick=${App.logOut}
-			 style={{margin:"0.1rem .8rem 0rem .5rem",fontSize:"1.7rem", cursor:"pointer", color:"#801111"}}></i>
+			 style={{margin:".8rem .5rem",fontSize:"1.7rem", cursor:"pointer", color:"#801111"}}></i>
 		</>
 		');
 	}

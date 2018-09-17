@@ -10,21 +10,7 @@ import redux.StoreMethods;
  * @author axel@cunity.me
  */
 
-typedef UserState =
-{
-	?contact:Int,
-	?firstName:String,
-	?lastName:String,
-	?active:Bool,
-	?loggedIn:Bool,
-	?lastLoggedIn:Date,
-	?loginError:Dynamic,
-	?jwt:String,
-	?pass:String,
-	userName:String,
-	?redirectAfterLogin:String,
-	?waiting:Bool
-}
+
 /*
 enum UserAction
 {

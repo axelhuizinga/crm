@@ -7,7 +7,7 @@ import history.BrowserHistory;
 import me.cunity.debug.Out;
 import model.AppState;
 import model.GlobalAppState;
-import model.UserService.UserState;
+import view.User.UserState;
 import react.Fragment;
 import react.ReactComponent.ReactFragment;
 import react.React;

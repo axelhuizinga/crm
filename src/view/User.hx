@@ -2,12 +2,27 @@ package view;
 
 import react.ReactComponent;
 import react.ReactMacro.jsx;
-import model.UserService.UserState;
 
 /**
  * ...
  * @author axel@cunity.me
  */
+
+typedef UserState =
+{
+	?contact:Int,
+	?firstName:String,
+	?lastName:String,
+	?active:Bool,
+	?loggedIn:Bool,
+	?lastLoggedIn:Date,
+	?loginError:Dynamic,
+	?jwt:String,
+	?pass:String,
+	userName:String,
+	?redirectAfterLogin:String,
+	?waiting:Bool
+}
 
 typedef UserFilter = Dynamic;
 

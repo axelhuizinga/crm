@@ -67,7 +67,7 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 			}
 		});
 		
-		/*AjaxLoader.load( '${App.config.api}?className=admin.CreateUsers&action=fromViciDial&jwt=${props.jwt}&userName=${props.userName}',
+		AjaxLoader.load( '${App.config.api}?className=admin.CreateUsers&action=fromViciDial&jwt=${props.jwt}&userName=${props.userName}',
 		function(data){
 			trace(data); 
 			if (data.length > 0)
@@ -77,9 +77,9 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 				sData.set('userGroups', Json.parse(data).data.rows);
 				setState(ReactUtil.copy(state, {data:sData}));				
 			}
-		});		*/
+		});		
 	}
-	//style=${{display:'flex',flexBasis: "auto", flexGrow: 1, flexShrink:0 }}is-flex is-fullheight
+	
     override public function render() {
 		trace(Reflect.fields(props));
 		if (state.hasError)
@@ -87,24 +87,20 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 		trace(props.history == App.store.getState().appWare.history);
         return jsx('
 				<div className="columns  ">
-					<div className="tabComponentForm column">
-						<div className="level-item" >
-							<div className="pBlock" style={{border:"1px solid #801111", borderRadius:"1rem", padding:"1rem"}}>
+					<div className="tabComponentForm columns level">
+							<div className="pBlock" >
 								${renderContent(state.data.get('historyTrigger'))}
 							</div>
-						</div>
-						<div className="level-item" >
-							<div className="pBlock" style={{border:"1px solid #801111", borderRadius:"1rem", padding:"1rem"}}>
+
+							<div className="pBlock" >
 								${renderContent(state.data.get('historyTrigger'))}
 							</div>
-						</div>
-						<div className="level-item" >
-							<div className="pBlock" style={{border:"1px solid #801111", borderRadius:"1rem", padding:"1rem"}}>
-								${renderContent(state.data.get('historyTrigger'))}
+
+							<div className="pBlock" >
+								${displayDebug('userGroups')}
 							</div>
-						</div>						
 					</div>
-					<div className="column is-2 is-sidebar-menu is-right is-hidden-mobile">
+					<div className=" is-sidebar-menu is-right is-hidden-mobile">
 						<aside className="menu">
 						  <p className="menu-label">
 							Allgemein
