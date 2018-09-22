@@ -180,7 +180,7 @@ module.exports = {
 		new FriendlyErrorsWebpackPlugin({
 			compilationSuccessInfo: {
 				messages: [
-					`Your application is running here: https://localhost:${9050}`
+					`Your application is running here: https://localhost:${9000}`
 				]
 			},
 			additionalTransformers: [haxeTransformer],

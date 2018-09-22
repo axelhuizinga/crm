@@ -9,11 +9,11 @@ typedef FormElement =
 {
 	name:String,
 	type:String,
-	value:Dynamic
+	value:String
 }
  
 typedef BaseFormData =
 {
-	name:String,
+	name:String,//FORM NAME
 	fields:Array<FormElement>
 }

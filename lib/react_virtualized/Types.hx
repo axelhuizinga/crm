@@ -5,6 +5,9 @@ package react_virtualized;
  * @author axel@cunity.me
  */
 
+import haxe.extern.EitherType;
+import react.ReactComponent.ReactElement;
+
 /* CellSizeAndPositionManager.js */
 
 typedef  CellSizeAndPositionManagerParams = {
@@ -53,7 +56,7 @@ typedef CellRendererParams = {
 	@:optional var style: Dynamic;
 };
 
-//typedef CellRenderer = (props: CellRendererParams) => React.Element<*>;
+typedef CellRenderer = CellRendererParams->ReactElement;
 
 typedef CellRangeRendererParams = {
 	var cellCache: Dynamic;
@@ -76,15 +79,13 @@ typedef CellRangeRendererParams = {
 	var visibleRowIndices: Dynamic;
 };
 
-/*typedef CellRangeRenderer = (
-  params: CellRangeRendererParams,
-) => React.Element<*>[];*/
+typedef CellRangeRenderer: CellRangeRendererParams->ReactElement;
 
 //typedef CellSizeGetter = (params: {index: Int}) => Int;
 
 typedef CellSize = Int;
 
-//typedef NoContentRenderer = () => React.Element<*> | null;
+typedef NoContentRenderer = EitherType<Void->ReactElement,Null>;
 
 typedef Scroll = {
 	var clientHeight: Int;
@@ -137,9 +138,7 @@ typedef OverscanIndices = {
   var overscanStopIndex: Int;
 };
 
-/*typedef OverscanIndicesGetter = (
-  params: OverscanIndicesGetterParams,
-) => OverscanIndices;*/
+typedef OverscanIndicesGetter = {params: OverscanIndicesGetterParams}->OverscanIndices;
 
 //typedef Alignment = enum{
 enum Alignment{

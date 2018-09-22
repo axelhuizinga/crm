@@ -100,7 +100,7 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 								${displayDebug('userGroups')}
 							</div>
 					</div>
-					<div className=" is-sidebar-menu is-right is-hidden-mobile">
+					<div className="is-right is-hidden-mobile">
 						<aside className="menu">
 						  <p className="menu-label">
 							Allgemein

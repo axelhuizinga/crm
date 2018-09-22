@@ -1,7 +1,5 @@
 node_modules/
 yarn-error.log
-node_modules/
 .temp/
 .tmp.drivedownload/
-*.hxproj
 .haxelib/

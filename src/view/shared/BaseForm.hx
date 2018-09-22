@@ -58,9 +58,17 @@ typedef FormState =
 	hasError:Bool
 }
 
+typedef AsyncDataLoader =
+{
+	url:String,
+	?params:StringMap<String>,
+	?cB:String->Void,
+	?dataField:String
+}
+
 class BaseForm extends ReactComponentOf<BaseFormProps, FormState> 
 {
-
+	
 	public function new(?props:BaseFormProps) 
 	{
 		super(props);	
@@ -75,6 +83,28 @@ class BaseForm extends ReactComponentOf<BaseFormProps, FormState>
 		};
 	}
 	
+	function loadData(loaders:Array<AsyncDataLoader>):Void
+	{
+		/**url:String, ?params:StringMap<String>,?cB:String->Void
+		   AjaxLoader.load(url, function(data:String){
+			trace(data); 
+			if (data != null && data.length > 0)
+			{
+				//trace(Json.parse(data)); 
+				var sData:StringMap<Dynamic> = state.data;
+				sData.set('historyTrigger', Json.parse(data).data.rows);
+				setState(ReactUtil.copy(state, {data:sData}));				
+			}
+		});
+		**/
+		for (l in loaders)
+		{
+			
+		}
+	}
+	
+	function createCallback(
+	
 	function cache(key:String):Dynamic
 	{
 		if (state.data.exists(key))
@@ -85,12 +115,8 @@ class BaseForm extends ReactComponentOf<BaseFormProps, FormState>
 	}
 	
     override function render() {
-		trace(Reflect.fields(props));
-        return jsx('
-            <form className="tabComponentForm">
-				...
-            </form>
-        ');
+		trace('You should override me :)');
+        return null;
     }	
 	
 	function displayDebug(fieldName:String):ReactFragment

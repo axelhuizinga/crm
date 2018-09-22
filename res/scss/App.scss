@@ -178,9 +178,6 @@ h1 {
 {
 	padding: .25em 1em;
 }
-.tabs a.active li{
-    /*background-color:orange;*/
-}
 
 .error, .error::placeholder { color: red}
 
@@ -191,4 +188,10 @@ h1 {
 }
 .tabs{
 	overflow:visible;
+}
+
+/*side menu*/
+.is-right .menu
+{
+	margin: 0.5rem 0.5rem 0.5rem 0.8rem!important;
 }
