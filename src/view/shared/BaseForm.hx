@@ -9,7 +9,6 @@ import react.ReactMacro.jsx;
 import react.router.Route.RouteRenderProps;
 import redux.Redux.Dispatch;
 import redux.Store;
-import view.shared.AjaxLoader;
 import view.shared.RouteTabProps;
 
 
@@ -58,17 +57,9 @@ typedef FormState =
 	hasError:Bool
 }
 
-typedef AsyncDataLoader =
-{
-	url:String,
-	?params:StringMap<String>,
-	?cB:String->Void,
-	?dataField:String
-}
 
 class BaseForm extends ReactComponentOf<BaseFormProps, FormState> 
-{
-	
+{	
 	public function new(?props:BaseFormProps) 
 	{
 		super(props);	
@@ -82,28 +73,6 @@ class BaseForm extends ReactComponentOf<BaseFormProps, FormState>
 			hasError:false			
 		};
 	}
-	
-	function loadData(loaders:Array<AsyncDataLoader>):Void
-	{
-		/**url:String, ?params:StringMap<String>,?cB:String->Void
-		   AjaxLoader.load(url, function(data:String){
-			trace(data); 
-			if (data != null && data.length > 0)
-			{
-				//trace(Json.parse(data)); 
-				var sData:StringMap<Dynamic> = state.data;
-				sData.set('historyTrigger', Json.parse(data).data.rows);
-				setState(ReactUtil.copy(state, {data:sData}));				
-			}
-		});
-		**/
-		for (l in loaders)
-		{
-			
-		}
-	}
-	
-	function createCallback(
 	
 	function cache(key:String):Dynamic
 	{

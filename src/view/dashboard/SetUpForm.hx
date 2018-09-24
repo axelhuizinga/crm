@@ -12,9 +12,10 @@ import react.ReactComponent.ReactFragment;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
 import redux.Redux.Dispatch;
-import view.shared.AjaxLoader;
+import model.AjaxLoader;
 import view.shared.BaseForm;
 import view.shared.BaseForm.BaseFormProps;
+import view.shared.BaseTable;
 
 /**
  * ...
@@ -28,6 +29,11 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 	public function new(?props:BaseFormProps) 
 	{
 		super(props);	
+	}
+	
+	public function loadData()
+	{
+		
 	}
 	
 	static function mapStateToProps() {
@@ -56,7 +62,7 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 		//super.componentDidMount();
 		var url:String = '${App.config.api}?className=admin.CreateHistoryTrigger&action=run&jwt=${props.jwt}&userName=${props.userName}';
 		trace(url);
-		AjaxLoader.load(url, function(data:String){
+		AjaxLoader.load(url, null, function(data:String){
 			trace(data); 
 			if (data != null && data.length > 0)
 			{
@@ -67,17 +73,7 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 			}
 		});
 		
-		AjaxLoader.load( '${App.config.api}?className=admin.CreateUsers&action=fromViciDial&jwt=${props.jwt}&userName=${props.userName}',
-		function(data){
-			trace(data); 
-			if (data.length > 0)
-			{
-				//trace(Json.parse(data)); 	
-				var sData:StringMap<Dynamic> = state.data;
-				sData.set('userGroups', Json.parse(data).data.rows);
-				setState(ReactUtil.copy(state, {data:sData}));				
-			}
-		});		
+			
 	}
 	
     override public function render() {
@@ -93,11 +89,11 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 							</div>
 
 							<div className="pBlock" >
-								${renderContent(state.data.get('historyTrigger'))}
+								Dummy
 							</div>
 
 							<div className="pBlock" >
-								${displayDebug('userGroups')}
+								<BaseTable ${...props} />
 							</div>
 					</div>
 					<div className="is-right is-hidden-mobile">

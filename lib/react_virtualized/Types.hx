@@ -39,6 +39,8 @@ typedef  SizeAndPositionData = {
 	var size: Int;
 };
 
+typedef ScalingCellSizeAndPositionManager = Dynamic;
+
 /* types.js */
 
 typedef CellPosition = {
@@ -61,14 +63,14 @@ typedef CellRenderer = CellRendererParams->ReactElement;
 typedef CellRangeRendererParams = {
 	var cellCache: Dynamic;
 	var cellRenderer: CellRangeRendererParams->react.ReactComponent.ReactElement;
-	var columnSizeAndPositionManager: Dynamic;//ScalingCellSizeAndPositionManager;
+	var columnSizeAndPositionManager: ScalingCellSizeAndPositionManager;
 	var columnStartIndex: Int;
 	var columnStopIndex: Int;
 	@:optional var deferredMeasurementCache: Dynamic;
 	var horizontalOffsetAdjustment: Int;
 	var isScrolling: Bool;
 	var parent: Dynamic;
-	var rowSizeAndPositionManager: Dynamic;//ScalingCellSizeAndPositionManager;
+	var rowSizeAndPositionManager: ScalingCellSizeAndPositionManager;
 	var rowStartIndex: Int;
 	var rowStopIndex: Int;
 	var scrollLeft: Int;
@@ -79,13 +81,13 @@ typedef CellRangeRendererParams = {
 	var visibleRowIndices: Dynamic;
 };
 
-typedef CellRangeRenderer: CellRangeRendererParams->ReactElement;
+typedef CellRangeRenderer = CellRangeRendererParams->ReactElement;
 
 //typedef CellSizeGetter = (params: {index: Int}) => Int;
 
 typedef CellSize = Int;
 
-typedef NoContentRenderer = EitherType<Void->ReactElement,Null>;
+typedef NoContentRenderer = Void->ReactElement;
 
 typedef Scroll = {
 	var clientHeight: Int;
@@ -101,6 +103,13 @@ typedef ScrollbarPresenceChange = {
 	var vertical: Bool;
 	var size: Int;
 };
+
+typedef SortDirection = {
+	@:value('ASC')
+	var ASC:String;
+	@:value('DESC')
+	var DESC:String;
+}
 
 typedef RenderedSection = {
 	var columnOverscanStartIndex: Int;
@@ -141,11 +150,15 @@ typedef OverscanIndices = {
 typedef OverscanIndicesGetter = {params: OverscanIndicesGetterParams}->OverscanIndices;
 
 //typedef Alignment = enum{
-enum Alignment{
-	auto;
-	end;
-	start;
-	center;
+typedef Alignment = {
+	@:value('auto')
+	var auto:String;
+	@:value('end')
+	var end:String;
+	@:value('start')
+	var start:String;
+	@:value('center')
+	var center:String;
 }
 
 typedef VisibleCellRange = {

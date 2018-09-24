@@ -58,7 +58,7 @@ module.exports = {
     devServer: {
         contentBase: dist,
         compress: true,
-	host:  '192.168.178.20',
+	host:  '192.168.178.56',
 	https: true,
         port: 9000,
         overlay: true,

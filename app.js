@@ -86,6 +86,25 @@ haxe_ds_StringMap.prototype = {
 		}
 		return this.rh.hasOwnProperty("$" + key);
 	}
+	,keys: function() {
+		return HxOverrides.iter(this.arrayKeys());
+	}
+	,arrayKeys: function() {
+		var out = [];
+		for( var key in this.h ) {
+		if(this.h.hasOwnProperty(key)) {
+			out.push(key);
+		}
+		}
+		if(this.rh != null) {
+			for( var key in this.rh ) {
+			if(key.charCodeAt(0) == 36) {
+				out.push(key.substr(1));
+			}
+			}
+		}
+		return out;
+	}
 	,__class__: haxe_ds_StringMap
 };
 var StringTools = function() { };
@@ -337,6 +356,24 @@ var JsxStaticInit_$_$ = function() { };
 JsxStaticInit_$_$.__name__ = "JsxStaticInit__";
 var Lambda = function() { };
 Lambda.__name__ = "Lambda";
+Lambda.array = function(it) {
+	var a = [];
+	var i = $getIterator(it);
+	while(i.hasNext()) {
+		var i1 = i.next();
+		a.push(i1);
+	}
+	return a;
+};
+Lambda.map = function(it,f) {
+	var l = new haxe_ds_List();
+	var x = $getIterator(it);
+	while(x.hasNext()) {
+		var x1 = x.next();
+		l.add(f(x1));
+	}
+	return l;
+};
 Lambda.has = function(it,elt) {
 	var x = $getIterator(it);
 	while(x.hasNext()) {
@@ -787,6 +824,55 @@ haxe_Timer.prototype = {
 	}
 	,__class__: haxe_Timer
 };
+var haxe_ds_List = function() {
+	this.length = 0;
+};
+haxe_ds_List.__name__ = "haxe.ds.List";
+haxe_ds_List.prototype = {
+	h: null
+	,q: null
+	,length: null
+	,add: function(item) {
+		var x = new haxe_ds__$List_ListNode(item,null);
+		if(this.h == null) {
+			this.h = x;
+		} else {
+			this.q.next = x;
+		}
+		this.q = x;
+		this.length++;
+	}
+	,iterator: function() {
+		return new haxe_ds__$List_ListIterator(this.h);
+	}
+	,__class__: haxe_ds_List
+};
+var haxe_ds__$List_ListNode = function(item,next) {
+	this.item = item;
+	this.next = next;
+};
+haxe_ds__$List_ListNode.__name__ = "haxe.ds._List.ListNode";
+haxe_ds__$List_ListNode.prototype = {
+	item: null
+	,next: null
+	,__class__: haxe_ds__$List_ListNode
+};
+var haxe_ds__$List_ListIterator = function(head) {
+	this.head = head;
+};
+haxe_ds__$List_ListIterator.__name__ = "haxe.ds._List.ListIterator";
+haxe_ds__$List_ListIterator.prototype = {
+	head: null
+	,hasNext: function() {
+		return this.head != null;
+	}
+	,next: function() {
+		var val = this.head.item;
+		this.head = this.head.next;
+		return val;
+	}
+	,__class__: haxe_ds__$List_ListIterator
+};
 var haxe_http_HttpBase = function(url) {
 	this.url = url;
 	this.headers = [];
@@ -812,6 +898,9 @@ haxe_http_HttpBase.prototype = {
 				return;
 			}
 		}
+		this.params.push({ name : name, value : value});
+	}
+	,addParameter: function(name,value) {
 		this.params.push({ name : name, value : value});
 	}
 	,onData: function(data) {
@@ -1354,6 +1443,32 @@ me_cunity_debug_Out.fTrace = function(str,arr,i) {
 		}
 	}
 	me_cunity_debug_Out._trace(str_buf_b,i);
+};
+var model_AjaxLoader = function() { };
+model_AjaxLoader.__name__ = "model.AjaxLoader";
+model_AjaxLoader.load = function(url,params,cB) {
+	var req = new haxe_http_HttpJs(url);
+	var k = params.keys();
+	while(k.hasNext()) {
+		var k1 = k.next();
+		req.addParameter(k1,__map_reserved[k1] != null ? params.getReserved(k1) : params.h[k1]);
+	}
+	if(cB != null) {
+		req.onData = cB;
+	}
+	req.onError = function(err) {
+		haxe_Log.trace(err,{ fileName : "src/model/AjaxLoader.hx", lineNumber : 34, className : "model.AjaxLoader", methodName : "load"});
+	};
+	haxe_Log.trace("POST? " + Std.string(params.keys().hasNext()),{ fileName : "src/model/AjaxLoader.hx", lineNumber : 35, className : "model.AjaxLoader", methodName : "load"});
+	req.request(params.keys().hasNext());
+};
+model_AjaxLoader.loadData = function(loaders) {
+	var _g = 0;
+	while(_g < loaders.length) {
+		var l = loaders[_g];
+		++_g;
+		model_AjaxLoader.load(l.url,l.params,l.cB);
+	}
 };
 var redux_IMiddleware = function() { };
 redux_IMiddleware.__name__ = "redux.IMiddleware";
@@ -2101,6 +2216,8 @@ react_router_bundle_BundleWrapper.prototype = $extend(React_Component.prototype,
 	}
 	,__class__: react_router_bundle_BundleWrapper
 });
+var react_$virtualized_Column = require("react-virtualized").Column;
+var react_$virtualized_Table = require("react-virtualized").Table;
 var redux_Redux = require("redux");
 var redux__$Redux_Action_$Impl_$ = {};
 redux__$Redux_Action_$Impl_$.__name__ = "redux._Redux.Action_Impl_";
@@ -2567,7 +2684,7 @@ view_NavTabs.prototype = $extend(React_Component.prototype,{
 			var tmp5 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromFunctionWithProps($bind(this,this.TabLink)),Object.assign({ },this.props,{ to : "/accounting"}),"Buchhaltung");
 			var tmp6 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromFunctionWithProps($bind(this,this.TabLink)),Object.assign({ },this.props,{ to : "/reports"}),"Berichte");
 			var tmp7 = React.createElement(tmp1,{ },tmp2,tmp3,tmp4,tmp5,tmp6);
-			var tmp8 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("i"),{ className : "icon is-pulled-right fa fa-sign-out", title : "Abmelden", onClick : App.logOut, style : { margin : "0.1rem .8rem 0rem .5rem", fontSize : "1.7rem", cursor : "pointer", color : "#801111"}});
+			var tmp8 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("i"),{ className : "icon is-pulled-right fa fa-sign-out", title : "Abmelden", onClick : App.logOut, style : { margin : ".8rem .5rem", fontSize : "1.7rem", cursor : "pointer", color : "#801111"}});
 			return React.createElement(tmp,{ },tmp7,tmp8);
 		}
 	}
@@ -2845,20 +2962,16 @@ view_shared_BaseForm.prototype = $extend(React_Component.prototype,{
 		return null;
 	}
 	,render: function() {
-		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 86, className : "view.shared.BaseForm", methodName : "render"});
-		return React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("form"),{ className : "tabComponentForm"},"...");
+		haxe_Log.trace("You should override me :)",{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 87, className : "view.shared.BaseForm", methodName : "render"});
+		return null;
 	}
 	,displayDebug: function(fieldName) {
 		var _this = this.state.data;
 		if(__map_reserved[fieldName] != null ? _this.existsReserved(fieldName) : _this.h.hasOwnProperty(fieldName)) {
-			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-			var tmp1 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-			var tmp2 = react__$ReactNode_ReactNode_$Impl_$.fromString("pre");
+			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("pre");
 			var _this1 = this.state.data;
-			var tmp3 = __map_reserved[fieldName] != null ? _this1.getReserved(fieldName) : _this1.h[fieldName];
-			var tmp4 = React.createElement(tmp2,{ className : "debug"},this.renderDataTable(tmp3));
-			var tmp5 = React.createElement(tmp1,{ className : "pBlock", style : { border : "1px solid #801111", borderRadius : "1rem", padding : "1rem"}},tmp4);
-			return React.createElement(tmp,{ className : "level-item"},tmp5);
+			var tmp1 = __map_reserved[fieldName] != null ? _this1.getReserved(fieldName) : _this1.h[fieldName];
+			return React.createElement(tmp,{ className : "debug"},this.renderDataTable(tmp1));
 		}
 		return null;
 	}
@@ -2885,22 +2998,24 @@ view_dashboard_SetUpForm.__name__ = "view.dashboard.SetUpForm";
 view_dashboard_SetUpForm.mapStateToProps = function() {
 	return function(aState) {
 		var uState = aState.appWare.user;
-		haxe_Log.trace(uState,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 38, className : "view.dashboard.SetUpForm", methodName : "mapStateToProps"});
+		haxe_Log.trace(uState,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 44, className : "view.dashboard.SetUpForm", methodName : "mapStateToProps"});
 		return { userName : uState.userName, jwt : uState.jwt, firstName : uState.firstName};
 	};
 };
 view_dashboard_SetUpForm.__super__ = view_shared_BaseForm;
 view_dashboard_SetUpForm.prototype = $extend(view_shared_BaseForm.prototype,{
-	componentDidCatch: function(error,info) {
+	loadData: function() {
+	}
+	,componentDidCatch: function(error,info) {
 		this.setState({ hasError : true});
-		haxe_Log.trace(error,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 51, className : "view.dashboard.SetUpForm", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 57, className : "view.dashboard.SetUpForm", methodName : "componentDidCatch"});
 	}
 	,componentDidMount: function() {
 		var _gthis = this;
 		var url = "" + Std.string(App.config.api) + "?className=admin.CreateHistoryTrigger&action=run&jwt=" + this.props.jwt + "&userName=" + this.props.userName;
-		haxe_Log.trace(url,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 58, className : "view.dashboard.SetUpForm", methodName : "componentDidMount"});
-		view_shared_AjaxLoader.load(url,function(data) {
-			haxe_Log.trace(data,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 60, className : "view.dashboard.SetUpForm", methodName : "componentDidMount"});
+		haxe_Log.trace(url,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 64, className : "view.dashboard.SetUpForm", methodName : "componentDidMount"});
+		model_AjaxLoader.load(url,null,function(data) {
+			haxe_Log.trace(data,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 66, className : "view.dashboard.SetUpForm", methodName : "componentDidMount"});
 			if(data != null && data.length > 0) {
 				var sData = _gthis.state.data;
 				var value = JSON.parse(data).data.rows;
@@ -2915,52 +3030,42 @@ view_dashboard_SetUpForm.prototype = $extend(view_shared_BaseForm.prototype,{
 		});
 	}
 	,render: function() {
-		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 84, className : "view.dashboard.SetUpForm", methodName : "render"});
+		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 80, className : "view.dashboard.SetUpForm", methodName : "render"});
 		if(this.state.hasError) {
 			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("h1");
 			var c = js_Boot.getClass(this);
 			var tmp1 = c.__name__;
 			return React.createElement(tmp,{ },"Fehler in ",tmp1,".");
 		}
-		haxe_Log.trace(this.props.history == App.store.getState().appWare.history,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 87, className : "view.dashboard.SetUpForm", methodName : "render"});
+		haxe_Log.trace(this.props.history == App.store.getState().appWare.history,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 83, className : "view.dashboard.SetUpForm", methodName : "render"});
 		var tmp2 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp3 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp4 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var tmp5 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var _this = this.state.data;
-		var tmp6 = __map_reserved["historyTrigger"] != null ? _this.getReserved("historyTrigger") : _this.h["historyTrigger"];
-		var tmp7 = React.createElement(tmp5,{ className : "pBlock", style : { border : "1px solid #801111", borderRadius : "1rem", padding : "1rem"}},this.renderContent(tmp6));
-		var tmp8 = React.createElement(tmp4,{ className : "column"},tmp7);
-		var tmp9 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var tmp10 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var _this1 = this.state.data;
-		var tmp11 = __map_reserved["historyTrigger"] != null ? _this1.getReserved("historyTrigger") : _this1.h["historyTrigger"];
-		var tmp12 = React.createElement(tmp10,{ className : "pBlock", style : { border : "1px solid #801111", borderRadius : "1rem", padding : "1rem"}},this.renderContent(tmp11));
-		var tmp13 = React.createElement(tmp9,{ className : "column"},tmp12);
-		var tmp14 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var tmp15 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var _this2 = this.state.data;
-		var tmp16 = __map_reserved["historyTrigger"] != null ? _this2.getReserved("historyTrigger") : _this2.h["historyTrigger"];
-		var tmp17 = React.createElement(tmp15,{ className : "pBlock", style : { border : "1px solid #801111", borderRadius : "1rem", padding : "1rem"}},this.renderContent(tmp16));
-		var tmp18 = React.createElement(tmp14,{ className : "column"},tmp17);
-		var tmp19 = React.createElement(tmp3,{ className : "tabComponentForm columns"},tmp8,tmp13,tmp18);
-		var tmp20 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var tmp21 = react__$ReactNode_ReactNode_$Impl_$.fromString("aside");
-		var tmp22 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("p"),{ className : "menu-label"},"Allgemein");
-		var tmp23 = react__$ReactNode_ReactNode_$Impl_$.fromString("ul");
-		var tmp24 = react__$ReactNode_ReactNode_$Impl_$.fromString("li");
-		var tmp25 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("a"),{ },"History Trigger");
-		var tmp26 = React.createElement(tmp24,{ },tmp25);
-		var tmp27 = React.createElement(tmp23,{ className : "menu-list"},tmp26);
-		var tmp28 = React.createElement(tmp21,{ className : "menu"},tmp22,tmp27);
-		var tmp29 = React.createElement(tmp20,{ className : " is-sidebar-menu is-right is-hidden-mobile"},tmp28);
-		return React.createElement(tmp2,{ className : "columns  "},tmp19,tmp29);
+		var tmp5 = __map_reserved["historyTrigger"] != null ? _this.getReserved("historyTrigger") : _this.h["historyTrigger"];
+		var tmp6 = React.createElement(tmp4,{ className : "pBlock"},this.renderContent(tmp5));
+		var tmp7 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("div"),{ className : "pBlock"},"Dummy");
+		var tmp8 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
+		var tmp9 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromComp(view_shared_BaseTable),this.props);
+		var tmp10 = React.createElement(tmp8,{ className : "pBlock"},tmp9);
+		var tmp11 = React.createElement(tmp3,{ className : "tabComponentForm columns level"},tmp6,tmp7,tmp10);
+		var tmp12 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
+		var tmp13 = react__$ReactNode_ReactNode_$Impl_$.fromString("aside");
+		var tmp14 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("p"),{ className : "menu-label"},"Allgemein");
+		var tmp15 = react__$ReactNode_ReactNode_$Impl_$.fromString("ul");
+		var tmp16 = react__$ReactNode_ReactNode_$Impl_$.fromString("li");
+		var tmp17 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("a"),{ },"History Trigger");
+		var tmp18 = React.createElement(tmp16,{ },tmp17);
+		var tmp19 = React.createElement(tmp15,{ className : "menu-list"},tmp18);
+		var tmp20 = React.createElement(tmp13,{ className : "menu"},tmp14,tmp19);
+		var tmp21 = React.createElement(tmp12,{ className : "is-right is-hidden-mobile"},tmp20);
+		return React.createElement(tmp2,{ className : "columns  "},tmp11,tmp21);
 	}
 	,renderContent: function(content) {
 		if(content == null || content.length == 0) {
 			return null;
 		}
-		haxe_Log.trace(content.length,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 125, className : "view.dashboard.SetUpForm", methodName : "renderContent"});
+		haxe_Log.trace(content.length,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 117, className : "view.dashboard.SetUpForm", methodName : "renderContent"});
 		var rC = [];
 		var k = 1;
 		var _g = 0;
@@ -2994,20 +3099,6 @@ view_dashboard_SettingsForm.prototype = $extend(React_Component.prototype,{
 	}
 	,__class__: view_dashboard_SettingsForm
 });
-var view_shared_AjaxLoader = function() { };
-view_shared_AjaxLoader.__name__ = "view.shared.AjaxLoader";
-view_shared_AjaxLoader.load = function(url,cB) {
-	var req = new haxe_http_HttpJs(url);
-	req.addHeader("Access-Control-Allow-Methods","PUT, GET, POST, DELETE, OPTIONS");
-	req.addHeader("Access-Control-Allow-Origin","*");
-	if(cB != null) {
-		req.onData = cB;
-	}
-	req.onError = function(err) {
-		haxe_Log.trace(err,{ fileName : "src/view/shared/AjaxLoader.hx", lineNumber : 19, className : "view.shared.AjaxLoader", methodName : "load"});
-	};
-	req.request();
-};
 var view_shared_FormElement = $hxEnums["view.shared.FormElement"] = { __ename__ : "view.shared.FormElement", __constructs__ : ["Input","Checkbox","Radio","Select","TextArea"]
 	,Input: {_hx_index:0,__enum__:"view.shared.FormElement"}
 	,Checkbox: {_hx_index:1,__enum__:"view.shared.FormElement"}
@@ -3015,6 +3106,98 @@ var view_shared_FormElement = $hxEnums["view.shared.FormElement"] = { __ename__ 
 	,Select: {_hx_index:3,__enum__:"view.shared.FormElement"}
 	,TextArea: {_hx_index:4,__enum__:"view.shared.FormElement"}
 };
+var view_shared_BaseTable = function(props) {
+	React_Component.call(this,props);
+	this.state = { data : [], dirty : false, loading : false, hasError : false};
+};
+view_shared_BaseTable.__name__ = "view.shared.BaseTable";
+view_shared_BaseTable.__super__ = React_Component;
+view_shared_BaseTable.prototype = $extend(React_Component.prototype,{
+	createColumns: function() {
+		return Lambda.array(Lambda.map(Reflect.fields(this.state.data[0]),function(field) {
+			var tmp = HxOverrides.substr(field,0,1).toUpperCase();
+			var tmp1 = HxOverrides.substr(field,1,null).toLowerCase();
+			return React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromComp(react_$virtualized_Column),{ label : tmp + tmp1, dataKey : field, width : 100, flexGrow : 1});
+		}));
+	}
+	,componentDidCatch: function(error,info) {
+		this.setState({ hasError : true});
+		haxe_Log.trace(error,{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 85, className : "view.shared.BaseTable", methodName : "componentDidCatch"});
+	}
+	,componentDidMount: function() {
+		var _gthis = this;
+		var tmp = "" + Std.string(App.config.api);
+		var _g = new haxe_ds_StringMap();
+		var value = this.props.userName;
+		if(__map_reserved["userName"] != null) {
+			_g.setReserved("userName",value);
+		} else {
+			_g.h["userName"] = value;
+		}
+		var value1 = this.props.jwt;
+		if(__map_reserved["jwt"] != null) {
+			_g.setReserved("jwt",value1);
+		} else {
+			_g.h["jwt"] = value1;
+		}
+		var value2 = this.props.firstName;
+		if(__map_reserved["firstName"] != null) {
+			_g.setReserved("firstName",value2);
+		} else {
+			_g.h["firstName"] = value2;
+		}
+		if(__map_reserved["className"] != null) {
+			_g.setReserved("className","admin.CreateUsers");
+		} else {
+			_g.h["className"] = "admin.CreateUsers";
+		}
+		if(__map_reserved["action"] != null) {
+			_g.setReserved("action","fromViciDial");
+		} else {
+			_g.h["action"] = "fromViciDial";
+		}
+		model_AjaxLoader.load(tmp,_g,function(data) {
+			haxe_Log.trace(data,{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 100, className : "view.shared.BaseTable", methodName : "componentDidMount"});
+			if(data.length > 0) {
+				_gthis.setState({ data : JSON.parse(data).data.rows});
+			}
+		});
+		this.setState({ loading : true});
+	}
+	,render: function() {
+		var _gthis = this;
+		haxe_Log.trace(this.state.data,{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 114, className : "view.shared.BaseTable", methodName : "render"});
+		if(this.state.data == null || this.state.data.length == 0) {
+			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("section");
+			var tmp1 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
+			var tmp2 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("div"),{ className : "loader", style : { width : "7rem", height : "7rem", margin : "auto", borderWidth : "0.58rem"}});
+			var tmp3 = React.createElement(tmp1,{ className : "hero-body"},tmp2);
+			return React.createElement(tmp,{ className : "hero is-alt is-fullheight"},tmp3);
+		}
+		return React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromComp(react_$virtualized_Table),{ width : 300, height : 300, headerHeight : 20, rowHeight : 30, rowCount : this.state.data.length, rowGetter : function(index) {
+			haxe_Log.trace(index,{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 132, className : "view.shared.BaseTable", methodName : "render"});
+			return _gthis.state.data[index];
+		}},this.createColumns());
+	}
+	,loaded: function(data) {
+		this.state.data = data;
+	}
+	,renderDataTable: function(content) {
+		if(content == null || content.length == 0) {
+			return null;
+		}
+		var rC = [];
+		var k = 1;
+		var _g = 0;
+		while(_g < content.length) {
+			var c = content[_g];
+			++_g;
+			rC.push(React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("div"),{ key : k++},c.user_group));
+		}
+		return rC;
+	}
+	,__class__: view_shared_BaseTable
+});
 var view_shared_RouteBox = function(props) {
 	React_Component.call(this,props);
 	this.parentIsMounted = false;
@@ -3173,6 +3356,8 @@ view_dashboard_SettingsForm.displayName = "SettingsForm";
 view_dashboard_SettingsForm.__fileName__ = "src/view/dashboard/SettingsForm.hx";
 view_dashboard_SettingsForm._connected = (redux_react_ReactRedux.connect(view_dashboard_SettingsForm.mapStateToProps))(react__$ReactNode_ReactNode_$Impl_$.fromComp(view_dashboard_SettingsForm));
 view_dashboard_SettingsForm.__jsxStatic = view_dashboard_SettingsForm._connected;
+view_shared_BaseTable.displayName = "BaseTable";
+view_shared_BaseTable.__fileName__ = "src/view/shared/BaseTable.hx";
 view_shared_RouteBox.displayName = "RouteBox";
 view_shared_RouteBox.__fileName__ = "src/view/shared/RouteBox.hx";
 view_shared_SLink.displayName = "SLink";
