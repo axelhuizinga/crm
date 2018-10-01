@@ -6,8 +6,8 @@ import redux.Redux.Dispatch;
 
 
 import Webpack.*;
-
-@:expose('default')
+ 
+//@:expose('default')
 @:connect
 class Statistics extends ReactComponent {
 

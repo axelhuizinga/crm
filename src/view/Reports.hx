@@ -15,7 +15,7 @@ import view.shared.RouteTabProps;
 import Webpack.*;
 
 
-@:expose('default')
+//@:expose('default')
 @:connect
 class Reports extends ReactComponentOfProps<RouteTabProps>
 	

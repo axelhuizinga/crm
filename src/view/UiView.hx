@@ -157,8 +157,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 					<$Route path="/reports" {...props} component=${NavTabs}/>
 				</div>
 				<div className="tabComponent">
-				<Route path="/"  component={RedirectBox} exact={true}/>
-				
+				<Route path="/"  component={RedirectBox} exact={true}/>				
 				<Route path="/dashboard" exact={true} component=${Bundle.load(DashBoardBox)}/>
 				<Route path="/dashboard/*" component=${Bundle.load(DashBoardBox)}/>
 				<Route path="/accounting" component=${Bundle.load(AccountingBox)}/>

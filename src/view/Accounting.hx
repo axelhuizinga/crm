@@ -17,7 +17,7 @@ import view.shared.RouteTabProps;
 import Webpack.*;
 import model.AppState;
 
-@:expose('default')
+//@:expose('default')
 @:connect
 class Accounting extends ReactComponentOfProps<RouteTabProps>
 	

@@ -49,9 +49,10 @@ typedef FormField =
 typedef FormState =
 {
 	?content:Array<String>,
+	data:StringMap<Dynamic>,
 	dirty:Bool,
 	fields:StringMap<FormField>,
-	data:StringMap<Dynamic>,
+	values:StringMap<Dynamic>,
 	submitted:Bool,
 	errors:StringMap<String>,
 	hasError:Bool
@@ -59,28 +60,43 @@ typedef FormState =
 
 
 class BaseForm extends ReactComponentOf<BaseFormProps, FormState> 
-{	
+{
+	var mounted:Bool;
+	
 	public function new(?props:BaseFormProps) 
 	{
-		super(props);	
+		super(props);
+		mounted = false;
 		state = {
+			data:new StringMap(),
 			content:new Array(),
 			dirty:false,
 			errors:new StringMap(),
-			data:new StringMap(),
+			values:new StringMap(),
 			fields:new StringMap(),
 			submitted:false,
-			hasError:false			
+			hasError:false		
 		};
 	}
 	
 	function cache(key:String):Dynamic
 	{
-		if (state.data.exists(key))
+		if (state.values.exists(key))
 		{
-			return state.data.get(key);
+			return state.values.get(key);
 		}
 		return null;
+	}
+	
+	override public function componentWillUnmount():Void 
+	{
+		mounted=false;
+	}
+	
+	override public function componentDidMount():Void 
+	{
+		mounted = true;
+		trace(mounted);
 	}
 	
     override function render() {
@@ -90,11 +106,11 @@ class BaseForm extends ReactComponentOf<BaseFormProps, FormState>
 	
 	function displayDebug(fieldName:String):ReactFragment
 	{
-		//trace (state.data.get(fieldName));
-		if (state.data.exists(fieldName))
+		//trace (state.values.get(fieldName));
+		if (state.values.exists(fieldName))
 		{
 			return jsx('
-					<pre className="debug">${renderDataTable(state.data.get(fieldName))}</pre>
+					<pre className="debug">${renderDataTable(state.values.get(fieldName))}</pre>
 			');
 		}
 		

@@ -89,10 +89,9 @@ typedef GridState = {
 }
 
 @:jsRequire('react-virtualized', 'Grid')
-#if (debug && react_render_warning)
-@:autoBuild(react.ReactDebugMacro.buildComponent())
-#end
 extern class Grid implements Dynamic extends ReactComponentOf<GridProps,GridState>
 {
-	public function new(?props:GridProps){}
+	public function new(?props:GridProps){};
+	
+	public static function 	scrollbarSize(Void):Int;
 }

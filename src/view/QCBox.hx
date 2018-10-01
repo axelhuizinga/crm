@@ -13,9 +13,9 @@ import view.QC;
 class QCBox extends ReactComponentOfProps<RouteRenderProps>
 {
 
-	public function new(?props:RouteRenderProps, ?context:Dynamic) 
+	public function new(?props:RouteRenderProps) 
 	{
-		super(props, context);
+		super(props);
 		
 	}
 	

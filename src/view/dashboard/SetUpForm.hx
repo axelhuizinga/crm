@@ -22,6 +22,7 @@ import view.shared.BaseTable;
  * @author axel@cunity.me
  */
 
+//@:expose('default')
 @:connect
 class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 {
@@ -41,7 +42,7 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 		return function(aState:model.AppState) 
 		{
 			var uState = aState.appWare.user;
-			trace(uState);			
+			trace(uState);		
 			return {
 				//appConfig:aState.appWare.config,
 				userName:uState.userName,
@@ -73,6 +74,24 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 			}
 		});
 		
+		AjaxLoader.load(
+			'${App.config.api}', 
+			{
+				userName:props.userName,
+				jwt:props.jwt,
+				className:'admin.CreateUsers',
+				action:'fromViciDial'
+			},
+			function(data){
+				trace(data); 
+				if (data.length > 0)
+				{
+					var sData:StringMap<Dynamic> = state.data;
+					sData.set('userGroups', Json.parse(data).data.rows);
+					setState(ReactUtil.copy(state, {data:sData}));				
+				}
+			}
+		);		
 			
 	}
 	
@@ -93,7 +112,7 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 							</div>
 
 							<div className="pBlock" >
-								<BaseTable ${...props} />
+								<BaseTable ${...props} data=${state.data.get('userGroups')}/>
 							</div>
 					</div>
 					<div className="is-right is-hidden-mobile">

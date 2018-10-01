@@ -23,7 +23,7 @@ typedef SLinkProps =
 	dispatch:Dispatch
 }
 
-@:expose('default')
+//@:expose('default')
 @:connect
 class SLink extends ReactComponentOfProps<SLinkProps>
 {

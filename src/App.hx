@@ -4,7 +4,6 @@
  * @author axel@cunity.me
  */
 
-import haxe.Timer;
 import haxe.http.HttpJs;
 import haxe.Json;
 import history.BrowserHistory;
@@ -42,6 +41,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	static var _app:App;
 	//static var bulma = require('../node_modules/bulma/css/bulma.min.css');
 	static var fa = require('../node_modules/font-awesome/css/font-awesome.min.css');
+	static var virtualized = require('../node_modules/react-virtualized/styles.css');
     static var STYLES = require('App.scss');
 
 	public static var store:Store<AppState>;
@@ -109,17 +109,6 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 
     override function componentDidMount()
 	{
-		var d:Date = Date.now();
-		var s:Int = d.getSeconds();
-		trace('start delay at $s set timer start in ${(60 - s ) } seconds');
-		//return;
-		Timer.delay(function(){
-			trace('timer start at ${Date.now().getSeconds()}');
-			store.dispatch(Tick(Date.now()));
-			var t:Timer = new Timer(60000);
-			t.run = function() store.dispatch(Tick(Date.now()));//this.setState({appWare:{ date: Date.now() }});
-		}, (60 - d.getSeconds()) * 1000);
-
 		//trace(state.appWare.history);
     }
 

@@ -17,7 +17,7 @@ import view.shared.RouteTabProps;
 
 import Webpack.*;
 
-@:expose('default')
+//@:expose('default')
 @:connect
 class Contacts extends ReactComponentOfProps<RouteTabProps>
 	

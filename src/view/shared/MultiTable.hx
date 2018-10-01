@@ -11,10 +11,9 @@ import react.ReactComponent.ReactComponentOf;
 import react.ReactComponent.ReactFragment;
 import react.ReactMacro.jsx;
 import react.router.Route.RouteRenderProps;
-import react_virtualized.AutoSizer;
 import react_virtualized.Column;
 import react_virtualized.Table;
-//import react_virtualized.Table.TableProps;
+import react_virtualized.Table.TableProps;
 import react_virtualized.Types.SortDirection;
 import redux.Redux.Dispatch;
 import redux.Store;
@@ -27,12 +26,10 @@ import view.shared.RouteTabProps;
  */
 
  
- typedef BaseTableProps =
+ typedef MultiTableProps =
  {
 	//> RouteTabProps,
 	> TableProps,
-	autoSize:Bool,
-	autoSizerProps:AutoSizerProps,
 	data:Array<Dynamic>,// ROWS OF HASHES
 	?dataColumns:Array<Dynamic>,// FORMAT + STYLE
 	//dataLoad
@@ -51,7 +48,7 @@ import view.shared.RouteTabProps;
 	?firstName:String
 }
 
-typedef BaseTableState =
+typedef MultiTableState =
 {
 	clean:Bool,
 	data:Array<Dynamic>,
@@ -61,10 +58,10 @@ typedef BaseTableState =
 }
 
 
-class BaseTable extends ReactComponentOf<BaseTableProps,BaseTableState> 
+class MultiTable extends ReactComponentOf<MultiTableProps,MultiTableState> 
 {
 	
-	public function new(?props:BaseTableProps) 
+	public function new(?props:MultiTableProps) 
 	{
 		this.state = 
 		{
@@ -74,7 +71,6 @@ class BaseTable extends ReactComponentOf<BaseTableProps,BaseTableState>
 			hasError:false,
 			scrollbarWidth:0
 		}
-		//props.;
 		super(props);
 		trace(state.clean);
 	}
@@ -126,31 +122,18 @@ class BaseTable extends ReactComponentOf<BaseTableProps,BaseTableState>
 			</section>
 			');					
 		}
-		if (!props.autoSize)
-			return renderTable({});
 		return jsx('
-			<AutoSizer disableHeight children=${renderTable}/>
-		');
-
-    }	
-
-	function renderTable(size:Size):ReactFragment
-	{
-		trace(size);
-		return jsx('
-		  <Table
-			style = {{height:"100%"}}
-			gridStyle = {{flex:1}}
-			disableHeader={props.disableHeader}
-			width={size != null && size.width !=null ? size.width:300}
+		  < Table
+			autoHeight={true} 
+			width={300}
 			height = {300}
 			headerHeight={20}
 			rowHeight={30}
 			rowCount=${props.data.length}
 			rowGetter = ${function(index) return props.data[index.index]}
 		  >${createColumns()}</Table>		
-		');		
-	}
+		');
+    }	
 	
 	public function loaded(data:Array<Dynamic>)
 	{

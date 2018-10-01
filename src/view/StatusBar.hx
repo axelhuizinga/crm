@@ -1,8 +1,10 @@
 package view;
 
+
+import haxe.Timer;
 import bulma_components.*;
 import react.Partial;
-import react.ReactComponent.ReactComponentOfProps;
+import react.ReactComponent.ReactComponentOf;
 import react.ReactComponentMacro;
 import react.ReactDateTimeClock;
 
@@ -28,16 +30,16 @@ typedef StatusBarProps =
 	userList:Array<User>
 }
 
-@:expose('default')
+//@:expose('default')
 @:connect
-class StatusBar extends ReactComponentOfProps<Dynamic>
+class StatusBar extends ReactComponentOf<StatusBarProps,Dynamic>
 	
 {
 	var mounted:Bool = false;
 	
 	public function new(?props:Dynamic)
 	{
-		//state = App.store.getState().statusBar;
+		state = {date:Date.now()};
 		//trace(props);
 		trace('ok');
 		super(props);
@@ -47,7 +49,18 @@ class StatusBar extends ReactComponentOfProps<Dynamic>
 	override public function componentDidMount():Void 
 	{
 		mounted = true;
-		trace(props.dispatch);
+		var d:Date = Date.now();
+		var s:Int = d.getSeconds();
+		trace('start delay at $s set timer start in ${(60 - s ) } seconds');
+		//return;
+		Timer.delay(function(){
+			trace('timer start at ${Date.now().getSeconds()}');
+			//store.dispatch(Tick(Date.now()));
+			var t:Timer = new Timer(60000);
+			t.run = function() this.setState({ date: Date.now() });
+		}, (60 - d.getSeconds()) * 1000);
+		
+		//trace(props.dispatch);
 	}
 	
 	static function mapStateToProps(state:AppState) {
@@ -70,7 +83,9 @@ class StatusBar extends ReactComponentOfProps<Dynamic>
 	
 	override public function render()
 	{
-		var userName:String = [props.user.firstName , props.user.lastName].join(' ');
+		var userName:String = (
+		(props.user!=null && props.user.state!=null && props.user.state.firstName !=null)?
+		[props.user.state.firstName , props.user.state.lastName].join(' '):'');
 		var userIcon:String = 'fa fa-user';
 		if (userName.length == 1){
 		 userName = 'Gast';
@@ -80,11 +95,11 @@ class StatusBar extends ReactComponentOfProps<Dynamic>
 		return jsx('
 		<Footer>
 			<div className="statusbar">
-				<span className="column is-one-fifth" > Pfad: ${props.pathname}</span>				
-				<span className="column is-one-fifth">
+				<span className="column is-one-third" > Pfad: ${props.pathname}</span>				
+				<span className="column icon is-one-third">
 				<i className={userIcon}></i> ${userName}
 				</span>
-				<ReactDateTimeClock value={props.date}  className="flex-end" />
+				<ReactDateTimeClock value={state.date}  className="flex-end" />
 			</div>
 		</Footer>
 		');

@@ -20,7 +20,7 @@ html,body {
 	overflow:hidden!important;
 	height:100%;
 } 
-div{}
+
 .rootBox
 {
 	
@@ -52,6 +52,10 @@ h1 {
 .footer .column
 {
 	padding:0px;
+}
+.footer .icon
+{
+	padding-top:0.35rem;
 }
 .pBlock
 {
@@ -125,6 +129,10 @@ h1 {
 	margin:0.8rem 1.25rem;	
 	overflow-y:auto;
 	min-height: 0;
+}
+.tabComponentForm .hero
+{
+	flex:1;
 }
 .tabNav2
 {

@@ -17,9 +17,9 @@ import view.shared.RouteTabProps;
 
 import Webpack.*;
 
-@:expose('default')
+//@:expose('default')
 @:connect
-class QC extends ReactComponentOfProps<RouteTabProps>
+class QC extends ReactComponentOf<RouteTabProps, Dynamic>
 	
 {
 	var mounted:Bool = false;

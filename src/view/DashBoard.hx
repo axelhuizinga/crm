@@ -44,7 +44,7 @@ typedef DashBoardState =
 	hasError:Bool
 }
 
-@:expose('default')
+//@:expose('default')
 @:connect
 class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 {
@@ -127,29 +127,27 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 		if (state.hasError)
 			return jsx('<h1>Fehler in ${Type.getClassName(Type.getClass(this))}.</h1>');
 
-
 		return jsx('
 		<>
 			<div className="tabNav2" >
 				<Tabs  boxed={true} >
 					<ul>
-						<TabLink to="/dashboard/roles" ${...props}>Berechtigungen</TabLink>
+						<TabLink to="/dashboard/roles" ${...props}>Benutzer</TabLink>
 						<TabLink to="/dashboard/settings" ${...props}>Einstellungen</TabLink>
 						<TabLink to="/dashboard/setup" ${...props}>Setup</TabLink>
 					</ul>
-				</Tabs>		
+				</Tabs>
 			</div>
             <div className="tabContent2" >
 				<Route path="/dashboard/roles"  {...props} component={RolesForm}/>
 				<Route path="/dashboard/settings"  {...props} component={SettingsForm}/>
-				<Route path="/dashboard/setup"  {...props} component={SetUpForm}/>
-											
+				<Route path="/dashboard/setup"  {...props} component={SetUpForm}/>					
             </div>
 			<StatusBar {...props}/>
 		</>
 			');
 			
-		/**					<Switch></Switch>{...props} 	<section className="tabContent2path="/dashboard"> </section>	<Route path="/dashboard"  {...props} ><Route path="/dashboard/roles" ><RolesForm  {...props}/></Route>
+		/**						<Switch></Switch>{...props} 	<section className="tabContent2path="/dashboard"> </section>	<Route path="/dashboard"  {...props} ><Route path="/dashboard/roles" ><RolesForm  {...props}/></Route>
 			<Switch>
 				<Route path="/dashboard/settings"  {...props} component={RolesForm}/>
 			</Switch>				
