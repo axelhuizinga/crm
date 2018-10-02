@@ -11,7 +11,7 @@ import redux.Redux.Dispatch;
 import view.shared.BaseForm;
 import view.shared.BaseForm.BaseFormProps;
 import view.shared.BaseTable;
-
+using Lambda;
 /**
  * ...
  * @author axel@cunity.me
@@ -21,7 +21,7 @@ import view.shared.BaseTable;
 @:connect
 class RolesForm extends BaseForm
 {
-
+var fieldNames:Array<String>;
 	public function new(?props:Dynamic) 
 	{
 		super(props);
@@ -45,6 +45,7 @@ class RolesForm extends BaseForm
 	{
 		super.componentDidMount();
 		trace(mounted);
+		fieldNames = "user,pass,full_name,user_level,user_group,active".split(',');
 		AjaxLoader.load(
 			'${App.config.api}', 
 			{
@@ -63,12 +64,23 @@ class RolesForm extends BaseForm
 				if (data.length > 0)
 				{
 					var sData:StringMap<Dynamic> = state.data;
-					sData.set('users', Json.parse(data).data.rows);
+					var displayRows:Array<Dynamic> = Json.parse(data).data.rows;
+					//trace(displayRows[0]);
+					sData.set('users', displayRows.map(function(row:Dynamic){
+						var retRow:Dynamic = {};
+						for(fn in fieldNames) {
+							Reflect.setField(retRow, fn, fn=='pass'?'xxxxx': Reflect.field(row, fn));
+						}
+						return retRow;
+					}));
+					trace(sData.get('users')[0]);
 					setState(ReactUtil.copy(state, {data:sData}));				
 				}
 			}
 		);		
 	}
+	
+	
 	//
     override function render() {
 		trace(Reflect.fields(props));
@@ -78,6 +90,9 @@ class RolesForm extends BaseForm
 					<div className="tabComponentForm columns">
 							<BaseTable 
 							autoSize={true} 
+							headerClassName="trHeader"
+							oddClassName="trOdd"
+							evenClassName="trEven"
 							${...props} data=${state.data.get('users')}/>
 					</div>
 					<div className="is-right is-hidden-mobile">

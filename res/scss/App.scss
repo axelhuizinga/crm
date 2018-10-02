@@ -6,6 +6,7 @@
 
 $primary: #601111;
 $tabs-boxed-link-radius: 5px;//@include tabsradius(5);
+$tableHeader-radius: 5px;
 
 @charset "utf-8";
 @import "../bulma/bulma.sass";
@@ -202,4 +203,22 @@ h1 {
 .is-right .menu
 {
 	margin: 0.5rem 0.5rem 0.5rem 0.8rem!important;
+}
+
+/*tables*/
+.trHeader
+{
+	background-color:#eee;
+	border-radius: $tableHeader-radius $tableHeader-radius 0px 0px;
+	color:#222;
+}
+
+.trEven
+{
+	background-color:#eee;
+}
+
+.trOdd
+{
+	background-color:#ddd;
 }

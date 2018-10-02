@@ -13,19 +13,28 @@ import react.ReactMacro.jsx;
 import react.router.Route.RouteRenderProps;
 import react_virtualized.AutoSizer;
 import react_virtualized.Column;
+import react_virtualized.ColumnSizer;
 import react_virtualized.Table;
 //import react_virtualized.Table.TableProps;
 import react_virtualized.Types.SortDirection;
 import redux.Redux.Dispatch;
 import redux.Store;
 import view.shared.RouteTabProps;
-
+using Lambda;
 
 /**
  * ...
  * @author axel@cunity.me
  */
 
+ typedef BaseCellProps =
+ {
+	 ?className:String,
+	 ?data:Dynamic,
+	 ?fieldName:String,
+	 ?id:Dynamic,
+	 ?style:Dynamic
+ }
  
  typedef BaseTableProps =
  {
@@ -33,13 +42,18 @@ import view.shared.RouteTabProps;
 	> TableProps,
 	autoSize:Bool,
 	autoSizerProps:AutoSizerProps,
+	columnSizerProps:ColumnSizerProps,
 	data:Array<Dynamic>,// ROWS OF HASHES
-	?dataColumns:Array<Dynamic>,// FORMAT + STYLE
+	?dataColumns:Array<BaseCellProps>,// FORMAT + STYLE
 	//dataLoad
 	?disableHeader:Bool,
-	?headerColumns:Array<Dynamic>,// FORMAT + STYLE
+	?headerColumns:Array<BaseCellProps>,// FORMAT + STYLE
 	?headerHeight: Int,
+	?headerClassName: String,
+	?oddClassName: String,
+    ?evenClassName:String,
 	height: Int,
+	width: Int,
 	?hideIndexRow: Bool,
 	overscanRowCount: Int,
 	rowCount: Int,
@@ -82,29 +96,20 @@ class BaseTable extends ReactComponentOf<BaseTableProps,BaseTableState>
 	function createColumns():ReactFragment
 	{
 		trace(Reflect.fields(props.data[0]));
-		return Lambda.array(Lambda.map(Reflect.fields(props.data[0]), function(field:String) return jsx('	
+		trace(Reflect.fields(props.headerColumns));
+		//var fieldNames = Lambda.map(props.headerColumns, function(hC:BaseCellProps) return hC.fieldName);
+		return Lambda.array(Lambda.map(Reflect.fields(props.data[0]), 
+			function(field:String) return
+			jsx('	
 			<Column
 			  label=${field.substr(0, 1).toUpperCase() + field.substr(1).toLowerCase()}
 			  dataKey={field}
+			  key={field}
 			  width = {100}
-			  flexGrow = {0}
+			  flexGrow = {field=="full_name" || field=="user_group"? 1:0}
 			/>		
 		')));
 	}
-	
-	/*override function shouldComponentUpdate(nextProps, nextState) {
-		trace(nextProps == props);
-		return(!(nextProps == props));
-		trace(nextState == state);
-		trace(state.clean);
-		if (!state.clean && props.data != null && props.data.length > 0)
-		{
-			setState({clean:true});
-			trace('returning true after setting state.clean=true');
-			return true;
-		}	
-		return state.clean;
-	}*/	
 	
 	override function componentDidCatch(error, info) {
 		// Display fallback UI
@@ -129,23 +134,34 @@ class BaseTable extends ReactComponentOf<BaseTableProps,BaseTableState>
 		if (!props.autoSize)
 			return renderTable({});
 		return jsx('
-			<AutoSizer disableHeight children=${renderTable}/>
+			<AutoSizer disableWidth children=${renderTable}/>
 		');
 
     }	
-
+	
+	function rowClassName(row:{index:Int}):String
+	{
+		if (row.index < 0) {
+		  return props.headerClassName != null ? props.headerClassName : props.oddClassName;
+		} else {
+		  return row.index % 2 != 0 ? props.evenClassName : props.oddClassName;
+		}	
+	}
+	
+	//function _renderColumns(
+//
 	function renderTable(size:Size):ReactFragment
 	{
 		trace(size);
 		return jsx('
 		  <Table
-			style = {{height:"100%"}}
-			gridStyle = {{flex:1}}
 			disableHeader={props.disableHeader}
-			width={size != null && size.width !=null ? size.width:300}
-			height = {300}
-			headerHeight={20}
-			rowHeight={30}
+			width={size != null && size.width !=null ? size.width:800}
+			height = {size.height}
+			headerClassName = {props.headerClassName}
+			headerHeight={25}
+			rowHeight = {25}
+			rowClassName = {rowClassName}
 			rowCount=${props.data.length}
 			rowGetter = ${function(index) return props.data[index.index]}
 		  >${createColumns()}</Table>		
@@ -177,3 +193,17 @@ class BaseTable extends ReactComponentOf<BaseTableProps,BaseTableState>
 		return null;
 	}
 }
+	/*override function shouldComponentUpdate(nextProps, nextState) {
+		trace(nextProps == props);
+		return(!(nextProps == props));
+		trace(nextState == state);
+		trace(state.clean);
+		if (!state.clean && props.data != null && props.data.length > 0)
+		{
+			setState({clean:true});
+			trace('returning true after setting state.clean=true');
+			return true;
+		}	
+		return state.clean;
+	}*/	
+	
