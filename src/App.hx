@@ -16,7 +16,7 @@ import js.html.XMLHttpRequest;
 import me.cunity.debug.Out;
 import model.ApplicationStore;
 import model.CState;
-import view.User.UserState;
+import view.User.UserProps;
 import react.ReactMacro.jsx;
 import react.ReactComponent;
 import react.ReactEvent;
@@ -79,7 +79,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 				else if (verifyData.data != null && verifyData.data.content == 'OK')
 				{
 					trace('verifyData:{verifyData.content}');
-					var uState:UserState = state.appWare.user;
+					var uState:UserProps = state.appWare.user;
 					uState.waiting = false;
 					store.dispatch(AppAction.LoginComplete(uState));
 					//setState({appware:{user:uState}});

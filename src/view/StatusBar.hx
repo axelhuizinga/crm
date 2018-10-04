@@ -15,6 +15,7 @@ import react.router.Route.RouteComponentProps;
 import redux.StoreMethods;
 import action.AppAction;
 import model.AppState;
+import view.User.UserProps;
 
 /**
  * ...
@@ -26,8 +27,8 @@ typedef StatusBarProps =
 	> RouteComponentProps,
 	date:Date,
 	pathname:String,
-	user:User,
-	userList:Array<User>
+	user:UserProps,
+	userList:Array<UserProps>
 }
 
 //@:expose('default')
@@ -83,15 +84,16 @@ class StatusBar extends ReactComponentOf<StatusBarProps,Dynamic>
 	
 	override public function render()
 	{
-		var userName:String = (
-		(props.user!=null && props.user.state!=null && props.user.state.firstName !=null)?
-		[props.user.state.firstName , props.user.state.lastName].join(' '):'');
-		var userIcon:String = 'fa fa-user';
-		if (userName.length == 1){
-		 userName = 'Gast';
-		 userIcon = 'fa fa-user-o';
+		var userName:String = 'Gast';
+		var userIcon:String = 'fa fa-user-o';
+		trace(props.user);
+		if (props.user != null)
+		{
+		 userName = props.user.firstName !='' ?
+		[props.user.firstName , props.user.lastName].join(' '):props.user.userName;
+		 userIcon = 'fa fa-user';			
 		}
-		 trace(userName +':' + cast userName.length);
+		trace(userName +':' + cast userName.length);
 		return jsx('
 		<Footer>
 			<div className="statusbar">

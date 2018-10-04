@@ -16,14 +16,14 @@ enum UserAction
 {
 	LoginWait;
 
-	LoginError(state:UserState);
-	LogOut(state:UserState);	
+	LoginError(state:UserProps);
+	LogOut(state:UserProps);	
 }
 
-class UserService implements IReducer<UserAction, UserState>
+class UserService implements IReducer<UserAction, UserProps>
 	implements IMiddleware<UserAction, model.AppState>
 {
-	public var initState:UserState = {
+	public var initState:UserProps = {
 		id:'',
 		pass:'',
 		waiting:false,
@@ -34,7 +34,7 @@ class UserService implements IReducer<UserAction, UserState>
 	
 	public function new() {}
 	
-	public function reduce(state:UserState, action:UserAction):UserState
+	public function reduce(state:UserProps, action:UserAction):UserProps
 	{
 		trace(state);
 		return switch(action)

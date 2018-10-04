@@ -8,7 +8,7 @@ import react.ReactMacro.jsx;
  * @author axel@cunity.me
  */
 
-typedef UserState =
+typedef UserProps =
 {
 	?contact:Int,
 	?firstName:String,
@@ -26,16 +26,16 @@ typedef UserState =
 
 typedef UserFilter = Dynamic;
 
-class User extends ReactComponentOfState<UserState> 
+class User extends ReactComponentOfProps<UserProps> 
 {
 
-	public function new(?props:Dynamic,state:UserState)
+	public function new(props:UserProps)
 	{
-		super();
-		this.state = state;
+		super(props);
+		//this.state = state;
 		//super(props, state);
 		//trace(props);
-		trace(this.state);
+		trace(this.props);
 	}
 	
 	override function render()

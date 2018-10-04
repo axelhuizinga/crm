@@ -3,7 +3,7 @@ import haxe.Json;
 import haxe.ds.StringMap;
 import history.History;
 import history.Location;
-import view.User.UserState;
+import view.User.UserProps;
 import model.BaseFormData.FormElement;
 
 typedef CompState = 
@@ -26,6 +26,6 @@ typedef GlobalAppState =
 	?redirectAfterLogin:String,
 	?routeHistory:Array<Location>,
 	?themeColor:String,
-	userList:Array<UserState>,
-	user:UserState
+	userList:Array<UserProps>,
+	user:UserProps
 }

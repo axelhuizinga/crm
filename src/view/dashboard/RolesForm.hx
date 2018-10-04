@@ -45,7 +45,7 @@ var fieldNames:Array<String>;
 	{
 		super.componentDidMount();
 		trace(mounted);
-		fieldNames = "user,pass,full_name,user_level,user_group,active".split(',');
+		fieldNames = "user,pass,full_name,user_level,user_group,active".split(',');		
 		AjaxLoader.load(
 			'${App.config.api}', 
 			{
@@ -56,7 +56,7 @@ var fieldNames:Array<String>;
 				action:'getViciDialUsers'
 			},
 			function(data){
-				trace(data); 
+				trace('loaded'); 
 				if (!mounted)
 				{
 					return;
@@ -74,14 +74,15 @@ var fieldNames:Array<String>;
 						return retRow;
 					}));
 					trace(sData.get('users')[0]);
-					setState(ReactUtil.copy(state, {data:sData}));				
+					setState({data:sData});				
+					//setState(ReactUtil.copy(state, {data:sData}));				
 				}
 			}
 		);		
 	}
 	
 	
-	//
+	//columnSizerProps = {{}}
     override function render() {
 		trace(Reflect.fields(props));
 		trace(props.match);
@@ -89,10 +90,12 @@ var fieldNames:Array<String>;
 				<div className="columns  ">
 					<div className="tabComponentForm columns">
 							<BaseTable 
-							autoSize={true} 
+							autoSize = {true} 
+							
 							headerClassName="trHeader"
 							oddClassName="trOdd"
-							evenClassName="trEven"
+							evenClassName = "trEven"
+							sortBy = "full_name"
 							${...props} data=${state.data.get('users')}/>
 					</div>
 					<div className="is-right is-hidden-mobile">

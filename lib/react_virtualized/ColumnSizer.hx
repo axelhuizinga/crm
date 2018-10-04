@@ -24,7 +24,7 @@ typedef ColumnSizerProps =
 	width:Int
 }
 
-@:jsRequire('react-virtualized', 'Column')
+@:jsRequire('react-virtualized', 'ColumnSizer')
 extern class ColumnSizer extends PureComponentOfProps<ColumnSizerProps>
 {
 

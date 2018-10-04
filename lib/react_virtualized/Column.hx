@@ -16,7 +16,7 @@ import react.ReactComponent.ReactComponentOfProps;
 
 /**
  * ...
- * @author axel@cunity.me
+ * @author axel@cunity.me 
  */
 
 typedef ColumnProps = {

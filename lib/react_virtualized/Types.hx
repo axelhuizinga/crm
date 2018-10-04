@@ -104,12 +104,18 @@ typedef ScrollbarPresenceChange = {
 	var size: Int;
 };
 
-typedef SortDirection = {
+@:enum
+abstract SortDirection(String){
+	var ASC = 'ASC';
+	var DESC = 'DESC';
+}
+
+/*typedef SortDirection = {
 	@:value('ASC')
 	var ASC:String;
 	@:value('DESC')
 	var DESC:String;
-}
+}*/
 
 typedef RenderedSection = {
 	var columnOverscanStartIndex: Int;

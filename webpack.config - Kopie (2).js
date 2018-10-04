@@ -12,15 +12,14 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 //const CSPWebpackPlugin = require('csp-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-//const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const useFriendly = true;
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const haxeFormatter = require('haxe-loader/errorFormatter');
 const haxeTransformer = require('haxe-loader/errorTransformer');
 
-//const  = new ExtractTextPlugin('app.css');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const extractCSS = new ExtractTextPlugin('app.css');
 // Options
 const debugMode = buildMode !== 'production';
 const dist = __dirname + '/bin/';
@@ -120,23 +119,45 @@ module.exports = {
             // - this is where you can add sass/less processing,
             // - also consider adding postcss-loader for autoprefixing
             {
-		test: /\.(sa|sc|c)ss$/,
-		use: [
-		  !isProd ? 'style-loader' : MiniCssExtractPlugin.loader,
-		  'css-loader',
-		  'sass-loader',
+                test: /\.css$/,
+                use: [
+			'style-loader',
+			'css-loader'
 		]
-	    }
+		},
+		isProd
+		? {
+			test: /\.scss$/,
+			loader: extractCSS.extract({
+				fallback: "style-loader",
+				use: [
+					{loader: 'css-loader'},
+					{
+						loader: 'sass-loader',
+						options: {
+							includePaths: [path.resolve(__dirname, 'res/scss'), path.resolve(__dirname, 'src')]
+						}
+					}
+				]
+			})
+		}
+		: {
+			test: /\.scss$/,
+			use: [
+				{loader: 'style-loader'},
+				{loader: 'css-loader'},
+				{
+					loader: 'sass-loader',
+					options: {
+						includePaths: [path.resolve(__dirname, 'res/scss'), path.resolve(__dirname, 'src')]
+					}
+				}
+			]
+		}
         ]
     },
     // Plugins can hook to the compiler lifecycle and handle extra tasks
     plugins: [
-	new MiniCssExtractPlugin({
-		// Options similar to the same options in webpackOptions.output
-		// both options are optional
-		filename: !isProd ? '[name].css' : '[name].[hash].css',
-		chunkFilename: !isProd ? '[id].css' : '[id].[hash].css',
-	}),
         // HMR: enable globally
         new webpack.HotModuleReplacementPlugin(),
         // HMR: prints more readable module names in the browser console on updates
@@ -146,8 +167,8 @@ module.exports = {
 
         // Like generating the HTML page with links the generated JS files
         new HtmlWebpackPlugin({
-		filename: dist + './crm.php',
-		template: __dirname + '/src/crm.php',
+		filename: dist + './index.html',
+		template: __dirname + '/src/index.html',
 		title: 'Xpress CRM'
         })
         // You may want to also:
@@ -166,5 +187,5 @@ module.exports = {
 			additionalFormatters: [haxeFormatter]
 		})
 	] : [])
-	//.concat(isProd ? [extractCSS] : []),
+	.concat(isProd ? [extractCSS] : []),
 };

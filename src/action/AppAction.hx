@@ -3,7 +3,7 @@ package action;
 //import model.AppService;
 import model.GlobalAppState.CompState;
 //import model.UserService.UserAction;
-import view.User.UserState;
+import view.User.UserProps;
 
 /**
  * @author axel@cunity.me
@@ -15,14 +15,14 @@ enum AppAction
 	AddComponent(path:String, cState:CompState);
 	Load;
 	// LOGIN TODO: MOVE TO USERACTIONS
-	//LoginReq(state:UserState);
-	LoginChange(state:UserState);
-	LoginComplete(state:UserState);
+	//LoginReq(state:UserProps);
+	LoginChange(state:UserProps);
+	LoginComplete(state:UserProps);
 	LoginWait;
 
-	LoginError(state:UserState);
-	LogOut(state:UserState);	
-	LoginRequired(state:UserState);	
+	LoginError(state:UserProps);
+	LogOut(state:UserProps);	
+	LoginRequired(state:UserProps);	
 	// LOGINEND
 	
 	//AddContact(id:Int);

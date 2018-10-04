@@ -3,7 +3,7 @@ package view;
 import action.AppAction;
 import bulma_components.*;
 import model.LocationState;
-import view.User.UserState;
+import view.User.UserProps;
 import react.Partial;
 import react.ReactComponent;
 import react.ReactComponent.*;
@@ -97,7 +97,7 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
     }
 
 	static function mapStateToProps(aState:AppState) {
-			var uState:UserState = aState.appWare.user;
+			var uState:UserProps = aState.appWare.user;
 			trace(aState.appWare.compState);
 			trace(' ${aState.appWare.history.location.pathname + (aState.appWare.compState.exists('dashboard') && aState.appWare.compState.get('dashboard').isMounted ? "Y":"N")}');
 			

@@ -1,5 +1,25 @@
 export let config =
 {
 	api:'https://pitverwaltung.de/server.php',
+	fieldProps:{
+		user:{
+			className:'cRight'
+		},
+		pass:{
+			className:'cCenter'
+		},
+		full_name:{
+			flexGrow:1
+		},
+		user_level:{
+			className:'cRight'
+		},
+		user_group:{
+			flexGrow:1
+		},
+		active:{
+			className:'cRight'
+		}
+	},
 	locale:'de'
 }

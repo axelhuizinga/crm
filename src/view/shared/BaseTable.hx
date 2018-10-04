@@ -27,6 +27,7 @@ using Lambda;
  * @author axel@cunity.me
  */
 
+
  typedef BaseCellProps =
  {
 	 ?className:String,
@@ -95,20 +96,27 @@ class BaseTable extends ReactComponentOf<BaseTableProps,BaseTableState>
 	
 	function createColumns():ReactFragment
 	{
-		trace(Reflect.fields(props.data[0]));
+		if(state.data.length>0)
+			trace(Reflect.fields(state.data[0]));
 		trace(Reflect.fields(props.headerColumns));
 		//var fieldNames = Lambda.map(props.headerColumns, function(hC:BaseCellProps) return hC.fieldName);
-		return Lambda.array(Lambda.map(Reflect.fields(props.data[0]), 
-			function(field:String) return
-			jsx('	
-			<Column
-			  label=${field.substr(0, 1).toUpperCase() + field.substr(1).toLowerCase()}
-			  dataKey={field}
-			  key={field}
-			  width = {100}
-			  flexGrow = {field=="full_name" || field=="user_group"? 1:0}
-			/>		
-		')));
+		//flexGrow = {field=="full_name" || field=="user_group"? 1:0}
+		var fieldProps:Any = App.config.fieldProps;
+		return Lambda.array(Lambda.map(Reflect.fields(state.data[0]), 
+			function(field:String) {
+				var p:Dynamic =	Reflect.field(fieldProps, field);
+				trace(p);
+				return jsx('	
+				<Column
+					label=${field.substr(0, 1).toUpperCase() + field.substr(1).toLowerCase()}
+					dataKey={field}
+					key={field}
+					width = {100}
+					className = {p.className}
+					flexGrow = {p.flexGrow}
+				/>
+				');
+		}));
 	}
 	
 	override function componentDidCatch(error, info) {
@@ -118,10 +126,9 @@ class BaseTable extends ReactComponentOf<BaseTableProps,BaseTableState>
 	}		
 	
     override function render() {
-		//trace(state.data);
-		if(props.data != null)
-			trace(props.data.length);
-		if (props.data == null || props.data.length == 0)
+		if(state.data != null)
+			trace(state.data.length);
+		if (state.data.length == 0)
 		{
 			return jsx('
 			<section className="hero is-alt">
@@ -131,12 +138,12 @@ class BaseTable extends ReactComponentOf<BaseTableProps,BaseTableState>
 			</section>
 			');					
 		}
+		trace(!props.autoSize);
 		if (!props.autoSize)
 			return renderTable({});
 		return jsx('
-			<AutoSizer disableWidth children=${renderTable}/>
+			<AutoSizer  children=${renderTable}/>
 		');
-
     }	
 	
 	function rowClassName(row:{index:Int}):String
@@ -148,8 +155,8 @@ class BaseTable extends ReactComponentOf<BaseTableProps,BaseTableState>
 		}	
 	}
 	
-	//function _renderColumns(
-//
+	//
+
 	function renderTable(size:Size):ReactFragment
 	{
 		trace(size);
@@ -162,10 +169,37 @@ class BaseTable extends ReactComponentOf<BaseTableProps,BaseTableState>
 			headerHeight={25}
 			rowHeight = {25}
 			rowClassName = {rowClassName}
-			rowCount=${props.data.length}
-			rowGetter = ${function(index) return props.data[index.index]}
+			rowCount=${state.data.length}
+			rowGetter = ${function(index) return state.data[index.index]}
+			sort = {_sort}
+			sortBy = {props.sortBy} 
+			sortDirection = {props.sortDirection != null ? props.sortDirection : SortDirection.ASC }
 		  >${createColumns()}</Table>		
 		');		
+	}
+	
+	function _sort(sP:{sortBy:String, sortDirection:SortDirection})
+	{
+		if (state.data.length == 0)
+			return;
+		//trace('$sP.sortBy $sP.sortDirection');
+		trace('${sP.sortBy} ${sP.sortDirection}');
+		var sortedList:Array<Dynamic> = state.data;
+		trace(sortedList[0]);
+		sortedList.sort(
+			function (e1:Dynamic, e2:Dynamic) return Reflect.compare(
+				Reflect.field(e1, props.sortBy), Reflect.field(e2, props.sortBy))
+				);
+		switch(sP.sortDirection)
+		{
+			case(SortDirection.DESC):
+				sortedList.reverse();
+			default:
+		}
+		trace(sortedList[0]);
+		this.setState({data:sortedList});
+		//trace(Reflect.field(e1, props.sortBy));
+		//return Reflect.compare(
 	}
 	
 	public function loaded(data:Array<Dynamic>)
@@ -173,23 +207,14 @@ class BaseTable extends ReactComponentOf<BaseTableProps,BaseTableState>
 		state.data = data;
 	}
 	
-	function renderDataTable(content:Array<Dynamic>):ReactFragment
-	{
-		//trace(content);
-		if (content == null || content.length == 0)
-			return null;
-		var rC:Array<ReactFragment> = new Array();
-		var k:Int = 1;
-		for (c in content)
-		{
-			rC.push(jsx('<div key=${k++}>${c.user_group}</div>'));
-		}
-		return rC;
-	}
-	
 	static function getDerivedStateFromProps(props, state) {
-		//trace(props);
-		trace(state);
+		trace(state.data.length);
+		if (props.data != null && state.data.length==0)
+		{
+			trace(state.data.length);
+			return {data:props.data};
+		}
+		//trace(state);
 		return null;
 	}
 }

@@ -45,6 +45,7 @@ typedef TableProps = {
     ?rowClassName:Function,
 	?rowStyle:EitherType<Function,Dynamic>,
 	?scrollToIndex:Int,
+	?sort:Function,
 	?sortBy:String,
 	?sortDirection:SortDirection,
 	?style:Dynamic,

@@ -432,6 +432,15 @@ Reflect.isFunction = function(f) {
 		return false;
 	}
 };
+Reflect.compare = function(a,b) {
+	if(a == b) {
+		return 0;
+	} else if(a > b) {
+		return 1;
+	} else {
+		return -1;
+	}
+};
 var Std = function() { };
 Std.__name__ = "Std";
 Std.string = function(s) {
@@ -2770,7 +2779,7 @@ view_ReportsBox.prototype = $extend(React_Component.prototype,{
 var view_StatusBar = function(props) {
 	this.mounted = false;
 	this.state = { date : new Date()};
-	haxe_Log.trace("ok",{ fileName : "src/view/StatusBar.hx", lineNumber : 44, className : "view.StatusBar", methodName : "new"});
+	haxe_Log.trace("ok",{ fileName : "src/view/StatusBar.hx", lineNumber : 45, className : "view.StatusBar", methodName : "new"});
 	React_Component.call(this,props);
 };
 view_StatusBar.__name__ = "view.StatusBar";
@@ -2778,7 +2787,7 @@ view_StatusBar.mapStateToProps = function(state) {
 	return { date : state.statusBar.date, userList : state.appWare.userList, user : state.appWare.user, pathname : state.appWare.history.location.pathname};
 };
 view_StatusBar.mapDispatchToProps = function(dispatch,ownProps) {
-	haxe_Log.trace(ownProps.date,{ fileName : "src/view/StatusBar.hx", lineNumber : 80, className : "view.StatusBar", methodName : "mapDispatchToProps"});
+	haxe_Log.trace(ownProps.date,{ fileName : "src/view/StatusBar.hx", lineNumber : 81, className : "view.StatusBar", methodName : "mapDispatchToProps"});
 	return { };
 };
 view_StatusBar.__super__ = React_Component;
@@ -2789,9 +2798,9 @@ view_StatusBar.prototype = $extend(React_Component.prototype,{
 		this.mounted = true;
 		var d = new Date();
 		var s = d.getSeconds();
-		haxe_Log.trace("start delay at " + s + " set timer start in " + (60 - s) + " seconds",{ fileName : "src/view/StatusBar.hx", lineNumber : 54, className : "view.StatusBar", methodName : "componentDidMount"});
+		haxe_Log.trace("start delay at " + s + " set timer start in " + (60 - s) + " seconds",{ fileName : "src/view/StatusBar.hx", lineNumber : 55, className : "view.StatusBar", methodName : "componentDidMount"});
 		haxe_Timer.delay(function() {
-			haxe_Log.trace("timer start at " + new Date().getSeconds(),{ fileName : "src/view/StatusBar.hx", lineNumber : 57, className : "view.StatusBar", methodName : "componentDidMount"});
+			haxe_Log.trace("timer start at " + new Date().getSeconds(),{ fileName : "src/view/StatusBar.hx", lineNumber : 58, className : "view.StatusBar", methodName : "componentDidMount"});
 			var t = new haxe_Timer(60000);
 			t.run = function() {
 				_gthis.setState({ date : new Date()});
@@ -2799,13 +2808,14 @@ view_StatusBar.prototype = $extend(React_Component.prototype,{
 		},(60 - d.getSeconds()) * 1000);
 	}
 	,render: function() {
-		var userName = this.props.user != null && this.props.user.state != null && this.props.user.state.firstName != null ? [this.props.user.state.firstName,this.props.user.state.lastName].join(" ") : "";
-		var userIcon = "fa fa-user";
-		if(userName.length == 1) {
-			userName = "Gast";
-			userIcon = "fa fa-user-o";
+		var userName = "Gast";
+		var userIcon = "fa fa-user-o";
+		haxe_Log.trace(this.props.user,{ fileName : "src/view/StatusBar.hx", lineNumber : 89, className : "view.StatusBar", methodName : "render"});
+		if(this.props.user != null) {
+			userName = this.props.user.firstName != "" ? [this.props.user.firstName,this.props.user.lastName].join(" ") : this.props.user.userName;
+			userIcon = "fa fa-user";
 		}
-		haxe_Log.trace(userName + ":" + userName.length,{ fileName : "src/view/StatusBar.hx", lineNumber : 94, className : "view.StatusBar", methodName : "render"});
+		haxe_Log.trace(userName + ":" + userName.length,{ fileName : "src/view/StatusBar.hx", lineNumber : 96, className : "view.StatusBar", methodName : "render"});
 		var tmp = react__$ReactNode_ReactNode_$Impl_$.fromComp(bulma_$components_Footer);
 		var tmp1 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp2 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("span"),{ className : "column is-one-third"}," Pfad: ",this.props.pathname);
@@ -2893,10 +2903,9 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 	}
 	,__class__: view_UiView
 });
-var view_User = function(props,state) {
-	React_Component.call(this);
-	this.state = state;
-	haxe_Log.trace(this.state,{ fileName : "src/view/User.hx", lineNumber : 38, className : "view.User", methodName : "new"});
+var view_User = function(props) {
+	React_Component.call(this,props);
+	haxe_Log.trace(this.props,{ fileName : "src/view/User.hx", lineNumber : 38, className : "view.User", methodName : "new"});
 };
 view_User.__name__ = "view.User";
 view_User.__super__ = React_Component;
@@ -2978,38 +2987,51 @@ view_dashboard_RolesForm.mapStateToProps = function(aState) {
 };
 view_dashboard_RolesForm.__super__ = view_shared_BaseForm;
 view_dashboard_RolesForm.prototype = $extend(view_shared_BaseForm.prototype,{
-	componentDidMount: function() {
+	fieldNames: null
+	,componentDidMount: function() {
 		var _gthis = this;
 		view_shared_BaseForm.prototype.componentDidMount.call(this);
 		haxe_Log.trace(this.mounted,{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 47, className : "view.dashboard.RolesForm", methodName : "componentDidMount"});
-		model_AjaxLoader.load("" + Std.string(App.config.api),{ userName : this.props.userName, jwt : this.props.jwt, firstName : this.props.firstName, className : "admin.CreateUsers", action : "fromViciDial"},function(data) {
-			haxe_Log.trace(data,{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 59, className : "view.dashboard.RolesForm", methodName : "componentDidMount"});
+		this.fieldNames = "user,pass,full_name,user_level,user_group,active".split(",");
+		model_AjaxLoader.load("" + Std.string(App.config.api),{ userName : this.props.userName, jwt : this.props.jwt, firstName : this.props.firstName, className : "admin.CreateUsers", action : "getViciDialUsers"},function(data) {
+			haxe_Log.trace("loaded",{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 59, className : "view.dashboard.RolesForm", methodName : "componentDidMount"});
 			if(!_gthis.mounted) {
 				return;
 			}
 			if(data.length > 0) {
 				var sData = _gthis.state.data;
-				var value = JSON.parse(data).data.rows;
+				var displayRows = JSON.parse(data).data.rows;
+				var value = displayRows.map(function(row) {
+					var retRow = { };
+					var _g = 0;
+					var _g1 = _gthis.fieldNames;
+					while(_g < _g1.length) {
+						var fn = _g1[_g];
+						++_g;
+						retRow[fn] = fn == "pass" ? "xxxxx" : Reflect.field(row,fn);
+					}
+					return retRow;
+				});
 				if(__map_reserved["users"] != null) {
 					sData.setReserved("users",value);
 				} else {
 					sData.h["users"] = value;
 				}
-				var tmp = react_ReactUtil.copy(_gthis.state,{ data : sData});
-				_gthis.setState(tmp);
+				haxe_Log.trace((__map_reserved["users"] != null ? sData.getReserved("users") : sData.h["users"])[0],{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 76, className : "view.dashboard.RolesForm", methodName : "componentDidMount"});
+				_gthis.setState({ data : sData});
 			}
 		});
 	}
 	,render: function() {
-		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 75, className : "view.dashboard.RolesForm", methodName : "render"});
-		haxe_Log.trace(this.props.match,{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 76, className : "view.dashboard.RolesForm", methodName : "render"});
+		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 87, className : "view.dashboard.RolesForm", methodName : "render"});
+		haxe_Log.trace(this.props.match,{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 88, className : "view.dashboard.RolesForm", methodName : "render"});
 		var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp1 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp2 = react__$ReactNode_ReactNode_$Impl_$.fromComp(view_shared_BaseTable);
 		var tmp3 = this.props;
 		var _this = this.state.data;
 		var tmp4 = __map_reserved["users"] != null ? _this.getReserved("users") : _this.h["users"];
-		var tmp5 = React.createElement(tmp2,Object.assign({ },tmp3,{ autoSize : true, data : tmp4}));
+		var tmp5 = React.createElement(tmp2,Object.assign({ },tmp3,{ autoSize : true, headerClassName : "trHeader", oddClassName : "trOdd", evenClassName : "trEven", sortBy : "full_name", data : tmp4}));
 		var tmp6 = React.createElement(tmp1,{ className : "tabComponentForm columns"},tmp5);
 		var tmp7 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp8 = react__$ReactNode_ReactNode_$Impl_$.fromString("aside");
@@ -3161,66 +3183,92 @@ var view_shared_FormElement = $hxEnums["view.shared.FormElement"] = { __ename__ 
 var view_shared_BaseTable = function(props) {
 	this.state = { clean : false, data : [], loading : false, hasError : false, scrollbarWidth : 0};
 	React_Component.call(this,props);
-	haxe_Log.trace(this.state.clean,{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 79, className : "view.shared.BaseTable", methodName : "new"});
+	haxe_Log.trace(this.state.clean,{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 94, className : "view.shared.BaseTable", methodName : "new"});
 };
 view_shared_BaseTable.__name__ = "view.shared.BaseTable";
 view_shared_BaseTable.getDerivedStateFromProps = function(props,state) {
-	haxe_Log.trace(state,{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 180, className : "view.shared.BaseTable", methodName : "getDerivedStateFromProps"});
+	if(props.data != null && state.data.length == 0) {
+		haxe_Log.trace(state.data.length,{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 214, className : "view.shared.BaseTable", methodName : "getDerivedStateFromProps"});
+		return { data : props.data};
+	}
 	return null;
 };
 view_shared_BaseTable.__super__ = React_Component;
 view_shared_BaseTable.prototype = $extend(React_Component.prototype,{
 	createColumns: function() {
-		haxe_Log.trace(Reflect.fields(this.props.data[0]),{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 84, className : "view.shared.BaseTable", methodName : "createColumns"});
-		return Lambda.array(Lambda.map(Reflect.fields(this.props.data[0]),function(field) {
+		if(this.state.data.length > 0) {
+			haxe_Log.trace(Reflect.fields(this.state.data[0]),{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 100, className : "view.shared.BaseTable", methodName : "createColumns"});
+		}
+		haxe_Log.trace(Reflect.fields(this.props.headerColumns),{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 101, className : "view.shared.BaseTable", methodName : "createColumns"});
+		var fieldProps = App.config.fieldProps;
+		return Lambda.array(Lambda.map(Reflect.fields(this.state.data[0]),function(field) {
+			var p = Reflect.field(fieldProps,field);
+			haxe_Log.trace(p,{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 108, className : "view.shared.BaseTable", methodName : "createColumns"});
 			var tmp = HxOverrides.substr(field,0,1).toUpperCase();
 			var tmp1 = HxOverrides.substr(field,1,null).toLowerCase();
-			return React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromComp(react_$virtualized_Column),{ label : tmp + tmp1, dataKey : field, width : 100, flexGrow : 0});
+			return React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromComp(react_$virtualized_Column),{ key : field, label : tmp + tmp1, dataKey : field, width : 100, className : p.className, flexGrow : p.flexGrow});
 		}));
 	}
 	,componentDidCatch: function(error,info) {
 		this.setState({ hasError : true});
-		haxe_Log.trace(error,{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 112, className : "view.shared.BaseTable", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 125, className : "view.shared.BaseTable", methodName : "componentDidCatch"});
 	}
 	,render: function() {
-		if(this.props.data != null) {
-			haxe_Log.trace(this.props.data.length,{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 118, className : "view.shared.BaseTable", methodName : "render"});
+		if(this.state.data != null) {
+			haxe_Log.trace(this.state.data.length,{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 131, className : "view.shared.BaseTable", methodName : "render"});
 		}
-		if(this.props.data == null || this.props.data.length == 0) {
+		if(this.state.data.length == 0) {
 			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("section");
 			var tmp1 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 			var tmp2 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("div"),{ className : "loader", style : { width : "3rem", height : "3rem", margin : "auto", borderWidth : "0.58rem"}});
 			var tmp3 = React.createElement(tmp1,{ className : "hero-body"},tmp2);
 			return React.createElement(tmp,{ className : "hero is-alt"},tmp3);
 		}
+		haxe_Log.trace(!this.props.autoSize,{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 142, className : "view.shared.BaseTable", methodName : "render"});
 		if(!this.props.autoSize) {
 			return this.renderTable({ });
 		}
-		return React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromComp(AutoSizer),{ disableHeight : true, children : $bind(this,this.renderTable)});
+		return React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromComp(AutoSizer),{ children : $bind(this,this.renderTable)});
+	}
+	,rowClassName: function(row) {
+		if(row.index < 0) {
+			if(this.props.headerClassName != null) {
+				return this.props.headerClassName;
+			} else {
+				return this.props.oddClassName;
+			}
+		} else if(row.index % 2 != 0) {
+			return this.props.evenClassName;
+		} else {
+			return this.props.oddClassName;
+		}
 	}
 	,renderTable: function(size) {
 		var _gthis = this;
-		haxe_Log.trace(this.props.data.length,{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 144, className : "view.shared.BaseTable", methodName : "renderTable"});
-		return React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromComp(react_$virtualized_Table),{ disableHeader : this.props.disableHeader, width : size != null && size.width != null ? size.width : 300, height : 300, headerHeight : 20, rowHeight : 30, rowCount : this.props.data.length, rowGetter : function(index) {
-			return _gthis.props.data[index.index];
-		}},this.createColumns());
+		haxe_Log.trace(size,{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 164, className : "view.shared.BaseTable", methodName : "renderTable"});
+		return React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromComp(react_$virtualized_Table),{ disableHeader : this.props.disableHeader, width : size != null && size.width != null ? size.width : 800, height : size.height, headerClassName : this.props.headerClassName, headerHeight : 25, rowHeight : 25, rowClassName : $bind(this,this.rowClassName), rowCount : this.state.data.length, rowGetter : function(index) {
+			return _gthis.state.data[index.index];
+		}, sort : $bind(this,this._sort), sortBy : this.props.sortBy, sortDirection : this.props.sortDirection != null ? this.props.sortDirection : "ASC"},this.createColumns());
+	}
+	,_sort: function(sP) {
+		var _gthis = this;
+		if(this.state.data.length == 0) {
+			return;
+		}
+		haxe_Log.trace("" + Std.string(sP) + ".sortBy " + Std.string(sP) + ".sortDirection",{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 187, className : "view.shared.BaseTable", methodName : "_sort"});
+		var sortedList = this.state.data;
+		haxe_Log.trace(sortedList[0],{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 189, className : "view.shared.BaseTable", methodName : "_sort"});
+		sortedList.sort(function(e1,e2) {
+			return Reflect.compare(Reflect.field(e1,_gthis.props.sortBy),Reflect.field(e2,_gthis.props.sortBy));
+		});
+		if(sP.sortDirection == "DESC") {
+			sortedList.reverse();
+		}
+		haxe_Log.trace(sortedList[0],{ fileName : "src/view/shared/BaseTable.hx", lineNumber : 200, className : "view.shared.BaseTable", methodName : "_sort"});
+		this.setState({ data : sortedList});
 	}
 	,loaded: function(data) {
 		this.state.data = data;
-	}
-	,renderDataTable: function(content) {
-		if(content == null || content.length == 0) {
-			return null;
-		}
-		var rC = [];
-		var k = 1;
-		var _g = 0;
-		while(_g < content.length) {
-			var c = content[_g];
-			++_g;
-			rC.push(React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("div"),{ key : k++},c.user_group));
-		}
-		return rC;
 	}
 	,__class__: view_shared_BaseTable
 });

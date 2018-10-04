@@ -7,7 +7,7 @@ import history.BrowserHistory;
 import me.cunity.debug.Out;
 import model.AppState;
 import model.GlobalAppState;
-import view.User.UserState;
+import view.User.UserProps;
 import react.Fragment;
 import react.ReactComponent.ReactFragment;
 import react.React;
@@ -54,7 +54,7 @@ typedef  NavLinks =
 typedef UIProps =
 {
 	?store:Store<AppState>,
-	?user:UserState
+	?user:UserProps
 }
 
 //@:expose('default')
@@ -69,7 +69,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 			trace(aState.appWare.user);
 			//if(_me != null)
 				//trace(_me.props);
-			var uState:UserState = aState.appWare.user;
+			var uState:UserProps = aState.appWare.user;
 			return {
 				user:{
 					waiting:aState.appWare.user.waiting,
@@ -157,14 +157,14 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 					<$Route path="/reports" {...props} component=${NavTabs}/>
 				</div>
 				<div className="tabComponent">
-				<Route path="/"  component={RedirectBox} exact={true}/>				
-				<Route path="/dashboard" exact={true} component=${Bundle.load(DashBoardBox)}/>
-				<Route path="/dashboard/*" component=${Bundle.load(DashBoardBox)}/>
-				<Route path="/accounting" component=${Bundle.load(AccountingBox)}/>
-				<Route path="/contacts/edit/:id" component=${Bundle.load(ContactsBox)}/>
-				<Route path="/contacts" component=${Bundle.load(ContactsBox)}/>
-				<Route path="/qc" component=${Bundle.load(QCBox)}/>
-				<Route path="/reports" component=${Bundle.load(ReportsBox)}/>
+					<Route path="/"  component={RedirectBox} exact={true}/>				
+					<Route path="/dashboard" exact={true} component=${Bundle.load(DashBoardBox)}/>
+					<Route path="/dashboard/*" component=${Bundle.load(DashBoardBox)}/>
+					<Route path="/accounting" component=${Bundle.load(AccountingBox)}/>
+					<Route path="/contacts/edit/:id" component=${Bundle.load(ContactsBox)}/>
+					<Route path="/contacts" component=${Bundle.load(ContactsBox)}/>
+					<Route path="/qc" component=${Bundle.load(QCBox)}/>
+					<Route path="/reports" component=${Bundle.load(ReportsBox)}/>
 				</div>
 			</>
 			</$Router>
