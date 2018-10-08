@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "dependencies": {
+    "ag-grid-community": "^19.0.0",
     "ajv": "^6.0.0",
     "bulma": "^0.7.1",
     "bulma-extensions": "^2.2.1",
@@ -13,6 +14,7 @@
     "lean-redux": "^3.3.1",
     "prop-types": "^15.5.10",
     "react": "^16.4.2",
+    "react-data-components-bulma": "^1.2.3",
     "react-datetime-picker": "^1.4.1",
     "react-dom": "^16.4.1",
     "react-redux": "^5.0.7",
@@ -20,6 +22,7 @@
     "react-router": "^4.0.0",
     "react-router-dom": "^4.3.1",
     "react-virtualized": "^9.20.1",
+    "reactable": "^1.1.0",
     "reactbulma": "^3.0.4",
     "redux": "^4.0.0",
     "style-loader": "^0.18.2",

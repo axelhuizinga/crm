@@ -26,7 +26,12 @@ import view.shared.BaseTable;
 @:connect
 class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 {
-
+	
+	static var displayUserGroups:StringMap<BaseCellProps> = [
+					'user_group'=>{},
+					'group_name'=>{flexGrow:1},
+					'allowed_campaigns'=>{flexGrow:1}			
+				];
 	public function new(?props:BaseFormProps) 
 	{
 		super(props);	
@@ -83,11 +88,19 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 				action:'fromViciDial'
 			},
 			function(data){
-				trace(data); 
+				//trace(data); 
 				if (data.length > 0)
 				{
 					var sData:StringMap<Dynamic> = state.data;
-					sData.set('userGroups', Json.parse(data).data.rows);
+					var rows:Array<Dynamic> = Json.parse(data).rows;
+					var i:Int = 1;
+					sData.set('userGroups', rows.map(function(row:Dynamic){
+						var retRow:Dynamic = {key:i++};
+						for(fn in displayUserGroups.keys()) {
+							Reflect.setField(retRow, fn, Reflect.field(row, fn));
+						}
+						return retRow;
+					}));
 					setState(ReactUtil.copy(state, {data:sData}));				
 				}
 			}
@@ -112,7 +125,8 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 							</div>
 
 							<div className="pBlock" >
-								<BaseTable ${...props} data=${state.data.get('userGroups')}/>
+								< BaseTable ${...props} data = ${state.data.get('userGroups')}
+								headerColumns=${displayUserGroups}/>
 							</div>
 					</div>
 					<div className="is-right is-hidden-mobile">

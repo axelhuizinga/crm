@@ -5,12 +5,14 @@ import haxe.Json;
 import model.AjaxLoader;
 import model.AppState;
 import react.ReactComponent.ReactComponentOfProps;
+import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
 import redux.Redux.Dispatch;
 import view.shared.BaseForm;
 import view.shared.BaseForm.BaseFormProps;
 import view.shared.BaseTable;
+import view.shared.SMenu;
 using Lambda;
 /**
  * ...
@@ -21,11 +23,44 @@ using Lambda;
 @:connect
 class RolesForm extends BaseForm
 {
-var fieldNames:Array<String>;
+	var fieldNames:Array<String>;
+	var sideMenu:Array<SMItem>;
+	//user,pass,full_name,user_level,user_group,active
+	static var displayUsers:StringMap<BaseCellProps> = [
+					'user'=>{},
+					'full_name'=>{flexGrow:1},
+					'user_level'=>{className:'cRight'},		
+					'user_group'=>{flexGrow:1},		
+					'active'=>{className:'cRight'},		
+				];	
 	public function new(?props:Dynamic) 
 	{
 		super(props);
+		sideMenu = [
+			{handler:this.importExternalUsers,label:'Importiere Externe Benutzer'}
+		];
 		trace(Reflect.fields(props));
+	}
+	
+	public function importExternalUsers(ev:ReactEvent):Void
+	{
+		trace(ev.currentTarget);
+		AjaxLoader.load(
+			'${App.config.api}', 
+			{
+				userName:props.userName,
+				jwt:props.jwt,
+				firstName:props.firstName,
+				className:'admin.CreateUsers',
+				action:'importExternal'
+			},
+			function(data){
+				if (data.length > 0)
+				{
+					trace(Json.parse(data));
+				}
+			}
+		);
 	}
 	
 	static function mapStateToProps(aState:AppState) {
@@ -64,7 +99,7 @@ var fieldNames:Array<String>;
 				if (data.length > 0)
 				{
 					var sData:StringMap<Dynamic> = state.data;
-					var displayRows:Array<Dynamic> = Json.parse(data).data.rows;
+					var displayRows:Array<Dynamic> = Json.parse(data).rows;
 					//trace(displayRows[0]);
 					sData.set('users', displayRows.map(function(row:Dynamic){
 						var retRow:Dynamic = {};
@@ -91,23 +126,15 @@ var fieldNames:Array<String>;
 					<div className="tabComponentForm columns">
 							<BaseTable 
 							autoSize = {true} 
-							
-							headerClassName="trHeader"
+							height = {100}
+							headerClassName = "trHeader"
+							headerColumns=${displayUsers}
 							oddClassName="trOdd"
 							evenClassName = "trEven"
 							sortBy = "full_name"
 							${...props} data=${state.data.get('users')}/>
 					</div>
-					<div className="is-right is-hidden-mobile">
-						<aside className="menu">
-						  <p className="menu-label">
-							Allgemein
-						  </p>
-						  <ul className="menu-list">
-							<li><a>Benutzer</a></li>
-						  </ul>
-						</aside>
-					</div>
+					<SMenu className="menu" itemsData={sideMenu}/>					
 				</div>		
         ');
     }	

@@ -114,8 +114,7 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 				redirectAfterLogin:aState.appWare.redirectAfterLogin,
 				//locationHistory:aState.appWare.history,
 				waiting:uState.waiting
-			};
-		
+			};		
 	}		
 	
     override function render() 

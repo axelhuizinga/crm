@@ -34,7 +34,8 @@ using Lambda;
 	 ?data:Dynamic,
 	 ?fieldName:String,
 	 ?id:Dynamic,
-	 ?style:Dynamic
+	 ?style:Dynamic,
+	 ?flexGrow:Int
  }
  
  typedef BaseTableProps =
@@ -45,10 +46,10 @@ using Lambda;
 	autoSizerProps:AutoSizerProps,
 	columnSizerProps:ColumnSizerProps,
 	data:Array<Dynamic>,// ROWS OF HASHES
-	?dataColumns:Array<BaseCellProps>,// FORMAT + STYLE
+	?dataColumns:StringMap<BaseCellProps>,// FORMAT + STYLE
 	//dataLoad
 	?disableHeader:Bool,
-	?headerColumns:Array<BaseCellProps>,// FORMAT + STYLE
+	?headerColumns:StringMap<BaseCellProps>,// FORMAT + STYLE
 	?headerHeight: Int,
 	?headerClassName: String,
 	?oddClassName: String,
@@ -99,24 +100,23 @@ class BaseTable extends ReactComponentOf<BaseTableProps,BaseTableState>
 		if(state.data.length>0)
 			trace(Reflect.fields(state.data[0]));
 		trace(Reflect.fields(props.headerColumns));
-		//var fieldNames = Lambda.map(props.headerColumns, function(hC:BaseCellProps) return hC.fieldName);
-		//flexGrow = {field=="full_name" || field=="user_group"? 1:0}
-		var fieldProps:Any = App.config.fieldProps;
-		return Lambda.array(Lambda.map(Reflect.fields(state.data[0]), 
-			function(field:String) {
-				var p:Dynamic =	Reflect.field(fieldProps, field);
-				trace(p);
-				return jsx('	
+		var cols:Array<ReactFragment> = [];
+		for (field in props.headerColumns.keys())
+		{
+			var hC:BaseCellProps = props.headerColumns.get(field);
+			cols.push(jsx('	
 				<Column
 					label=${field.substr(0, 1).toUpperCase() + field.substr(1).toLowerCase()}
 					dataKey={field}
 					key={field}
-					width = {100}
-					className = {p.className}
-					flexGrow = {p.flexGrow}
+					width = {122}
+					className = {hC.className}
+					flexGrow = {hC.flexGrow}
 				/>
-				');
-		}));
+				')
+			);
+		}
+		return cols;
 	}
 	
 	override function componentDidCatch(error, info) {
@@ -127,7 +127,7 @@ class BaseTable extends ReactComponentOf<BaseTableProps,BaseTableState>
 	
     override function render() {
 		if(state.data != null)
-			trace(state.data.length);
+			trace(state.data[2]);
 		if (state.data.length == 0)
 		{
 			return jsx('
@@ -162,9 +162,10 @@ class BaseTable extends ReactComponentOf<BaseTableProps,BaseTableState>
 		trace(size);
 		return jsx('
 		  <Table
+			autoHeight 
 			disableHeader={props.disableHeader}
 			width={size != null && size.width !=null ? size.width:800}
-			height = {size.height}
+			height = {size != null && size.height !=null ? size.height:600}
 			headerClassName = {props.headerClassName}
 			headerHeight={25}
 			rowHeight = {25}

@@ -37,6 +37,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,Dynamic>
 	
 {
 	var mounted:Bool = false;
+	var timer:Timer;
 	
 	public function new(?props:Dynamic)
 	{
@@ -57,19 +58,24 @@ class StatusBar extends ReactComponentOf<StatusBarProps,Dynamic>
 		Timer.delay(function(){
 			trace('timer start at ${Date.now().getSeconds()}');
 			//store.dispatch(Tick(Date.now()));
-			var t:Timer = new Timer(60000);
-			t.run = function() this.setState({ date: Date.now() });
+			timer = new Timer(60000);
+			timer.run = function() this.setState({ date: Date.now()});
 		}, (60 - d.getSeconds()) * 1000);
 		
 		//trace(props.dispatch);
 	}
+	
+	override public function componentWillUnmount()
+	{
+		timer.stop();
+	}	
 	
 	static function mapStateToProps(state:AppState) {
 
 		//return function(state:model.AppState) {
 			//trace(state.appWare.history);
 			return {
-				date:state.statusBar.date,
+				/*date:state.statusBar.date,*/
 				userList:state.appWare.userList,
 				user:state.appWare.user,
 				pathname: state.appWare.history.location.pathname
@@ -80,7 +86,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,Dynamic>
 	static function mapDispatchToProps(dispatch:Dispatch, ownProps:Dynamic) {
 		trace(ownProps.date);
 		return {};
-	}	
+	}		
 	
 	override public function render()
 	{
@@ -89,8 +95,8 @@ class StatusBar extends ReactComponentOf<StatusBarProps,Dynamic>
 		trace(props.user);
 		if (props.user != null)
 		{
-		 userName = props.user.firstName !='' ?
-		[props.user.firstName , props.user.lastName].join(' '):props.user.userName;
+		 userName = props.user.firstName != null &&  props.user.firstName !='' ?
+		[props.user.firstName , props.user.lastName].join(' ') : props.user.userName;
 		 userIcon = 'fa fa-user';			
 		}
 		trace(userName +':' + cast userName.length);

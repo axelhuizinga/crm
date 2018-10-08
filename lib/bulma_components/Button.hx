@@ -9,6 +9,6 @@ import react.ReactComponent;
 //@:keep
 //@:autoBuild(react.ReactMacro.buildComponent())
 //@:autoBuild(react.ReactTypeMacro.alterComponentSignatures())
-//@:jsRequire('reactbulma', 'Button')
+@:jsRequire('reactbulma', 'Button')
 extern class Button extends ReactComponent
 {}
