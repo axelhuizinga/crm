@@ -15,7 +15,7 @@ import redux.Redux.Dispatch;
 import model.AjaxLoader;
 import view.shared.BaseForm;
 import view.shared.BaseForm.BaseFormProps;
-import view.shared.BaseTable;
+import view.table.Table;
 
 /**
  * ...
@@ -27,19 +27,9 @@ import view.shared.BaseTable;
 class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 {
 	
-	static var displayUserGroups:StringMap<BaseCellProps> = [
-					'user_group'=>{},
-					'group_name'=>{flexGrow:1},
-					'allowed_campaigns'=>{flexGrow:1}			
-				];
 	public function new(?props:BaseFormProps) 
 	{
 		super(props);	
-	}
-	
-	public function loadData()
-	{
-		
 	}
 	
 	static function mapStateToProps() {
@@ -96,7 +86,7 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 					var i:Int = 1;
 					sData.set('userGroups', rows.map(function(row:Dynamic){
 						var retRow:Dynamic = {key:i++};
-						for(fn in displayUserGroups.keys()) {
+						for(fn in dataDisplay["userGroups"].columns.keys()) {
 							Reflect.setField(retRow, fn, Reflect.field(row, fn));
 						}
 						return retRow;
@@ -125,8 +115,8 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 							</div>
 
 							<div className="pBlock" >
-								< BaseTable ${...props} data = ${state.data.get('userGroups')}
-								headerColumns=${displayUserGroups}/>
+								<Table ${...props} data = ${state.data.get('userGroups')}
+								dataState=${dataDisplay["userGroups"]}/>
 							</div>
 					</div>
 					<div className="is-right is-hidden-mobile">

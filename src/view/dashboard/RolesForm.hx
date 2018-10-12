@@ -1,17 +1,22 @@
 package view.dashboard;
 
+import gigatables_react.Reactables.ReactableSettings;
 import haxe.ds.StringMap;
 import haxe.Json;
+import haxe.http.HttpJs;
 import model.AjaxLoader;
 import model.AppState;
+import view.shared.BaseForm;
+import view.table.Table;
+import view.table.Table.DataCell;
+import view.table.Table.SortDirection;
 import react.ReactComponent.ReactComponentOfProps;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
 import redux.Redux.Dispatch;
-import view.shared.BaseForm;
+import view.dashboard.model.RolesFormModel;
 import view.shared.BaseForm.BaseFormProps;
-import view.shared.BaseTable;
 import view.shared.SMenu;
 using Lambda;
 /**
@@ -23,29 +28,33 @@ using Lambda;
 @:connect
 class RolesForm extends BaseForm
 {
-	var fieldNames:Array<String>;
+	//var requests:Array<HttpJs>;
+// StringMap<DataState>;
 	var sideMenu:Array<SMItem>;
 	//user,pass,full_name,user_level,user_group,active
-	static var displayUsers:StringMap<BaseCellProps> = [
-					'user'=>{},
-					'full_name'=>{flexGrow:1},
-					'user_level'=>{className:'cRight'},		
-					'user_group'=>{flexGrow:1},		
-					'active'=>{className:'cRight'},		
-				];	
-	public function new(?props:Dynamic) 
+		
+	var settings: ReactableSettings;
+	
+	public function new(?props:BaseFormProps) 
 	{
 		super(props);
+		
 		sideMenu = [
 			{handler:this.importExternalUsers,label:'Importiere Externe Benutzer'}
 		];
+		state = {
+			clean:true,
+			hasError:false,
+			loading:true
+		};
+		requests = [];
 		trace(Reflect.fields(props));
 	}
 	
 	public function importExternalUsers(ev:ReactEvent):Void
 	{
 		trace(ev.currentTarget);
-		AjaxLoader.load(
+		requests.push(AjaxLoader.load(
 			'${App.config.api}', 
 			{
 				userName:props.userName,
@@ -60,7 +69,7 @@ class RolesForm extends BaseForm
 					trace(Json.parse(data));
 				}
 			}
-		);
+		));
 	}
 	
 	static function mapStateToProps(aState:AppState) {
@@ -78,10 +87,9 @@ class RolesForm extends BaseForm
 	
 	override public function componentDidMount():Void 
 	{
-		super.componentDidMount();
-		trace(mounted);
-		fieldNames = "user,pass,full_name,user_level,user_group,active".split(',');		
-		AjaxLoader.load(
+		//super.componentDidMount();
+		trace(state.loading);
+		requests.push(AjaxLoader.load(
 			'${App.config.api}', 
 			{
 				userName:props.userName,
@@ -91,48 +99,34 @@ class RolesForm extends BaseForm
 				action:'getViciDialUsers'
 			},
 			function(data){
-				trace('loaded'); 
-				if (!mounted)
-				{
-					return;
-				}
+				trace('loaded:${!state.loading}'); 
 				if (data.length > 0)
 				{
-					var sData:StringMap<Dynamic> = state.data;
-					var displayRows:Array<Dynamic> = Json.parse(data).rows;
+					var dataRows:Array<Dynamic> = Json.parse(data).rows;
 					//trace(displayRows[0]);
-					sData.set('users', displayRows.map(function(row:Dynamic){
-						var retRow:Dynamic = {};
-						for(fn in fieldNames) {
-							Reflect.setField(retRow, fn, fn=='pass'?'xxxxx': Reflect.field(row, fn));
-						}
-						return retRow;
-					}));
-					trace(sData.get('users')[0]);
-					setState({data:sData});				
+					
+					setState({data:['userList'=>dataRows], loading:false});				
 					//setState(ReactUtil.copy(state, {data:sData}));				
 				}
 			}
-		);		
+		));		
 	}
 	
-	
-	//columnSizerProps = {{}}
+	/*override public function componentWillUnmount()
+	{
+		for (r in requests)
+			r.cancel();
+	}*/	
+	//columnSizerProps = {{}}defaultSort = ${{column:"full_name", direction: SortDirection.ASC}}
     override function render() {
 		trace(Reflect.fields(props));
-		trace(props.match);
+		trace(state);
+		trace(props);
         return jsx('		
-				<div className="columns  ">
+				<div className="columns">
 					<div className="tabComponentForm columns">
-							<BaseTable 
-							autoSize = {true} 
-							height = {100}
-							headerClassName = "trHeader"
-							headerColumns=${displayUsers}
-							oddClassName="trOdd"
-							evenClassName = "trEven"
-							sortBy = "full_name"
-							${...props} data=${state.data.get('users')}/>
+							<Table id="userList" data=${state.data == null? null:state.data["userList"]}
+							${...props} dataState=${dataDisplay["userList"]}/>
 					</div>
 					<SMenu className="menu" itemsData={sideMenu}/>					
 				</div>		
@@ -140,3 +134,13 @@ class RolesForm extends BaseForm
     }	
 	
 }
+
+/**
+ * 							autoSize = {true} 
+							headerClassName = "table tablesorter is-striped is-fullwidth is-hoverable"
+							headerColumns=${displayUsers}
+							oddClassName="trOdd"
+							evenClassName = "trEven"
+							sortColumn = "full_name"
+							sortDirection = {SortDirection.ASC}
+*/

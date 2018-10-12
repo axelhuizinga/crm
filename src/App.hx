@@ -41,7 +41,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	static var _app:App;
 	//static var bulma = require('../node_modules/bulma/css/bulma.min.css');
 	static var fa = require('../node_modules/font-awesome/css/font-awesome.min.css');
-	static var virtualized = require('../node_modules/react-virtualized/styles.css');
+	//static var data_table = require('../node_modules/gigatables-react/src/css/styles.css');
     static var STYLES = require('App.scss');
 
 	public static var store:Store<AppState>;
@@ -63,7 +63,8 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 			trace(props);
 			var verifyRequest = new HttpJs('${App.config.api}?jwt=${App.jwt}&userName=${App.userName}&className=auth.User&action=clientVerify');
 			verifyRequest.addHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
-			verifyRequest.addHeader('Access-Control-Allow-Origin','*');
+			verifyRequest.addHeader('Access-Control-Allow-Origin', 'pitverwaltung.de');
+			verifyRequest.withCredentials = false;
 			verifyRequest.onData = function(data:String)
 			{
 				trace(data);
@@ -83,8 +84,12 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 					uState.waiting = false;
 					store.dispatch(AppAction.LoginComplete(uState));
 					//setState({appware:{user:uState}});
-					//_app.props = { waiting:false};
+					//_app.props = { waiting:false}; 
 				}			
+			}
+			verifyRequest.onError = function(msg:String)
+			{
+				trace(msg);
 			}
 			verifyRequest.request();
 		}

@@ -10,5 +10,4 @@ typedef AppState =
 	appWare:GlobalAppState,
 	//locationHistory:LocationState,
 	statusBar:StatusBarState
-	
 }

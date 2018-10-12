@@ -7,6 +7,7 @@
 $primary: #601111;
 $tabs-boxed-link-radius: 5px;//@include tabsradius(5);
 $tableHeader-radius: 5px;
+$tableHeaderHeight: 42px;
 
 @charset "utf-8";
 @import "../bulma/bulma.sass";
@@ -98,6 +99,92 @@ h1 {
 {
 		height:auto;
 }
+
+/* sticky header table stuff */
+
+.table thead th
+{
+	 padding: 0px 0.75rem;
+	 border-width:0;
+}
+.fixed-table-container table
+{
+	overflow-x:hidden;
+	overflow-y:auto;
+}
+.fixed-table-container {
+  /* width: 50%;
+  height: 200px;
+  border: 1px solid black;
+  margin: 10px auto;
+  background-color: white;
+  above is decorative or flexible */
+  position: relative; /* could be absolute or relative */
+  padding-top: $tableHeaderHeight; /* height of header */
+  display:flex;
+}
+
+.fixed-table-container-inner {
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+}
+ 
+.header-background {
+  background-color: #D5ECFF;
+  height: $tableHeaderHeight; /* height of header */
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  border-radius: $tableHeader-radius $tableHeader-radius 0px 0px;
+}
+
+.th-inner {
+  position: absolute;
+  top: 0;
+  line-height: $tableHeaderHeight; /* height of header */
+  text-align: left;
+  border-left: 1px solid black;
+  padding-left: 5px;
+  margin-left: -5px;
+}
+.fixed-table-container th:first-child .th-inner{
+	border-left: none;
+}
+.fixed-table-container th:first-child{
+	padding-left: 6px;
+}
+    
+.fixed-table-container.sort-decoration { 
+      overflow: hidden;
+      min-width: 530px; /* enough width to show arrows */
+	  heigth:100%;
+	  width:100%;
+}
+.sort-decoration .th-inner {
+	width: 100%;
+}
+.header .th-inner {
+	background-color: #D5ECFF;
+}
+.th-inner .headerSort{
+	padding:0 1rem;
+}
+/*span.sortArrow {
+	background: url(icons/bg.gif) 0 4px no-repeat transparent;
+	padding: 1px 10px;
+	line-height: 30px;
+}
+.headerSortUp span.sortArrow {
+	background: url(icons/asc.gif) 0 7px no-repeat transparent;
+}
+.headerSortDown span.sortArrow {
+	background: url(icons/desc.gif) 0 7px no-repeat transparent;
+}*/
+  
+/* END OF STICKY TABLE HEADER */
+
 .statusbar
  {
 	 display:flex;
@@ -247,4 +334,9 @@ h1 {
 .ReactVirtualized__Table__headerColumn
 {
 	white-space:nowrap;
+}
+.zeroH
+{
+	height:0px;
+	position:relative;
 }

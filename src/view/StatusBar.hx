@@ -67,7 +67,8 @@ class StatusBar extends ReactComponentOf<StatusBarProps,Dynamic>
 	
 	override public function componentWillUnmount()
 	{
-		timer.stop();
+		if(timer !=null)
+			timer.stop();
 	}	
 	
 	static function mapStateToProps(state:AppState) {

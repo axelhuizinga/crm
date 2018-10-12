@@ -1,6 +1,7 @@
 package view.shared;
 
 import haxe.ds.StringMap;
+import haxe.http.HttpJs;
 import js.html.Event;
 import model.AppState;
 import react.ReactComponent.ReactComponentOf;
@@ -9,6 +10,8 @@ import react.ReactMacro.jsx;
 import react.router.Route.RouteRenderProps;
 import redux.Redux.Dispatch;
 import redux.Store;
+import view.dashboard.model.RolesFormModel;
+import view.table.Table.DataState;
 import view.shared.RouteTabProps;
 
 
@@ -39,38 +42,45 @@ typedef FormField =
  
  typedef BaseFormProps =
  {
-	 > RouteTabProps,
-	 formData:Dynamic,
-	 store:Store<AppState>,
-	 handleChange:Event->Void,
-	 handleSubmit:Event->Void
+	 >RouteTabProps,
+	 ?formData:Dynamic,
+	 ?store:Store<AppState>,
+	 ?handleChange:Event->Void,
+	 ?handleSubmit:Event->Void
  }
 
 typedef FormState =
 {
-	?content:Array<String>,
-	data:StringMap<Dynamic>,
-	dirty:Bool,
-	fields:StringMap<FormField>,
-	values:StringMap<Dynamic>,
-	submitted:Bool,
-	errors:StringMap<String>,
-	hasError:Bool
+	@:optional var content:Array<String>;
+	@:arrayAccess
+	@:optional var data:Map<String,Dynamic>;
+	var clean:Bool;
+	var hasError:Bool;
+	@:optional var loading:Bool;
+	@:optional var fields:StringMap<FormField>;
+	@:optional var values:StringMap<Dynamic>;
+	@:optional var submitted:Bool;
+	@:optional var errors:StringMap<String>;
 }
 
 
 class BaseForm extends ReactComponentOf<BaseFormProps, FormState> 
 {
 	var mounted:Bool;
+	var requests:Array<HttpJs>;	
+	@:arrayAccess
+	var dataDisplay:Map<String,DataState>;
 	
 	public function new(?props:BaseFormProps) 
 	{
 		super(props);
+		dataDisplay = RolesFormModel.dataDisplay;
 		mounted = false;
+		requests = [];
 		state = {
 			data:new StringMap(),
 			content:new Array(),
-			dirty:false,
+			clean:true,
 			errors:new StringMap(),
 			values:new StringMap(),
 			fields:new StringMap(),
@@ -88,11 +98,6 @@ class BaseForm extends ReactComponentOf<BaseFormProps, FormState>
 		return null;
 	}
 	
-	override public function componentWillUnmount():Void 
-	{
-		mounted=false;
-	}
-	
 	override public function componentDidMount():Void 
 	{
 		mounted = true;
@@ -103,6 +108,13 @@ class BaseForm extends ReactComponentOf<BaseFormProps, FormState>
 		trace('You should override me :)');
         return null;
     }	
+
+	override public function componentWillUnmount()
+	{
+		mounted=false;
+		for (r in requests)
+			r.cancel();
+	}	
 	
 	function displayDebug(fieldName:String):ReactFragment
 	{
