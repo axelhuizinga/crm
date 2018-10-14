@@ -1,4 +1,4 @@
-package view.table;
+package view.grid;
 
 import haxe.Constraints.Function;
 import haxe.Timer;
@@ -113,19 +113,22 @@ typedef TableProps =
 	?sortable:EitherType<Bool, Array<EitherType<String,Dynamic>>>
 }
 
-class Table extends ReactComponentOf<TableProps, Dynamic>
+class Grid extends ReactComponentOf<TableProps, Dynamic>
 {
 	var fieldNames:Array<String>;
-	var tableRef:ReactRef<TableElement>;
+	var gridRef:ReactRef<DivElement>;
 	var fixedHeader:ReactRef<DivElement>;
 	var rowRef:ReactRef<TableRowElement>;
-	var tHeadRef:ReactRef<TableRowElement>;
+	var gridHead:ReactRef<TableRowElement>;
+	var gridStyle:String;
+	var visibleColumns:Int;
 	var headerUpdated:Bool;
 	
 	public function new(?props:TableProps)
 	{
 		super(props);		
 		headerUpdated = false;
+		visibleColumns = 0;
 		fieldNames = [];
 		for (k in props.dataState.columns.keys())
 		{
@@ -151,28 +154,24 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 			');					
 		}		
 		
-		tableRef = React.createRef();
+		gridRef = React.createRef();
 		fixedHeader = React.createRef();
-		tHeadRef = React.createRef();
+		gridHead = React.createRef();
 		rowRef = React.createRef();
 		return jsx('		
 			<div className="fixed-table-container sort-decoration">
-				<div className="fixed-table-container-inner">		
-					<table className=${props.className} ref={tableRef}>
-						<thead>
-							<tr ref=${tHeadRef}>
-								${renderHeaderRow()}
-							</tr>
-						</thead>
-						<tbody>
-						${renderRows()}
-						</tbody>
-					</table>
-				</div>
 				<div className="header-background" >
-					<div className="thead" ref={fixedHeader}>
-					${renderHeaderDisplay()}
+					<div className="grid head" ref={fixedHeader}>
+						${renderHeaderDisplay()}
 					</div>				
+				</div>				
+				<div className="${props.className} grid-container-inner">							
+					<div className="grid body" ref={gridRef}>
+						${renderHeaderRow()}
+						${renderRows()}
+					</div>
+				</div>
+				<div className="pager">
 				</div>
 			</div>					
 		');		
@@ -190,17 +189,25 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 			return null;
 		//trace(props.dataState.columns.keys());
 		var headerRow:Array<ReactFragment> = [];
+		var col:Int = 0;
+		gridStyle = '';
 		for (field in props.dataState.columns.keys())
 		{
 			var hC:DataColumn = props.dataState.columns.get(field);
 			if (hC.show == false)
 				continue;
-			//trace(hC);
+			//
+			gridStyle += (hC.flexGrow == 1?' 1fr':' auto');
+			if (col == 0)
+				trace('${hC.headerClassName} :${hC.className}');
 			headerRow.push(jsx('	
-			<th key={field} className={(hC.headerClassName != null? hC.headerClassName :hC.className)}>
+			<div key={field} 
+				className = {(hC.headerClassName != null? hC.headerClassName :hC.className)}
+				ref=${col==0?gridHead:null}>
 				{hC.label != null? hC.label : hC.name}<span className="sort-box fa fa-sort"></span>
-			</th>
+			</div>
 			'));
+			col++;
 		}
 		trace(headerRow.length);
 		return headerRow;
@@ -217,42 +224,43 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 			var hC:DataColumn = props.dataState.columns.get(field);
 			if (hC.show == false)
 				continue;
+			visibleColumns++;
 			headerRow.push(jsx('	
-			<div key={field} className={"th-box " + (hC.headerClassName != null? hC.headerClassName :hC.className)}>
+			<div key={field} className={"gridHeadItem " + (hC.headerClassName != null? hC.headerClassName :hC.className)}>
 			{hC.label != null? hC.label : hC.name}<span className="sort-box fa fa-sort"></span>
 			</div>
 			'));
 		}
 		return headerRow;
 	}	
-//<span>{hC.data}<span className="fa fa-sort"></span></span><span className="2fa 2fa-sort"></span>
+
 	function renderCells(rD:Dynamic, row:Int):ReactFragment
 	{
 		@:arrayAccess
 		var rdMap:Map<String,Any> = Utils.dynaMap(rD);
 		var column:Int = 0;
 		var cells:Array<DataCell> = fieldNames.map(function(fN:String){
-					var columnDataState:DataColumn = props.dataState.columns.get(fN);
-					var cD:DataCell = {
-						cellFormat:columnDataState.cellFormat,
-						className:columnDataState.className,
-						data:rdMap[fN],
-						dataDisplay:columnDataState.cellFormat != null ? columnDataState.cellFormat(rdMap[fN]):rdMap[fN],
-						name:fN,
-						pos:{column:column++, row:row},
-						show:columnDataState.show != false
-					};
-					return cD;					
-				});
+			var columnDataState:DataColumn = props.dataState.columns.get(fN);
+			var cD:DataCell = {
+				cellFormat:columnDataState.cellFormat,
+				className:columnDataState.className,
+				data:rdMap[fN],
+				dataDisplay:columnDataState.cellFormat != null ? columnDataState.cellFormat(rdMap[fN]):rdMap[fN],
+				name:fN,
+				pos:{column:column++, row:row},
+				show:columnDataState.show != false
+			};
+			return cD;					
+		});
 		var rCs:Array<ReactFragment> = [];
 		for (cD in cells)
 		{
 			if (!cD.show)
 			 continue;
 			rCs.push(
-			jsx('<td className=${cD.className} key=${"r"+cD.pos.row+"c"+cD.pos.column} data-value=${cD.cellFormat!=null?cD.data:null}>
+			jsx('<div className=${cD.className} key=${"r"+cD.pos.row+"c"+cD.pos.column} data-value=${cD.cellFormat!=null?cD.data:null}>
 				${cD.dataDisplay}
-			</td>'));
+			</div>'));
 		}
 		return rCs;
 	}
@@ -266,9 +274,9 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 		for (dR in dRows)
 		{			
 			dRs.push(
-			jsx('<tr key=${"r"+row} ref=${row==0?rowRef:null} >
+			jsx('
 				${renderCells(dR, row++)}				
-			</tr>'));
+			'));
 		}//
 		return dRs;
 	}
@@ -277,34 +285,56 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 	{
 		trace(headerUpdated); 
 
-		if (tHeadRef != null)
+		if (gridHead != null)
 		{
 			if (headerUpdated)
 				return;
-			headerUpdated = true;			
-			var tableHeight:Float = tableRef.current.clientHeight;
-			trace('tableHeight:$tableHeight');
-			fixedHeader.current.parentElement.setAttribute('style', 'margin-top:-${tableHeight}px;');
-			//Out.dumpObjectTree(tHeadRef.current.cells[0].getBoundingClientRect());
-			//Out.dumpObject(tHeadRef.current.cells[0].getBoundingClientRect());
-			//Out.dumpObjectTree(fixedHeader.current.children);
-			trace(tHeadRef.current.cells[0].getBoundingClientRect().width);
-			trace(fixedHeader.current.children.length);
+			headerUpdated = true;		
+			//gridRef.current.style.se.style.setProperty('grid-template-columns', gridStyle);
+			var gridHeight:Float = gridRef.current.clientHeight;
+			var scrollBarWidth = gridRef.current.parentElement.offsetWidth - gridRef.current.offsetWidth;
+			trace('$scrollBarWidth ${gridRef.current.parentElement.offsetWidth} ${gridRef.current.offsetWidth}');
+			fixedHeader.current.style.setProperty('padding-right', '${scrollBarWidth}px');
+			trace('gridHeight:$gridHeight');
+			//fixedHeader.current.parentElement.setAttribute('style', 'margin-top:-${gridHeight}px;');
+			//Out.dumpObjectTree(gridHead.current.cells[0].getBoundingClientRect());
+			//Out.dumpObject(gridHead.current.cells[0].getBoundingClientRect());
+			//Out.dumpObjectTree(fixedHeader.current.children);grid-template-columns
+			trace(gridRef.current + 'visibleColumns:$visibleColumns');
+			// .childNodes[0], Element).getBoundingClientRect().width);
+			//trace(fixedHeader.current.children.length);
 			var i:Int = 0;
-			var x:Float = 0.0;// tHeadRef.current.cells[0].getBoundingClientRect().x;tHeadRef.current.remove()
+			var x:Float = 0.0;// gridHead.current.cells[0].getBoundingClientRect().x;gridHead.current.remove()
 			//showDims(rowRef);
-			tHeadRef.current.style.visibility = "collapse";			
-
-			for (cell in tHeadRef.current.cells)
+			fixedHeader.current.style.setProperty('grid-template-columns', gridStyle);
+			var grid:Element = gridRef.current;
+			grid.style.setProperty('grid-template-columns', gridStyle);
+			grid.style.setProperty('grid-template-rows', '0px auto');
+			//var gH:Element = cast(gridHead.current, Element);
+			var gH:Element = gridHead.current;
+			gH.style.setProperty('visibility', "collapse");
+			//gridHead.current.style.visibility = "collapse";		
+			for (i in 1...visibleColumns) 
 			{
-				var w:Float = cell.getBoundingClientRect().width;
-				var fixedHeaderCell = cast(fixedHeader.current.childNodes[i],Element);
-				fixedHeaderCell.setAttribute('style', 'left:${x}px;width:${w}px');
+				trace(i);
+				gH.nextElementSibling.style.setProperty('visibility', 'collapse');
+				gH = gH.nextElementSibling;
+				trace(gH.nextElementSibling);
+				//cast(gridHead.current.nextSibling,Element).style.visibility = "collapse";
+			}
+			trace(fixedHeader);
+			trace(gridHead);
+			return;
+			for (cell in gridHead.current.childNodes)
+			{
+				var w:Float = cast(cell,Element).getBoundingClientRect().width;
+				//var fixedHeaderCell = cast(fixedHeader.current.childNodes[i],Element);
+				//fixedHeaderCell.setAttribute('style', 'left:${x}px;width:${w}px');
 				i++;
 				x += w;
 				//trace(fixedHeaderCell.getAttribute('style'));
 			}
-			//showDims(tHeadRef);
+			//showDims(gridHead);
 			nodeDims(fixedHeader.current);
 		}
 	}

@@ -15,7 +15,7 @@ import redux.Redux.Dispatch;
 import model.AjaxLoader;
 import view.shared.BaseForm;
 import view.shared.BaseForm.BaseFormProps;
-import view.table.Table;
+import view.grid.Grid;
 
 /**
  * ...
@@ -105,7 +105,7 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 		trace(props.history == App.store.getState().appWare.history);
         return jsx('
 				<div className="columns  ">
-					<div className="tabComponentForm columns level">
+					<div className="tabComponentForm columns">
 							<div className="pBlock" >
 								${renderContent(state.data.get('historyTrigger'))}
 							</div>
@@ -114,10 +114,11 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 								Dummy
 							</div>
 
-							<div className="pBlock" >
-								<Table ${...props} data = ${state.data.get('userGroups')}
-								dataState=${dataDisplay["userGroups"]}/>
-							</div>
+							
+								<Grid ${...props} data = ${state.data.get('userGroups')}
+								dataState = ${dataDisplay["userGroups"]}
+								className = "is-striped is-fullwidth is-hoverable"/>
+							<div className="pBlock" ></div>
 					</div>
 					<div className="is-right is-hidden-mobile">
 						<aside className="menu">

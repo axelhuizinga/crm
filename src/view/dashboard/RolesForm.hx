@@ -7,9 +7,9 @@ import haxe.http.HttpJs;
 import model.AjaxLoader;
 import model.AppState;
 import view.shared.BaseForm;
-import view.table.Table;
-import view.table.Table.DataCell;
-import view.table.Table.SortDirection;
+import view.grid.Grid;
+import view.grid.Grid.DataCell;
+import view.grid.Grid.SortDirection;
 import react.ReactComponent.ReactComponentOfProps;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
@@ -120,13 +120,14 @@ class RolesForm extends BaseForm
 	//columnSizerProps = {{}}defaultSort = ${{column:"full_name", direction: SortDirection.ASC}}
     override function render() {
 		trace(Reflect.fields(props));
-		trace(state);
-		trace(props);
+		//trace(state);
+		//trace(props);
         return jsx('		
 				<div className="columns">
-					<div className="tabComponentForm columns">
-							<Table id="userList" data=${state.data == null? null:state.data["userList"]}
-							${...props} dataState=${dataDisplay["userList"]}/>
+					<div className="tabComponentForm">
+							<Grid id="userList" data=${state.data == null? null:state.data["userList"]}
+							${...props} dataState = ${dataDisplay["userList"]}
+							className = "is-striped is-fullwidth is-hoverable"/>
 					</div>
 					<SMenu className="menu" itemsData={sideMenu}/>					
 				</div>		

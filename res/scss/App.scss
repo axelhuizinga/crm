@@ -4,17 +4,23 @@
 }
 */
 
+$bgto: #ddd;
+$border-light: #dbdbdb;
+$cellPadding1: 0px 0.75rem;
+$cellPadding: 0px 11px;
 $primary: #601111;
 $tabs-boxed-link-radius: 5px;//@include tabsradius(5);
 $tableHeader-radius: 5px;
-$tableHeaderHeight: 42px;
+$tableHeaderHeight: 2rem;
 
 @charset "utf-8";
 @import "../bulma/bulma.sass";
 
 *{
-	
+	border-collapse:collapse;
+	background-color:transparent;
 }
+ 
 html,body { 
     /*font-family:Arial;*/
 	font-size:16px;
@@ -47,6 +53,7 @@ h1 {
 .cRight
 {
 	align-self:flex-end;
+	text-align:right!important;
 }
 .tRight
 {
@@ -97,20 +104,46 @@ h1 {
 }
 .react-datetime-picker__button__input__input
 {
-		height:auto;
+	height:auto;
 }
 
 /* sticky header table stuff */
 
+.grid{
+	display:grid;
+	grid-template-columns:auto auto auto auto auto;
+}
+	
+.grid>div
+{
+	padding: $cellPadding;
+	border: 0.3px solid grey;
+}
+.grid.head
+{
+	grid-rows: $tableHeaderHeight;
+	padding-right:17px;
+}
 .table thead th
 {
-	 padding: 0px 0.75rem;
-	 border-width:0;
+	/* padding: 0px 0.75rem;
+	 border-width:0;*/
+	white-space:nowrap;
+}
+.fixed-table-container th, .fixed-table-container td
+{
+	padding: $cellPadding;
+	border: 1px solid grey;
+	border-collapse:collapse;
 }
 .fixed-table-container table
 {
 	overflow-x:hidden;
 	overflow-y:auto;
+	/*table-layout:fixed;*/
+}
+.fixed-table-container thead th{
+	
 }
 .fixed-table-container {
   /* width: 50%;
@@ -124,12 +157,23 @@ h1 {
   display:flex;
 }
 
-.fixed-table-container-inner {
+.grid-container-inner {
   overflow-x: hidden;
   overflow-y: auto;
   width: 100%;
 }
  
+.header-background table{
+	background-color:transparent;
+}
+/*.header-background th:last-child
+{
+	padding-right:17px;
+}
+.header-background th
+{
+	padding-left:0.75rem;	
+}*/
 .header-background {
   background-color: #D5ECFF;
   height: $tableHeaderHeight; /* height of header */
@@ -137,15 +181,29 @@ h1 {
   top: 0;
   right: 0;
   left: 0;
+  overflow: hidden;
+  border-color: $border-light;
   border-radius: $tableHeader-radius $tableHeader-radius 0px 0px;
+  border-style: solid solid none;
+  border-width:1px;
 }
-
+.thead
+{padding-left:0px;}
+.th-box {
+  position: relative;
+  display: inline-block;
+  height: $tableHeaderHeight;
+  top: 0;
+  line-height: $tableHeaderHeight; /* height of header */  
+  border: 1px solid grey;
+  padding: $cellPadding;
+  font-weight:666;
+  white-space:nowrap;
+}
 .th-inner {
   position: absolute;
   top: 0;
   line-height: $tableHeaderHeight; /* height of header */
-  text-align: left;
-  border-left: 1px solid black;
   padding-left: 5px;
   margin-left: -5px;
 }
@@ -153,17 +211,25 @@ h1 {
 	border-left: none;
 }
 .fixed-table-container th:first-child{
-	padding-left: 6px;
+	/*padding-left: 6px;*/
 }
     
 .fixed-table-container.sort-decoration { 
-      overflow: hidden;
-      min-width: 530px; /* enough width to show arrows */
-	  heigth:100%;
-	  width:100%;
+	overflow: hidden;
+	heigth:100%;
+	width:100%;
+	border-radius: $tableHeader-radius $tableHeader-radius 0px 0px;
+	border-style: none solid solid;
+	border-width:1px;
+	border-color: $border-light;
+	flex-direction:column;
+}
+.sort-box
+{
+	margin:0.42rem 0 0 0.75rem;
 }
 .sort-decoration .th-inner {
-	width: 100%;
+	/*width: 100%;*/
 }
 .header .th-inner {
 	background-color: #D5ECFF;
@@ -204,6 +270,10 @@ h1 {
 {
 	border-bottom-color:orange;
 }
+.topNav 
+{
+	background-image:linear-gradient(white, $bgto);	
+}
 .topNav ul
 {
 	border:none;
@@ -229,13 +299,14 @@ h1 {
 	flex: auto;
 	margin:0.3rem 0px 0px;
 	min-height: 0;
+	background-image:linear-gradient(white, $bgto);
 }
 .tabComponentForm
 {
 	display:flex;
 	flex-direction:column;
 	flex: auto;
-	margin:0.8rem 1.25rem;	
+	margin:0.8rem 0 0 0.8rem;	
 	overflow-y:auto;
 	min-height: 0;
 }
@@ -272,8 +343,6 @@ h1 {
 {
 	display:flex;
 	flex-direction:column;
-	/*overflow:hidden;
-	overflow-y:auto;*/
 	flex: auto;
 	min-height: 0;
 	padding:0px;/*.5rem 1.1rem;*/
@@ -292,7 +361,7 @@ h1 {
 
 .tabs a 
 {
-	padding: .25em 1em;
+	padding: .25rem 1rem;
 }
 
 .error, .error::placeholder { color: red}
@@ -309,7 +378,7 @@ h1 {
 /*side menu*/
 .is-right .menu
 {
-	margin: 0.5rem 0.5rem 0.5rem 0.8rem!important;
+	margin: 0.8rem 0.5rem 0.5rem 0.8rem!important;
 }
 
 /*tables*/

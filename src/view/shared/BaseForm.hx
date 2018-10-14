@@ -11,7 +11,7 @@ import react.router.Route.RouteRenderProps;
 import redux.Redux.Dispatch;
 import redux.Store;
 import view.dashboard.model.RolesFormModel;
-import view.table.Table.DataState;
+import view.grid.Grid.DataState;
 import view.shared.RouteTabProps;
 
 
