@@ -6,8 +6,11 @@
 
 $bgto: #ddd;
 $border-light: #dbdbdb;
+$cell-border: 1px solid grey;
 $cellPadding1: 0px 0.75rem;
 $cellPadding: 0px 11px;
+$darkRed: rgb(128, 17, 17);
+$lightRed: rgb(251, 220, 220);
 $primary: #601111;
 $tabs-boxed-link-radius: 5px;//@include tabsradius(5);
 $tableHeader-radius: 5px;
@@ -107,136 +110,68 @@ h1 {
 	height:auto;
 }
 
-/* sticky header table stuff */
+/* sticky header grid stuff display:flex;grid-template-columns:repeat( auto-fill, auto );*/
 
 .grid{
 	display:grid;
-	grid-template-columns:auto auto auto auto auto;
+	/*grid-auto-flow: dense;*/
+	grid-column-gap:0px;
 }
 	
 .grid>div
 {
 	padding: $cellPadding;
-	border: 0.3px solid grey;
+	border: none;
+	
 }
 .grid.head
 {
 	grid-rows: $tableHeaderHeight;
 	padding-right:17px;
+	padding-bottom:2px;
 }
-.table thead th
-{
-	/* padding: 0px 0.75rem;
-	 border-width:0;*/
-	white-space:nowrap;
-}
-.fixed-table-container th, .fixed-table-container td
-{
-	padding: $cellPadding;
-	border: 1px solid grey;
-	border-collapse:collapse;
-}
-.fixed-table-container table
+
+/*.fixed-grid-container .grid
 {
 	overflow-x:hidden;
 	overflow-y:auto;
-	/*table-layout:fixed;*/
-}
-.fixed-table-container thead th{
-	
-}
-.fixed-table-container {
-  /* width: 50%;
-  height: 200px;
-  border: 1px solid black;
-  margin: 10px auto;
-  background-color: white;
-  above is decorative or flexible */
-  position: relative; /* could be absolute or relative */
-  padding-top: $tableHeaderHeight; /* height of header */
+}*/
+
+.fixed-grid-container 
+{
   display:flex;
+  flex-direction:column;
+   /* position: relative;could be absolute or relative */
 }
 
 .grid-container-inner {
-  overflow-x: hidden;
-  overflow-y: auto;
-  width: 100%;
+	
+	overflow-x: hidden;
+	overflow-y: auto;
+	border:1px solid grey;
+	border-style:none solid solid;
 }
- 
-.header-background table{
-	background-color:transparent;
-}
-/*.header-background th:last-child
+.gridHeadItem
 {
-	padding-right:17px;
+	font-weight:bold;
 }
-.header-background th
-{
-	padding-left:0.75rem;	
-}*/
+
 .header-background {
-  background-color: #D5ECFF;
-  height: $tableHeaderHeight; /* height of header */
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  overflow: hidden;
-  border-color: $border-light;
+  /*background-color: #D5ECFF;*/
+  color: #eee;
+  background-image:linear-gradient($lightRed, $darkRed);	
+  flex: 1 0 auto;
+  border-color: grey;
   border-radius: $tableHeader-radius $tableHeader-radius 0px 0px;
-  border-style: solid solid none;
+  border-style: solid solid none solid;
   border-width:1px;
 }
-.thead
-{padding-left:0px;}
-.th-box {
-  position: relative;
-  display: inline-block;
-  height: $tableHeaderHeight;
-  top: 0;
-  line-height: $tableHeaderHeight; /* height of header */  
-  border: 1px solid grey;
-  padding: $cellPadding;
-  font-weight:666;
-  white-space:nowrap;
-}
-.th-inner {
-  position: absolute;
-  top: 0;
-  line-height: $tableHeaderHeight; /* height of header */
-  padding-left: 5px;
-  margin-left: -5px;
-}
-.fixed-table-container th:first-child .th-inner{
-	border-left: none;
-}
-.fixed-table-container th:first-child{
-	/*padding-left: 6px;*/
-}
     
-.fixed-table-container.sort-decoration { 
-	overflow: hidden;
-	heigth:100%;
-	width:100%;
-	border-radius: $tableHeader-radius $tableHeader-radius 0px 0px;
-	border-style: none solid solid;
-	border-width:1px;
-	border-color: $border-light;
-	flex-direction:column;
-}
 .sort-box
 {
 	margin:0.42rem 0 0 0.75rem;
 }
-.sort-decoration .th-inner {
-	/*width: 100%;*/
-}
-.header .th-inner {
-	background-color: #D5ECFF;
-}
-.th-inner .headerSort{
-	padding:0 1rem;
-}
+
 /*span.sortArrow {
 	background: url(icons/bg.gif) 0 4px no-repeat transparent;
 	padding: 1px 10px;
@@ -389,12 +324,12 @@ h1 {
 	color:#fff;
 }
 
-.trEven
+.even
 {
 	background-color:#eee;
 }
 
-.trOdd
+.odd
 {
 	background-color:#ddd;
 }

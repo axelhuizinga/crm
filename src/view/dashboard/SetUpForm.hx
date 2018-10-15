@@ -15,6 +15,7 @@ import redux.Redux.Dispatch;
 import model.AjaxLoader;
 import view.shared.BaseForm;
 import view.shared.BaseForm.BaseFormProps;
+import view.shared.SMenu;
 import view.grid.Grid;
 
 /**
@@ -26,10 +27,13 @@ import view.grid.Grid;
 @:connect
 class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 {
-	
+	var sideMenu:Array<SMItem>;
 	public function new(?props:BaseFormProps) 
 	{
 		super(props);	
+		sideMenu = [
+			{handler:null,label:'History Trigger'}
+		];
 	}
 	
 	static function mapStateToProps() {
@@ -113,27 +117,17 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 							<div className="pBlock" >
 								Dummy
 							</div>
-
 							
 								<Grid ${...props} data = ${state.data.get('userGroups')}
 								dataState = ${dataDisplay["userGroups"]}
 								className = "is-striped is-fullwidth is-hoverable"/>
-							<div className="pBlock" ></div>
+							
 					</div>
-					<div className="is-right is-hidden-mobile">
-						<aside className="menu">
-						  <p className="menu-label">
-							Allgemein
-						  </p>
-						  <ul className="menu-list">
-							<li><a>History Trigger</a></li>
-						  </ul>
-						</aside>
-					</div>
+					<SMenu className="menu" itemsData={sideMenu}/>
 				</div>
         ');
     }	
-	//${displayDebug('userGroups')}
+	//${displayDebug('userGroups')}<div className="pBlock" ></div>
 	function renderContent(content:Array<String>):ReactFragment
 	{
 		if (content == null || content.length == 0)

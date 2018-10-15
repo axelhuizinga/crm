@@ -5,6 +5,7 @@ import haxe.Timer;
 import haxe.ds.StringMap;
 import haxe.extern.EitherType;
 import js.html.DOMRect;
+import js.html.DOMRectList;
 import js.html.Element;
 import js.html.Node;
 import js.html.NodeList;
@@ -153,16 +154,16 @@ class Grid extends ReactComponentOf<TableProps, Dynamic>
 			</section>
 			');					
 		}		
-		
+		//className="${props.className} sort-decoration"
 		gridRef = React.createRef();
 		fixedHeader = React.createRef();
 		gridHead = React.createRef();
 		rowRef = React.createRef();
 		return jsx('		
-			<div className="fixed-table-container sort-decoration">
+			<div className="fixed-grid-container" >
 				<div className="header-background" >
 					<div className="grid head" ref={fixedHeader}>
-						${renderHeaderDisplay()}
+					${renderHeaderDisplay()}
 					</div>				
 				</div>				
 				<div className="${props.className} grid-container-inner">							
@@ -196,13 +197,14 @@ class Grid extends ReactComponentOf<TableProps, Dynamic>
 			var hC:DataColumn = props.dataState.columns.get(field);
 			if (hC.show == false)
 				continue;
-			//
-			gridStyle += (hC.flexGrow == 1?' 1fr':' auto');
+			//' auto';//
+			gridStyle +=  (hC.flexGrow == 1?' 1fr':' auto');
 			if (col == 0)
 				trace('${hC.headerClassName} :${hC.className}');
 			headerRow.push(jsx('	
 			<div key={field} 
-				className = {(hC.headerClassName != null? hC.headerClassName :hC.className)}
+				className= ${"gridHeadItem "+(hC.headerClassName != null? hC.headerClassName :
+					(hC.className!=null?hC.className:''))}
 				ref=${col==0?gridHead:null}>
 				{hC.label != null? hC.label : hC.name}<span className="sort-box fa fa-sort"></span>
 			</div>
@@ -239,11 +241,12 @@ class Grid extends ReactComponentOf<TableProps, Dynamic>
 		@:arrayAccess
 		var rdMap:Map<String,Any> = Utils.dynaMap(rD);
 		var column:Int = 0;
+		var rowClass = (row % 2 == 0?'even':'odd');
 		var cells:Array<DataCell> = fieldNames.map(function(fN:String){
 			var columnDataState:DataColumn = props.dataState.columns.get(fN);
 			var cD:DataCell = {
 				cellFormat:columnDataState.cellFormat,
-				className:columnDataState.className,
+				className:'${columnDataState.className} ${rowClass}',
 				data:rdMap[fN],
 				dataDisplay:columnDataState.cellFormat != null ? columnDataState.cellFormat(rdMap[fN]):rdMap[fN],
 				name:fN,
@@ -312,26 +315,38 @@ class Grid extends ReactComponentOf<TableProps, Dynamic>
 			grid.style.setProperty('grid-template-rows', '0px auto');
 			//var gH:Element = cast(gridHead.current, Element);
 			var gH:Element = gridHead.current;
-			gH.style.setProperty('visibility', "collapse");
-			//gridHead.current.style.visibility = "collapse";		
+			gridHead.current.style.visibility = "collapse";	
+			trace(gH.offsetWidth + ':' + gH.clientWidth);
+			var cRects:DOMRectList = gH.getClientRects();
+			for (cR in cRects)
+			{
+				Out.dumpObject(cR);
+			}
+			//trace();
+			Out.dumpObject(gH.getBoundingClientRect());
+			var rowRects:Array<DOMRect> = [gH.getBoundingClientRect()];
+			gH.style.setProperty('visibility', "collapse");			
 			for (i in 1...visibleColumns) 
 			{
 				trace(i);
-				gH.nextElementSibling.style.setProperty('visibility', 'collapse');
 				gH = gH.nextElementSibling;
-				trace(gH.nextElementSibling);
+				rowRects.push(gH.getBoundingClientRect());
+				gH.style.setProperty('visibility', 'collapse');
+				trace(gH);
 				//cast(gridHead.current.nextSibling,Element).style.visibility = "collapse";
 			}
 			trace(fixedHeader);
 			trace(gridHead);
 			return;
-			for (cell in gridHead.current.childNodes)
+			for (fixedHeaderCell in fixedHeader.current.children)
 			{
-				var w:Float = cast(cell,Element).getBoundingClientRect().width;
+				trace(fixedHeaderCell);
+				var r:DOMRect = rowRects.shift();
+				//var w:Float = cell. .getBoundingClientRect().width;left:${x}px;
 				//var fixedHeaderCell = cast(fixedHeader.current.childNodes[i],Element);
-				//fixedHeaderCell.setAttribute('style', 'left:${x}px;width:${w}px');
+				fixedHeaderCell.setAttribute('style', 'left:${r.left}px;width:${r.width}px;');
 				i++;
-				x += w;
+				//x += w;
 				//trace(fixedHeaderCell.getAttribute('style'));
 			}
 			//showDims(gridHead);
