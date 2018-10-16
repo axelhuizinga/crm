@@ -7,6 +7,8 @@ import haxe.extern.EitherType;
 import js.html.DOMRect;
 import js.html.DOMRectList;
 import js.html.Element;
+import js.html.Event;
+import js.html.MouseEvent;
 import js.html.Node;
 import js.html.NodeList;
 import js.html.TableCellElement;
@@ -15,6 +17,7 @@ import js.html.TableRowElement;
 import js.html.DivElement;
 import me.cunity.debug.Out;
 import react.React;
+import react.ReactEvent;
 import react.ReactRef;
 import react.ReactComponent.ReactFragment;
 import react.ReactComponent;
@@ -114,7 +117,17 @@ typedef TableProps =
 	?sortable:EitherType<Bool, Array<EitherType<String,Dynamic>>>
 }
 
-class Grid extends ReactComponentOf<TableProps, Dynamic>
+typedef GridState =
+{
+	?enteredRow:Int,
+	?selectedRow:Int,
+	?selectedRows:Array<Int>,
+	?_rowCells:Array<Element>,
+	?_selectedCells:Array<Element>,
+	?_selecting:Bool
+}
+
+class Grid extends ReactComponentOf<TableProps, GridState>
 {
 	var fieldNames:Array<String>;
 	var gridRef:ReactRef<DivElement>;
@@ -124,6 +137,7 @@ class Grid extends ReactComponentOf<TableProps, Dynamic>
 	var gridStyle:String;
 	var visibleColumns:Int;
 	var headerUpdated:Bool;
+	var _state:GridState;
 	
 	public function new(?props:TableProps)
 	{
@@ -137,6 +151,13 @@ class Grid extends ReactComponentOf<TableProps, Dynamic>
 			fieldNames.push(k);
 		}	
 		trace(fieldNames);
+		_state = {
+			_selecting:false,
+			selectedRow:null,
+			selectedRows:[],
+			_rowCells:[],
+			_selectedCells:[]
+		}
 	}
 	
 	override public function render():ReactFragment
@@ -246,7 +267,7 @@ class Grid extends ReactComponentOf<TableProps, Dynamic>
 			var columnDataState:DataColumn = props.dataState.columns.get(fN);
 			var cD:DataCell = {
 				cellFormat:columnDataState.cellFormat,
-				className:'${columnDataState.className} ${rowClass}',
+				className:'${columnDataState.className==null?'':columnDataState.className} ${rowClass}',
 				data:rdMap[fN],
 				dataDisplay:columnDataState.cellFormat != null ? columnDataState.cellFormat(rdMap[fN]):rdMap[fN],
 				name:fN,
@@ -261,7 +282,7 @@ class Grid extends ReactComponentOf<TableProps, Dynamic>
 			if (!cD.show)
 			 continue;
 			rCs.push(
-			jsx('<div className=${cD.className} key=${"r"+cD.pos.row+"c"+cD.pos.column} data-value=${cD.cellFormat!=null?cD.data:null}>
+			jsx('<div className=${cD.className} key=${"r"+cD.pos.row+"c"+cD.pos.column} data-value=${cD.cellFormat!=null?cD.data:null} data-gridpos=${cD.pos.row+"_"+cD.pos.column}>
 				${cD.dataDisplay}
 			</div>'));
 		}
@@ -286,44 +307,32 @@ class Grid extends ReactComponentOf<TableProps, Dynamic>
 	
 	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)
 	{
-		trace(headerUpdated); 
+		trace(headerUpdated+ ':' + gridHead); 
 
 		if (gridHead != null)
 		{
 			if (headerUpdated)
 				return;
 			headerUpdated = true;		
-			//gridRef.current.style.se.style.setProperty('grid-template-columns', gridStyle);
+			for (child in gridRef.current.children)
+			{
+				child.onmouseleave = leaveRow;
+				child.onmouseenter = highLightRow;
+			}
 			var gridHeight:Float = gridRef.current.clientHeight;
 			var scrollBarWidth = gridRef.current.parentElement.offsetWidth - gridRef.current.offsetWidth;
 			trace('$scrollBarWidth ${gridRef.current.parentElement.offsetWidth} ${gridRef.current.offsetWidth}');
 			fixedHeader.current.style.setProperty('padding-right', '${scrollBarWidth}px');
 			trace('gridHeight:$gridHeight');
-			//fixedHeader.current.parentElement.setAttribute('style', 'margin-top:-${gridHeight}px;');
-			//Out.dumpObjectTree(gridHead.current.cells[0].getBoundingClientRect());
-			//Out.dumpObject(gridHead.current.cells[0].getBoundingClientRect());
-			//Out.dumpObjectTree(fixedHeader.current.children);grid-template-columns
-			trace(gridRef.current + 'visibleColumns:$visibleColumns');
-			// .childNodes[0], Element).getBoundingClientRect().width);
-			//trace(fixedHeader.current.children.length);
-			var i:Int = 0;
-			var x:Float = 0.0;// gridHead.current.cells[0].getBoundingClientRect().x;gridHead.current.remove()
-			//showDims(rowRef);
+			trace(gridRef.current + 'visibleColumns:$visibleColumns children:${gridRef.current.children.length}');
+
 			fixedHeader.current.style.setProperty('grid-template-columns', gridStyle);
 			var grid:Element = gridRef.current;
 			grid.style.setProperty('grid-template-columns', gridStyle);
 			grid.style.setProperty('grid-template-rows', '0px auto');
-			//var gH:Element = cast(gridHead.current, Element);
 			var gH:Element = gridHead.current;
 			gridHead.current.style.visibility = "collapse";	
 			trace(gH.offsetWidth + ':' + gH.clientWidth);
-			var cRects:DOMRectList = gH.getClientRects();
-			for (cR in cRects)
-			{
-				Out.dumpObject(cR);
-			}
-			//trace();
-			Out.dumpObject(gH.getBoundingClientRect());
 			var rowRects:Array<DOMRect> = [gH.getBoundingClientRect()];
 			gH.style.setProperty('visibility', "collapse");			
 			for (i in 1...visibleColumns) 
@@ -332,26 +341,84 @@ class Grid extends ReactComponentOf<TableProps, Dynamic>
 				gH = gH.nextElementSibling;
 				rowRects.push(gH.getBoundingClientRect());
 				gH.style.setProperty('visibility', 'collapse');
-				trace(gH);
-				//cast(gridHead.current.nextSibling,Element).style.visibility = "collapse";
+				//trace(gH);
 			}
 			trace(fixedHeader);
 			trace(gridHead);
-			return;
+			//return;
+			var i = 0;
 			for (fixedHeaderCell in fixedHeader.current.children)
 			{
 				trace(fixedHeaderCell);
 				var r:DOMRect = rowRects.shift();
-				//var w:Float = cell. .getBoundingClientRect().width;left:${x}px;
-				//var fixedHeaderCell = cast(fixedHeader.current.childNodes[i],Element);
-				fixedHeaderCell.setAttribute('style', 'left:${r.left}px;width:${r.width}px;');
+				fixedHeaderCell.setAttribute('style', 'width:${r.width}px;');
 				i++;
-				//x += w;
+				//x += w;left:${r.left}px;
 				//trace(fixedHeaderCell.getAttribute('style'));
 			}
 			//showDims(gridHead);
-			nodeDims(fixedHeader.current);
+			//nodeDims(fixedHeader.current);
 		}
+	}
+	
+	function leaveRow(evt:MouseEvent)
+	{
+		if (_state.enteredRow != null)
+		{
+			var pos:Array<Any> = cast (cast (evt.target, Element).dataset.gridpos.split("_"));
+			trace (pos[0] +"==" + _state.enteredRow +  ':' + _state._rowCells.length);
+			if (pos[0] == _state.enteredRow)
+			{
+				return;//	SAME ROW
+			}
+			for (c in _state._rowCells)
+			{
+				c.style.removeProperty('background-color'); 
+			}
+		}
+	}
+	
+	function highLightRow(evt:MouseEvent)
+	{
+		trace (_state._selecting);
+		if (_state._selecting)
+			return;
+		if (evt.button == 0)
+		{			
+			_state._rowCells = [];
+			_state._selectedCells = [];			
+		}
+		_state._selecting = true;
+		trace(cast (evt.target, Element).dataset.gridpos);
+		_selectRowOfCell(cast (evt.target, Element));
+		//Out.dumpObject(evt);
+	}
+	
+	function _selectRowOfCell(el:Element)
+	{
+		var eCol:Int;
+		var pos:Array<Any> = cast el.dataset.gridpos.split("_");
+		_state.enteredRow = pos[0];
+		var aCol = eCol = pos[1];
+		while (aCol > 0)
+		{
+			el = el.previousElementSibling;
+			aCol--;
+		}
+		// col=0
+		_state._rowCells = [];
+		while (aCol < visibleColumns)
+		{
+			_state._rowCells.push(el);
+			el = el.nextElementSibling;
+			aCol++;
+		}
+		for (c in _state._rowCells)
+		{
+			c.style.setProperty('background-color', 'white'); 
+		}
+		trace(pos);
+		_state._selecting = false;
 	}
 	
 	function showDims(ref:Dynamic)

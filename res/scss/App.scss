@@ -7,13 +7,17 @@
 $bgto: #ddd;
 $border-light: #dbdbdb;
 $cell-border: 1px solid grey;
-$cellPadding1: 0px 0.75rem;
-$cellPadding: 0px 11px;
+$cellPadding: 0px 0.75rem;
+$headPadding: 0.35rem 0.75rem;
+$darkGreen: rgb(17,128,17);
+$highLightGreen: rgb(80,220,20);
+$lightGreen: rgb(240,255,240);
 $darkRed: rgb(128, 17, 17);
 $lightRed: rgb(251, 220, 220);
 $primary: #601111;
-$tabs-boxed-link-radius: 5px;//@include tabsradius(5);
-$tableHeader-radius: 5px;
+$sun: #fabf32;
+$tabs-boxed-link-radius: 0.3rem;//@include tabsradius(5);
+$tableHeader-radius: 0.3rem;
 $tableHeaderHeight: 2rem;
 
 @charset "utf-8";
@@ -38,9 +42,7 @@ html,body {
 	height:100%;
 	display:flex;
 	flex: auto;
-	flex-direction:column; 
-	/*font-size:1.05rem;*/
-	
+	flex-direction:column; 	
 } 
 h1 {
 	margin: 10px;
@@ -121,7 +123,7 @@ h1 {
 .grid>div
 {
 	padding: $cellPadding;
-	border: none;
+	border-left:0.6px dotted transparent;
 	
 }
 .grid.head
@@ -131,11 +133,10 @@ h1 {
 	padding-bottom:2px;
 }
 
-/*.fixed-grid-container .grid
+.grid.body>div
 {
-	overflow-x:hidden;
-	overflow-y:auto;
-}*/
+	border-left:0.6px dotted white;
+}
 
 .fixed-grid-container 
 {
@@ -154,22 +155,30 @@ h1 {
 .gridHeadItem
 {
 	font-weight:bold;
+	padding: $headPadding!important;
+	/*display:flex;
+	flex-grow:1 0 auto;
+	justify-content:space-between;*/
 }
 
 .header-background {
-  /*background-color: #D5ECFF;*/
-  color: #eee;
-  background-image:linear-gradient($lightRed, $darkRed);	
-  flex: 1 0 auto;
+  /*background-color: #D5ECFF;#eee;flex: 1 0 auto;*/
+  color: $lightGreen;
+  background-image:linear-gradient($lightRed, $darkRed);	  
   border-color: grey;
   border-radius: $tableHeader-radius $tableHeader-radius 0px 0px;
   border-style: solid solid none solid;
   border-width:1px;
 }
+.gridHeadItem:hover
+{
+	color: $sun;
+}
     
 .sort-box
 {
-	margin:0.42rem 0 0 0.75rem;
+	margin:0 0 0.22rem 0.75rem;
+	align-self: flex-end;
 }
 
 /*span.sortArrow {
@@ -197,14 +206,6 @@ h1 {
 	justify-content:center;
 }
 
-.topNav .tabs li a
-{
-	border-bottom:0.3rem solid transparent;
-}
-.topNav .tabs li.is-active a
-{
-	border-bottom-color:orange;
-}
 .topNav 
 {
 	background-image:linear-gradient(white, $bgto);	
@@ -310,6 +311,19 @@ h1 {
 	overflow:visible;
 }
 
+.topNav .tabs li a
+{
+	border-bottom:0.3rem solid transparent;
+}
+.tabs li.is-active a
+{
+	color:$darkGreen!important;
+}
+.topNav .tabs li.is-active a
+{
+	color:$darkGreen!important;
+	border-bottom-color:$darkRed!important;
+}
 /*side menu*/
 .is-right .menu
 {
@@ -334,11 +348,6 @@ h1 {
 	background-color:#ddd;
 }
 
-/*react-virtualized*/
-.ReactVirtualized__Table__headerColumn
-{
-	white-space:nowrap;
-}
 .zeroH
 {
 	height:0px;

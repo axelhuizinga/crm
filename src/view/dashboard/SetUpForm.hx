@@ -118,7 +118,7 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 								Dummy
 							</div>
 							
-								<Grid ${...props} data = ${state.data.get('userGroups')}
+								<Grid id="userGroups" ${...props} data = ${state.data.get('userGroups')}
 								dataState = ${dataDisplay["userGroups"]}
 								className = "is-striped is-fullwidth is-hoverable"/>
 							
