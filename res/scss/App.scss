@@ -6,6 +6,7 @@
 
 $bgto: #ddd;
 $border-light: #dbdbdb;
+$borderCol:0.6px dotted transparent;
 $cell-border: 1px solid grey;
 $cellPadding: 0px 0.75rem;
 $headPadding: 0.35rem 0.75rem;
@@ -16,6 +17,7 @@ $darkRed: rgb(128, 17, 17);
 $lightRed: rgb(251, 220, 220);
 $primary: #601111;
 $sun: #fabf32;
+$borderHeadCol:0.6px dotted $lightRed;
 $tabs-boxed-link-radius: 0.3rem;//@include tabsradius(5);
 $tableHeader-radius: 0.3rem;
 $tableHeaderHeight: 2rem;
@@ -25,7 +27,7 @@ $tableHeaderHeight: 2rem;
 
 *{
 	border-collapse:collapse;
-	background-color:transparent;
+	/*background-color:transparent!important;*/
 }
  
 html,body { 
@@ -123,7 +125,7 @@ h1 {
 .grid>div
 {
 	padding: $cellPadding;
-	border-left:0.6px dotted transparent;
+	/*border-left:0.6px dotted transparent;*/
 	
 }
 .grid.head
@@ -135,7 +137,7 @@ h1 {
 
 .grid.body>div
 {
-	border-left:0.6px dotted white;
+	/*border-left:0.6px dotted white;*/
 }
 
 .fixed-grid-container 
@@ -162,13 +164,22 @@ h1 {
 }
 
 .header-background {
-  /*background-color: #D5ECFF;#eee;flex: 1 0 auto;*/
-  color: $lightGreen;
-  background-image:linear-gradient($lightRed, $darkRed);	  
+  /*background-color: #D5ECFF;#eee;flex: 1 0 auto;background-color: $darkRed;
+  color: $lightGreen;*/ 
+  background-origin:border-box;
+  background-image:linear-gradient($lightRed, $darkRed);	 
   border-color: grey;
   border-radius: $tableHeader-radius $tableHeader-radius 0px 0px;
   border-style: solid solid none solid;
-  border-width:1px;
+  border-width: 1px 1px 0px 1px;  
+}
+.head tr
+{
+	/*background-color: $darkRed;
+	background-color:transparent!important;*/
+	background-image:linear-gradient($lightRed, $darkRed);	
+	background-origin:border-box;
+	
 }
 .gridHeadItem:hover
 {
@@ -243,7 +254,7 @@ h1 {
 	flex-direction:column;
 	flex: auto;
 	margin:0.8rem 0 0 0.8rem;	
-	overflow-y:auto;
+	/*overflow-y:auto;*/
 	min-height: 0;
 }
 .tabComponentForm .hero
@@ -319,10 +330,29 @@ h1 {
 {
 	color:$darkGreen!important;
 }
+.tabNav2 .tabs ul
+{
+	background-color:white;
+}
+/*.tabNav2 .table thead td, .table thead th {
+	border-width:0px 0px 0px 0px!important;
+}*/
+.tabs.is-boxed li.is-active a
+{
+	border-bottom-color:white!important;
+}
 .topNav .tabs li.is-active a
 {
 	color:$darkGreen!important;
 	border-bottom-color:$darkRed!important;
+}
+.table td, .table th{
+	border: none;
+	border-left: $borderCol;
+}
+.table th{
+	color: $lightGreen!important;
+	border-left:$borderHeadCol;
 }
 /*side menu*/
 .is-right .menu
@@ -331,6 +361,10 @@ h1 {
 }
 
 /*tables*/
+.table.head
+{
+	background-color:transparent!important;
+}
 .trHeader
 {
 	background-color:#777;

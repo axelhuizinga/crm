@@ -7,7 +7,7 @@ import haxe.http.HttpJs;
 import model.AjaxLoader;
 import model.AppState;
 import view.shared.BaseForm;
-import view.grid.Grid;
+import view.table.Table;
 //import view.grid.Grid.DataCell;
 //import view.grid.Grid.SortDirection;
 import react.ReactComponent.ReactComponentOfProps;
@@ -125,7 +125,7 @@ class RolesForm extends BaseForm
         return jsx('		
 				<div className="columns">
 					<div className="tabComponentForm">
-							<Grid id="userList" data=${state.data == null? null:state.data["userList"]}
+							<Table id="userList" data=${state.data == null? null:state.data["userList"]}
 							${...props} dataState = ${dataDisplay["userList"]}
 							className = "is-striped is-fullwidth is-hoverable"/>
 					</div>

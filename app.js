@@ -3028,10 +3028,10 @@ view_shared_BaseForm.prototype = $extend(React_Component.prototype,{
 	}
 	,componentDidMount: function() {
 		this.mounted = true;
-		haxe_Log.trace(this.mounted,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 104, className : "view.shared.BaseForm", methodName : "componentDidMount"});
+		haxe_Log.trace(this.mounted,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 105, className : "view.shared.BaseForm", methodName : "componentDidMount"});
 	}
 	,render: function() {
-		haxe_Log.trace("You should override me :)",{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 108, className : "view.shared.BaseForm", methodName : "render"});
+		haxe_Log.trace("You should override me :)",{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 109, className : "view.shared.BaseForm", methodName : "render"});
 		return null;
 	}
 	,componentWillUnmount: function() {
@@ -3118,7 +3118,7 @@ view_dashboard_RolesForm.prototype = $extend(view_shared_BaseForm.prototype,{
 		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 122, className : "view.dashboard.RolesForm", methodName : "render"});
 		var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp1 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var tmp2 = react__$ReactNode_ReactNode_$Impl_$.fromComp(view_grid_Grid);
+		var tmp2 = react__$ReactNode_ReactNode_$Impl_$.fromComp(view_table_Table);
 		var tmp3 = this.props;
 		var tmp4;
 		if(this.state.data == null) {
@@ -3129,7 +3129,7 @@ view_dashboard_RolesForm.prototype = $extend(view_shared_BaseForm.prototype,{
 		}
 		var _this1 = this.dataDisplay;
 		var tmp5 = __map_reserved["userList"] != null ? _this1.getReserved("userList") : _this1.h["userList"];
-		var tmp6 = React.createElement(tmp2,Object.assign({ },tmp3,{ id : "userList", data : tmp4, dataState : tmp5, className : "table is-striped is-fullwidth is-hoverable"}));
+		var tmp6 = React.createElement(tmp2,Object.assign({ },tmp3,{ id : "userList", data : tmp4, dataState : tmp5, className : "is-striped is-fullwidth is-hoverable"}));
 		var tmp7 = React.createElement(tmp1,{ className : "tabComponentForm"},tmp6);
 		var tmp8 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromComp(view_shared_SMenu),{ className : "menu", itemsData : this.sideMenu});
 		return React.createElement(tmp,{ className : "columns"},tmp7,tmp8);
@@ -3138,27 +3138,29 @@ view_dashboard_RolesForm.prototype = $extend(view_shared_BaseForm.prototype,{
 });
 var view_dashboard_SetUpForm = function(props) {
 	view_shared_BaseForm.call(this,props);
+	this.sideMenu = [{ handler : null, label : "History Trigger"}];
 };
 view_dashboard_SetUpForm.__name__ = "view.dashboard.SetUpForm";
 view_dashboard_SetUpForm.mapStateToProps = function() {
 	return function(aState) {
 		var uState = aState.appWare.user;
-		haxe_Log.trace(uState,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 40, className : "view.dashboard.SetUpForm", methodName : "mapStateToProps"});
+		haxe_Log.trace(uState,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 44, className : "view.dashboard.SetUpForm", methodName : "mapStateToProps"});
 		return { userName : uState.userName, jwt : uState.jwt, firstName : uState.firstName};
 	};
 };
 view_dashboard_SetUpForm.__super__ = view_shared_BaseForm;
 view_dashboard_SetUpForm.prototype = $extend(view_shared_BaseForm.prototype,{
-	componentDidCatch: function(error,info) {
+	sideMenu: null
+	,componentDidCatch: function(error,info) {
 		this.setState({ hasError : true});
-		haxe_Log.trace(error,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 53, className : "view.dashboard.SetUpForm", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 57, className : "view.dashboard.SetUpForm", methodName : "componentDidCatch"});
 	}
 	,componentDidMount: function() {
 		var _gthis = this;
 		var url = "" + Std.string(App.config.api) + "?className=admin.CreateHistoryTrigger&action=run&jwt=" + this.props.jwt + "&userName=" + this.props.userName;
-		haxe_Log.trace(url,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 60, className : "view.dashboard.SetUpForm", methodName : "componentDidMount"});
+		haxe_Log.trace(url,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 64, className : "view.dashboard.SetUpForm", methodName : "componentDidMount"});
 		model_AjaxLoader.load(url,null,function(data) {
-			haxe_Log.trace(data,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 62, className : "view.dashboard.SetUpForm", methodName : "componentDidMount"});
+			haxe_Log.trace(data,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 66, className : "view.dashboard.SetUpForm", methodName : "componentDidMount"});
 			if(data != null && data.length > 0) {
 				var sData = _gthis.state.data;
 				var value = JSON.parse(data).data.rows;
@@ -3198,14 +3200,14 @@ view_dashboard_SetUpForm.prototype = $extend(view_shared_BaseForm.prototype,{
 		});
 	}
 	,render: function() {
-		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 102, className : "view.dashboard.SetUpForm", methodName : "render"});
+		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 106, className : "view.dashboard.SetUpForm", methodName : "render"});
 		if(this.state.hasError) {
 			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("h1");
 			var c = js_Boot.getClass(this);
 			var tmp1 = c.__name__;
 			return React.createElement(tmp,{ },"Fehler in ",tmp1,".");
 		}
-		haxe_Log.trace(this.props.history == App.store.getState().appWare.history,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 105, className : "view.dashboard.SetUpForm", methodName : "render"});
+		haxe_Log.trace(this.props.history == App.store.getState().appWare.history,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 109, className : "view.dashboard.SetUpForm", methodName : "render"});
 		var tmp2 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp3 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp4 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
@@ -3213,33 +3215,22 @@ view_dashboard_SetUpForm.prototype = $extend(view_shared_BaseForm.prototype,{
 		var tmp5 = __map_reserved["historyTrigger"] != null ? _this.getReserved("historyTrigger") : _this.h["historyTrigger"];
 		var tmp6 = React.createElement(tmp4,{ className : "pBlock"},this.renderContent(tmp5));
 		var tmp7 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("div"),{ className : "pBlock"},"Dummy");
-		var tmp8 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var tmp9 = react__$ReactNode_ReactNode_$Impl_$.fromComp(view_grid_Grid);
-		var tmp10 = this.props;
+		var tmp8 = react__$ReactNode_ReactNode_$Impl_$.fromComp(view_table_Table);
+		var tmp9 = this.props;
 		var _this1 = this.state.data;
-		var tmp11 = __map_reserved["userGroups"] != null ? _this1.getReserved("userGroups") : _this1.h["userGroups"];
+		var tmp10 = __map_reserved["userGroups"] != null ? _this1.getReserved("userGroups") : _this1.h["userGroups"];
 		var _this2 = this.dataDisplay;
-		var tmp12 = __map_reserved["userGroups"] != null ? _this2.getReserved("userGroups") : _this2.h["userGroups"];
-		var tmp13 = React.createElement(tmp9,Object.assign({ },tmp10,{ data : tmp11, dataState : tmp12}));
-		var tmp14 = React.createElement(tmp8,{ className : "pBlock"},tmp13);
-		var tmp15 = React.createElement(tmp3,{ className : "tabComponentForm columns level"},tmp6,tmp7,tmp14);
-		var tmp16 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var tmp17 = react__$ReactNode_ReactNode_$Impl_$.fromString("aside");
-		var tmp18 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("p"),{ className : "menu-label"},"Allgemein");
-		var tmp19 = react__$ReactNode_ReactNode_$Impl_$.fromString("ul");
-		var tmp20 = react__$ReactNode_ReactNode_$Impl_$.fromString("li");
-		var tmp21 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("a"),{ },"History Trigger");
-		var tmp22 = React.createElement(tmp20,{ },tmp21);
-		var tmp23 = React.createElement(tmp19,{ className : "menu-list"},tmp22);
-		var tmp24 = React.createElement(tmp17,{ className : "menu"},tmp18,tmp23);
-		var tmp25 = React.createElement(tmp16,{ className : "is-right is-hidden-mobile"},tmp24);
-		return React.createElement(tmp2,{ className : "columns  "},tmp15,tmp25);
+		var tmp11 = __map_reserved["userGroups"] != null ? _this2.getReserved("userGroups") : _this2.h["userGroups"];
+		var tmp12 = React.createElement(tmp8,Object.assign({ },tmp9,{ id : "userGroups", data : tmp10, dataState : tmp11, className : "is-striped is-fullwidth is-hoverable"}));
+		var tmp13 = React.createElement(tmp3,{ className : "tabComponentForm columns"},tmp6,tmp7,tmp12);
+		var tmp14 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromComp(view_shared_SMenu),{ className : "menu", itemsData : this.sideMenu});
+		return React.createElement(tmp2,{ className : "columns  "},tmp13,tmp14);
 	}
 	,renderContent: function(content) {
 		if(content == null || content.length == 0) {
 			return null;
 		}
-		haxe_Log.trace(content.length,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 140, className : "view.dashboard.SetUpForm", methodName : "renderContent"});
+		haxe_Log.trace(content.length,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 135, className : "view.dashboard.SetUpForm", methodName : "renderContent"});
 		var rC = [];
 		var k = 1;
 		var _g = 0;
@@ -3275,199 +3266,6 @@ view_dashboard_SettingsForm.prototype = $extend(React_Component.prototype,{
 });
 var view_dashboard_model_RolesFormModel = function() { };
 view_dashboard_model_RolesFormModel.__name__ = "view.dashboard.model.RolesFormModel";
-var view_grid_Grid = function(props) {
-	React_Component.call(this,props);
-	this.headerUpdated = false;
-	this.fieldNames = [];
-	var k = props.dataState.columns.keys();
-	while(k.hasNext()) {
-		var k1 = k.next();
-		this.fieldNames.push(k1);
-	}
-	haxe_Log.trace(this.fieldNames,{ fileName : "src/view/grid/Grid.hx", lineNumber : 135, className : "view.grid.Grid", methodName : "new"});
-};
-view_grid_Grid.__name__ = "view.grid.Grid";
-view_grid_Grid.__super__ = React_Component;
-view_grid_Grid.prototype = $extend(React_Component.prototype,{
-	fieldNames: null
-	,gridRef: null
-	,fixedHeader: null
-	,rowRef: null
-	,gridHead: null
-	,headerUpdated: null
-	,render: function() {
-		if(this.props.data != null) {
-			haxe_Log.trace(this.props.data.length,{ fileName : "src/view/grid/Grid.hx", lineNumber : 141, className : "view.grid.Grid", methodName : "render"});
-		}
-		haxe_Log.trace(this.props.className,{ fileName : "src/view/grid/Grid.hx", lineNumber : 142, className : "view.grid.Grid", methodName : "render"});
-		if(this.props.data == null || this.props.data.length == 0) {
-			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("section");
-			var tmp1 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-			var tmp2 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("div"),{ className : "loader", style : { width : "3rem", height : "3rem", margin : "auto", borderWidth : "0.58rem"}});
-			var tmp3 = React.createElement(tmp1,{ className : "hero-body"},tmp2);
-			return React.createElement(tmp,{ className : "hero is-alt"},tmp3);
-		}
-		this.gridRef = React.createRef();
-		this.fixedHeader = React.createRef();
-		this.gridHead = React.createRef();
-		this.rowRef = React.createRef();
-		var tmp4 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var tmp5 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var tmp6 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("div"),{ ref : this.fixedHeader, className : "grid-head"},this.renderHeaderDisplay());
-		var tmp7 = React.createElement(tmp5,{ className : "header-background"},tmp6);
-		var tmp8 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var tmp9 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var tmp10 = { ref : this.gridRef, className : this.props.className};
-		var tmp11 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var tmp12 = this.renderHeaderRow();
-		var tmp13 = React.createElement(tmp9,tmp10,React.createElement(tmp11,{ className : "grid-body"},tmp12,this.renderRows()));
-		var tmp14 = React.createElement(tmp8,{ className : "grid-container-inner"},tmp13);
-		var tmp15 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("div"),{ className : "pager"});
-		return React.createElement(tmp4,{ className : "fixed-table-container sort-decoration"},tmp7,tmp14,tmp15);
-	}
-	,renderHeaderRow: function() {
-		if(this.props.dataState == null) {
-			return null;
-		}
-		var headerRow = [];
-		var col = 0;
-		var field = this.props.dataState.columns.keys();
-		while(field.hasNext()) {
-			var field1 = field.next();
-			var _this = this.props.dataState.columns;
-			var hC = __map_reserved[field1] != null ? _this.getReserved(field1) : _this.h[field1];
-			if(hC.show == false) {
-				continue;
-			}
-			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-			var tmp1 = col == 0 ? this.gridHead : null;
-			var tmp2 = hC.headerClassName != null ? hC.headerClassName : hC.className;
-			var tmp3 = hC.label != null ? hC.label : hC.name;
-			var tmp4 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("span"),{ className : "sort-box fa fa-sort"});
-			headerRow.push(React.createElement(tmp,{ key : field1, ref : tmp1, className : tmp2},tmp3,tmp4));
-			++col;
-		}
-		haxe_Log.trace(headerRow.length,{ fileName : "src/view/grid/Grid.hx", lineNumber : 207, className : "view.grid.Grid", methodName : "renderHeaderRow"});
-		return headerRow;
-	}
-	,renderHeaderDisplay: function() {
-		if(this.props.dataState == null) {
-			return null;
-		}
-		var headerRow = [];
-		var field = this.props.dataState.columns.keys();
-		while(field.hasNext()) {
-			var field1 = field.next();
-			var _this = this.props.dataState.columns;
-			var hC = __map_reserved[field1] != null ? _this.getReserved(field1) : _this.h[field1];
-			if(hC.show == false) {
-				continue;
-			}
-			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-			var tmp1 = hC.headerClassName != null ? hC.headerClassName : hC.className;
-			var tmp2 = hC.label != null ? hC.label : hC.name;
-			var tmp3 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("span"),{ className : "sort-box fa fa-sort"});
-			headerRow.push(React.createElement(tmp,{ key : field1, className : "gridHeadItem " + tmp1},tmp2,tmp3));
-		}
-		return headerRow;
-	}
-	,renderCells: function(rD,row) {
-		var _gthis = this;
-		var rdMap = shared_Utils.dynaMap(rD);
-		var column = 0;
-		var cells = this.fieldNames.map(function(fN) {
-			var _this = _gthis.props.dataState.columns;
-			var columnDataState = __map_reserved[fN] != null ? _this.getReserved(fN) : _this.h[fN];
-			column += 1;
-			var cD = { cellFormat : columnDataState.cellFormat, className : columnDataState.className, data : __map_reserved[fN] != null ? rdMap.getReserved(fN) : rdMap.h[fN], dataDisplay : columnDataState.cellFormat != null ? columnDataState.cellFormat(__map_reserved[fN] != null ? rdMap.getReserved(fN) : rdMap.h[fN]) : __map_reserved[fN] != null ? rdMap.getReserved(fN) : rdMap.h[fN], name : fN, pos : { column : column - 1, row : row}, show : columnDataState.show != false};
-			return cD;
-		});
-		var rCs = [];
-		var _g = 0;
-		while(_g < cells.length) {
-			var cD1 = cells[_g];
-			++_g;
-			if(!cD1.show) {
-				continue;
-			}
-			var tmp = "r" + cD1.pos.row + "c" + cD1.pos.column;
-			var tmp1 = cD1.cellFormat != null ? cD1.data : null;
-			rCs.push(React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("div"),{ key : tmp, className : cD1.className, 'data-value' : tmp1},cD1.dataDisplay));
-		}
-		return rCs;
-	}
-	,renderRows: function(dRows) {
-		if(dRows == null) {
-			dRows = this.props.data;
-		}
-		var dRs = [];
-		var row = 0;
-		var _g = 0;
-		while(_g < dRows.length) {
-			var dR = dRows[_g];
-			++_g;
-			dRs.push(this.renderCells(dR,row++));
-		}
-		return dRs;
-	}
-	,componentDidUpdate: function(prevProps,prevState) {
-		var _gthis = this;
-		haxe_Log.trace(this.headerUpdated,{ fileName : "src/view/grid/Grid.hx", lineNumber : 280, className : "view.grid.Grid", methodName : "componentDidUpdate"});
-		if(this.gridHead != null) {
-			if(this.headerUpdated) {
-				return;
-			}
-			this.headerUpdated = true;
-			var gridHeight = react__$ReactRef_ReactRef_$Impl_$.get_current(this.gridRef).clientHeight;
-			haxe_Log.trace("gridHeight:" + gridHeight,{ fileName : "src/view/grid/Grid.hx", lineNumber : 288, className : "view.grid.Grid", methodName : "componentDidUpdate"});
-			haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.gridHead).cells[0].getBoundingClientRect().width,{ fileName : "src/view/grid/Grid.hx", lineNumber : 293, className : "view.grid.Grid", methodName : "componentDidUpdate"});
-			var i = 0;
-			var x = 0.0;
-			haxe_Timer.delay(function() {
-				react__$ReactRef_ReactRef_$Impl_$.get_current(_gthis.gridHead).style.visibility = "collapse";
-			},5000);
-			var _g = 0;
-			var _g1 = react__$ReactRef_ReactRef_$Impl_$.get_current(this.gridHead).childNodes;
-			while(_g < _g1.length) {
-				var cell = _g1[_g];
-				++_g;
-				var w = (js_Boot.__cast(cell , HTMLElement)).getBoundingClientRect().width;
-				var fixedHeaderCell = js_Boot.__cast(react__$ReactRef_ReactRef_$Impl_$.get_current(this.fixedHeader).childNodes[i] , HTMLElement);
-				++i;
-				x += w;
-			}
-			this.nodeDims(react__$ReactRef_ReactRef_$Impl_$.get_current(this.fixedHeader));
-		}
-	}
-	,showDims: function(ref) {
-		var i = 0;
-		var s = 0;
-		var cells = ref.current != null ? ref.current.cells : ref.cells;
-		var _g = 0;
-		while(_g < cells.length) {
-			var cell = cells[_g];
-			++_g;
-			haxe_Log.trace(cell.getBoundingClientRect().toJSON(),{ fileName : "src/view/grid/Grid.hx", lineNumber : 321, className : "view.grid.Grid", methodName : "showDims"});
-			s += cell.getBoundingClientRect().width;
-		}
-		haxe_Log.trace(" sum:" + s,{ fileName : "src/view/grid/Grid.hx", lineNumber : 324, className : "view.grid.Grid", methodName : "showDims"});
-	}
-	,nodeDims: function(n) {
-		var i = 0;
-		var s = 0;
-		var cells = n.childNodes;
-		var _g = 0;
-		while(_g < cells.length) {
-			var cell = cells[_g];
-			++_g;
-			var dRect = (js_Boot.__cast(cell , HTMLElement)).getBoundingClientRect().toJSON();
-			haxe_Log.trace(dRect,{ fileName : "src/view/grid/Grid.hx", lineNumber : 335, className : "view.grid.Grid", methodName : "nodeDims"});
-			s += (js_Boot.__cast(cell , HTMLElement)).getBoundingClientRect().width;
-		}
-		haxe_Log.trace(" sum:" + s,{ fileName : "src/view/grid/Grid.hx", lineNumber : 339, className : "view.grid.Grid", methodName : "nodeDims"});
-	}
-	,__class__: view_grid_Grid
-});
 var view_shared_FormElement = $hxEnums["view.shared.FormElement"] = { __ename__ : "view.shared.FormElement", __constructs__ : ["Input","Checkbox","Radio","Select","TextArea"]
 	,Input: {_hx_index:0,__enum__:"view.shared.FormElement"}
 	,Checkbox: {_hx_index:1,__enum__:"view.shared.FormElement"}
@@ -3557,6 +3355,205 @@ view_shared_SMenu.prototype = $extend(React_PureComponent.prototype,{
 		return React.createElement(tmp,{ className : "is-right is-hidden-mobile"},tmp3);
 	}
 	,__class__: view_shared_SMenu
+});
+var view_table_Table = function(props) {
+	React_Component.call(this,props);
+	this.headerUpdated = false;
+	this.fieldNames = [];
+	var k = props.dataState.columns.keys();
+	while(k.hasNext()) {
+		var k1 = k.next();
+		this.fieldNames.push(k1);
+	}
+	haxe_Log.trace(this.fieldNames,{ fileName : "src/view/table/Table.hx", lineNumber : 146, className : "view.table.Table", methodName : "new"});
+};
+view_table_Table.__name__ = "view.table.Table";
+view_table_Table.__super__ = React_Component;
+view_table_Table.prototype = $extend(React_Component.prototype,{
+	fieldNames: null
+	,tableRef: null
+	,fixedHeader: null
+	,rowRef: null
+	,tHeadRef: null
+	,visibleColumns: null
+	,headerUpdated: null
+	,render: function() {
+		if(this.props.data != null) {
+			haxe_Log.trace(this.props.data.length,{ fileName : "src/view/table/Table.hx", lineNumber : 152, className : "view.table.Table", methodName : "render"});
+		}
+		haxe_Log.trace(this.props.className,{ fileName : "src/view/table/Table.hx", lineNumber : 153, className : "view.table.Table", methodName : "render"});
+		if(this.props.data == null || this.props.data.length == 0) {
+			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("section");
+			var tmp1 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
+			var tmp2 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("div"),{ className : "loader", style : { width : "3rem", height : "3rem", margin : "auto", borderWidth : "0.58rem"}});
+			var tmp3 = React.createElement(tmp1,{ className : "hero-body"},tmp2);
+			return React.createElement(tmp,{ className : "hero is-alt"},tmp3);
+		}
+		this.tableRef = React.createRef();
+		this.fixedHeader = React.createRef();
+		this.tHeadRef = React.createRef();
+		this.rowRef = React.createRef();
+		var tmp4 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
+		var tmp5 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
+		var tmp6 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("table"),{ ref : this.fixedHeader, className : "table head"},React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("thead"),{ },this.renderHeaderDisplay()));
+		var tmp7 = React.createElement(tmp5,{ className : "header-background"},tmp6);
+		var tmp8 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
+		var tmp9 = react__$ReactNode_ReactNode_$Impl_$.fromString("table");
+		var tmp10 = { ref : this.tableRef, className : "table body"};
+		var tmp11 = react__$ReactNode_ReactNode_$Impl_$.fromString("thead");
+		var tmp12 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("tr"),{ },this.renderHeaderRow());
+		var tmp13 = React.createElement(tmp9,tmp10,React.createElement(tmp11,{ },tmp12),React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("tbody"),{ },this.renderRows()));
+		var tmp14 = React.createElement(tmp8,{ className : "${props.className} grid-container-inner"},tmp13);
+		var tmp15 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("div"),{ className : "pager"});
+		return React.createElement(tmp4,{ className : "fixed-grid-container"},tmp7,tmp14,tmp15);
+	}
+	,renderHeaderRow: function() {
+		if(this.props.dataState == null) {
+			return null;
+		}
+		var headerRow = [];
+		var field = this.props.dataState.columns.keys();
+		while(field.hasNext()) {
+			var field1 = field.next();
+			var _this = this.props.dataState.columns;
+			var hC = __map_reserved[field1] != null ? _this.getReserved(field1) : _this.h[field1];
+			if(hC.show == false) {
+				continue;
+			}
+			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("th");
+			var tmp1 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
+			var tmp2 = hC.headerClassName != null ? hC.headerClassName : hC.className;
+			var tmp3 = hC.label != null ? hC.label : hC.name;
+			var tmp4 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("span"),{ className : "sort-box fa fa-sort"});
+			var tmp5 = React.createElement(tmp1,{ className : "th-box " + tmp2},tmp3,tmp4);
+			headerRow.push(React.createElement(tmp,{ key : field1},tmp5));
+		}
+		haxe_Log.trace(headerRow.length,{ fileName : "src/view/table/Table.hx", lineNumber : 242, className : "view.table.Table", methodName : "renderHeaderRow"});
+		return headerRow;
+	}
+	,renderHeaderDisplay: function() {
+		if(this.props.dataState == null) {
+			return null;
+		}
+		var headerRow = [];
+		var field = this.props.dataState.columns.keys();
+		while(field.hasNext()) {
+			var field1 = field.next();
+			var _this = this.props.dataState.columns;
+			var hC = __map_reserved[field1] != null ? _this.getReserved(field1) : _this.h[field1];
+			if(hC.show == false) {
+				continue;
+			}
+			this.visibleColumns++;
+			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("th");
+			var tmp1 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
+			var tmp2 = hC.headerClassName != null ? hC.headerClassName : hC.className;
+			var tmp3 = hC.label != null ? hC.label : hC.name;
+			var tmp4 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("span"),{ className : "sort-box fa fa-sort"});
+			var tmp5 = React.createElement(tmp1,{ className : "th-box " + tmp2},tmp3,tmp4);
+			headerRow.push(React.createElement(tmp,{ key : field1},tmp5));
+		}
+		return headerRow;
+	}
+	,renderCells: function(rD,row) {
+		var _gthis = this;
+		var rdMap = shared_Utils.dynaMap(rD);
+		var column = 0;
+		var cells = this.fieldNames.map(function(fN) {
+			var _this = _gthis.props.dataState.columns;
+			var columnDataState = __map_reserved[fN] != null ? _this.getReserved(fN) : _this.h[fN];
+			column += 1;
+			var cD = { cellFormat : columnDataState.cellFormat, className : columnDataState.className, data : __map_reserved[fN] != null ? rdMap.getReserved(fN) : rdMap.h[fN], dataDisplay : columnDataState.cellFormat != null ? columnDataState.cellFormat(__map_reserved[fN] != null ? rdMap.getReserved(fN) : rdMap.h[fN]) : __map_reserved[fN] != null ? rdMap.getReserved(fN) : rdMap.h[fN], name : fN, pos : { column : column - 1, row : row}, show : columnDataState.show != false};
+			return cD;
+		});
+		var rCs = [];
+		var _g = 0;
+		while(_g < cells.length) {
+			var cD1 = cells[_g];
+			++_g;
+			if(!cD1.show) {
+				continue;
+			}
+			var tmp = "r" + cD1.pos.row + "c" + cD1.pos.column;
+			var tmp1 = cD1.cellFormat != null ? cD1.data : null;
+			rCs.push(React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("td"),{ key : tmp, className : cD1.className, 'data-value' : tmp1},cD1.dataDisplay));
+		}
+		return rCs;
+	}
+	,renderRows: function(dRows) {
+		if(dRows == null) {
+			dRows = this.props.data;
+		}
+		var dRs = [];
+		var row = 0;
+		var _g = 0;
+		while(_g < dRows.length) {
+			var dR = dRows[_g];
+			++_g;
+			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("tr");
+			var tmp1 = row == 0 ? this.rowRef : null;
+			dRs.push(React.createElement(tmp,{ key : "r" + row++, ref : tmp1},this.renderCells(dR,row - 1)));
+		}
+		return dRs;
+	}
+	,componentDidUpdate: function(prevProps,prevState) {
+		haxe_Log.trace(this.headerUpdated,{ fileName : "src/view/table/Table.hx", lineNumber : 318, className : "view.table.Table", methodName : "componentDidUpdate"});
+		if(this.tHeadRef != null) {
+			if(this.headerUpdated) {
+				return;
+			}
+			this.headerUpdated = true;
+			var tableHeight = react__$ReactRef_ReactRef_$Impl_$.get_current(this.tableRef).clientHeight;
+			haxe_Log.trace("tableHeight:" + tableHeight,{ fileName : "src/view/table/Table.hx", lineNumber : 326, className : "view.table.Table", methodName : "componentDidUpdate"});
+			var scrollBarWidth = react__$ReactRef_ReactRef_$Impl_$.get_current(this.tableRef).parentElement.offsetWidth - react__$ReactRef_ReactRef_$Impl_$.get_current(this.tableRef).offsetWidth;
+			haxe_Log.trace("" + scrollBarWidth + " " + react__$ReactRef_ReactRef_$Impl_$.get_current(this.tableRef).parentElement.offsetWidth + " " + react__$ReactRef_ReactRef_$Impl_$.get_current(this.tableRef).offsetWidth,{ fileName : "src/view/table/Table.hx", lineNumber : 329, className : "view.table.Table", methodName : "componentDidUpdate"});
+			react__$ReactRef_ReactRef_$Impl_$.get_current(this.fixedHeader).style.setProperty("padding-right","" + scrollBarWidth + "px");
+			haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.tHeadRef).cells[0].getBoundingClientRect().width,{ fileName : "src/view/table/Table.hx", lineNumber : 331, className : "view.table.Table", methodName : "componentDidUpdate"});
+			haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.fixedHeader).children.length,{ fileName : "src/view/table/Table.hx", lineNumber : 332, className : "view.table.Table", methodName : "componentDidUpdate"});
+			var i = 0;
+			var x = 0.0;
+			react__$ReactRef_ReactRef_$Impl_$.get_current(this.tHeadRef).style.visibility = "collapse";
+			var _g = 0;
+			var _g1 = react__$ReactRef_ReactRef_$Impl_$.get_current(this.tHeadRef).cells;
+			while(_g < _g1.length) {
+				var cell = _g1[_g];
+				++_g;
+				var w = cell.getBoundingClientRect().width;
+				var fixedHeaderCell = js_Boot.__cast(react__$ReactRef_ReactRef_$Impl_$.get_current(this.fixedHeader).childNodes[i] , HTMLElement);
+				fixedHeaderCell.setAttribute("style","width:" + w + "px");
+				++i;
+				x += w;
+			}
+		}
+	}
+	,showDims: function(ref) {
+		var i = 0;
+		var s = 0;
+		var cells = ref.current != null ? ref.current.cells : ref.cells;
+		var _g = 0;
+		while(_g < cells.length) {
+			var cell = cells[_g];
+			++_g;
+			haxe_Log.trace(cell.getBoundingClientRect().toJSON(),{ fileName : "src/view/table/Table.hx", lineNumber : 359, className : "view.table.Table", methodName : "showDims"});
+			s += cell.getBoundingClientRect().width;
+		}
+		haxe_Log.trace(" sum:" + s,{ fileName : "src/view/table/Table.hx", lineNumber : 362, className : "view.table.Table", methodName : "showDims"});
+	}
+	,nodeDims: function(n) {
+		var i = 0;
+		var s = 0;
+		var cells = n.childNodes;
+		var _g = 0;
+		while(_g < cells.length) {
+			var cell = cells[_g];
+			++_g;
+			var dRect = (js_Boot.__cast(cell , HTMLElement)).getBoundingClientRect().toJSON();
+			haxe_Log.trace(dRect,{ fileName : "src/view/table/Table.hx", lineNumber : 373, className : "view.table.Table", methodName : "nodeDims"});
+			s += (js_Boot.__cast(cell , HTMLElement)).getBoundingClientRect().width;
+		}
+		haxe_Log.trace(" sum:" + s,{ fileName : "src/view/table/Table.hx", lineNumber : 377, className : "view.table.Table", methodName : "nodeDims"});
+	}
+	,__class__: view_table_Table
 });
 function $getIterator(o) { if( o instanceof Array ) return HxOverrides.iter(o); else return o.iterator(); }
 var $fid = 0;
@@ -3762,8 +3759,6 @@ view_dashboard_model_RolesFormModel.dataDisplay = (function($this) {
 	$r = _g1;
 	return $r;
 }(this));
-view_grid_Grid.displayName = "Grid";
-view_grid_Grid.__fileName__ = "src/view/grid/Grid.hx";
 view_shared_RouteBox.displayName = "RouteBox";
 view_shared_RouteBox.__fileName__ = "src/view/shared/RouteBox.hx";
 view_shared_SLink.displayName = "SLink";
@@ -3772,5 +3767,7 @@ view_shared_SLink._connected = (redux_react_ReactRedux.connect(view_shared_SLink
 view_shared_SLink.__jsxStatic = view_shared_SLink._connected;
 view_shared_SMenu.displayName = "SMenu";
 view_shared_SMenu.__fileName__ = "src/view/shared/SMenu.hx";
+view_table_Table.displayName = "Table";
+view_table_Table.__fileName__ = "src/view/table/Table.hx";
 Go.main();
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);

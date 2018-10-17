@@ -36,11 +36,11 @@ typedef DataState =
 typedef DataColumn = 
 {
 	@:optional var cellFormat:Function;
-	@:value('')
+	@:value(' ')
 	@:optional var className:String;
 	@:optional var editable:Bool;
 	@:optional var flexGrow:Int;
-	@:value('')
+	@:value(' ')
 	@:optional var headerClassName:String;
 	@:optional var headerFormat:Function;
 	@:optional var headerStyle:Dynamic;
@@ -51,7 +51,7 @@ typedef DataColumn =
 	@:optional var show:Bool;
 	@:optional var style:Dynamic;
 }
-
+//
 typedef DataCellPos =
 {
 	column:Int,
@@ -113,6 +113,16 @@ typedef TableProps =
 	?sortable:EitherType<Bool, Array<EitherType<String,Dynamic>>>
 }
 
+typedef TableState =
+{
+	?enteredRow:Int,
+	?selectedRow:Int,
+	?selectedRows:Array<Int>,
+	?_rowCells:Array<Element>,
+	?_selectedCells:Array<Element>,
+	?_isSelected:Bool
+}
+
 class Table extends ReactComponentOf<TableProps, Dynamic>
 {
 	var fieldNames:Array<String>;
@@ -120,6 +130,7 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 	var fixedHeader:ReactRef<DivElement>;
 	var rowRef:ReactRef<TableRowElement>;
 	var tHeadRef:ReactRef<TableRowElement>;
+	var visibleColumns:Int;
 	var headerUpdated:Bool;
 	
 	public function new(?props:TableProps)
@@ -156,7 +167,38 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 		tHeadRef = React.createRef();
 		rowRef = React.createRef();
 		return jsx('		
-			<div className="fixed-table-container sort-decoration">
+			<div className="fixed-grid-container" >
+				<div className="header-background" >
+					<table className="table head">
+						<thead>
+							<tr ref={fixedHeader}>
+								${renderHeaderDisplay()}
+							</tr>
+						</thead>
+					</table>				
+				</div>				
+				<div className="grid-container-inner">							
+					<table className=${"table " + props.className} ref={tableRef}>
+						<thead>
+							<tr ref=${tHeadRef}>
+								${renderHeaderRow()}
+							</tr>
+						</thead>
+						<tbody>
+							${renderRows()}
+						</tbody>
+					</table>
+				</div>
+				<div className="pager">
+				</div>
+			</div>		
+			
+							
+		');		
+	}
+			
+	/**
+	   <div className="fixed-table-container sort-decoration">
 				<div className="fixed-table-container-inner">		
 					<table className=${props.className} ref={tableRef}>
 						<thead>
@@ -174,12 +216,7 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 					${renderHeaderDisplay()}
 					</div>				
 				</div>
-			</div>					
-		');		
-	}
-			
-	/**
-	   
+			</div>	
 	${renderHeaderRow()}
 	   @return
 	**/
@@ -197,8 +234,10 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 				continue;
 			//trace(hC);
 			headerRow.push(jsx('	
-			<th key={field} className={(hC.headerClassName != null? hC.headerClassName :hC.className)}>
+			<th key={field}>
+				<div  className={"th-box " + (hC.headerClassName != null? hC.headerClassName :hC.className)}>
 				{hC.label != null? hC.label : hC.name}<span className="sort-box fa fa-sort"></span>
+				</div>
 			</th>
 			'));
 		}
@@ -217,15 +256,18 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 			var hC:DataColumn = props.dataState.columns.get(field);
 			if (hC.show == false)
 				continue;
+			visibleColumns++;	
 			headerRow.push(jsx('	
-			<div key={field} className={"th-box " + (hC.headerClassName != null? hC.headerClassName :hC.className)}>
+			<th key={field}>
+			<div  className={"th-box " + (hC.headerClassName != null? hC.headerClassName :hC.className)}>
 			{hC.label != null? hC.label : hC.name}<span className="sort-box fa fa-sort"></span>
 			</div>
+			</th>
 			'));
 		}
 		return headerRow;
 	}	
-//<span>{hC.data}<span className="fa fa-sort"></span></span><span className="2fa 2fa-sort"></span>
+
 	function renderCells(rD:Dynamic, row:Int):ReactFragment
 	{
 		@:arrayAccess
@@ -284,28 +326,30 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 			headerUpdated = true;			
 			var tableHeight:Float = tableRef.current.clientHeight;
 			trace('tableHeight:$tableHeight');
-			fixedHeader.current.parentElement.setAttribute('style', 'margin-top:-${tableHeight}px;');
-			//Out.dumpObjectTree(tHeadRef.current.cells[0].getBoundingClientRect());
-			//Out.dumpObject(tHeadRef.current.cells[0].getBoundingClientRect());
-			//Out.dumpObjectTree(fixedHeader.current.children);
-			trace(tHeadRef.current.cells[0].getBoundingClientRect().width);
+			//fixedHeader.current.parentElement.setAttribute('style', 'margin-top:-${tableHeight}px;');
+			var scrollBarWidth = tableRef.current.parentElement.offsetWidth - tableRef.current.offsetWidth;
+			trace('$scrollBarWidth ${tableRef.current.parentElement.offsetWidth} ${tableRef.current.offsetWidth}');
+			//fixedHeader.current.style.setProperty('padding-right', '${scrollBarWidth}px');
+			trace(tHeadRef);// .current.cells[0].getBoundingClientRect().width);
 			trace(fixedHeader.current.children.length);
+			trace(fixedHeader.current);// .firstElementChild.children.length);
+			
 			var i:Int = 0;
 			var x:Float = 0.0;// tHeadRef.current.cells[0].getBoundingClientRect().x;tHeadRef.current.remove()
 			//showDims(rowRef);
 			tHeadRef.current.style.visibility = "collapse";			
-
-			for (cell in tHeadRef.current.cells)
+			//return;
+			for (cell in tHeadRef.current.children)
 			{
 				var w:Float = cell.getBoundingClientRect().width;
 				var fixedHeaderCell = cast(fixedHeader.current.childNodes[i],Element);
-				fixedHeaderCell.setAttribute('style', 'left:${x}px;width:${w}px');
+				fixedHeaderCell.setAttribute('style', 'width:${w}px');
 				i++;
 				x += w;
 				//trace(fixedHeaderCell.getAttribute('style'));
 			}
 			//showDims(tHeadRef);
-			nodeDims(fixedHeader.current);
+			//nodeDims(fixedHeader.current);
 		}
 	}
 	

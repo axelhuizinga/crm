@@ -16,7 +16,7 @@ import model.AjaxLoader;
 import view.shared.BaseForm;
 import view.shared.BaseForm.BaseFormProps;
 import view.shared.SMenu;
-import view.grid.Grid;
+import view.table.Table;
 
 /**
  * ...
@@ -118,7 +118,7 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 								Dummy
 							</div>
 							
-								<Grid id="userGroups" ${...props} data = ${state.data.get('userGroups')}
+								<Table id="userGroups" ${...props} data = ${state.data.get('userGroups')}
 								dataState = ${dataDisplay["userGroups"]}
 								className = "is-striped is-fullwidth is-hoverable"/>
 							

@@ -1,13 +1,13 @@
 package view.dashboard.model;
 import haxe.ds.StringMap;
-import view.grid.Grid.DataColumn;
-import view.grid.Grid.DataState;
+import view.table.Table.DataColumn;
+import view.table.Table.DataState;
 
 /**
  * @author axel@cunity.me
  */
 
-import view.grid.Grid.*;
+import view.table.Table.*;
 
 class RolesFormModel
 {
