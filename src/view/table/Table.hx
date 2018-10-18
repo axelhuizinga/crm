@@ -6,6 +6,7 @@ import haxe.ds.StringMap;
 import haxe.extern.EitherType;
 import js.html.DOMRect;
 import js.html.Element;
+import js.html.MouseEvent;
 import js.html.Node;
 import js.html.NodeList;
 import js.html.TableCellElement;
@@ -308,11 +309,19 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 		for (dR in dRows)
 		{			
 			dRs.push(
-			jsx('<tr key=${"r"+row} ref=${row==0?rowRef:null} >
+			jsx('<tr key=${"r"+row} ref=${row==0?rowRef:null} onClick={select}>
 				${renderCells(dR, row++)}				
 			</tr>'));
 		}//
 		return dRs;
+	}
+	
+	public function select(mEv:MouseEvent)
+	{
+		trace(mEv.target);
+		trace(mEv.currentTarget);
+		var htRow:TableRowElement = cast(mEv.currentTarget, TableRowElement);
+		htRow.classList.toggle('is-selected');
 	}
 	
 	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)

@@ -7414,7 +7414,7 @@ label.panel-block {
     justify-content: flex-end; }
   .tabs.is-boxed a {
     border: 1px solid transparent;
-    border-radius: 5px 5px 0 0; }
+    border-radius: 0.3rem 0.3rem 0 0; }
     .tabs.is-boxed a:hover {
       background-color: whitesmoke;
       border-bottom-color: #dbdbdb; }
@@ -8891,7 +8891,7 @@ label.panel-block {
 
 * {
   border-collapse: collapse;
-  background-color: transparent; }
+  /*background-color:transparent!important;*/ }
 
 html, body {
   /*font-family:Arial;*/
@@ -8904,8 +8904,7 @@ html, body {
   height: 100%;
   display: flex;
   flex: auto;
-  flex-direction: column;
-  /*font-size:1.05rem;*/ }
+  flex-direction: column; }
 
 h1 {
   margin: 10px; }
@@ -8961,106 +8960,64 @@ h1 {
 .react-datetime-picker__button__input__input {
   height: auto; }
 
-/* sticky header table stuff */
-.table thead th {
-  /* padding: 0px 0.75rem;
-	 border-width:0;*/ }
+/* sticky header grid stuff display:flex;grid-template-columns:repeat( auto-fill, auto );*/
+.grid {
+  display: grid;
+  /*grid-auto-flow: dense;*/
+  grid-column-gap: 0px; }
 
-.fixed-table-container th, .fixed-table-container td {
+.grid > div {
   padding: 0px 0.75rem;
+  /*border-left:0.6px dotted transparent;*/ }
+
+.grid.head {
+  grid-rows: 2rem;
+  padding-right: 17px;
+  padding-bottom: 2px; }
+
+.grid.body > div {
+  /*border-left:0.6px dotted white;*/ }
+
+.fixed-grid-container {
+  display: flex;
+  flex-direction: column;
+  /* position: relative;could be absolute or relative */ }
+
+.grid-container-inner {
+  overflow-x: hidden;
+  overflow-y: auto;
   border: 1px solid grey;
-  border-collapse: collapse;
-  font-weight: normal; }
+  border-style: none solid solid; }
 
-.fixed-table-container table {
-  overflow-x: hidden;
-  overflow-y: auto;
-  /*table-layout:fixed;*/ }
+.gridHeadItem {
+  font-weight: bold;
+  padding: 0.35rem 0.75rem !important;
+  /*display:flex;
+	flex-grow:1 0 auto;
+	justify-content:space-between;*/ }
 
-.fixed-table-container {
-  /* width: 50%;
-  height: 200px;
-  border: 1px solid black;
-  margin: 10px auto;
-  background-color: white;
-  above is decorative or flexible */
-  position: relative;
-  /* could be absolute or relative */
-  padding-top: 2rem;
-  /* height of header */
-  display: flex; }
-
-.fixed-table-container-inner {
-  overflow-x: hidden;
-  overflow-y: auto;
-  width: 100%; }
-
-.header-background table {
-  background-color: transparent; }
-
-/*.header-background th:last-child
-{
-	padding-right:17px;
-}
-.header-background th
-{
-	padding-left:0.75rem;	
-}*/
 .header-background {
-  background-color: #D5ECFF;
-  height: 2rem;
-  /* height of header */
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  border-color: #dbdbdb;
-  border-radius: 5px 5px 0px 0px;
-  border-style: solid solid none;
-  border-width: 1px; }
+  /*background-color: #D5ECFF;#eee;flex: 1 0 auto;background-color: $darkRed;
+  color: $lightGreen;*/
+  background-origin: border-box;
+  background-image: linear-gradient(#fbdcdc, #801111);
+  border-color: grey;
+  border-radius: 0.3rem 0.3rem 0px 0px;
+  border-style: solid solid none solid;
+  border-width: 1px 1px 0px 1px; }
 
-.thead {
-  padding-left: -1px; }
+.head tr {
+  /*background-color: $darkRed;
+	background-color:transparent!important;*/
+  background-image: linear-gradient(#fbdcdc, #801111);
+  background-origin: border-box; }
 
-.th-box {
-  position: absolute;
-  height: 2rem;
-  top: 0;
-  line-height: 2rem;
-  /* height of header */
-  border: 1px solid grey;
-  padding: 0px 0.75rem;
-  /* padding-left: 5px;text-align: left;
-  margin-left: -5px;*/ }
-
-.fixed-table-container th:first-child .th-inner {
-  border-left: none; }
-
-.fixed-table-container th:first-child {
-  /*padding-left: 6px;*/ }
-
-.fixed-table-container.sort-decoration {
-  overflow: hidden;
-  min-width: 530px;
-  /* enough width to show arrows */
-  heigth: 100%;
-  width: 100%;
-  border-radius: 5px 5px 0px 0px;
-  border-style: none solid solid;
-  border-width: 1px;
-  border-color: #dbdbdb; }
+.gridHeadItem:hover {
+  color: #fabf32; }
 
 .sort-box {
-  margin: 0.42rem 0 0 0.75rem; }
-
-.sort-decoration .th-inner {
-  width: 100%; }
-
-.header .th-inner {
-  background-color: #D5ECFF; }
-
-.th-inner .headerSort {
-  padding: 0 1rem; }
+  margin: 0 0 0.22rem 0.75rem;
+  align-self: flex-end; }
 
 /*span.sortArrow {
 	background: url(icons/bg.gif) 0 4px no-repeat transparent;
@@ -9082,12 +9039,6 @@ h1 {
 .topNav, .topNav ul {
   display: flex;
   justify-content: center; }
-
-.topNav .tabs li a {
-  border-bottom: 0.3rem solid transparent; }
-
-.topNav .tabs li.is-active a {
-  border-bottom-color: orange; }
 
 .topNav {
   background-image: linear-gradient(white, #ddd); }
@@ -9119,7 +9070,7 @@ h1 {
   flex-direction: column;
   flex: auto;
   margin: 0.8rem 0 0 0.8rem;
-  overflow-y: auto;
+  /*overflow-y:auto;*/
   min-height: 0; }
 
 .tabComponentForm .hero {
@@ -9176,25 +9127,52 @@ h1 {
 .tabs {
   overflow: visible; }
 
+.topNav .tabs li a {
+  border-bottom: 0.3rem solid transparent; }
+
+.tabs li.is-active a {
+  color: #118011 !important; }
+
+.tabNav2 .tabs ul {
+  background-color: white; }
+
+/*.tabNav2 .table thead td, .table thead th {
+	border-width:0px 0px 0px 0px!important;
+}*/
+.tabs.is-boxed li.is-active a {
+  border-bottom-color: white !important; }
+
+.topNav .tabs li.is-active a {
+  color: #118011 !important;
+  border-bottom-color: #801111 !important; }
+
+.table td,
+.table th {
+  border: none;
+  border-left: 0.6px dotted transparent; }
+
+.table th {
+  color: honeydew !important;
+  border-left: 0.6px dotted #fbdcdc; }
+
 /*side menu*/
 .is-right .menu {
   margin: 0.8rem 0.5rem 0.5rem 0.8rem !important; }
 
 /*tables*/
+.table.head {
+  background-color: transparent !important; }
+
 .trHeader {
   background-color: #777;
-  border-radius: 5px 5px 0px 0px;
+  border-radius: 0.3rem 0.3rem 0px 0px;
   color: #fff; }
 
-.trEven {
+.even {
   background-color: #eee; }
 
-.trOdd {
+.odd {
   background-color: #ddd; }
-
-/*react-virtualized*/
-.ReactVirtualized__Table__headerColumn {
-  white-space: nowrap; }
 
 .zeroH {
   height: 0px;

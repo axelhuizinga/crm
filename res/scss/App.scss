@@ -6,7 +6,7 @@
 
 $bgto: #ddd;
 $border-light: #dbdbdb;
-$borderCol:0.6px dotted transparent;
+$borderCol:0.35px dotted #eee;
 $cell-border: 1px solid grey;
 $cellPadding: 0px 0.75rem;
 $headPadding: 0.35rem 0.75rem;
@@ -334,9 +334,9 @@ h1 {
 {
 	background-color:white;
 }
-/*.tabNav2 .table thead td, .table thead th {
-	border-width:0px 0px 0px 0px!important;
-}*/
+.tabContent2 .table thead th:hover {
+	color:$sun!important;
+}
 .tabs.is-boxed li.is-active a
 {
 	border-bottom-color:white!important;
@@ -352,7 +352,7 @@ h1 {
 }
 .table th{
 	color: $lightGreen!important;
-	border-left:$borderHeadCol;
+	border-left:$borderHeadCol!important;
 }
 /*side menu*/
 .is-right .menu
@@ -372,6 +372,10 @@ h1 {
 	color:#fff;
 }
 
+tr.is-selected
+{
+	background-color: $darkGreen;
+}
 .even
 {
 	background-color:#eee;
