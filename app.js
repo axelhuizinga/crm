@@ -3365,7 +3365,7 @@ var view_table_Table = function(props) {
 		var k1 = k.next();
 		this.fieldNames.push(k1);
 	}
-	haxe_Log.trace(this.fieldNames,{ fileName : "src/view/table/Table.hx", lineNumber : 146, className : "view.table.Table", methodName : "new"});
+	haxe_Log.trace(this.fieldNames,{ fileName : "src/view/table/Table.hx", lineNumber : 147, className : "view.table.Table", methodName : "new"});
 };
 view_table_Table.__name__ = "view.table.Table";
 view_table_Table.__super__ = React_Component;
@@ -3379,9 +3379,9 @@ view_table_Table.prototype = $extend(React_Component.prototype,{
 	,headerUpdated: null
 	,render: function() {
 		if(this.props.data != null) {
-			haxe_Log.trace(this.props.data.length,{ fileName : "src/view/table/Table.hx", lineNumber : 152, className : "view.table.Table", methodName : "render"});
+			haxe_Log.trace(this.props.data.length,{ fileName : "src/view/table/Table.hx", lineNumber : 153, className : "view.table.Table", methodName : "render"});
 		}
-		haxe_Log.trace(this.props.className,{ fileName : "src/view/table/Table.hx", lineNumber : 153, className : "view.table.Table", methodName : "render"});
+		haxe_Log.trace(this.props.className,{ fileName : "src/view/table/Table.hx", lineNumber : 154, className : "view.table.Table", methodName : "render"});
 		if(this.props.data == null || this.props.data.length == 0) {
 			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("section");
 			var tmp1 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
@@ -3395,17 +3395,21 @@ view_table_Table.prototype = $extend(React_Component.prototype,{
 		this.rowRef = React.createRef();
 		var tmp4 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp5 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var tmp6 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("table"),{ ref : this.fixedHeader, className : "table head"},React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("thead"),{ },this.renderHeaderDisplay()));
-		var tmp7 = React.createElement(tmp5,{ className : "header-background"},tmp6);
-		var tmp8 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var tmp9 = react__$ReactNode_ReactNode_$Impl_$.fromString("table");
-		var tmp10 = { ref : this.tableRef, className : "table body"};
-		var tmp11 = react__$ReactNode_ReactNode_$Impl_$.fromString("thead");
-		var tmp12 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("tr"),{ },this.renderHeaderRow());
-		var tmp13 = React.createElement(tmp9,tmp10,React.createElement(tmp11,{ },tmp12),React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("tbody"),{ },this.renderRows()));
-		var tmp14 = React.createElement(tmp8,{ className : "${props.className} grid-container-inner"},tmp13);
-		var tmp15 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("div"),{ className : "pager"});
-		return React.createElement(tmp4,{ className : "fixed-grid-container"},tmp7,tmp14,tmp15);
+		var tmp6 = react__$ReactNode_ReactNode_$Impl_$.fromString("table");
+		var tmp7 = react__$ReactNode_ReactNode_$Impl_$.fromString("thead");
+		var tmp8 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("tr"),{ ref : this.fixedHeader},this.renderHeaderDisplay());
+		var tmp9 = React.createElement(tmp7,{ },tmp8);
+		var tmp10 = React.createElement(tmp6,{ className : "table head"},tmp9);
+		var tmp11 = React.createElement(tmp5,{ className : "header-background"},tmp10);
+		var tmp12 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
+		var tmp13 = react__$ReactNode_ReactNode_$Impl_$.fromString("table");
+		var tmp14 = { ref : this.tableRef, className : "table " + this.props.className};
+		var tmp15 = react__$ReactNode_ReactNode_$Impl_$.fromString("thead");
+		var tmp16 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("tr"),{ ref : this.tHeadRef},this.renderHeaderRow());
+		var tmp17 = React.createElement(tmp13,tmp14,React.createElement(tmp15,{ },tmp16),React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("tbody"),{ },this.renderRows()));
+		var tmp18 = React.createElement(tmp12,{ className : "grid-container-inner"},tmp17);
+		var tmp19 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("div"),{ className : "pager"});
+		return React.createElement(tmp4,{ className : "fixed-grid-container"},tmp11,tmp18,tmp19);
 	}
 	,renderHeaderRow: function() {
 		if(this.props.dataState == null) {
@@ -3428,7 +3432,7 @@ view_table_Table.prototype = $extend(React_Component.prototype,{
 			var tmp5 = React.createElement(tmp1,{ className : "th-box " + tmp2},tmp3,tmp4);
 			headerRow.push(React.createElement(tmp,{ key : field1},tmp5));
 		}
-		haxe_Log.trace(headerRow.length,{ fileName : "src/view/table/Table.hx", lineNumber : 242, className : "view.table.Table", methodName : "renderHeaderRow"});
+		haxe_Log.trace(headerRow.length,{ fileName : "src/view/table/Table.hx", lineNumber : 245, className : "view.table.Table", methodName : "renderHeaderRow"});
 		return headerRow;
 	}
 	,renderHeaderDisplay: function() {
@@ -3492,29 +3496,35 @@ view_table_Table.prototype = $extend(React_Component.prototype,{
 			++_g;
 			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("tr");
 			var tmp1 = row == 0 ? this.rowRef : null;
-			dRs.push(React.createElement(tmp,{ key : "r" + row++, ref : tmp1},this.renderCells(dR,row - 1)));
+			dRs.push(React.createElement(tmp,{ key : "r" + row++, ref : tmp1, onClick : $bind(this,this.select)},this.renderCells(dR,row - 1)));
 		}
 		return dRs;
 	}
+	,select: function(mEv) {
+		haxe_Log.trace(mEv.target,{ fileName : "src/view/table/Table.hx", lineNumber : 321, className : "view.table.Table", methodName : "select"});
+		haxe_Log.trace(mEv.currentTarget,{ fileName : "src/view/table/Table.hx", lineNumber : 322, className : "view.table.Table", methodName : "select"});
+		var htRow = js_Boot.__cast(mEv.currentTarget , HTMLTableRowElement);
+		htRow.classList.toggle("is-selected");
+	}
 	,componentDidUpdate: function(prevProps,prevState) {
-		haxe_Log.trace(this.headerUpdated,{ fileName : "src/view/table/Table.hx", lineNumber : 318, className : "view.table.Table", methodName : "componentDidUpdate"});
+		haxe_Log.trace(this.headerUpdated,{ fileName : "src/view/table/Table.hx", lineNumber : 329, className : "view.table.Table", methodName : "componentDidUpdate"});
 		if(this.tHeadRef != null) {
 			if(this.headerUpdated) {
 				return;
 			}
 			this.headerUpdated = true;
 			var tableHeight = react__$ReactRef_ReactRef_$Impl_$.get_current(this.tableRef).clientHeight;
-			haxe_Log.trace("tableHeight:" + tableHeight,{ fileName : "src/view/table/Table.hx", lineNumber : 326, className : "view.table.Table", methodName : "componentDidUpdate"});
+			haxe_Log.trace("tableHeight:" + tableHeight,{ fileName : "src/view/table/Table.hx", lineNumber : 337, className : "view.table.Table", methodName : "componentDidUpdate"});
 			var scrollBarWidth = react__$ReactRef_ReactRef_$Impl_$.get_current(this.tableRef).parentElement.offsetWidth - react__$ReactRef_ReactRef_$Impl_$.get_current(this.tableRef).offsetWidth;
-			haxe_Log.trace("" + scrollBarWidth + " " + react__$ReactRef_ReactRef_$Impl_$.get_current(this.tableRef).parentElement.offsetWidth + " " + react__$ReactRef_ReactRef_$Impl_$.get_current(this.tableRef).offsetWidth,{ fileName : "src/view/table/Table.hx", lineNumber : 329, className : "view.table.Table", methodName : "componentDidUpdate"});
-			react__$ReactRef_ReactRef_$Impl_$.get_current(this.fixedHeader).style.setProperty("padding-right","" + scrollBarWidth + "px");
-			haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.tHeadRef).cells[0].getBoundingClientRect().width,{ fileName : "src/view/table/Table.hx", lineNumber : 331, className : "view.table.Table", methodName : "componentDidUpdate"});
-			haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.fixedHeader).children.length,{ fileName : "src/view/table/Table.hx", lineNumber : 332, className : "view.table.Table", methodName : "componentDidUpdate"});
+			haxe_Log.trace("" + scrollBarWidth + " " + react__$ReactRef_ReactRef_$Impl_$.get_current(this.tableRef).parentElement.offsetWidth + " " + react__$ReactRef_ReactRef_$Impl_$.get_current(this.tableRef).offsetWidth,{ fileName : "src/view/table/Table.hx", lineNumber : 340, className : "view.table.Table", methodName : "componentDidUpdate"});
+			haxe_Log.trace(this.tHeadRef,{ fileName : "src/view/table/Table.hx", lineNumber : 342, className : "view.table.Table", methodName : "componentDidUpdate"});
+			haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.fixedHeader).children.length,{ fileName : "src/view/table/Table.hx", lineNumber : 343, className : "view.table.Table", methodName : "componentDidUpdate"});
+			haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.fixedHeader),{ fileName : "src/view/table/Table.hx", lineNumber : 344, className : "view.table.Table", methodName : "componentDidUpdate"});
 			var i = 0;
 			var x = 0.0;
 			react__$ReactRef_ReactRef_$Impl_$.get_current(this.tHeadRef).style.visibility = "collapse";
 			var _g = 0;
-			var _g1 = react__$ReactRef_ReactRef_$Impl_$.get_current(this.tHeadRef).cells;
+			var _g1 = react__$ReactRef_ReactRef_$Impl_$.get_current(this.tHeadRef).children;
 			while(_g < _g1.length) {
 				var cell = _g1[_g];
 				++_g;
@@ -3534,10 +3544,10 @@ view_table_Table.prototype = $extend(React_Component.prototype,{
 		while(_g < cells.length) {
 			var cell = cells[_g];
 			++_g;
-			haxe_Log.trace(cell.getBoundingClientRect().toJSON(),{ fileName : "src/view/table/Table.hx", lineNumber : 359, className : "view.table.Table", methodName : "showDims"});
+			haxe_Log.trace(cell.getBoundingClientRect().toJSON(),{ fileName : "src/view/table/Table.hx", lineNumber : 372, className : "view.table.Table", methodName : "showDims"});
 			s += cell.getBoundingClientRect().width;
 		}
-		haxe_Log.trace(" sum:" + s,{ fileName : "src/view/table/Table.hx", lineNumber : 362, className : "view.table.Table", methodName : "showDims"});
+		haxe_Log.trace(" sum:" + s,{ fileName : "src/view/table/Table.hx", lineNumber : 375, className : "view.table.Table", methodName : "showDims"});
 	}
 	,nodeDims: function(n) {
 		var i = 0;
@@ -3548,10 +3558,10 @@ view_table_Table.prototype = $extend(React_Component.prototype,{
 			var cell = cells[_g];
 			++_g;
 			var dRect = (js_Boot.__cast(cell , HTMLElement)).getBoundingClientRect().toJSON();
-			haxe_Log.trace(dRect,{ fileName : "src/view/table/Table.hx", lineNumber : 373, className : "view.table.Table", methodName : "nodeDims"});
+			haxe_Log.trace(dRect,{ fileName : "src/view/table/Table.hx", lineNumber : 386, className : "view.table.Table", methodName : "nodeDims"});
 			s += (js_Boot.__cast(cell , HTMLElement)).getBoundingClientRect().width;
 		}
-		haxe_Log.trace(" sum:" + s,{ fileName : "src/view/table/Table.hx", lineNumber : 377, className : "view.table.Table", methodName : "nodeDims"});
+		haxe_Log.trace(" sum:" + s,{ fileName : "src/view/table/Table.hx", lineNumber : 390, className : "view.table.Table", methodName : "nodeDims"});
 	}
 	,__class__: view_table_Table
 });

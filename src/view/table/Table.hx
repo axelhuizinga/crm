@@ -324,7 +324,7 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 		htRow.classList.toggle('is-selected');
 	}
 	
-	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)
+	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)//,snapshot:Dynamic
 	{
 		trace(headerUpdated); 
 

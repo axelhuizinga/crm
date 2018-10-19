@@ -10,17 +10,26 @@ $borderCol:0.35px dotted #eee;
 $cell-border: 1px solid grey;
 $cellPadding: 0px 0.75rem;
 $headPadding: 0.35rem 0.75rem;
-$darkGreen: rgb(17,128,17);
+$darkBlue: rgb(10,20,60);
+$paleBlue: rgb(140,190,240);
+$darkGreen: rgb(60,80,0);
 $highLightGreen: rgb(80,220,20);
+$lightBlue: rgb(240,240,255);
 $lightGreen: rgb(240,255,240);
 $darkRed: rgb(128, 17, 17);
 $lightRed: rgb(251, 220, 220);
 $primary: #601111;
-$sun: #fabf32;
-$borderHeadCol:0.6px dotted $lightRed;
+$darkSun: #fabf32;
+$lightSun: hsl(49, 95%, 95%);
+$sun: rgb(251, 220, 80);
+$borderHeadCol:0.6px dotted $lightGreen;
 $tabs-boxed-link-radius: 0.3rem;//@include tabsradius(5);
 $tableHeader-radius: 0.3rem;
 $tableHeaderHeight: 2rem;
+
+/**/
+$darkGradient1:linear-gradient($lightGreen,$darkGreen, $darkGreen);	 
+$darkGradient:linear-gradient($lightBlue 0%, $paleBlue 32%);	 
 
 @charset "utf-8";
 @import "../bulma/bulma.sass";
@@ -165,22 +174,23 @@ h1 {
 
 .header-background {
   /*background-color: #D5ECFF;#eee;flex: 1 0 auto;background-color: $darkRed;
-  color: $lightGreen;*/ 
+  color: $lightGreen; background-image:linear-gradient($lightGreen,$darkGreen, $darkGreen);	 */ 
   background-origin:border-box;
-  background-image:linear-gradient($lightRed, $darkRed);	 
+  background-image:$darkGradient;
   border-color: grey;
   border-radius: $tableHeader-radius $tableHeader-radius 0px 0px;
   border-style: solid solid none solid;
   border-width: 1px 1px 0px 1px;  
 }
-.head tr
+/*.head tr
 {
-	/*background-color: $darkRed;
-	background-color:transparent!important;*/
-	background-image:linear-gradient($lightRed, $darkRed);	
+	background-color: $darkRed;
+	background-color:transparent!important;
+	background-image:linear-gradient($lightGreen,$darkGreen, $darkGreen);	
 	background-origin:border-box;
 	
-}
+}*/
+	
 .gridHeadItem:hover
 {
 	color: $sun;
@@ -344,14 +354,14 @@ h1 {
 .topNav .tabs li.is-active a
 {
 	color:$darkGreen!important;
-	border-bottom-color:$darkRed!important;
+	border-bottom-color:$darkSun!important;
 }
 .table td, .table th{
 	border: none;
 	border-left: $borderCol;
 }
-.table th{
-	color: $lightGreen!important;
+.table thead th{
+	color: $lightSun;
 	border-left:$borderHeadCol!important;
 }
 /*side menu*/
@@ -364,17 +374,20 @@ h1 {
 .table.head
 {
 	background-color:transparent!important;
+	text-shadow: 0.2rem 0.2rem 1.1rem #333;
 }
 .trHeader
 {
 	background-color:#777;
 	border-radius: $tableHeader-radius $tableHeader-radius 0px 0px;
 	color:#fff;
+	
 }
 
-tr.is-selected
+.table tr.is-selected
 {
-	background-color: $darkGreen;
+	background-color: $sun;
+	color:$darkBlue;
 }
 .even
 {
