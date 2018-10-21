@@ -40,7 +40,7 @@ class RolesForm extends BaseForm
 		super(props);
 		
 		sideMenu = [
-			{handler:this.importExternalUsers,label:'Importiere Externe Benutzer'}
+			{handler:this.deleteUsers,label:'Benutzer Löschen'}
 		];
 		state = {
 			clean:true,
@@ -49,6 +49,11 @@ class RolesForm extends BaseForm
 		};
 		requests = [];
 		trace(Reflect.fields(props));
+	}
+	
+	public function deleteUsers(ev:ReactEvent):Void
+	{
+		
 	}
 	
 	public function importExternalUsers(ev:ReactEvent):Void
@@ -89,6 +94,27 @@ class RolesForm extends BaseForm
 	{
 		//super.componentDidMount();
 		trace(state.loading);
+		/*requests.push(AjaxLoader.load(
+			'${App.config.api}', 
+			{
+				userName:props.userName,
+				jwt:props.jwt,
+				firstName:props.firstName,
+				className:'admin.CreateUsers',
+				action:'getViciDialUsers'
+			},
+			function(data){
+				trace('loaded:${!state.loading}'); 
+				if (data.length > 0)
+				{
+					var dataRows:Array<Dynamic> = Json.parse(data).rows;
+					//trace(displayRows[0]);
+					
+					setState({data:['userList'=>dataRows], loading:false});				
+					//setState(ReactUtil.copy(state, {data:sData}));				
+				}
+			}
+		));*/
 		requests.push(AjaxLoader.load(
 			'${App.config.api}', 
 			{
@@ -109,7 +135,7 @@ class RolesForm extends BaseForm
 					//setState(ReactUtil.copy(state, {data:sData}));				
 				}
 			}
-		));		
+		));
 	}
 	
 	/*override public function componentWillUnmount()

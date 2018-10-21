@@ -3072,7 +3072,7 @@ view_shared_BaseForm.prototype = $extend(React_Component.prototype,{
 });
 var view_dashboard_RolesForm = function(props) {
 	view_shared_BaseForm.call(this,props);
-	this.sideMenu = [{ handler : $bind(this,this.importExternalUsers), label : "Importiere Externe Benutzer"}];
+	this.sideMenu = [{ handler : $bind(this,this.deleteUsers), label : "Benutzer Löschen"}];
 	this.state = { clean : true, hasError : false, loading : true};
 	this.requests = [];
 	haxe_Log.trace(Reflect.fields(props),{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 51, className : "view.dashboard.RolesForm", methodName : "new"});
@@ -3081,7 +3081,7 @@ view_dashboard_RolesForm.__name__ = "view.dashboard.RolesForm";
 view_dashboard_RolesForm.mapStateToProps = function(aState) {
 	return function(aState1) {
 		var uState = aState1.appWare.user;
-		haxe_Log.trace(uState,{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 79, className : "view.dashboard.RolesForm", methodName : "mapStateToProps"});
+		haxe_Log.trace(uState,{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 84, className : "view.dashboard.RolesForm", methodName : "mapStateToProps"});
 		return { userName : uState.userName, jwt : uState.jwt, firstName : uState.firstName};
 	};
 };
@@ -3089,19 +3089,21 @@ view_dashboard_RolesForm.__super__ = view_shared_BaseForm;
 view_dashboard_RolesForm.prototype = $extend(view_shared_BaseForm.prototype,{
 	sideMenu: null
 	,settings: null
+	,deleteUsers: function(ev) {
+	}
 	,importExternalUsers: function(ev) {
-		haxe_Log.trace(ev.currentTarget,{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 56, className : "view.dashboard.RolesForm", methodName : "importExternalUsers"});
+		haxe_Log.trace(ev.currentTarget,{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 61, className : "view.dashboard.RolesForm", methodName : "importExternalUsers"});
 		this.requests.push(model_AjaxLoader.load("" + Std.string(App.config.api),{ userName : this.props.userName, jwt : this.props.jwt, firstName : this.props.firstName, className : "admin.CreateUsers", action : "importExternal"},function(data) {
 			if(data.length > 0) {
-				haxe_Log.trace(JSON.parse(data),{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 69, className : "view.dashboard.RolesForm", methodName : "importExternalUsers"});
+				haxe_Log.trace(JSON.parse(data),{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 74, className : "view.dashboard.RolesForm", methodName : "importExternalUsers"});
 			}
 		}));
 	}
 	,componentDidMount: function() {
 		var _gthis = this;
-		haxe_Log.trace(this.state.loading,{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 91, className : "view.dashboard.RolesForm", methodName : "componentDidMount"});
+		haxe_Log.trace(this.state.loading,{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 96, className : "view.dashboard.RolesForm", methodName : "componentDidMount"});
 		this.requests.push(model_AjaxLoader.load("" + Std.string(App.config.api),{ userName : this.props.userName, jwt : this.props.jwt, firstName : this.props.firstName, className : "admin.CreateUsers", action : "getViciDialUsers"},function(data) {
-			haxe_Log.trace("loaded:" + Std.string(!_gthis.state.loading),{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 102, className : "view.dashboard.RolesForm", methodName : "componentDidMount"});
+			haxe_Log.trace("loaded:" + Std.string(!_gthis.state.loading),{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 128, className : "view.dashboard.RolesForm", methodName : "componentDidMount"});
 			if(data.length > 0) {
 				var dataRows = JSON.parse(data).rows;
 				var _g2 = new haxe_ds_StringMap();
@@ -3115,7 +3117,7 @@ view_dashboard_RolesForm.prototype = $extend(view_shared_BaseForm.prototype,{
 		}));
 	}
 	,render: function() {
-		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 122, className : "view.dashboard.RolesForm", methodName : "render"});
+		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 148, className : "view.dashboard.RolesForm", methodName : "render"});
 		var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp1 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp2 = react__$ReactNode_ReactNode_$Impl_$.fromComp(view_table_Table);
@@ -3138,13 +3140,13 @@ view_dashboard_RolesForm.prototype = $extend(view_shared_BaseForm.prototype,{
 });
 var view_dashboard_SetUpForm = function(props) {
 	view_shared_BaseForm.call(this,props);
-	this.sideMenu = [{ handler : null, label : "History Trigger"}];
+	this.sideMenu = [{ handler : $bind(this,this.importExternalUsers), label : "Importiere Externe Benutzer"}];
 };
 view_dashboard_SetUpForm.__name__ = "view.dashboard.SetUpForm";
 view_dashboard_SetUpForm.mapStateToProps = function() {
 	return function(aState) {
 		var uState = aState.appWare.user;
-		haxe_Log.trace(uState,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 44, className : "view.dashboard.SetUpForm", methodName : "mapStateToProps"});
+		haxe_Log.trace(uState,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 47, className : "view.dashboard.SetUpForm", methodName : "mapStateToProps"});
 		return { userName : uState.userName, jwt : uState.jwt, firstName : uState.firstName};
 	};
 };
@@ -3153,14 +3155,14 @@ view_dashboard_SetUpForm.prototype = $extend(view_shared_BaseForm.prototype,{
 	sideMenu: null
 	,componentDidCatch: function(error,info) {
 		this.setState({ hasError : true});
-		haxe_Log.trace(error,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 57, className : "view.dashboard.SetUpForm", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 60, className : "view.dashboard.SetUpForm", methodName : "componentDidCatch"});
 	}
 	,componentDidMount: function() {
 		var _gthis = this;
 		var url = "" + Std.string(App.config.api) + "?className=admin.CreateHistoryTrigger&action=run&jwt=" + this.props.jwt + "&userName=" + this.props.userName;
-		haxe_Log.trace(url,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 64, className : "view.dashboard.SetUpForm", methodName : "componentDidMount"});
+		haxe_Log.trace(url,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 67, className : "view.dashboard.SetUpForm", methodName : "componentDidMount"});
 		model_AjaxLoader.load(url,null,function(data) {
-			haxe_Log.trace(data,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 66, className : "view.dashboard.SetUpForm", methodName : "componentDidMount"});
+			haxe_Log.trace(data,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 69, className : "view.dashboard.SetUpForm", methodName : "componentDidMount"});
 			if(data != null && data.length > 0) {
 				var sData = _gthis.state.data;
 				var value = JSON.parse(data).data.rows;
@@ -3199,15 +3201,24 @@ view_dashboard_SetUpForm.prototype = $extend(view_shared_BaseForm.prototype,{
 			}
 		});
 	}
+	,importExternalUsers: function(ev) {
+		me_cunity_debug_Out.dumpObjectTree(ev,null,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 110, className : "view.dashboard.SetUpForm", methodName : "importExternalUsers"});
+		haxe_Log.trace(ev.currentTarget,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 111, className : "view.dashboard.SetUpForm", methodName : "importExternalUsers"});
+		this.requests.push(model_AjaxLoader.load("" + Std.string(App.config.api),{ userName : this.props.userName, jwt : this.props.jwt, firstName : this.props.firstName, className : "admin.CreateUsers", action : "importExternal"},function(data) {
+			if(data.length > 0) {
+				haxe_Log.trace(JSON.parse(data),{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 124, className : "view.dashboard.SetUpForm", methodName : "importExternalUsers"});
+			}
+		}));
+	}
 	,render: function() {
-		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 106, className : "view.dashboard.SetUpForm", methodName : "render"});
+		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 131, className : "view.dashboard.SetUpForm", methodName : "render"});
 		if(this.state.hasError) {
 			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("h1");
 			var c = js_Boot.getClass(this);
 			var tmp1 = c.__name__;
 			return React.createElement(tmp,{ },"Fehler in ",tmp1,".");
 		}
-		haxe_Log.trace(this.props.history == App.store.getState().appWare.history,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 109, className : "view.dashboard.SetUpForm", methodName : "render"});
+		haxe_Log.trace(this.props.history == App.store.getState().appWare.history,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 134, className : "view.dashboard.SetUpForm", methodName : "render"});
 		var tmp2 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp3 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp4 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
@@ -3230,7 +3241,7 @@ view_dashboard_SetUpForm.prototype = $extend(view_shared_BaseForm.prototype,{
 		if(content == null || content.length == 0) {
 			return null;
 		}
-		haxe_Log.trace(content.length,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 135, className : "view.dashboard.SetUpForm", methodName : "renderContent"});
+		haxe_Log.trace(content.length,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 160, className : "view.dashboard.SetUpForm", methodName : "renderContent"});
 		var rC = [];
 		var k = 1;
 		var _g = 0;

@@ -4,11 +4,13 @@ import comments.StringTransform;
 import haxe.ds.StringMap;
 import haxe.Json;
 import js.html.XMLHttpRequest;
+import me.cunity.debug.Out;
 import model.AppState;
 import react.Fragment;
 import react.React;
 import react.ReactComponent.ReactComponentOf;
 import react.ReactComponent.ReactFragment;
+import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
 import redux.Redux.Dispatch;
@@ -32,7 +34,8 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 	{
 		super(props);	
 		sideMenu = [
-			{handler:null,label:'History Trigger'}
+			//{handler:null, label:'Create History Trigger'},//TODO: ADD HANDLER - REMOVE AUTORUN ON MOUNT
+			{handler:this.importExternalUsers,label:'Importiere Externe Benutzer'}
 		];
 	}
 	
@@ -100,6 +103,53 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 			}
 		);		
 			
+	}
+	
+	public function importExternalUsers(ev:ReactEvent):Void
+	{
+		Out.dumpObjectTree(ev);
+		trace(ev.currentTarget);
+		/*requests.push(AjaxLoader.load(
+			'${App.config.api}', 
+			{
+				userName:props.userName,
+				jwt:props.jwt,
+				firstName:props.firstName,
+				className:'admin.CreateUsers',
+				action:'importExternal'
+			},
+			function(data){
+				if (data.length > 0)
+				{
+					trace(Json.parse(data));
+				}
+			}
+		));*/
+		
+		requests.push(AjaxLoader.load(
+			'${App.config.api}', 
+			{
+				userName:props.userName,
+				jwt:props.jwt,
+				firstName:props.firstName,
+				className:'roles.Users',
+				action:'list',
+				filter:'active|TRUE',
+				table:'users',
+				dataSource:Json.stringify({
+					users:{alias: 'us',fields:'user_name,last_login'},
+					user_groups:{alias: 'ug', fields:'name'},
+					contacts:{alias: 'co', fields:'first_name,last_name,email'}
+				}),
+				joinConditions:['ug.id=us.user_group','contact=co.id']
+			},
+			function(data){
+				if (data.length > 0)
+				{
+					trace(Json.parse(data));
+				}
+			}
+		));
 	}
 	
     override public function render() {
