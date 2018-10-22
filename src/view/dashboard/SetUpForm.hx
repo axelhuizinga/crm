@@ -1,6 +1,7 @@
 package view.dashboard;
 
 import comments.StringTransform;
+import haxe.Serializer;
 import haxe.ds.StringMap;
 import haxe.Json;
 import js.html.XMLHttpRequest;
@@ -62,19 +63,23 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 	
 	override public function componentDidMount():Void 
 	{
-		//super.componentDidMount();
-		var url:String = '${App.config.api}?className=admin.CreateHistoryTrigger&action=run&jwt=${props.jwt}&userName=${props.userName}';
-		trace(url);
-		AjaxLoader.load(url, null, function(data:String){
-			trace(data); 
-			if (data != null && data.length > 0)
+		AjaxLoader.load('${App.config.api}', 
 			{
-				//trace(Json.parse(data)); 
-				var sData:StringMap<Dynamic> = state.data;
-				sData.set('historyTrigger', Json.parse(data).data.rows);
-				setState(ReactUtil.copy(state, {data:sData}));				
-			}
-		});
+				userName:props.userName,
+				jwt:props.jwt,
+				className:'admin.CreateHistoryTrigger',
+				action:'run'				
+			}, 
+			function(data:String){
+				trace(data); 
+				if (data != null && data.length > 0)
+				{
+					//trace(Json.parse(data)); 
+					var sData:StringMap<Dynamic> = state.data;
+					sData.set('historyTrigger', Json.parse(data).data.rows);
+					setState(ReactUtil.copy(state, {data:sData}));				
+				}
+			});
 		
 		AjaxLoader.load(
 			'${App.config.api}', 
@@ -131,17 +136,21 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 			{
 				userName:props.userName,
 				jwt:props.jwt,
-				firstName:props.firstName,
 				className:'roles.Users',
 				action:'list',
 				filter:'active|TRUE',
-				table:'users',
-				dataSource:Json.stringify({
-					users:{alias: 'us',fields:'user_name,last_login'},
-					user_groups:{alias: 'ug', fields:'name'},
-					contacts:{alias: 'co', fields:'first_name,last_name,email'}
-				}),
-				joinConditions:['ug.id=us.user_group','contact=co.id']
+				dataSource:Serializer.run([
+					"users" => ["alias" => 'us',
+						"fields" => 'user_name,last_login'],
+					"user_groups" => [
+						"alias" => 'ug', 
+						"fields" => 'name', 
+						"jCond"=>'ug.id=us.user_group'],
+					"contacts" => [
+						"alias" => 'co', 
+						"fields" => 'first_name,last_name,email', 
+						"jCond"=>'contact=co.id']
+				])
 			},
 			function(data){
 				if (data.length > 0)
