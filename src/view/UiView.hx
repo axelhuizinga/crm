@@ -158,13 +158,13 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 				</div>
 				<div className="tabComponent">
 					<Route path="/"  component={RedirectBox} exact={true}/>				
-					<Route path="/dashboard" exact={true} component=${Bundle.load(DashBoardBox)}/>
-					<Route path="/dashboard/*" component=${Bundle.load(DashBoardBox)}/>
-					<Route path="/accounting" component=${Bundle.load(AccountingBox)}/>
-					<Route path="/contacts/edit/:id" component=${Bundle.load(ContactsBox)}/>
-					<Route path="/contacts" component=${Bundle.load(ContactsBox)}/>
-					<Route path="/qc" component=${Bundle.load(QCBox)}/>
-					<Route path="/reports" component=${Bundle.load(ReportsBox)}/>
+					<Route path="/dashboard" exact={true} component=${Bundle.load(DashBoard)}/>
+					<Route path="/dashboard/*" component=${Bundle.load(DashBoard)}/>
+					<Route path="/accounting" component=${Bundle.load(Accounting)}/>
+					<Route path="/contacts/edit/:id" component=${Bundle.load(Contacts)}/>
+					<Route path="/contacts" component=${Bundle.load(Contacts)}/>
+					<Route path="/qc" component=${Bundle.load(QC)}/>
+					<Route path="/reports" component=${Bundle.load(Reports)}/>
 				</div>
 			</>
 			</$Router>
@@ -175,9 +175,9 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 	
 	function renderRedirect(p:Dynamic)
 	{
-		return jsx('<RedirectBox a="1" {...p}/>');
+		return jsx('<RedirectBox {...p}/>');
 	}
-	/*<Route exact={true} path="/" render=${routeBox(props)} />
+	/*<Route exact={true} path="/" render=${routeBox(props)} />a="1"
 	 * <Redirect path="/dashboard" to="/dashboard/roles" exact={true}/>
 	 * 				<div className="tabComponent">
 				<Route path="/"  component={RedirectBox} exact={true}/>

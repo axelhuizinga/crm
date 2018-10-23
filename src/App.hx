@@ -9,6 +9,7 @@ import haxe.Json;
 import history.BrowserHistory;
 import history.History;
 import history.Location;
+import js.Browser;
 import js.Cookie;
 import js.Error;
 import js.Promise;
@@ -39,9 +40,9 @@ typedef AppProps =
 class App  extends react.ReactComponentOf<AppProps, AppState>
 {
 	static var _app:App;
-	//static var bulma = require('../node_modules/bulma/css/bulma.min.css');
+	public static var bulmaAccordion = require('../node_modules/bulma-extensions/bulma-accordion/dist/js/bulma-accordion.min.js');
 	static var fa = require('../node_modules/font-awesome/css/font-awesome.min.css');
-	//static var data_table = require('../node_modules/gigatables-react/src/css/styles.css');
+	//
     static var STYLES = require('App.scss');
 
 	public static var store:Store<AppState>;
@@ -61,6 +62,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		if (!(App.userName == '' || App.jwt == ''))
 		{			
 			trace(props);
+			trace(bulmaAccordion);
 			var verifyRequest = new HttpJs('${App.config.api}?jwt=${App.jwt}&userName=${App.userName}&className=auth.User&action=clientVerify');
 			verifyRequest.addHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
 			verifyRequest.addHeader('Access-Control-Allow-Origin', 'pitverwaltung.de');

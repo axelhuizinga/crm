@@ -12,11 +12,12 @@ import view.table.Table.*;
 class RolesFormModel
 {
 	public static var userListColumns:StringMap<DataColumn> =  [
-		'user'=>{label:'Benutzer'},
-		'full_name'=>{label:'Name', flexGrow:1},
-		'user_level'=>{label:'UserLevel', className:'cRight'},		
-		'user_group'=>{label:'UserGroup', flexGrow:1},		
-		'active'=>{label:'Aktiv', className:'cRight'},
+		'user_name'=>{label:'Benutzer'},
+		'first_name'=>{label:'Vorname', flexGrow:0},
+		'last_name'=>{label:'Name', flexGrow:0},
+		'name'=>{label:'UserGroup', flexGrow:1},		
+		'active' => {label:'Aktiv', className:'cRight', 
+			cellFormat:function(v:Bool) return (v?'J':'N')},
 		'user_id' => {show:false}
 	];
 	

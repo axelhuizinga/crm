@@ -43,16 +43,19 @@ typedef FormField =
  
  typedef BaseFormProps =
  {
-	 >RouteTabProps,
-	 ?formData:Dynamic,
-	 ?store:Store<AppState>,
-	 ?handleChange:Event->Void,
-	 ?handleSubmit:Event->Void
+	>RouteTabProps,
+	?contentId:String,
+	?content:Map<String,ReactFragment>,
+	?formData:Dynamic,
+	?store:Store<AppState>,
+	?handleChange:Event->Void,
+	?handleSubmit:Event->Void
  }
 
 typedef FormState =
 {
-	@:optional var content:Array<String>;
+	var contentId:String;
+	//@:optional var content:Array<String>;
 	@:arrayAccess
 	@:optional var data:Map<String,Dynamic>;
 	var clean:Bool;
@@ -80,7 +83,8 @@ class BaseForm extends ReactComponentOf<BaseFormProps, FormState>
 		requests = [];
 		state = {
 			data:new StringMap(),
-			content:new Array(),
+			contentId:'',
+			//content:new Array(),
 			clean:true,
 			errors:new StringMap(),
 			values:new StringMap(),
@@ -105,17 +109,25 @@ class BaseForm extends ReactComponentOf<BaseFormProps, FormState>
 		trace(mounted);
 	}
 	
-    override function render() {
-		trace('You should override me :)');
-        return null;
-    }	
-
 	override public function componentWillUnmount()
 	{
 		mounted=false;
 		for (r in requests)
 			r.cancel();
-	}	
+	}		
+	
+    override function render() {
+		trace('You should override me :)');
+        return null;
+    }	
+	
+	public function switchContent(contentId:String)
+	{
+		if (props.contentId != contentId)
+		{
+			setState({contentId:contentId});
+		}
+	}
 	
 	function displayDebug(fieldName:String):ReactFragment
 	{

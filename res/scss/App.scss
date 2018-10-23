@@ -1,3 +1,7 @@
+@charset "utf-8";
+@import "../bulma/bulma.sass";
+@import "../../node_modules/bulma-extensions/bulma-accordion/dist/css/bulma-accordion.sass";
+
 /**
 @mixin tabsradius($br){
 	$br $br 0 0;
@@ -20,7 +24,7 @@ $darkRed: rgb(128, 17, 17);
 $lightRed: rgb(251, 220, 220);
 $primary: #601111;
 $darkSun: #fabf32;
-$lightSun: hsl(49, 95%, 95%);
+$lightSun: hsl(49, 95%, 99%);
 $sun: rgb(251, 220, 80);
 $borderHeadCol:0.6px dotted $lightGreen;
 $tabs-boxed-link-radius: 0.3rem;//@include tabsradius(5);
@@ -30,9 +34,6 @@ $tableHeaderHeight: 2rem;
 /**/
 $darkGradient1:linear-gradient($lightGreen,$darkGreen, $darkGreen);	 
 $darkGradient:linear-gradient($lightBlue 0%, $paleBlue 32%);	 
-
-@charset "utf-8";
-@import "../bulma/bulma.sass";
 
 *{
 	border-collapse:collapse;
@@ -356,6 +357,9 @@ h1 {
 	color:$darkGreen!important;
 	border-bottom-color:$darkSun!important;
 }
+.table tr{
+	/*display:flex;*/
+}
 .table td, .table th{
 	border: none;
 	border-left: $borderCol;
@@ -363,13 +367,27 @@ h1 {
 .table thead th{
 	color: $lightSun;
 	border-left:$borderHeadCol!important;
+	white-space:nowrap;
 }
 /*side menu*/
 .is-right .menu
 {
 	margin: 0.8rem 0.5rem 0.5rem 0.8rem!important;
+	min-width:15rem;
 }
-
+.menu .button
+{
+	width:100%;
+}
+.accordions .accordion .accordion-header
+{
+	background-color:#fff;
+	background-image:linear-gradient(white, $bgto);
+	border-top:0.6px solid #dbdbdb;
+	border-right:0.6px solid #dbdbdb;
+	border-left:0.6px solid #dbdbdb;
+	color:$darkBlue;
+}
 /*tables*/
 .table.head
 {

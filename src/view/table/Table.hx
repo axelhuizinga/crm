@@ -21,6 +21,7 @@ import react.ReactComponent;
 import react.ReactComponent.*;
 import react.ReactMacro.jsx;
 import shared.Utils;
+using Lambda;
 
 /**
  * ...
@@ -105,6 +106,7 @@ typedef TableProps =
 	?defaultSort:Dynamic,
 	?defaultSortDescending:Bool,
 	?filterable:Dynamic,
+	?fullWidth:Bool,
 	?id:String,
 	?itemsPerPage:Int,
 	?onFilter:String->Void,
@@ -273,6 +275,7 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 	{
 		@:arrayAccess
 		var rdMap:Map<String,Any> = Utils.dynaMap(rD);
+		trace(rdMap['active']);
 		var column:Int = 0;
 		var cells:Array<DataCell> = fieldNames.map(function(fN:String){
 					var columnDataState:DataColumn = props.dataState.columns.get(fN);
@@ -281,6 +284,7 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 						className:columnDataState.className,
 						data:rdMap[fN],
 						dataDisplay:columnDataState.cellFormat != null ? columnDataState.cellFormat(rdMap[fN]):rdMap[fN],
+						flexGrow:columnDataState.flexGrow,
 						name:fN,
 						pos:{column:column++, row:row},
 						show:columnDataState.show != false
@@ -293,7 +297,7 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 			if (!cD.show)
 			 continue;
 			rCs.push(
-			jsx('<td className=${cD.className} key=${"r"+cD.pos.row+"c"+cD.pos.column} data-value=${cD.cellFormat!=null?cD.data:null}>
+			jsx('<td className=${cD.className} key=${"r"+cD.pos.row+"c"+cD.pos.column} data-grow=${cD.flexGrow!=null?cD.flexGrow:null}>
 				${cD.dataDisplay}
 			</td>'));
 		}
@@ -327,7 +331,7 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)//,snapshot:Dynamic
 	{
 		trace(headerUpdated); 
-
+//#return;
 		if (tHeadRef != null)
 		{
 			if (headerUpdated)
@@ -336,26 +340,54 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 			var tableHeight:Float = tableRef.current.clientHeight;
 			trace('tableHeight:$tableHeight');
 			//fixedHeader.current.parentElement.setAttribute('style', 'margin-top:-${tableHeight}px;');
-			var scrollBarWidth = tableRef.current.parentElement.offsetWidth - tableRef.current.offsetWidth;
-			trace('$scrollBarWidth ${tableRef.current.parentElement.offsetWidth} ${tableRef.current.offsetWidth}');
-			//fixedHeader.current.style.setProperty('padding-right', '${scrollBarWidth}px');
+			var scrollBarWidth:Float = App.config.getScrollbarWidth();
+			var freeWidth:Float = tableRef.current.parentElement.offsetWidth - tableRef.current.offsetWidth - scrollBarWidth;
+			trace('$scrollBarWidth freeWidth:$freeWidth ${tableRef.current.parentElement.offsetWidth} ${tableRef.current.offsetWidth}');
 			trace(tHeadRef);// .current.cells[0].getBoundingClientRect().width);
 			trace(fixedHeader.current.children.length);
 			trace(fixedHeader.current);// .firstElementChild.children.length);
-			
+			tHeadRef.current.style.visibility = "collapse";						
 			var i:Int = 0;
-			var x:Float = 0.0;// tHeadRef.current.cells[0].getBoundingClientRect().x;tHeadRef.current.remove()
-			//showDims(rowRef);
-			tHeadRef.current.style.visibility = "collapse";			
-			//return;
+			var grow:Array<Int> = [];
+			if (props.fullWidth)
+			{
+				for (cell in rowRef.current.children)
+				{
+					var cGrow = cell.getAttribute('data-grow');
+					if (cGrow != null)
+					{
+						grow[i] = Std.parseInt(cGrow);
+						trace(grow[i]);
+					}
+					i++;
+				}		
+				var growSum:Int = 0;
+				grow.iter(function(el) growSum += (el==null?0:el));
+				trace (grow +':' + growSum );
+				if (growSum > 0)
+				{
+					var growUnit:Float = freeWidth / growSum;
+					trace(growSum);		
+					for (i in 0...grow.length)
+					{
+						if (grow[i] != 0)
+						{
+							rowRef.current.children.item(i).setAttribute(
+								'width', Std.string(grow[i] * growUnit + rowRef.current.children.item(i).offsetWidth) + 'px'
+							);
+						}
+					}					
+				}
+
+				
+			}
+			i = 0;
 			for (cell in tHeadRef.current.children)
 			{
 				var w:Float = cell.getBoundingClientRect().width;
 				var fixedHeaderCell = cast(fixedHeader.current.childNodes[i],Element);
 				fixedHeaderCell.setAttribute('style', 'width:${w}px');
 				i++;
-				x += w;
-				//trace(fixedHeaderCell.getAttribute('style'));
 			}
 			//showDims(tHeadRef);
 			//nodeDims(fixedHeader.current);

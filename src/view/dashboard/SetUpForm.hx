@@ -113,7 +113,7 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 	public function importExternalUsers(ev:ReactEvent):Void
 	{
 		Out.dumpObjectTree(ev);
-		trace(ev.currentTarget);
+		trace(untyped ev.currentTarget._targetInst);
 		/*requests.push(AjaxLoader.load(
 			'${App.config.api}', 
 			{
@@ -155,7 +155,8 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 			function(data){
 				if (data.length > 0)
 				{
-					trace(Json.parse(data));
+					//trace(Json.parse(data));
+					trace(Json.parse(data).data.rows.length);
 				}
 			}
 		));
@@ -182,7 +183,7 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 								className = "is-striped is-fullwidth is-hoverable"/>
 							
 					</div>
-					<SMenu className="menu" itemsData={sideMenu}/>
+					<SMenu className="menu" items={sideMenu}/>
 				</div>
         ');
     }	

@@ -1,6 +1,7 @@
 package view.shared;
 
 import haxe.Constraints.Function;
+import haxe.Timer;
 import react.Fragment;
 import react.PureComponent.PureComponentOf;
 import react.ReactComponent;
@@ -12,9 +13,21 @@ import bulma_components.Button;
  * @author axel@cunity.me
  */
 
+typedef SMIArticle =
+{
+	?className:String,
+	?onActivate:Function,
+	?img:String,
+	?info:String,
+	?isActive:Bool,
+	items:Array<SMItem>,
+	?label:String,	
+}
+
 typedef SMItem =
 {
 	?className:String,
+	?component:ReactComponent,
 	?handler:Function,
 	?img:String,
 	?info:String,
@@ -26,7 +39,8 @@ typedef SMenuProps =
 {
 	?className:String,
 	?hidden:Bool,
-	itemsData:Array<SMItem>,
+	?articles:Array<SMIArticle>,
+	?items:Array<SMItem>,
 	?right:Bool		
 }
 
@@ -47,14 +61,32 @@ class SMenu extends PureComponentOf<SMenuProps,SMenuState>
 			hidden:props.hidden||false
 		}
 	}
+
 	
-	function renderItems():ReactFragment
+	function renderArticles():ReactFragment
 	{
-		if (props.itemsData.length == 0)
+		if (props.articles.length == 0)
 			return null;
 		var i:Int = 1;
-		return props.itemsData.map(function(iData:SMItem) return jsx('
-			<li key=${i++}><Button onClick=${iData.handler}>${iData.label}</Button></li>		
+		return props.articles.map(function(art:SMIArticle) return jsx('
+		<article className=${"accordion " + (art.isActive?"is-active":"")} key=${i++}>
+			<div className="accordion-header toggle">
+			  <p>${art.label}</p>
+			</div>
+			<div className="accordion-body">
+			  <div className="accordion-content" children=${renderItems(art.items)}/>
+			</div>
+		</article>
+		'));
+	}//			 <button className="toggle" aria-label="toggle"></button>
+	
+	function renderItems(items:Array<SMItem>):ReactFragment
+	{
+		if (items.length == 0)
+			return null;
+		var i:Int = 1;
+		return items.map(function(item:SMItem) return jsx('
+			<Button key=${i++} onClick=${item.handler}>${item.label}</Button>	
 		'));
 	}
 	
@@ -63,10 +95,26 @@ class SMenu extends PureComponentOf<SMenuProps,SMenuState>
 		return jsx('
 		<div className="is-right is-hidden-mobile">
 			<aside className="menu">
-			  <ul className="menu-list" children=${renderItems()}/>
+				<section className="accordions" children=${renderArticles()}/>
+				<ul className="menu-list" children=${props.items==null?null:renderItems(props.items)}/>
 			</aside>
 		</div>	
 		');
 	}
 	
+	override public function componentDidMount():Void 
+	{
+		//Timer.delay(function(){
+			if (App.bulmaAccordion != null)
+			{			
+				var accordions = App.bulmaAccordion.attach();
+				trace(accordions);
+			}		
+		//}, 1000);
+	}
+	
+	override public function componentDidUpdate(prevProps:SMenuProps, prevState:SMenuState):Void 
+	{
+		//super.componentDidUpdate(prevProps, prevState);
+	}
 }
