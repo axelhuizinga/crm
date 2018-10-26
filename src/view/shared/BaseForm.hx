@@ -1,5 +1,6 @@
 package view.shared;
 
+import haxe.Constraints.Function;
 import haxe.ds.StringMap;
 import haxe.http.HttpJs;
 import js.html.Event;
@@ -14,10 +15,12 @@ import view.dashboard.model.RolesFormModel;
 
 import view.table.Table.DataState;
 import view.shared.RouteTabProps;
-
+import view.shared.SMenu.SMItem;
+import view.shared.SMenu.SMenuProps;
 
 enum FormElement
 {
+	Hidden;
 	Input;
 	Checkbox;
 	Radio;
@@ -32,20 +35,25 @@ enum FormElement
 
 typedef FormField =
 {
-	name:String,
+	?name:String,
+	?label:String,
 	?value:Any,
-	type:FormElement,
+	?dataBase:String, 
+	?dataTable:String,
+	?dataField:String,
+	?dataFormat:Function,
+	?type:FormElement,
 	?required:Bool,
 	?onChange:Event->Void,
 	?placeholder:String,
 	?validate:Any->Bool
 }
  
- typedef BaseFormProps =
+ typedef FormProps =
  {
 	>RouteTabProps,
 	?contentId:String,
-	?content:Map<String,ReactFragment>,
+	?elements:StringMap<FormField>,
 	?formData:Dynamic,
 	?store:Store<AppState>,
 	?handleChange:Event->Void,
@@ -68,19 +76,20 @@ typedef FormState =
 }
 
 
-class BaseForm extends ReactComponentOf<BaseFormProps, FormState> 
+class BaseForm extends ReactComponentOf<FormProps, FormState> 
 {
 	var mounted:Bool;
 	var requests:Array<HttpJs>;	
+	var sideMenu:SMenuProps;
 	@:arrayAccess
-	var dataDisplay:Map<String,DataState>;
+	var dataDisplay:Map<String,DataState>;//TODO: CHECK4INTEGRATION INTO state or props
 	
-	public function new(?props:BaseFormProps) 
+	public function new(?props:FormProps) 
 	{
-		super(props);
-		dataDisplay = RolesFormModel.dataDisplay;
+		super(props);		
 		mounted = false;
 		requests = [];
+		sideMenu = {articles:[]};
 		state = {
 			data:new StringMap(),
 			contentId:'',

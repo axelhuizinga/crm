@@ -19,7 +19,7 @@ import react.ReactMacro.jsx;
 import react.ReactUtil;
 import redux.Redux.Dispatch;
 import view.dashboard.model.RolesFormModel;
-import view.shared.BaseForm.BaseFormProps;
+import view.shared.BaseForm.FormProps;
 import view.shared.SMenu;
 using Lambda;
 /**
@@ -33,14 +33,14 @@ class RolesForm extends BaseForm
 {
 	//var requests:Array<HttpJs>;
 // StringMap<DataState>;
-	var sideMenu:SMenuProps;
 	//user,pass,full_name,user_level,user_group,active
 		
 	var settings: ReactableSettings;
 	
-	public function new(?props:BaseFormProps) 
+	public function new(?props:FormProps) 
 	{
 		super(props);
+		dataDisplay = RolesFormModel.dataDisplay;
 		/*	?className:String,
 	?handler:Function,
 	?img:String,
@@ -165,9 +165,9 @@ class RolesForm extends BaseForm
 	
 	override public function componentDidMount():Void 
 	{
-		//super.componentDidMount();
+		super.componentDidMount();
 		trace(state.loading);
-		trace(App.config);
+		//trace(App.config);
 		/*requests.push(AjaxLoader.load(
 			'${App.config.api}', 
 			{

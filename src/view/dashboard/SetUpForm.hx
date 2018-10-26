@@ -17,7 +17,7 @@ import react.ReactUtil;
 import redux.Redux.Dispatch;
 import model.AjaxLoader;
 import view.shared.BaseForm;
-import view.shared.BaseForm.BaseFormProps;
+import view.shared.BaseForm.FormProps;
 import view.shared.SMenu;
 import view.table.Table;
 
@@ -28,16 +28,19 @@ import view.table.Table;
 
 //@:expose('default')
 @:connect
-class SetUpForm extends BaseForm //<BaseFormProps, FormState>
+class SetUpForm extends BaseForm //<FormProps, FormState>
 {
-	var sideMenu:Array<SMItem>;
-	public function new(?props:BaseFormProps) 
+	
+	public function new(?props:FormProps) 
 	{
 		super(props);	
-		sideMenu = [
+		
+		sideMenu = 	null;/* {
+			articles:[
 			//{handler:null, label:'Create History Trigger'},//TODO: ADD HANDLER - REMOVE AUTORUN ON MOUNT
-			{handler:this.importExternalUsers,label:'Importiere Externe Benutzer'}
-		];
+			//	{handler:this.importExternalUsers,label:'Importiere Externe Benutzer'}
+			]
+		};*/
 	}
 	
 	static function mapStateToProps() {
@@ -63,6 +66,7 @@ class SetUpForm extends BaseForm //<BaseFormProps, FormState>
 	
 	override public function componentDidMount():Void 
 	{
+		super.componentDidMount();
 		AjaxLoader.load('${App.config.api}', 
 			{
 				userName:props.userName,
