@@ -12,10 +12,8 @@ import react.ReactMacro.jsx;
 
 typedef FormUiProps =
 {
-	data:Array<Dynamic>,
+	>view.shared.BaseForm.FormProps,
 	?fullWidth:Bool,
-	elements:Array<FormField>,
-	?name:String
 }
 
 class FormUi extends PureComponentOf<FormUiProps,FormState>
@@ -24,10 +22,13 @@ class FormUi extends PureComponentOf<FormUiProps,FormState>
 	public function new(?props:FormUiProps) 
 	{
 		super(props);
+		trace(props.match);
 	}
 	
 	override public function render()
 	{
+		//trace(props.match);
+		trace(props.data);
 		return jsx('<form/>');
 	}
 }

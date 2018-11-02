@@ -1,3 +1,4 @@
+import view.shared.io.User;
 
 /**
  * ...
@@ -17,7 +18,7 @@ import js.html.XMLHttpRequest;
 import me.cunity.debug.Out;
 import model.ApplicationStore;
 import model.CState;
-import view.User.UserProps;
+import view.shared.io.User.UserProps;
 import react.ReactMacro.jsx;
 import react.ReactComponent;
 import react.ReactEvent;
@@ -40,7 +41,7 @@ typedef AppProps =
 class App  extends react.ReactComponentOf<AppProps, AppState>
 {
 	static var _app:App;
-	public static var bulmaAccordion = require('../node_modules/bulma-extensions/bulma-accordion/dist/js/bulma-accordion.min.js');
+	//public static var bulmaAccordion = require('../node_modules/bulma-extensions/bulma-accordion/dist/js/bulma-accordion.min.js');
 	static var fa = require('../node_modules/font-awesome/css/font-awesome.min.css');
 	//
     static var STYLES = require('App.scss');
@@ -62,7 +63,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		if (!(App.userName == '' || App.jwt == ''))
 		{			
 			trace(props);
-			trace(bulmaAccordion);
+			//trace(bulmaAccordion);
 			var verifyRequest = new HttpJs('${App.config.api}?jwt=${App.jwt}&userName=${App.userName}&className=auth.User&action=clientVerify');
 			verifyRequest.addHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
 			verifyRequest.addHeader('Access-Control-Allow-Origin', 'pitverwaltung.de');

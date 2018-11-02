@@ -1,9 +1,10 @@
 package model;
+import view.shared.io.User;
 import haxe.Json;
 import haxe.ds.StringMap;
 import history.History;
 import history.Location;
-import view.User.UserProps;
+import view.shared.io.User.UserProps;
 import model.BaseFormData.FormElement;
 
 typedef CompState = 

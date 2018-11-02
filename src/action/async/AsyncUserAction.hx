@@ -4,6 +4,9 @@ package action.async;
 
 import haxe.Json;
 import js.Cookie;
+import js.Syntax;
+import js.html.FormData;
+import me.cunity.debug.Out;
 import model.AppState;
 
 import js.html.XMLHttpRequest;
@@ -25,10 +28,16 @@ class AsyncUserAction
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->model.AppState){
 			trace(props);
 			//trace(getState());
+			var fD:FormData = new FormData();
+			fD.append('action', 'login');
+			fD.append('className', 'auth.User');
+			fD.append('userName', props.userName);
+			fD.append('pass', props.pass);
 			if (props.pass == '' || props.userName == '') 
 				return dispatch(AppAction.LoginError({userName:props.userName, loginError:'Passwort und UserName eintragen!'}));
-			
-			var req:XMLHttpRequest = new XMLHttpRequest();
+			//Syntax.code("fetch({0}, {method:'post', body:{2}, mode:'cors',credentials: 'omit', headers: {'Access-Control-Allow-Origin': 'https://pitverwaltung.de', 'Access-Control-Allow-Credentials': 'true'}}).then(function(res){ return res.json()}).then(function(d){console.log(d)}).catch(function(error ) {console.error('Error:', error)})", 
+			//props.api, fetched, fD);
+			var req:XMLHttpRequest = new XMLHttpRequest();//,headers: {'Content-Type': 'application/json; charset=utf-8'}'Content-Type': 'application/json; charset=utf-8',
 			req.open('GET', '${props.api}?' + App.queryString2({action:'login', className:'auth.User', userName:props.userName, pass: props.pass}));
 			req.setRequestHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
 			req.setRequestHeader('Access-Control-Allow-Origin','*');
@@ -53,10 +62,17 @@ class AsyncUserAction
 				}
 			};
 			var spin:Dynamic = dispatch(AppAction.LoginWait);
+			req.withCredentials = true;
 			req.send();
 			trace(spin);
-			return spin;			
+			return spin;
 		});
+	}
+	
+	public static function fetched(d:Dynamic):Void
+	{
+		Out.dumpObject(d);
+		trace(d.statusText);
 	}
 
 	public static function logOff(props:LoginState) 

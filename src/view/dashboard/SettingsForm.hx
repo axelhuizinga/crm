@@ -2,6 +2,7 @@ package view.dashboard;
 
 import haxe.Json;
 import haxe.Serializer;
+import me.cunity.debug.Out;
 import model.AppState;
 import model.AjaxLoader;
 import react.ReactComponent.ReactComponentOfProps;
@@ -26,33 +27,46 @@ class SettingsForm extends BaseForm
 	public function new(?props:FormProps) 
 	{
 		super(props);		
-		dataDisplay = SettingsFormModel.dataDisplay;
+		//dataDisplay = SettingsFormModel.dataDisplay;
+		if (props.jwt == null)
+		{
+			trace(props);
+		}
+		else{
+			trace(props.jwt);
+		}
 		sideMenu = {
-			articles:[
+			menuBlocks:[
 				{
+					codeClass:'User',
 					isActive:true,
-					label:'KontoDaten',
+					label:'Meine KontoDaten',
 					onActivate:switchContent,
 					items:[
-						{handler:editMe,label:'Bearbeiten'}
-					]
+						{handler:editMe,label:'Bearbeiten',segment:'edit'}
+					],
+					segment:'userAccount'
 				},
 				{
+					codeClass:'Bookmarks',
 					label:'Lesezeichen',
 					onActivate:switchContent,
 					items:[
 						{handler:createUserBookmark,label:'Neu'},
 						{handler:editUserBookmark,label:'Bearbeiten'},
 						{handler:deleteUserBookmark,label:'Löschen'}
-					]				
+					],
+					segment:'bookmarks'
 				},
 				{
+					codeClass:'Design',
 					label:'Design',
 					onActivate:switchContent,
 					items:[
 						{handler:editColors,label:'Farben'},
 						{handler:editFonts,label:'Schrift'}
-					]				
+					],
+					segment:'design'
 				}
 				
 			]
@@ -69,40 +83,16 @@ class SettingsForm extends BaseForm
 	override public function componentDidMount():Void 
 	{
 		super.componentDidMount();
-		trace(state.loading);		
-		requests.push(AjaxLoader.load(
-			'${App.config.api}', 
-			{
-				userName:props.userName,
-				jwt:props.jwt,
-				className:'roles.Users',
-				action:'list',
-				filter:'active|TRUE',
-				dataSource:Serializer.run([
-					"users" => ["alias" => 'us',
-						"fields" => 'user_name,last_login'],
-					"user_groups" => [
-						"alias" => 'ug',
-						"fields" => 'name',
-						"jCond"=>'ug.id=us.user_group'],
-					"contacts" => [
-						"alias" => 'co',
-						"fields" => 'first_name,last_name,email',
-						"jCond"=>'contact=co.id']
-				])
-			},
-			function(data){
-				if (data.length > 0)
-				{
-					//trace(Json.parse(data));
-					trace(Json.parse(data).data.rows.length);
-					var dataRows:Array<Dynamic> = Json.parse(data).data.rows;
-					trace(Reflect.fields(dataRows[0]));
-					trace(dataRows[0].active);
-					setState({data:['userList'=>dataRows], loading:false});					
-				}
-			}
-		));		
+		trace(state.loading);	
+		if (props.jwt == null)
+		{
+			trace(props);
+			return;
+		}
+		//return;
+		trace(Reflect.fields(props));
+		trace(props.match);
+				
 	}
 	
 	public function createUserBookmark(ev:ReactEvent):Void
@@ -127,18 +117,58 @@ class SettingsForm extends BaseForm
 	}
 	public function editMe(ev:ReactEvent):Void
 	{
-		
+		trace('hi :)');
+		requests.push(AjaxLoader.load(	
+			'${App.config.api}', 
+			{
+				userName:props.userName,
+				jwt:props.jwt,
+				className:'auth.User',
+				action:'edit',
+				filter:'user_name|${props.userName}',
+				dataSource:Serializer.run([
+					"users" => ["alias" => 'us',
+						"fields" => 'user_name,last_login'],
+					"user_groups" => [
+						"alias" => 'ug',
+						"fields" => 'name',
+						"jCond"=>'ug.id=us.user_group'],
+					"contacts" => [
+						"alias" => 'co',
+						"fields" => 'first_name,last_name,email',
+						"jCond"=>'contact=co.id']
+				])
+			},
+			function(data){
+				if (data.length > 0)
+				{
+					var dataObj = Json.parse(data);
+					if (dataObj.error != '')
+					{
+						trace(dataObj.error);
+						return;
+					}
+					if (dataObj.data == null)
+						return;
+					trace(Json.parse(data).data.rows.length);
+					var dataRows:Array<Dynamic> = Json.parse(data).data.rows;
+					trace(Reflect.fields(dataRows[0]));
+					trace(dataRows[0].active);
+					setState({data:['accountData'=>dataRows], loading:false});					
+				}
+			}
+		));
+		setState({contentId:"editUser"});
 	}
-	
-	static function mapStateToProps() {
-
+		
+	static function mapStateToProps(aState:AppState) {
 		return function(aState:model.AppState) 
 		{
 			var uState = aState.appWare.user;
-			//trace(uState);			
+			trace(uState);		
 			return {
-				appConfig:aState.appWare.config,
 				userName:uState.userName,
+				jwt:uState.jwt,
 				firstName:uState.firstName
 			};
 		};
@@ -150,19 +180,20 @@ class SettingsForm extends BaseForm
         return jsx('		
 				<div className="columns">
 					<div className="tabComponentForm" children={renderContent()} />
-					<SMenu className="menu" articles={sideMenu.articles}/>					
+					<SMenu className="menu" menuBlocks={sideMenu.menuBlocks}/>					
 				</div>		
         ');
     }	
 	
 	function renderContent():ReactFragment
 	{
+		trace(state.contentId);
 		return switch(state.contentId)
 		{
 			case "editUser":
 				jsx('
 					<FormUi name="accountData" data=${state.data == null? null:state.data["accountData"]}
-					${...props} className="" fullWidth={true}/>				
+					${...props} fullWidth={true}/>				
 				');				
 			default:
 				null;

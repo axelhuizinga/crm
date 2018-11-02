@@ -93,7 +93,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 		var t:InputElement = cast e.target;
 		trace(t.name);
 		trace(t.value);
-		t.className = 'input';
+		//t.className = 'input';
 		Reflect.setField(s, t.name, t.value);
 		trace(props.dispatch == App.store.dispatch);
 		//App.store.dispatch(AppAction.LoginChange(s));
@@ -119,7 +119,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 		trace(Reflect.fields(props));
 		var style = 
 		{
-			maxWidth:'22rem'
+			maxWidth:'32rem'
 		};
 		
 		if (props.waiting)
@@ -135,31 +135,34 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 		
 		return jsx('
 		<section className="hero is-alt is-fullheight">
-		  <div className="hero-body">
-			<div className="container" style=${style}>
-			  <article className="card is-rounded" >
-				<div className="card-content">
-				  <h2 className="title is-5">
-				  <img src="img/schutzengelwerk-logo.png" style=${{width:'100%'}}/>
+		  <div className="formContainer">
+			<div className="formBox is-rounded" style=${style}>
+				<div className="logo">
+				<img src="img/schutzengelwerk-logo.png" style=${{width:'100%'}}/>
+				  <h2 className="overlaySubTitle">				  
 				  crm 2.0
 				  </h2>
+				</div>
+				<div className="form2">
 				  <form name="form" onSubmit={handleSubmit} autoComplete="new-password" >
-					  <p className="control has-icon">
-						<input name="userName" className=${errorStyle("userName")} type="text" placeholder="User ID"  value={state.userName} onChange={handleChange} />
-						<i className="fa fa-user"></i>
-					  </p>
-					  <p className="control has-icon">
-						<input name="pass" className=${errorStyle("pass")} type="password" placeholder="Password"  value={state.pass} onChange={handleChange} />
-						<i className="fa fa-lock"></i>
-					  </p>
-					  <p className="control">
-						<button className="button is-medium is-fullwidth is-warning">
-						  Login
-						</button>
-					  </p>
+					<div className="formField">
+						<label className="userIcon" forhtml="login-username">
+							<span className="hidden">User ID</span></label>
+						<input id = "login-username"  name = "userName" 
+							className=${errorStyle("userName") + "form-input"}  
+							placeholder="User ID" value={state.userName} onChange={handleChange} />
+					</div>
+					<div className="formField">
+						<label className="lockIcon" forhtml="login-pass">
+							<span className="hidden">Password</span></label>
+						<input id="login-pass" className=${errorStyle("pass") + "form-input"}  
+							name="pass" type="password" placeholder="Password"  value={state.pass} onChange={handleChange} />					
+					</div>
+					<div className="formField">
+						<input type="submit" value="Login"/>
+					</div>
 				  </form>
 				</div>
-			  </article>
 			</div>
 		  </div>
 		</section>		
@@ -168,7 +171,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 	
 	function errorStyle(name:String):String
 	{
-		return switch(name)
+		var eStyle = "form-input " + switch(name)
 		{
 			case "pass":
 				var res = props.loginError == "password"?"input error":"input";
@@ -181,6 +184,8 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 			default:
 				'';
 		}
+		trace(eStyle);
+		return eStyle;
 	}
 	
 }

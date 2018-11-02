@@ -41,14 +41,8 @@ class RolesForm extends BaseForm
 	{
 		super(props);
 		dataDisplay = RolesFormModel.dataDisplay;
-		/*	?className:String,
-	?handler:Function,
-	?img:String,
-	?info:String,
-	itemsData:Array<SMItem>,
-	?label:String,*/
 		sideMenu = {
-			articles:[
+			menuBlocks:[
 				{
 					isActive:true,
 					label:'Benutzer',
@@ -258,7 +252,7 @@ class RolesForm extends BaseForm
         return jsx('		
 				<div className="columns">
 					<div className="tabComponentForm" children={renderContent()} />
-					<SMenu className="menu" articles={sideMenu.articles}/>					
+					<SMenu className="menu" menuBlocks={sideMenu.menuBlocks}/>					
 				</div>		
         ');
     }	

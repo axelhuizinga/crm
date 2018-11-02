@@ -15,7 +15,6 @@ import bulma_components.Button;
 
 typedef SMenuBlock =
 {
-	?codeClass:String,
 	?className:String,
 	?onActivate:Function,
 	?img:String,
@@ -23,19 +22,17 @@ typedef SMenuBlock =
 	?isActive:Bool,
 	items:Array<SMItem>,
 	?label:String,	
-	?segment:String,
 }
 
 typedef SMItem =
 {
-	?codeClass:String,
 	?className:String,
 	?component:ReactComponent,
 	?handler:Function,
-	?segment:String,
 	?img:String,
 	?info:String,
-	?label:String,	
+	?label:String,
+	
 }
  
 typedef SMenuProps =
@@ -65,41 +62,19 @@ class SMenu extends PureComponentOf<SMenuProps,SMenuState>
 		}
 	}
 
-	function renderHeader():ReactFragment
-	{
-		if (props.menuBlocks.length == 0)
-			return null;
-		var i:Int = 1;		
-		return props.menuBlocks.map(function(block:SMenuBlock) return jsx('
-		<input type="radio" key=${i} id=${"panel-"+(i++)} name="accordion-select" data-codeclass=${block.codeClass} onChange=${block.onActivate} value=${block.segment}/>
-		'));
-	}
-
-	function renderPanels():ReactFragment
-	{
-		if (props.menuBlocks.length == 0)
-			return null;
-		var i:Int = 1;
-		return props.menuBlocks.map(function(block:SMenuBlock) return jsx('	
-			<div className="panel" key=${i}>
-			  <label className="panel-heading" htmlFor=${"panel-"+i}>${block.label}</label>
-			  <div className=${"panel-block body-"+(i++)} children=${renderItems(block.items)}/>
-			</div>		
-		'));
-	}		
 	
 	function renderArticles():ReactFragment
 	{
 		if (props.menuBlocks.length == 0)
 			return null;
 		var i:Int = 1;
-		return props.menuBlocks.map(function(block:SMenuBlock) return jsx('
-		<article className=${"accordion " + (block.isActive?"is-active":"")} key=${i++}>
+		return props.menuBlocks.map(function(art:SMenuBlock) return jsx('
+		<article className=${"accordion " + (art.isActive?"is-active":"")} key=${i++}>
 			<div className="accordion-header toggle">
-			  <p>${block.label}</p>
+			  <p>${art.label}</p>
 			</div>
 			<div className="accordion-body">
-			  <div className="accordion-content" children=${renderItems(block.items)}/>
+			  <div className="accordion-content" children=${renderItems(art.items)}/>
 			</div>
 		</article>
 		'));
@@ -107,7 +82,7 @@ class SMenu extends PureComponentOf<SMenuProps,SMenuState>
 	
 	function renderItems(items:Array<SMItem>):ReactFragment
 	{
-		//trace(items);
+		trace(items);
 		if (items.length == 0)
 			return null;
 		var i:Int = 1;
@@ -121,8 +96,8 @@ class SMenu extends PureComponentOf<SMenuProps,SMenuState>
 		return jsx('
 		<div className="is-right is-hidden-mobile">
 			<aside className="menu">
-				${renderHeader()}
-				${renderPanels()}
+				<section className="accordions" children=${renderArticles()}/>
+				<ul className="menu-list" children=${props.items==null?null:renderItems(props.items)}/>
 			</aside>
 		</div>	
 		');
@@ -131,12 +106,12 @@ class SMenu extends PureComponentOf<SMenuProps,SMenuState>
 	override public function componentDidMount():Void 
 	{
 		//Timer.delay(function(){
-			/*if (App.bulmaAccordion != null)
+			if (App.bulmaAccordion != null)
 			{
 				trace(App.bulmaAccordion);
 				var accordions = App.bulmaAccordion.attach();
 				trace(accordions);
-			}		*/
+			}		
 		//}, 1000);
 	}
 	

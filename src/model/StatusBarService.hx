@@ -4,7 +4,7 @@ import haxe.Http;
 import haxe.Json;
 import js.Browser;
 import js.Promise;
-import view.User;
+import view.shared.io.User;
 import react.ReactUtil.copy;
 import redux.IMiddleware;
 import redux.IReducer;

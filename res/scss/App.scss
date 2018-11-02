@@ -11,10 +11,12 @@
 $bgto: #ddd;
 $border-light: #dbdbdb;
 $borderCol:0.35px dotted #eee;
+$buttonSun:#ffdd57;
 $cell-border: 1px solid grey;
 $cellPadding: 0px 0.75rem;
 $headPadding: 0.35rem 0.75rem;
 $darkBlue: rgb(10,20,60);
+$logoBlue: hsl(202,75%,40%);
 $paleBlue: rgb(140,190,240);
 $darkGreen: rgb(60,80,0);
 $highLightGreen: rgb(80,220,20);
@@ -42,7 +44,7 @@ $darkGradient:linear-gradient($lightBlue 0%, $paleBlue 32%);
  
 html,body { 
     /*font-family:Arial;*/
-	font-size:16px;
+	font-size:14px;
 	margin: 0;
 	overflow:hidden!important;
 	height:100%;
@@ -217,6 +219,104 @@ h1 {
   
 /* END OF STICKY TABLE HEADER */
 
+.formContainer
+{
+	flex-grow:1;
+	display:flex;
+	flex-direction:column;
+	justify-content:center;
+	align-self:center;
+}
+.formBox
+{
+	box-shadow:	0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+	display:flex;
+	flex-direction:column;
+	padding:1rem;
+	border-radius: 0.5rem;
+}
+.formField
+{
+	display:flex;
+	margin:0.8rem auto;
+}
+.hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+.formField label:before {
+	font: 1.55rem fontawesome;
+	color: $logoBlue;
+}
+.userIcon:before {
+	content: '\f007';
+}
+.lockIcon:before {
+	content: '\f023';
+}
+
+.formField label,
+.formField input,
+{
+  border-radius: $tableHeader-radius;
+  border:1px solid #ccc;
+  padding: 1rem;
+  color: #3A3F44;  
+  
+}
+.formField input {
+  width: 100%;
+  padding:1rem;
+  background-color: #eeeeee;
+  border-left-style:none;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;  
+  font-size: 1.25rem;  
+}
+.formField label {
+  background-color: eee;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  border-right-style:none;
+  padding: 1.15rem 1.25rem 0rem 1.25rem ;
+}
+.formField input:focus, .formField input:hover {
+  background-color: #fff;
+}
+
+.formField input[type="submit"]{
+	border-radius: $tableHeader-radius;
+	color:$logoBlue;
+	font-size:1.4rem;
+	font-weight:bold;
+	padding:1rem;
+	background-color:$buttonSun;
+	border-color:transparent;
+}
+
+/*.user:before {
+  content: '\f007';
+  font: 0.8rem fontawesome;
+	color: #5b5b5b;
+}
+
+.lock:before {
+  content: '\f023';
+  font: 0.8rem fontawesome;
+	color: #5b5b5b;
+}*/
+.overlaySubTitle
+{
+	font-size:1.22rem;
+	margin-top:-1.9rem;
+	text-align:right;
+}
 .statusbar
  {
 	 display:flex;
@@ -388,6 +488,27 @@ h1 {
 	border-left:0.6px solid #dbdbdb;
 	color:$darkBlue;
 }
+
+input[name="accordion-select"], .panel-block {
+  display: none;
+}
+label.panel-heading {
+  cursor: pointer;
+  display: block;
+}
+
+/* the magic */
+#panel-1:checked ~ .panel > .body-1,
+#panel-2:checked ~ .panel > .body-2,
+#panel-3:checked ~ .panel > .body-3 {
+  display: flex;
+  flex-direction:column;
+}
+.panel-heading 
+{
+	font-size:1.15rem;
+}
+
 /*tables*/
 .table.head
 {

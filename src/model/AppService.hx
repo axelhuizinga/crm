@@ -7,7 +7,7 @@ import haxe.ds.StringMap;
 import js.Browser;
 import js.Cookie;
 import js.Promise;
-import view.User;
+import view.shared.io.User;
 import react.ReactUtil.copy;
 import redux.IMiddleware;
 import redux.IReducer;

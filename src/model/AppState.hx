@@ -1,8 +1,9 @@
 package model;
+import view.shared.io.User;
 import history.Location;
 import model.GlobalAppState;
 import model.LocationState;
-import view.User.UserProps;
+import view.shared.io.User.UserProps;
 import model.StatusBarService.StatusBarState;
 
 typedef AppState =

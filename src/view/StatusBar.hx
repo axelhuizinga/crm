@@ -7,6 +7,7 @@ import react.Partial;
 import react.ReactComponent.ReactComponentOf;
 import react.ReactComponentMacro;
 import react.ReactDateTimeClock;
+import view.shared.io.User;
 
 import react.ReactMacro.jsx;
 import redux.react.IConnectedComponent;
@@ -15,7 +16,7 @@ import react.router.Route.RouteComponentProps;
 import redux.StoreMethods;
 import action.AppAction;
 import model.AppState;
-import view.User.UserProps;
+import view.shared.io.User.UserProps;
 
 /**
  * ...

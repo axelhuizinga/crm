@@ -1,4 +1,5 @@
 package view;
+import view.shared.io.User;
 
 import comments.StringTransform;
 import haxe.Timer;
@@ -7,7 +8,7 @@ import history.BrowserHistory;
 import me.cunity.debug.Out;
 import model.AppState;
 import model.GlobalAppState;
-import view.User.UserProps;
+import view.shared.io.User.UserProps;
 import react.Fragment;
 import react.ReactComponent.ReactFragment;
 import react.React;

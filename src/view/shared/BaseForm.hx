@@ -4,6 +4,7 @@ import haxe.Constraints.Function;
 import haxe.ds.StringMap;
 import haxe.http.HttpJs;
 import js.html.Event;
+import me.cunity.debug.Out;
 import model.AppState;
 import react.ReactComponent.ReactComponentOf;
 import react.ReactComponent.ReactFragment;
@@ -35,6 +36,7 @@ enum FormElement
 
 typedef FormField =
 {
+	?className:String,
 	?name:String,
 	?label:String,
 	?value:Any,
@@ -54,10 +56,11 @@ typedef FormField =
 	>RouteTabProps,
 	?contentId:String,
 	?elements:StringMap<FormField>,
-	?formData:Dynamic,
+	?data:Dynamic,
 	?store:Store<AppState>,
 	?handleChange:Event->Void,
-	?handleSubmit:Event->Void
+	?handleSubmit:Event->Void,
+	?name:String
  }
 
 typedef FormState =
@@ -89,7 +92,7 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 		super(props);		
 		mounted = false;
 		requests = [];
-		sideMenu = {articles:[]};
+		sideMenu = {menuBlocks:[]};
 		state = {
 			data:new StringMap(),
 			contentId:'',
@@ -128,13 +131,16 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
     override function render() {
 		trace('You should override me :)');
         return null;
-    }	
+    }	 
 	
-	public function switchContent(contentId:String)
+	public function switchContent(contentId:Dynamic)
 	{
+		var mData:String = contentId.target.getAttribute('data-codeclass');
+		trace(mData);
+		trace(contentId.target.value);
 		if (props.contentId != contentId)
 		{
-			setState({contentId:contentId});
+			//setState({contentId:contentId});
 		}
 	}
 	

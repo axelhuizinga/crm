@@ -10,7 +10,7 @@ import js.Promise;
 import react.ReactUtil;
 import redux.Redux;
 import redux.Redux.Dispatch;
-import view.User;
+import view.shared.io.User;
 import react.ReactUtil.copy;
 import redux.IMiddleware;
 import redux.IReducer;
