@@ -59,6 +59,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,Dynamic>
 		Timer.delay(function(){
 			trace('timer start at ${Date.now().getSeconds()}');
 			//store.dispatch(Tick(Date.now()));
+			this.setState({ date: Date.now()});
 			timer = new Timer(60000);
 			timer.run = function() this.setState({ date: Date.now()});
 		}, (60 - d.getSeconds()) * 1000);
@@ -94,14 +95,14 @@ class StatusBar extends ReactComponentOf<StatusBarProps,Dynamic>
 	{
 		var userName:String = 'Gast';
 		var userIcon:String = 'fa fa-user-o';
-		trace(props.user);
+		//trace(props.user);
 		if (props.user != null)
 		{
 		 userName = props.user.firstName != null &&  props.user.firstName !='' ?
 		[props.user.firstName , props.user.lastName].join(' ') : props.user.userName;
 		 userIcon = 'fa fa-user';			
 		}
-		trace(userName +':' + cast userName.length);
+		//trace(userName +':' + cast userName.length);
 		return jsx('
 		<Footer>
 			<div className="statusbar">

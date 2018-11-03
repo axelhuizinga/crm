@@ -54,7 +54,7 @@ typedef FormField =
  typedef FormProps =
  {
 	>RouteTabProps,
-	?contentId:String,
+	?classPath:String,
 	?elements:StringMap<FormField>,
 	?data:Dynamic,
 	?store:Store<AppState>,
@@ -65,7 +65,7 @@ typedef FormField =
 
 typedef FormState =
 {
-	var contentId:String;
+	var classPath:String;
 	//@:optional var content:Array<String>;
 	@:arrayAccess
 	@:optional var data:Map<String,Dynamic>;
@@ -95,7 +95,7 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 		sideMenu = {menuBlocks:[]};
 		state = {
 			data:new StringMap(),
-			contentId:'',
+			classPath:'',
 			//content:new Array(),
 			clean:true,
 			errors:new StringMap(),
@@ -126,21 +126,22 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 		mounted=false;
 		for (r in requests)
 			r.cancel();
-	}		
+	}	
 	
     override function render() {
 		trace('You should override me :)');
         return null;
     }	 
 	
-	public function switchContent(contentId:Dynamic)
+	public function switchContent(reactEventSource:Dynamic)
 	{
-		var mData:String = contentId.target.getAttribute('data-codeclass');
-		trace(mData);
-		trace(contentId.target.value);
-		if (props.contentId != contentId)
+		//Out.dumpObject(reactEventSource);
+		trace(props.match);
+		var classPath:String = reactEventSource.target.getAttribute('data-classpath');
+		trace(classPath + ':' + state.classPath);
+		if (state.classPath != classPath)
 		{
-			//setState({contentId:contentId});
+			setState({classPath:classPath});
 		}
 	}
 	

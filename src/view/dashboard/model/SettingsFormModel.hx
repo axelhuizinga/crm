@@ -28,7 +28,7 @@ class SettingsFormModel
 	];
 	
 	public static var relations:StringMap<FormRelation> = [
-		'accountData' => {
+		'user' => {
 			props:{elements:accountDataElements},
 			state:null
 		},

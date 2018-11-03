@@ -95,10 +95,11 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 			},
 			function(data){
 				//trace(data); 
-				if (data.length > 0)
+				var rows:Array<Dynamic> = [].concat(data.rows);
+				if (rows.length > 0)
 				{
 					var sData:StringMap<Dynamic> = state.data;
-					var rows:Array<Dynamic> = Json.parse(data).rows;
+					
 					var i:Int = 1;
 					sData.set('userGroups', rows.map(function(row:Dynamic){
 						var retRow:Dynamic = {key:i++};
@@ -157,11 +158,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 				])
 			},
 			function(data){
-				if (data.length > 0)
-				{
-					//trace(Json.parse(data));
-					trace(Json.parse(data).data.rows.length);
-				}
+				trace(data);
 			}
 		));
 	}

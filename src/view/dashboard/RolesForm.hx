@@ -76,7 +76,7 @@ class RolesForm extends BaseForm
 		};
 		state = {
 			clean:true,
-			contentId:"userList",
+			classPath:"userList",
 			hasError:false,
 			loading:true
 		};
@@ -136,10 +136,7 @@ class RolesForm extends BaseForm
 				action:'importExternal'
 			},
 			function(data){
-				if (data.length > 0)
-				{
-					trace(Json.parse(data));
-				}
+				trace(data);				
 			}
 		));
 	}
@@ -226,15 +223,10 @@ class RolesForm extends BaseForm
 				])
 			},
 			function(data){
-				if (data.length > 0)
-				{
-					//trace(Json.parse(data));
-					trace(Json.parse(data).data.rows.length);
-					var dataRows:Array<Dynamic> = Json.parse(data).data.rows;
-					trace(Reflect.fields(dataRows[0]));
-					trace(dataRows[0].active);
-					setState({data:['userList'=>dataRows], loading:false});					
-				}
+				var dataRows:Array<Dynamic> = data.rows;
+				trace(Reflect.fields(dataRows[0]));
+				trace(dataRows[0].active);
+				setState({data:['userList'=>dataRows], loading:false});					
 			}
 		));
 	}
@@ -259,7 +251,7 @@ class RolesForm extends BaseForm
 	
 	function renderContent():ReactFragment
 	{
-		return switch(state.contentId)
+		return switch(state.classPath)
 		{
 			case "userList":
 				jsx('

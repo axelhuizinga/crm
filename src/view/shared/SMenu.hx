@@ -2,11 +2,14 @@ package view.shared;
 
 import haxe.Constraints.Function;
 import haxe.Timer;
+import js.html.InputElement;
 import react.Fragment;
 import react.PureComponent.PureComponentOf;
 import react.ReactComponent;
+import react.React;
 import react.ReactMacro.jsx;
 import bulma_components.Button;
+import react.ReactRef;
 
 /**
  * ...
@@ -41,6 +44,7 @@ typedef SMItem =
 typedef SMenuProps =
 {
 	?className:String,
+	?basePath:String,
 	?hidden:Bool,
 	?menuBlocks:Array<SMenuBlock>,
 	?items:Array<SMItem>,
@@ -56,7 +60,7 @@ typedef SMenuState =
 class SMenu extends PureComponentOf<SMenuProps,SMenuState>
 
 {
-
+	var initialActiveHeaderRef:ReactRef<InputElement>;
 	public function new(props:SMenuProps) 
 	{
 		super(props);
@@ -64,14 +68,24 @@ class SMenu extends PureComponentOf<SMenuProps,SMenuState>
 			hidden:props.hidden||false
 		}
 	}
+	
+	function activate()
+	{
+		trace(initialActiveHeaderRef.current);
+		if (initialActiveHeaderRef.current != null)
+		{
+			initialActiveHeaderRef.current.checked = true;
+		}
+	}
 
 	function renderHeader():ReactFragment
 	{
+		initialActiveHeaderRef = React.createRef();
 		if (props.menuBlocks.length == 0)
 			return null;
 		var i:Int = 1;		
 		return props.menuBlocks.map(function(block:SMenuBlock) return jsx('
-		<input type="radio" key=${i} id=${"panel-"+(i++)} name="accordion-select" data-codeclass=${block.codeClass} onChange=${block.onActivate} value=${block.segment}/>
+		<input type="radio" key=${i} id=${"sMenuPanel-"+(i++)} name="accordion-select" data-classpath=${block.codeClass} onChange=${block.onActivate} value=${block.segment} ref=${block.isActive?initialActiveHeaderRef:null}/>
 		'));
 	}
 
@@ -82,28 +96,13 @@ class SMenu extends PureComponentOf<SMenuProps,SMenuState>
 		var i:Int = 1;
 		return props.menuBlocks.map(function(block:SMenuBlock) return jsx('	
 			<div className="panel" key=${i}>
-			  <label className="panel-heading" htmlFor=${"panel-"+i}>${block.label}</label>
+			  <label className="panel-heading" htmlFor=${"sMenuPanel-"+i}>${block.label}</label>
 			  <div className=${"panel-block body-"+(i++)} children=${renderItems(block.items)}/>
 			</div>		
 		'));
 	}		
 	
-	function renderArticles():ReactFragment
-	{
-		if (props.menuBlocks.length == 0)
-			return null;
-		var i:Int = 1;
-		return props.menuBlocks.map(function(block:SMenuBlock) return jsx('
-		<article className=${"accordion " + (block.isActive?"is-active":"")} key=${i++}>
-			<div className="accordion-header toggle">
-			  <p>${block.label}</p>
-			</div>
-			<div className="accordion-body">
-			  <div className="accordion-content" children=${renderItems(block.items)}/>
-			</div>
-		</article>
-		'));
-	}//			 <button className="toggle" aria-label="toggle"></button>
+	// <button className="toggle" aria-label="toggle"></button>
 	
 	function renderItems(items:Array<SMItem>):ReactFragment
 	{
@@ -138,6 +137,7 @@ class SMenu extends PureComponentOf<SMenuProps,SMenuState>
 				trace(accordions);
 			}		*/
 		//}, 1000);
+		activate();
 	}
 	
 	override public function componentDidUpdate(prevProps:SMenuProps, prevState:SMenuState):Void 

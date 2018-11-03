@@ -38,33 +38,33 @@ class SettingsForm extends BaseForm
 		sideMenu = {
 			menuBlocks:[
 				{
-					codeClass:'User',
+					codeClass:'auth.User',
 					isActive:true,
 					label:'Meine KontoDaten',
 					onActivate:switchContent,
 					items:[
 						{handler:editMe,label:'Bearbeiten',segment:'edit'}
 					],
-					segment:'userAccount'
+					segment:'user'
 				},
 				{
-					codeClass:'Bookmarks',
+					codeClass:'settings.Bookmarks',
 					label:'Lesezeichen',
 					onActivate:switchContent,
 					items:[
-						{handler:createUserBookmark,label:'Neu'},
-						{handler:editUserBookmark,label:'Bearbeiten'},
-						{handler:deleteUserBookmark,label:'Löschen'}
+						{handler:createUserBookmark,label:'Neu',segment:'create'},
+						{handler:editUserBookmark,label:'Bearbeiten',segment:'edit'},
+						{handler:deleteUserBookmark,label:'Löschen',segment:'delete'}
 					],
 					segment:'bookmarks'
 				},
 				{
-					codeClass:'Design',
+					codeClass:'settings.Design',
 					label:'Design',
 					onActivate:switchContent,
 					items:[
-						{handler:editColors,label:'Farben'},
-						{handler:editFonts,label:'Schrift'}
+						{handler:editColors,label:'Farben',segment:'editColors'},
+						{handler:editFonts,label:'Schrift',segment:'editFont'}
 					],
 					segment:'design'
 				}
@@ -73,7 +73,7 @@ class SettingsForm extends BaseForm
 		};
 		state = {
 			clean:true,
-			contentId:"accountData",
+			classPath:"auth.User",
 			hasError:false,
 			loading:true
 		};
@@ -126,39 +126,20 @@ class SettingsForm extends BaseForm
 				className:'auth.User',
 				action:'edit',
 				filter:'user_name|${props.userName}',
-				dataSource:Serializer.run([
-					"users" => ["alias" => 'us',
-						"fields" => 'user_name,last_login'],
-					"user_groups" => [
-						"alias" => 'ug',
-						"fields" => 'name',
-						"jCond"=>'ug.id=us.user_group'],
-					"contacts" => [
-						"alias" => 'co',
-						"fields" => 'first_name,last_name,email',
-						"jCond"=>'contact=co.id']
-				])
+				dataSource:Serializer.run(view.shared.io.User.userModel)
 			},
-			function(data){
-				if (data.length > 0)
-				{
-					var dataObj = Json.parse(data);
-					if (dataObj.error != '')
-					{
-						trace(dataObj.error);
-						return;
-					}
-					if (dataObj.data == null)
-						return;
-					trace(Json.parse(data).data.rows.length);
-					var dataRows:Array<Dynamic> = Json.parse(data).data.rows;
-					trace(Reflect.fields(dataRows[0]));
-					trace(dataRows[0].active);
-					setState({data:['accountData'=>dataRows], loading:false});					
-				}
+			function(data:Dynamic )
+			{
+				if (data.rows == null)
+					return;
+				trace(data.rows.length);
+				var dataRows:Array<Dynamic> = data.rows;
+				trace(Reflect.fields(dataRows[0]));
+				trace(dataRows[0].active);
+				setState({data:['accountData'=>dataRows], loading:false});					
 			}
 		));
-		setState({contentId:"editUser"});
+		setState({classPath:"edit"});
 	}
 		
 	static function mapStateToProps(aState:AppState) {
@@ -175,7 +156,8 @@ class SettingsForm extends BaseForm
 	}	
 	
     override public function render() {
-		trace(Reflect.fields(props));
+		//trace(Reflect.fields(props));
+		//trace(props.match);
 		//trace(props.history == App.store.getState().appWare.history);
         return jsx('		
 				<div className="columns">
@@ -187,10 +169,10 @@ class SettingsForm extends BaseForm
 	
 	function renderContent():ReactFragment
 	{
-		trace(state.contentId);
-		return switch(state.contentId)
+		trace(state.classPath);
+		return switch(state.classPath)
 		{
-			case "editUser":
+			case "user":
 				jsx('
 					<FormUi name="accountData" data=${state.data == null? null:state.data["accountData"]}
 					${...props} fullWidth={true}/>				

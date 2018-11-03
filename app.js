@@ -2057,7 +2057,9 @@ me_cunity_debug_Out.fTrace = function(str,arr,i) {
 	}
 	me_cunity_debug_Out._trace(str_buf_b,i);
 };
-var model_AjaxLoader = function() { };
+var model_AjaxLoader = function(cb) {
+	this.cB = cb;
+};
 model_AjaxLoader.__name__ = "model.AjaxLoader";
 model_AjaxLoader.load = function(url,params,cB) {
 	var req = new haxe_http_HttpJs(url);
@@ -2072,9 +2074,8 @@ model_AjaxLoader.load = function(url,params,cB) {
 	}
 	req.addHeader("Access-Control-Allow-Methods","PUT, GET, POST, DELETE, OPTIONS");
 	req.addHeader("Access-Control-Allow-Origin","*");
-	if(cB != null) {
-		req.onData = cB;
-	}
+	var loader = new model_AjaxLoader(cB);
+	req.onData = $bind(loader,loader._onData);
 	req.onError = function(err) {
 		haxe_Log.trace(err,{ fileName : "src/model/AjaxLoader.hx", lineNumber : 34, className : "model.AjaxLoader", methodName : "load"});
 	};
@@ -2082,15 +2083,28 @@ model_AjaxLoader.load = function(url,params,cB) {
 	req.request(params != null);
 	return req;
 };
-model_AjaxLoader.loadData = function(loaders) {
-	var rqs = [];
-	var _g = 0;
-	while(_g < loaders.length) {
-		var l = loaders[_g];
-		++_g;
-		rqs.push(model_AjaxLoader.load(l.url,l.params,l.cB));
+model_AjaxLoader.prototype = {
+	cB: null
+	,_onData: function(data) {
+		if(data.length > 0) {
+			var dataObj = JSON.parse(data);
+			if(dataObj.error != "") {
+				haxe_Log.trace(dataObj.error,{ fileName : "src/model/AjaxLoader.hx", lineNumber : 53, className : "model.AjaxLoader", methodName : "_onData"});
+				haxe_Log.trace(App.store.getState().appWare.history,{ fileName : "src/model/AjaxLoader.hx", lineNumber : 54, className : "model.AjaxLoader", methodName : "_onData"});
+				dataObj.data.error = dataObj.error;
+			}
+			if(dataObj.data == null) {
+				dataObj.info = "No data";
+			}
+			if(dataObj.data.rows != null) {
+				haxe_Log.trace(dataObj.data.rows.length,{ fileName : "src/model/AjaxLoader.hx", lineNumber : 63, className : "model.AjaxLoader", methodName : "_onData"});
+			}
+			if(this.cB != null) {
+				this.cB(dataObj.data);
+			}
+		}
 	}
-	return rqs;
+	,__class__: model_AjaxLoader
 };
 var redux_IMiddleware = function() { };
 redux_IMiddleware.__name__ = "redux.IMiddleware";
@@ -3210,7 +3224,6 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 		var t = e.target;
 		haxe_Log.trace(t.name,{ fileName : "src/view/LoginForm.hx", lineNumber : 94, className : "view.LoginForm", methodName : "handleChange"});
 		haxe_Log.trace(t.value,{ fileName : "src/view/LoginForm.hx", lineNumber : 95, className : "view.LoginForm", methodName : "handleChange"});
-		t.className = "input";
 		s[t.name] = t.value;
 		haxe_Log.trace(this.props.dispatch == ($_=App.store,$bind($_,$_.dispatch)),{ fileName : "src/view/LoginForm.hx", lineNumber : 98, className : "view.LoginForm", methodName : "handleChange"});
 		this.setState(s);
@@ -3222,7 +3235,7 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 	}
 	,render: function() {
 		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/LoginForm.hx", lineNumber : 119, className : "view.LoginForm", methodName : "render"});
-		var style = { maxWidth : "22rem"};
+		var style = { maxWidth : "32rem"};
 		if(this.props.waiting) {
 			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("section");
 			var tmp1 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
@@ -3233,46 +3246,50 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 		var tmp4 = react__$ReactNode_ReactNode_$Impl_$.fromString("section");
 		var tmp5 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp6 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var tmp7 = react__$ReactNode_ReactNode_$Impl_$.fromString("article");
-		var tmp8 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var tmp9 = react__$ReactNode_ReactNode_$Impl_$.fromString("h2");
-		var tmp10 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("img"),{ src : "img/schutzengelwerk-logo.png", style : { width : "100%"}});
-		var tmp11 = React.createElement(tmp9,{ className : "title is-5"},tmp10,"crm 2.0");
+		var tmp7 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
+		var tmp8 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("img"),{ src : "img/schutzengelwerk-logo.png", style : { width : "100%"}});
+		var tmp9 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("h2"),{ className : "overlaySubTitle"},"crm 2.0");
+		var tmp10 = React.createElement(tmp7,{ className : "logo"},tmp8,tmp9);
+		var tmp11 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp12 = react__$ReactNode_ReactNode_$Impl_$.fromString("form");
 		var tmp13 = { name : "form", onSubmit : $bind(this,this.handleSubmit), autoComplete : "new-password"};
-		var tmp14 = react__$ReactNode_ReactNode_$Impl_$.fromString("p");
-		var tmp15 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("input"),{ name : "userName", className : this.errorStyle("userName"), type : "text", placeholder : "User ID", value : this.state.userName, onChange : $bind(this,this.handleChange)});
-		var tmp16 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("i"),{ className : "fa fa-user"});
-		var tmp17 = React.createElement(tmp14,{ className : "control has-icon"},tmp15,tmp16);
-		var tmp18 = react__$ReactNode_ReactNode_$Impl_$.fromString("p");
-		var tmp19 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("input"),{ name : "pass", className : this.errorStyle("pass"), type : "password", placeholder : "Password", value : this.state.pass, onChange : $bind(this,this.handleChange)});
-		var tmp20 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("i"),{ className : "fa fa-lock"});
-		var tmp21 = React.createElement(tmp18,{ className : "control has-icon"},tmp19,tmp20);
-		var tmp22 = react__$ReactNode_ReactNode_$Impl_$.fromString("p");
-		var tmp23 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("button"),{ className : "button is-medium is-fullwidth is-warning"},"Login");
-		var tmp24 = React.createElement(tmp12,tmp13,tmp17,tmp21,React.createElement(tmp22,{ className : "control"},tmp23));
-		var tmp25 = React.createElement(tmp8,{ className : "card-content"},tmp11,tmp24);
-		var tmp26 = React.createElement(tmp7,{ className : "card is-rounded"},tmp25);
-		var tmp27 = React.createElement(tmp6,{ className : "container", style : style},tmp26);
-		var tmp28 = React.createElement(tmp5,{ className : "hero-body"},tmp27);
-		return React.createElement(tmp4,{ className : "hero is-alt is-fullheight"},tmp28);
+		var tmp14 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
+		var tmp15 = react__$ReactNode_ReactNode_$Impl_$.fromString("label");
+		var tmp16 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("span"),{ className : "hidden"},"User ID");
+		var tmp17 = React.createElement(tmp15,{ className : "userIcon", forhtml : "login-username"},tmp16);
+		var tmp18 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("input"),{ id : "login-username", name : "userName", className : this.errorStyle("userName") + "form-input", placeholder : "User ID", value : this.state.userName, onChange : $bind(this,this.handleChange)});
+		var tmp19 = React.createElement(tmp14,{ className : "formField"},tmp17,tmp18);
+		var tmp20 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
+		var tmp21 = react__$ReactNode_ReactNode_$Impl_$.fromString("label");
+		var tmp22 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("span"),{ className : "hidden"},"Password");
+		var tmp23 = React.createElement(tmp21,{ className : "lockIcon", forhtml : "login-pass"},tmp22);
+		var tmp24 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("input"),{ id : "login-pass", className : this.errorStyle("pass") + "form-input", name : "pass", type : "password", placeholder : "Password", value : this.state.pass, onChange : $bind(this,this.handleChange)});
+		var tmp25 = React.createElement(tmp20,{ className : "formField"},tmp23,tmp24);
+		var tmp26 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
+		var tmp27 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("input"),{ type : "submit", value : "Login"});
+		var tmp28 = React.createElement(tmp12,tmp13,tmp19,tmp25,React.createElement(tmp26,{ className : "formField"},tmp27));
+		var tmp29 = React.createElement(tmp11,{ className : "form2"},tmp28);
+		var tmp30 = React.createElement(tmp6,{ className : "formBox is-rounded", style : style},tmp10,tmp29);
+		var tmp31 = React.createElement(tmp5,{ className : "formContainer"},tmp30);
+		return React.createElement(tmp4,{ className : "hero is-alt is-fullheight"},tmp31);
 	}
 	,errorStyle: function(name) {
+		var eStyle;
 		switch(name) {
 		case "pass":
 			var res = this.props.loginError == "password" ? "input error" : "input";
-			haxe_Log.trace(res,{ fileName : "src/view/LoginForm.hx", lineNumber : 175, className : "view.LoginForm", methodName : "errorStyle"});
-			return res;
+			haxe_Log.trace(res,{ fileName : "src/view/LoginForm.hx", lineNumber : 178, className : "view.LoginForm", methodName : "errorStyle"});
+			eStyle = res;
+			break;
 		case "userName":
-			if(this.props.loginError == "userName") {
-				return "input error";
-			} else {
-				return "input";
-			}
+			eStyle = this.props.loginError == "userName" ? "input error" : "input";
 			break;
 		default:
-			return "";
+			eStyle = "";
 		}
+		var eStyle1 = "form-input " + eStyle;
+		haxe_Log.trace(eStyle1,{ fileName : "src/view/LoginForm.hx", lineNumber : 187, className : "view.LoginForm", methodName : "errorStyle"});
+		return eStyle1;
 	}
 	,__class__: view_LoginForm
 });
@@ -3404,7 +3421,7 @@ view_StatusBar.mapStateToProps = function(state) {
 	return { userList : state.appWare.userList, user : state.appWare.user, pathname : state.appWare.history.location.pathname};
 };
 view_StatusBar.mapDispatchToProps = function(dispatch,ownProps) {
-	haxe_Log.trace(ownProps.date,{ fileName : "src/view/StatusBar.hx", lineNumber : 89, className : "view.StatusBar", methodName : "mapDispatchToProps"});
+	haxe_Log.trace(ownProps.date,{ fileName : "src/view/StatusBar.hx", lineNumber : 90, className : "view.StatusBar", methodName : "mapDispatchToProps"});
 	return { };
 };
 view_StatusBar.__super__ = React_Component;
@@ -3419,6 +3436,7 @@ view_StatusBar.prototype = $extend(React_Component.prototype,{
 		haxe_Log.trace("start delay at " + s + " set timer start in " + (60 - s) + " seconds",{ fileName : "src/view/StatusBar.hx", lineNumber : 57, className : "view.StatusBar", methodName : "componentDidMount"});
 		haxe_Timer.delay(function() {
 			haxe_Log.trace("timer start at " + new Date().getSeconds(),{ fileName : "src/view/StatusBar.hx", lineNumber : 60, className : "view.StatusBar", methodName : "componentDidMount"});
+			_gthis.setState({ date : new Date()});
 			_gthis.timer = new haxe_Timer(60000);
 			_gthis.timer.run = function() {
 				_gthis.setState({ date : new Date()});
@@ -3433,12 +3451,10 @@ view_StatusBar.prototype = $extend(React_Component.prototype,{
 	,render: function() {
 		var userName = "Gast";
 		var userIcon = "fa fa-user-o";
-		haxe_Log.trace(this.props.user,{ fileName : "src/view/StatusBar.hx", lineNumber : 97, className : "view.StatusBar", methodName : "render"});
 		if(this.props.user != null) {
 			userName = this.props.user.firstName != null && this.props.user.firstName != "" ? [this.props.user.firstName,this.props.user.lastName].join(" ") : this.props.user.userName;
 			userIcon = "fa fa-user";
 		}
-		haxe_Log.trace(userName + ":" + userName.length,{ fileName : "src/view/StatusBar.hx", lineNumber : 104, className : "view.StatusBar", methodName : "render"});
 		var tmp = react__$ReactNode_ReactNode_$Impl_$.fromComp(bulma_$components_Footer);
 		var tmp1 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp2 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("span"),{ className : "column is-one-third"}," Pfad: ",this.props.pathname);
@@ -3531,7 +3547,7 @@ var view_shared_BaseForm = function(props) {
 	this.mounted = false;
 	this.requests = [];
 	this.sideMenu = { menuBlocks : []};
-	this.state = { data : new haxe_ds_StringMap(), contentId : "", clean : true, errors : new haxe_ds_StringMap(), values : new haxe_ds_StringMap(), fields : new haxe_ds_StringMap(), submitted : false, hasError : false};
+	this.state = { data : new haxe_ds_StringMap(), classPath : "", clean : true, errors : new haxe_ds_StringMap(), values : new haxe_ds_StringMap(), fields : new haxe_ds_StringMap(), submitted : false, hasError : false};
 };
 view_shared_BaseForm.__name__ = "view.shared.BaseForm";
 view_shared_BaseForm.__super__ = React_Component;
@@ -3570,11 +3586,13 @@ view_shared_BaseForm.prototype = $extend(React_Component.prototype,{
 		haxe_Log.trace("You should override me :)",{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 132, className : "view.shared.BaseForm", methodName : "render"});
 		return null;
 	}
-	,switchContent: function(contentId) {
-		var mData = contentId.target.getAttribute("data-codeclass");
-		haxe_Log.trace(mData,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 139, className : "view.shared.BaseForm", methodName : "switchContent"});
-		haxe_Log.trace(contentId.target.value,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 140, className : "view.shared.BaseForm", methodName : "switchContent"});
-		var tmp = this.props.contentId != contentId;
+	,switchContent: function(reactEventSource) {
+		haxe_Log.trace(this.props.match,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 139, className : "view.shared.BaseForm", methodName : "switchContent"});
+		var classPath = reactEventSource.target.getAttribute("data-classpath");
+		haxe_Log.trace(classPath + ":" + this.state.classPath,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 141, className : "view.shared.BaseForm", methodName : "switchContent"});
+		if(this.state.classPath != classPath) {
+			this.setState({ classPath : classPath});
+		}
 	}
 	,displayDebug: function(fieldName) {
 		var _this = this.state.values;
@@ -3606,7 +3624,7 @@ var view_dashboard_RolesForm = function(props) {
 	view_shared_BaseForm.call(this,props);
 	this.dataDisplay = view_dashboard_model_RolesFormModel.dataDisplay;
 	this.sideMenu = { menuBlocks : [{ isActive : true, label : "Benutzer", onActivate : $bind(this,this.switchContent), items : [{ handler : $bind(this,this.createUsers), label : "Neu"},{ handler : $bind(this,this.editUsers), label : "Bearbeiten"},{ handler : $bind(this,this.deleteUsers), label : "Löschen"}]},{ label : "Benutzergruppen", onActivate : $bind(this,this.switchContent), items : [{ handler : $bind(this,this.createUserGroups), label : "Neu"},{ handler : $bind(this,this.editUserGroups), label : "Bearbeiten"},{ handler : $bind(this,this.deleteUserGroups), label : "Löschen"}]},{ label : "Rechte", onActivate : $bind(this,this.switchContent), items : [{ handler : $bind(this,this.createRoles), label : "Neu"},{ handler : $bind(this,this.editRoles), label : "Bearbeiten"},{ handler : $bind(this,this.deleteRoles), label : "Löschen"}]}]};
-	this.state = { clean : true, contentId : "userList", hasError : false, loading : true};
+	this.state = { clean : true, classPath : "userList", hasError : false, loading : true};
 	this.requests = [];
 	haxe_Log.trace(Reflect.fields(props),{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 84, className : "view.dashboard.RolesForm", methodName : "new"});
 };
@@ -3614,7 +3632,7 @@ view_dashboard_RolesForm.__name__ = "view.dashboard.RolesForm";
 view_dashboard_RolesForm.mapStateToProps = function(aState) {
 	return function(aState1) {
 		var uState = aState1.appWare.user;
-		haxe_Log.trace(uState,{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 151, className : "view.dashboard.RolesForm", methodName : "mapStateToProps"});
+		haxe_Log.trace(uState,{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 148, className : "view.dashboard.RolesForm", methodName : "mapStateToProps"});
 		return { userName : uState.userName, jwt : uState.jwt, firstName : uState.firstName};
 	};
 };
@@ -3642,15 +3660,13 @@ view_dashboard_RolesForm.prototype = $extend(view_shared_BaseForm.prototype,{
 	,importExternalUsers: function(ev) {
 		haxe_Log.trace(ev.currentTarget,{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 128, className : "view.dashboard.RolesForm", methodName : "importExternalUsers"});
 		this.requests.push(model_AjaxLoader.load("" + Std.string(App.config.api),{ userName : this.props.userName, jwt : this.props.jwt, firstName : this.props.firstName, className : "admin.CreateUsers", action : "importExternal"},function(data) {
-			if(data.length > 0) {
-				haxe_Log.trace(JSON.parse(data),{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 141, className : "view.dashboard.RolesForm", methodName : "importExternalUsers"});
-			}
+			haxe_Log.trace(data,{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 139, className : "view.dashboard.RolesForm", methodName : "importExternalUsers"});
 		}));
 	}
 	,componentDidMount: function() {
 		var _gthis = this;
 		view_shared_BaseForm.prototype.componentDidMount.call(this);
-		haxe_Log.trace(this.state.loading,{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 163, className : "view.dashboard.RolesForm", methodName : "componentDidMount"});
+		haxe_Log.trace(this.state.loading,{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 160, className : "view.dashboard.RolesForm", methodName : "componentDidMount"});
 		var tmp = this.requests;
 		var tmp1 = "" + Std.string(App.config.api);
 		var tmp2 = this.props.userName;
@@ -3718,30 +3734,27 @@ view_dashboard_RolesForm.prototype = $extend(view_shared_BaseForm.prototype,{
 			_g3.h["contacts"] = value2;
 		}
 		tmp.push(model_AjaxLoader.load(tmp1,{ userName : tmp2, jwt : tmp3, className : "roles.Users", action : "list", filter : "active|TRUE", dataSource : haxe_Serializer.run(_g3)},function(data) {
-			if(data.length > 0) {
-				haxe_Log.trace(JSON.parse(data).data.rows.length,{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 232, className : "view.dashboard.RolesForm", methodName : "componentDidMount"});
-				var dataRows = JSON.parse(data).data.rows;
-				haxe_Log.trace(Reflect.fields(dataRows[0]),{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 234, className : "view.dashboard.RolesForm", methodName : "componentDidMount"});
-				haxe_Log.trace(dataRows[0].active,{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 235, className : "view.dashboard.RolesForm", methodName : "componentDidMount"});
-				var _g6 = new haxe_ds_StringMap();
-				if(__map_reserved["userList"] != null) {
-					_g6.setReserved("userList",dataRows);
-				} else {
-					_g6.h["userList"] = dataRows;
-				}
-				_gthis.setState({ data : _g6, loading : false});
+			var dataRows = data.rows;
+			haxe_Log.trace(Reflect.fields(dataRows[0]),{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 227, className : "view.dashboard.RolesForm", methodName : "componentDidMount"});
+			haxe_Log.trace(dataRows[0].active,{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 228, className : "view.dashboard.RolesForm", methodName : "componentDidMount"});
+			var _g6 = new haxe_ds_StringMap();
+			if(__map_reserved["userList"] != null) {
+				_g6.setReserved("userList",dataRows);
+			} else {
+				_g6.h["userList"] = dataRows;
 			}
+			_gthis.setState({ data : _g6, loading : false});
 		}));
 	}
 	,render: function() {
-		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 249, className : "view.dashboard.RolesForm", methodName : "render"});
+		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 241, className : "view.dashboard.RolesForm", methodName : "render"});
 		var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp1 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("div"),{ className : "tabComponentForm", children : this.renderContent()});
 		var tmp2 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromComp(view_shared_SMenu),{ className : "menu", menuBlocks : this.sideMenu.menuBlocks});
 		return React.createElement(tmp,{ className : "columns"},tmp1,tmp2);
 	}
 	,renderContent: function() {
-		if(this.state.contentId == "userList") {
+		if(this.state.classPath == "userList") {
 			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromComp(view_table_Table);
 			var tmp1 = this.props;
 			var tmp2;
@@ -3796,9 +3809,9 @@ view_dashboard_SetUpForm.prototype = $extend(view_shared_BaseForm.prototype,{
 			}
 		});
 		model_AjaxLoader.load("" + Std.string(App.config.api),{ userName : this.props.userName, jwt : this.props.jwt, className : "admin.CreateUsers", action : "fromViciDial"},function(data1) {
-			if(data1.length > 0) {
+			var rows = [].concat(data1.rows);
+			if(rows.length > 0) {
 				var sData1 = _gthis.state.data;
-				var rows = JSON.parse(data1).rows;
 				var i = 1;
 				var value1 = rows.map(function(row) {
 					i += 1;
@@ -3822,8 +3835,8 @@ view_dashboard_SetUpForm.prototype = $extend(view_shared_BaseForm.prototype,{
 		});
 	}
 	,importExternalUsers: function(ev) {
-		me_cunity_debug_Out.dumpObjectTree(ev,null,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 119, className : "view.dashboard.SetUpForm", methodName : "importExternalUsers"});
-		haxe_Log.trace(ev.currentTarget._targetInst,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 120, className : "view.dashboard.SetUpForm", methodName : "importExternalUsers"});
+		me_cunity_debug_Out.dumpObjectTree(ev,null,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 120, className : "view.dashboard.SetUpForm", methodName : "importExternalUsers"});
+		haxe_Log.trace(ev.currentTarget._targetInst,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 121, className : "view.dashboard.SetUpForm", methodName : "importExternalUsers"});
 		var tmp = this.requests;
 		var tmp1 = "" + Std.string(App.config.api);
 		var tmp2 = this.props.userName;
@@ -3891,20 +3904,18 @@ view_dashboard_SetUpForm.prototype = $extend(view_shared_BaseForm.prototype,{
 			_g3.h["contacts"] = value2;
 		}
 		tmp.push(model_AjaxLoader.load(tmp1,{ userName : tmp2, jwt : tmp3, className : "roles.Users", action : "list", filter : "active|TRUE", dataSource : haxe_Serializer.run(_g3)},function(data) {
-			if(data.length > 0) {
-				haxe_Log.trace(JSON.parse(data).data.rows.length,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 163, className : "view.dashboard.SetUpForm", methodName : "importExternalUsers"});
-			}
+			haxe_Log.trace(data,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 161, className : "view.dashboard.SetUpForm", methodName : "importExternalUsers"});
 		}));
 	}
 	,render: function() {
-		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 170, className : "view.dashboard.SetUpForm", methodName : "render"});
+		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 167, className : "view.dashboard.SetUpForm", methodName : "render"});
 		if(this.state.hasError) {
 			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("h1");
 			var c = js_Boot.getClass(this);
 			var tmp1 = c.__name__;
 			return React.createElement(tmp,{ },"Fehler in ",tmp1,".");
 		}
-		haxe_Log.trace(this.props.history == App.store.getState().appWare.history,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 173, className : "view.dashboard.SetUpForm", methodName : "render"});
+		haxe_Log.trace(this.props.history == App.store.getState().appWare.history,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 170, className : "view.dashboard.SetUpForm", methodName : "render"});
 		var tmp2 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp3 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp4 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
@@ -3927,7 +3938,7 @@ view_dashboard_SetUpForm.prototype = $extend(view_shared_BaseForm.prototype,{
 		if(content == null || content.length == 0) {
 			return null;
 		}
-		haxe_Log.trace(content.length,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 199, className : "view.dashboard.SetUpForm", methodName : "renderContent"});
+		haxe_Log.trace(content.length,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 196, className : "view.dashboard.SetUpForm", methodName : "renderContent"});
 		var rC = [];
 		var k = 1;
 		var _g = 0;
@@ -3947,15 +3958,15 @@ var view_dashboard_SettingsForm = function(props) {
 	} else {
 		haxe_Log.trace(props.jwt,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 36, className : "view.dashboard.SettingsForm", methodName : "new"});
 	}
-	this.sideMenu = { menuBlocks : [{ codeClass : "User", isActive : true, label : "Meine KontoDaten", onActivate : $bind(this,this.switchContent), items : [{ handler : $bind(this,this.editMe), label : "Bearbeiten", segment : "edit"}], segment : "userAccount"},{ codeClass : "Bookmarks", label : "Lesezeichen", onActivate : $bind(this,this.switchContent), items : [{ handler : $bind(this,this.createUserBookmark), label : "Neu"},{ handler : $bind(this,this.editUserBookmark), label : "Bearbeiten"},{ handler : $bind(this,this.deleteUserBookmark), label : "Löschen"}], segment : "bookmarks"},{ codeClass : "Design", label : "Design", onActivate : $bind(this,this.switchContent), items : [{ handler : $bind(this,this.editColors), label : "Farben"},{ handler : $bind(this,this.editFonts), label : "Schrift"}], segment : "design"}]};
-	this.state = { clean : true, contentId : "accountData", hasError : false, loading : true};
+	this.sideMenu = { menuBlocks : [{ codeClass : "auth.User", isActive : true, label : "Meine KontoDaten", onActivate : $bind(this,this.switchContent), items : [{ handler : $bind(this,this.editMe), label : "Bearbeiten", segment : "edit"}], segment : "user"},{ codeClass : "settings.Bookmarks", label : "Lesezeichen", onActivate : $bind(this,this.switchContent), items : [{ handler : $bind(this,this.createUserBookmark), label : "Neu", segment : "create"},{ handler : $bind(this,this.editUserBookmark), label : "Bearbeiten", segment : "edit"},{ handler : $bind(this,this.deleteUserBookmark), label : "Löschen", segment : "delete"}], segment : "bookmarks"},{ codeClass : "settings.Design", label : "Design", onActivate : $bind(this,this.switchContent), items : [{ handler : $bind(this,this.editColors), label : "Farben", segment : "editColors"},{ handler : $bind(this,this.editFonts), label : "Schrift", segment : "editFont"}], segment : "design"}]};
+	this.state = { clean : true, classPath : "auth.User", hasError : false, loading : true};
 	this.requests = [];
 };
 view_dashboard_SettingsForm.__name__ = "view.dashboard.SettingsForm";
 view_dashboard_SettingsForm.mapStateToProps = function(aState) {
 	return function(aState1) {
 		var uState = aState1.appWare.user;
-		haxe_Log.trace(uState,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 168, className : "view.dashboard.SettingsForm", methodName : "mapStateToProps"});
+		haxe_Log.trace(uState,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 149, className : "view.dashboard.SettingsForm", methodName : "mapStateToProps"});
 		return { userName : uState.userName, jwt : uState.jwt, firstName : uState.firstName};
 	};
 };
@@ -3984,108 +3995,33 @@ view_dashboard_SettingsForm.prototype = $extend(view_shared_BaseForm.prototype,{
 	,editMe: function(ev) {
 		var _gthis = this;
 		haxe_Log.trace("hi :)",{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 120, className : "view.dashboard.SettingsForm", methodName : "editMe"});
-		var tmp = this.requests;
-		var tmp1 = "" + Std.string(App.config.api);
-		var tmp2 = this.props.userName;
-		var tmp3 = this.props.jwt;
-		var tmp4 = "user_name|" + this.props.userName;
-		var _g3 = new haxe_ds_StringMap();
-		var _g = new haxe_ds_StringMap();
-		if(__map_reserved["alias"] != null) {
-			_g.setReserved("alias","us");
-		} else {
-			_g.h["alias"] = "us";
-		}
-		if(__map_reserved["fields"] != null) {
-			_g.setReserved("fields","user_name,last_login");
-		} else {
-			_g.h["fields"] = "user_name,last_login";
-		}
-		var value = _g;
-		if(__map_reserved["users"] != null) {
-			_g3.setReserved("users",value);
-		} else {
-			_g3.h["users"] = value;
-		}
-		var _g1 = new haxe_ds_StringMap();
-		if(__map_reserved["alias"] != null) {
-			_g1.setReserved("alias","ug");
-		} else {
-			_g1.h["alias"] = "ug";
-		}
-		if(__map_reserved["fields"] != null) {
-			_g1.setReserved("fields","name");
-		} else {
-			_g1.h["fields"] = "name";
-		}
-		if(__map_reserved["jCond"] != null) {
-			_g1.setReserved("jCond","ug.id=us.user_group");
-		} else {
-			_g1.h["jCond"] = "ug.id=us.user_group";
-		}
-		var value1 = _g1;
-		if(__map_reserved["user_groups"] != null) {
-			_g3.setReserved("user_groups",value1);
-		} else {
-			_g3.h["user_groups"] = value1;
-		}
-		var _g2 = new haxe_ds_StringMap();
-		if(__map_reserved["alias"] != null) {
-			_g2.setReserved("alias","co");
-		} else {
-			_g2.h["alias"] = "co";
-		}
-		if(__map_reserved["fields"] != null) {
-			_g2.setReserved("fields","first_name,last_name,email");
-		} else {
-			_g2.h["fields"] = "first_name,last_name,email";
-		}
-		if(__map_reserved["jCond"] != null) {
-			_g2.setReserved("jCond","contact=co.id");
-		} else {
-			_g2.h["jCond"] = "contact=co.id";
-		}
-		var value2 = _g2;
-		if(__map_reserved["contacts"] != null) {
-			_g3.setReserved("contacts",value2);
-		} else {
-			_g3.h["contacts"] = value2;
-		}
-		tmp.push(model_AjaxLoader.load(tmp1,{ userName : tmp2, jwt : tmp3, className : "auth.User", action : "edit", filter : tmp4, dataSource : haxe_Serializer.run(_g3)},function(data) {
-			if(data.length > 0) {
-				var dataObj = JSON.parse(data);
-				if(dataObj.error != null) {
-					haxe_Log.trace(dataObj.error,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 148, className : "view.dashboard.SettingsForm", methodName : "editMe"});
-					return;
-				}
-				if(dataObj.data == null) {
-					return;
-				}
-				haxe_Log.trace(JSON.parse(data).data.rows.length,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 153, className : "view.dashboard.SettingsForm", methodName : "editMe"});
-				var dataRows = JSON.parse(data).data.rows;
-				haxe_Log.trace(Reflect.fields(dataRows[0]),{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 155, className : "view.dashboard.SettingsForm", methodName : "editMe"});
-				haxe_Log.trace(dataRows[0].active,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 156, className : "view.dashboard.SettingsForm", methodName : "editMe"});
-				var _g6 = new haxe_ds_StringMap();
-				if(__map_reserved["userList"] != null) {
-					_g6.setReserved("userList",dataRows);
-				} else {
-					_g6.h["userList"] = dataRows;
-				}
-				_gthis.setState({ data : _g6, loading : false});
+		this.requests.push(model_AjaxLoader.load("" + Std.string(App.config.api),{ userName : this.props.userName, jwt : this.props.jwt, className : "auth.User", action : "edit", filter : "user_name|" + this.props.userName, dataSource : haxe_Serializer.run(view_shared_io_User.userModel)},function(data) {
+			if(data.rows == null) {
+				return;
 			}
+			haxe_Log.trace(data.rows.length,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 135, className : "view.dashboard.SettingsForm", methodName : "editMe"});
+			var dataRows = data.rows;
+			haxe_Log.trace(Reflect.fields(dataRows[0]),{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 137, className : "view.dashboard.SettingsForm", methodName : "editMe"});
+			haxe_Log.trace(dataRows[0].active,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 138, className : "view.dashboard.SettingsForm", methodName : "editMe"});
+			var _g2 = new haxe_ds_StringMap();
+			if(__map_reserved["accountData"] != null) {
+				_g2.setReserved("accountData",dataRows);
+			} else {
+				_g2.h["accountData"] = dataRows;
+			}
+			_gthis.setState({ data : _g2, loading : false});
 		}));
-		this.setState({ contentId : "editUser"});
+		this.setState({ classPath : "edit"});
 	}
 	,render: function() {
-		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 178, className : "view.dashboard.SettingsForm", methodName : "render"});
 		var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 		var tmp1 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("div"),{ className : "tabComponentForm", children : this.renderContent()});
 		var tmp2 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromComp(view_shared_SMenu),{ className : "menu", menuBlocks : this.sideMenu.menuBlocks});
 		return React.createElement(tmp,{ className : "columns"},tmp1,tmp2);
 	}
 	,renderContent: function() {
-		haxe_Log.trace(this.state.contentId,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 190, className : "view.dashboard.SettingsForm", methodName : "renderContent"});
-		if(this.state.contentId == "editUser") {
+		haxe_Log.trace(this.state.classPath,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 172, className : "view.dashboard.SettingsForm", methodName : "renderContent"});
+		if(this.state.classPath == "user") {
 			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromComp(view_shared_FormUi);
 			var tmp1 = this.props;
 			var tmp2;
@@ -4122,7 +4058,7 @@ view_shared_FormUi.__name__ = "view.shared.FormUi";
 view_shared_FormUi.__super__ = React_PureComponent;
 view_shared_FormUi.prototype = $extend(React_PureComponent.prototype,{
 	render: function() {
-		haxe_Log.trace(this.props.match,{ fileName : "src/view/shared/FormUi.hx", lineNumber : 30, className : "view.shared.FormUi", methodName : "render"});
+		haxe_Log.trace(this.props.data,{ fileName : "src/view/shared/FormUi.hx", lineNumber : 31, className : "view.shared.FormUi", methodName : "render"});
 		return React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("form"),{ });
 	}
 	,__class__: view_shared_FormUi
@@ -4191,7 +4127,16 @@ var view_shared_SMenu = function(props) {
 view_shared_SMenu.__name__ = "view.shared.SMenu";
 view_shared_SMenu.__super__ = React_PureComponent;
 view_shared_SMenu.prototype = $extend(React_PureComponent.prototype,{
-	renderHeader: function() {
+	initialActiveHeaderRef: null
+	,activate: function() {
+		haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.initialActiveHeaderRef),{ fileName : "src/view/shared/SMenu.hx", lineNumber : 74, className : "view.shared.SMenu", methodName : "activate"});
+		if(react__$ReactRef_ReactRef_$Impl_$.get_current(this.initialActiveHeaderRef) != null) {
+			react__$ReactRef_ReactRef_$Impl_$.get_current(this.initialActiveHeaderRef).checked = true;
+		}
+	}
+	,renderHeader: function() {
+		var _gthis = this;
+		this.initialActiveHeaderRef = React.createRef();
 		if(this.props.menuBlocks.length == 0) {
 			return null;
 		}
@@ -4200,7 +4145,7 @@ view_shared_SMenu.prototype = $extend(React_PureComponent.prototype,{
 			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("input");
 			var i1 = i;
 			i += 1;
-			return React.createElement(tmp,{ key : i1, type : "radio", id : "panel-" + (i - 1), name : "accordion-select", 'data-codeclass' : block.codeClass, onChange : block.onActivate, value : block.segment});
+			return React.createElement(tmp,{ key : i1, ref : block.isActive ? _gthis.initialActiveHeaderRef : null, type : "radio", id : "sMenuPanel-" + (i - 1), name : "accordion-select", 'data-classpath' : block.codeClass, onChange : block.onActivate, value : block.segment});
 		});
 	}
 	,renderPanels: function() {
@@ -4212,27 +4157,9 @@ view_shared_SMenu.prototype = $extend(React_PureComponent.prototype,{
 		return this.props.menuBlocks.map(function(block) {
 			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
 			var tmp1 = { key : i, className : "panel"};
-			var tmp2 = "panel-" + i;
+			var tmp2 = "sMenuPanel-" + i;
 			i += 1;
 			return React.createElement(tmp,tmp1,React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("label"),{ className : "panel-heading", htmlFor : tmp2},block.label),React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("div"),{ className : "panel-block body-" + (i - 1), children : _gthis.renderItems(block.items)}));
-		});
-	}
-	,renderArticles: function() {
-		var _gthis = this;
-		if(this.props.menuBlocks.length == 0) {
-			return null;
-		}
-		var i = 1;
-		return this.props.menuBlocks.map(function(block) {
-			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("article");
-			i += 1;
-			var tmp1 = { key : i - 1, className : "accordion " + (block.isActive ? "is-active" : "")};
-			var tmp2 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-			var tmp3 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("p"),{ },block.label);
-			var tmp4 = React.createElement(tmp2,{ className : "accordion-header toggle"},tmp3);
-			var tmp5 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-			var tmp6 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("div"),{ className : "accordion-content", children : _gthis.renderItems(block.items)});
-			return React.createElement(tmp,tmp1,tmp4,React.createElement(tmp5,{ className : "accordion-body"},tmp6));
 		});
 	}
 	,renderItems: function(items) {
@@ -4253,6 +4180,7 @@ view_shared_SMenu.prototype = $extend(React_PureComponent.prototype,{
 		return React.createElement(tmp,{ className : "is-right is-hidden-mobile"},tmp3);
 	}
 	,componentDidMount: function() {
+		this.activate();
 	}
 	,componentDidUpdate: function(prevProps,prevState) {
 	}
@@ -4260,7 +4188,7 @@ view_shared_SMenu.prototype = $extend(React_PureComponent.prototype,{
 });
 var view_shared_io_User = function(props) {
 	React_Component.call(this,props);
-	haxe_Log.trace(this.props,{ fileName : "src/view/shared/io/User.hx", lineNumber : 38, className : "view.shared.io.User", methodName : "new"});
+	haxe_Log.trace(this.props,{ fileName : "src/view/shared/io/User.hx", lineNumber : 54, className : "view.shared.io.User", methodName : "new"});
 };
 view_shared_io_User.__name__ = "view.shared.io.User";
 view_shared_io_User.__super__ = React_Component;
@@ -4779,10 +4707,10 @@ view_dashboard_model_SettingsFormModel.relations = (function($this) {
 	var _g = new haxe_ds_StringMap();
 	{
 		var value = { props : { elements : view_dashboard_model_SettingsFormModel.accountDataElements}, state : null};
-		if(__map_reserved["accountData"] != null) {
-			_g.setReserved("accountData",value);
+		if(__map_reserved["user"] != null) {
+			_g.setReserved("user",value);
 		} else {
-			_g.h["accountData"] = value;
+			_g.h["user"] = value;
 		}
 	}
 	{
@@ -4806,6 +4734,79 @@ view_shared_SLink._connected = (redux_react_ReactRedux.connect(view_shared_SLink
 view_shared_SLink.__jsxStatic = view_shared_SLink._connected;
 view_shared_SMenu.displayName = "SMenu";
 view_shared_SMenu.__fileName__ = "src/view/shared/SMenu.hx";
+view_shared_io_User.userModel = (function($this) {
+	var $r;
+	var _g3 = new haxe_ds_StringMap();
+	{
+		var _g = new haxe_ds_StringMap();
+		if(__map_reserved["alias"] != null) {
+			_g.setReserved("alias","us");
+		} else {
+			_g.h["alias"] = "us";
+		}
+		if(__map_reserved["fields"] != null) {
+			_g.setReserved("fields","user_name,last_login");
+		} else {
+			_g.h["fields"] = "user_name,last_login";
+		}
+		var value = _g;
+		if(__map_reserved["users"] != null) {
+			_g3.setReserved("users",value);
+		} else {
+			_g3.h["users"] = value;
+		}
+	}
+	{
+		var _g1 = new haxe_ds_StringMap();
+		if(__map_reserved["alias"] != null) {
+			_g1.setReserved("alias","ug");
+		} else {
+			_g1.h["alias"] = "ug";
+		}
+		if(__map_reserved["fields"] != null) {
+			_g1.setReserved("fields","name");
+		} else {
+			_g1.h["fields"] = "name";
+		}
+		if(__map_reserved["jCond"] != null) {
+			_g1.setReserved("jCond","ug.id=us.user_group");
+		} else {
+			_g1.h["jCond"] = "ug.id=us.user_group";
+		}
+		var value1 = _g1;
+		if(__map_reserved["user_groups"] != null) {
+			_g3.setReserved("user_groups",value1);
+		} else {
+			_g3.h["user_groups"] = value1;
+		}
+	}
+	{
+		var _g2 = new haxe_ds_StringMap();
+		if(__map_reserved["alias"] != null) {
+			_g2.setReserved("alias","co");
+		} else {
+			_g2.h["alias"] = "co";
+		}
+		if(__map_reserved["fields"] != null) {
+			_g2.setReserved("fields","first_name,last_name,email");
+		} else {
+			_g2.h["fields"] = "first_name,last_name,email";
+		}
+		if(__map_reserved["jCond"] != null) {
+			_g2.setReserved("jCond","contact=co.id");
+		} else {
+			_g2.h["jCond"] = "contact=co.id";
+		}
+		var value2 = _g2;
+		if(__map_reserved["contacts"] != null) {
+			_g3.setReserved("contacts",value2);
+		} else {
+			_g3.h["contacts"] = value2;
+		}
+	}
+	$r = _g3;
+	return $r;
+}(this));
 view_shared_io_User.displayName = "User";
 view_shared_io_User.__fileName__ = "src/view/shared/io/User.hx";
 view_table_Table.displayName = "Table";

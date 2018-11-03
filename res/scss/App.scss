@@ -361,11 +361,10 @@ h1 {
 }
 .tabComponentForm
 {
-	display:flex;
-	flex-direction:column;
+	display:flex;	
 	flex: auto;
 	margin:0.8rem 0 0 0.8rem;	
-	/*overflow-y:auto;*/
+	/*overflow-y:auto;flex-direction:column;*/
 	min-height: 0;
 }
 .tabComponentForm .hero
@@ -498,9 +497,12 @@ label.panel-heading {
 }
 
 /* the magic */
-#panel-1:checked ~ .panel > .body-1,
-#panel-2:checked ~ .panel > .body-2,
-#panel-3:checked ~ .panel > .body-3 {
+#sMenuPanel-1:checked ~ .panel > .body-1,
+#sMenuPanel-2:checked ~ .panel > .body-2,
+#sMenuPanel-3:checked ~ .panel > .body-3,
+#sMenuPanel-4:checked ~ .panel > .body-4,
+#sMenuPanel-5:checked ~ .panel > .body-5,
+{
   display: flex;
   flex-direction:column;
 }

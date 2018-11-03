@@ -20,7 +20,7 @@ typedef AsyncDataLoader =
 
  class AjaxLoader 
 {	
-	public static function load(url:String, ?params:Dynamic,?cB:String->Void):HttpJs
+	public static function load(url:String, ?params:Dynamic,?cB:Dynamic->Void):HttpJs
 	{
 		var req = new HttpJs(url); 
 		if(params!=null) for (k in Reflect.fields(params))
@@ -28,16 +28,45 @@ typedef AsyncDataLoader =
 			req.addParameter(k, Reflect.field(params, k));
 		}		
 		req.addHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
-		req.addHeader('Access-Control-Allow-Origin','*');
-		if(cB != null)
-			req.onData = cB;
+		req.addHeader('Access-Control-Allow-Origin', '*');
+		var loader:AjaxLoader = new AjaxLoader(cB);
+		req.onData = loader._onData;
 		req.onError = function(err:String) trace(err);
 		trace('POST? ' + params!=null);
 		req.request(params != null);
 		return req;
 	}
+	
+	var cB:Dynamic->Void;
+	public function new(?cb:String->Void)
+	{
+		cB = cb;
+	}
+	
+	function _onData(data:String)
+	{
+		if (data.length > 0)
+		{
+			var dataObj = Json.parse(data);
+			if (dataObj.error != '')
+			{
+				trace(dataObj.error);
+				trace(App.store.getState().appWare.history);
+				//return;
+				dataObj.data.error = dataObj.error;
+			}
+			if (dataObj.data == null)
+			{
+				dataObj.info = "No data";
+			}
+			if (dataObj.data.rows != null)
+			trace(dataObj.data.rows.length);
+			if (cB != null)
+				cB(dataObj.data);					
+		}
+	}
 
-	public static function loadData(loaders:Array<AsyncDataLoader>):Array<HttpJs>
+	/*public static function loadData(loaders:Array<AsyncDataLoader>):Array<HttpJs>
 	{
 		var rqs:Array<HttpJs> = [];
 		for (l in loaders)
@@ -45,7 +74,7 @@ typedef AsyncDataLoader =
 			rqs.push(load(l.url, l.params, l.cB));
 		}
 		return rqs;
-	}
+	}*/
 	
 
 	
