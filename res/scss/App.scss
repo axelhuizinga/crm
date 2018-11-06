@@ -156,6 +156,7 @@ h1 {
 {
   display:flex;
   flex-direction:column;
+  flex-grow:1;
    /* position: relative;could be absolute or relative */
 }
 
@@ -361,12 +362,14 @@ h1 {
 }
 .tabComponentForm
 {
+	/*align-items:stretch;
+	align-content:stretch;*/
 	display:flex;	
-	flex: auto;
+	flex-grow:1;
 	margin:0.8rem 0 0 0.8rem;	
-	/*overflow-y:auto;flex-direction:column;*/
 	min-height: 0;
 }
+.tabComponentForm 
 .tabComponentForm .hero
 {
 	flex:1;
@@ -467,6 +470,26 @@ h1 {
 	color: $lightSun;
 	border-left:$borderHeadCol!important;
 	white-space:nowrap;
+}
+
+/*FORMS * ELEMENTS*/
+form{
+	margin:1rem auto;
+}
+.form60 .formField
+{
+	min-width:60rem;
+}
+.formField button
+{
+	padding:0.5rem;
+	font-size:1.1rem;
+	margin:0.3rem auto;
+	border-radius: $tableHeader-radius;
+}
+.formField label
+{
+	width:50%;
 }
 /*side menu*/
 .is-right .menu

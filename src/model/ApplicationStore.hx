@@ -23,7 +23,7 @@ class ApplicationStore
 	{
 		// store model, implementing reducer and middleware logic
 		var appWare = new AppService();
-		var locationService = new LocationService();
+		//var locationService = new LocationService();
 		var statusBarService = new StatusBarService();
 		//var userService = new UserService();
 		
@@ -57,12 +57,7 @@ class ApplicationStore
 	{
 		trace(store);
 		store.dispatch(InitHistory(history));
-		/*store.dispatch(LocationChange({
-			pathname:location.pathname,
-			search: location.search,
-			hash: location.hash
-		}));	*/
-		
+	
 		return history.listen( function(location:Location, action:history.Action){
 			trace(action);
 			trace(location);

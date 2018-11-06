@@ -5,15 +5,18 @@ import haxe.Serializer;
 import me.cunity.debug.Out;
 import model.AppState;
 import model.AjaxLoader;
+import react.React;
 import react.ReactComponent.ReactComponentOfProps;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactComponent.ReactFragment;
+import react.ReactUtil;
 import view.dashboard.model.SettingsFormModel;
-import view.shared.FormUi;
+import view.shared.io.DataAccessForm.DataFormProps;
 import view.shared.RouteTabProps;
 import view.shared.BaseForm;
 import view.shared.SMenu;
+import view.shared.io.User;
 
 /**
  * ...
@@ -24,58 +27,59 @@ import view.shared.SMenu;
 class SettingsForm extends BaseForm
 {
 
+	var MyUser:User;
+	
 	public function new(?props:FormProps) 
 	{
-		super(props);		
-		//dataDisplay = SettingsFormModel.dataDisplay;
+		super(props);	
+		var uProps:DataFormProps = ReactUtil.copy(props, {fullWidth: true});
+		//MyUser = cast React.createElement(view.shared.io.User, uProps);
+		//trace(MyUser.menuItems);
 		if (props.jwt == null)
 		{
 			trace(props);
 		}
 		else{
 			trace(props.jwt);
-		}
-		sideMenu = {
-			menuBlocks:[
-				{
-					codeClass:'auth.User',
-					isActive:true,
-					label:'Meine KontoDaten',
-					onActivate:switchContent,
-					items:[
-						{handler:editMe,label:'Bearbeiten',segment:'edit'}
-					],
-					segment:'user'
-				},
-				{
-					codeClass:'settings.Bookmarks',
-					label:'Lesezeichen',
-					onActivate:switchContent,
-					items:[
-						{handler:createUserBookmark,label:'Neu',segment:'create'},
-						{handler:editUserBookmark,label:'Bearbeiten',segment:'edit'},
-						{handler:deleteUserBookmark,label:'Löschen',segment:'delete'}
-					],
-					segment:'bookmarks'
-				},
-				{
-					codeClass:'settings.Design',
-					label:'Design',
-					onActivate:switchContent,
-					items:[
-						{handler:editColors,label:'Farben',segment:'editColors'},
-						{handler:editFonts,label:'Schrift',segment:'editFont'}
-					],
-					segment:'design'
-				}
-				
-			]
-		};
+		}		
 		state = {
 			clean:true,
-			classPath:"auth.User",
+			viewClassPath:"shared.io.User",
 			hasError:false,
-			loading:true
+			loading:true,
+			sideMenu:{
+				menuBlocks:[
+					'user'=>{
+						dataClassPath:'auth.User',
+						viewClassPath:'shared.io.User',
+						isActive:true,
+						label:'UserDaten',
+						onActivate:switchContent,
+						items: User.menuItems
+					},
+					'bookmarks'=>{
+						dataClassPath:'settings.Bookmarks',
+						viewClassPath:'shared.io.Bookmarks',
+						label:'Lesezeichen',
+						onActivate:switchContent,
+						items:function() return [
+							{handler:createUserBookmark,label:'Neu',segment:'create'},
+							{handler:editUserBookmark,label:'Bearbeiten',segment:'edit'},
+							{handler:deleteUserBookmark,label:'Löschen',segment:'delete'}
+						]
+					},
+					'design'=>{
+						dataClassPath:'settings.Design',
+						viewClassPath:'shared.io.Design',
+						label:'Design',
+						onActivate:switchContent,
+						items:function() return [
+							{handler:editColors,label:'Farben',segment:'editColors'},
+							{handler:editFonts,label:'Schrift',segment:'editFont'}
+						]
+					}				
+				]
+			}
 		};
 		requests = [];		
 	}
@@ -115,32 +119,16 @@ class SettingsForm extends BaseForm
 	{
 		
 	}
-	public function editMe(ev:ReactEvent):Void
+	
+	public function menuBlockItems():Array<SMItem>
 	{
-		trace('hi :)');
-		requests.push(AjaxLoader.load(	
-			'${App.config.api}', 
-			{
-				userName:props.userName,
-				jwt:props.jwt,
-				className:'auth.User',
-				action:'edit',
-				filter:'user_name|${props.userName}',
-				dataSource:Serializer.run(view.shared.io.User.userModel)
-			},
-			function(data:Dynamic )
-			{
-				if (data.rows == null)
-					return;
-				trace(data.rows.length);
-				var dataRows:Array<Dynamic> = data.rows;
-				trace(Reflect.fields(dataRows[0]));
-				trace(dataRows[0].active);
-				setState({data:['accountData'=>dataRows], loading:false});					
-			}
-		));
-		setState({classPath:"edit"});
+		return [];
 	}
+	override public function switchContent(reactEventSource:Dynamic)
+	{
+		super.switchContent(reactEventSource);
+	}
+
 		
 	static function mapStateToProps(aState:AppState) {
 		return function(aState:model.AppState) 
@@ -156,26 +144,21 @@ class SettingsForm extends BaseForm
 	}	
 	
     override public function render() {
-		//trace(Reflect.fields(props));
-		//trace(props.match);
-		//trace(props.history == App.store.getState().appWare.history);
         return jsx('		
 				<div className="columns">
 					<div className="tabComponentForm" children={renderContent()} />
-					<SMenu className="menu" menuBlocks={sideMenu.menuBlocks}/>					
+					<SMenu className="menu" menuBlocks={state.sideMenu.menuBlocks}/>					
 				</div>		
         ');
     }	
 	
 	function renderContent():ReactFragment
 	{
-		trace(state.classPath);
-		return switch(state.classPath)
+		return switch(state.viewClassPath)
 		{
-			case "user":
+			case "shared.io.User":
 				jsx('
-					<FormUi name="accountData" data=${state.data == null? null:state.data["accountData"]}
-					${...props} fullWidth={true}/>				
+					<User ${...props} fullWidth={true}/>				
 				');				
 			default:
 				null;

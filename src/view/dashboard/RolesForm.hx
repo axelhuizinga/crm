@@ -41,44 +41,45 @@ class RolesForm extends BaseForm
 	{
 		super(props);
 		dataDisplay = RolesFormModel.dataDisplay;
-		sideMenu = {
-			menuBlocks:[
-				{
-					isActive:true,
-					label:'Benutzer',
-					onActivate:switchContent,
-					items:[
-						{handler:createUsers, label:'Neu'},
-						{handler:editUsers,label:'Bearbeiten'},
-						{handler:deleteUsers,label:'Löschen'}
-					]
-				},
-				{
-					label:'Benutzergruppen',
-					onActivate:switchContent,
-					items:[
-						{handler:createUserGroups,label:'Neu'},
-						{handler:editUserGroups,label:'Bearbeiten'},
-						{handler:deleteUserGroups,label:'Löschen'}
-					]				
-				},
-				{
-					label:'Rechte',
-					onActivate:switchContent,
-					items:[
-						{handler:createRoles,label:'Neu'},
-						{handler:editRoles,label:'Bearbeiten'},
-						{handler:deleteRoles,label:'Löschen'}
-					]				
-				}
-				
-			]
-		};
+		
 		state = {
 			clean:true,
-			classPath:"userList",
+			dataClassPath:"userList",
 			hasError:false,
-			loading:true
+			loading:true,
+			sideMenu:{
+				menuBlocks:[
+					'users'=>{
+						isActive:true,
+						label:'Benutzer',
+						onActivate:switchContent,
+						items:function() return [
+							{handler:createUsers, label:'Neu'},
+							{handler:editUsers,label:'Bearbeiten'},
+							{handler:deleteUsers,label:'Löschen'}
+						]
+					},
+					'userGroups'=>{
+						label:'Benutzergruppen',
+						onActivate:switchContent,
+						items:function() return [
+							{handler:createUserGroups,label:'Neu'},
+							{handler:editUserGroups,label:'Bearbeiten'},
+							{handler:deleteUserGroups,label:'Löschen'}
+						]				
+					},
+					'permissions'=>{
+						label:'Rechte',
+						onActivate:switchContent,
+						items:function() return [
+							{handler:createRoles,label:'Neu'},
+							{handler:editRoles,label:'Bearbeiten'},
+							{handler:deleteRoles,label:'Löschen'}
+						]				
+					}
+					
+				]
+			}
 		};
 		requests = [];
 		trace(Reflect.fields(props));
@@ -244,14 +245,14 @@ class RolesForm extends BaseForm
         return jsx('		
 				<div className="columns">
 					<div className="tabComponentForm" children={renderContent()} />
-					<SMenu className="menu" menuBlocks={sideMenu.menuBlocks}/>					
+					<SMenu className="menu" menuBlocks={state.sideMenu.menuBlocks}/>					
 				</div>		
         ');
     }	
 	
 	function renderContent():ReactFragment
 	{
-		return switch(state.classPath)
+		return switch(state.dataClassPath)
 		{
 			case "userList":
 				jsx('

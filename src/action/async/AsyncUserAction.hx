@@ -14,7 +14,7 @@ import js.html.XMLHttpRequest;
 import redux.Redux.Dispatch;
 import redux.thunk.Thunk;
 import view.LoginForm.LoginState;
-
+import view.shared.BaseForm.FormState;
 /**
  * ...
  * @author axel@cunity.me
@@ -22,8 +22,7 @@ import view.LoginForm.LoginState;
 
 class AsyncUserAction 
 {
-
-	public static function loginReq(props:LoginState) 
+	/*public static function submitReq(props:FormState) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->model.AppState){
 			trace(props);
@@ -31,12 +30,28 @@ class AsyncUserAction
 			var fD:FormData = new FormData();
 			fD.append('action', 'login');
 			fD.append('className', 'auth.User');
+			return dispatch(AppAction.LoginError({userName:props.userName, loginError:'?'}));
 			fD.append('userName', props.userName);
 			fD.append('pass', props.pass);
 			if (props.pass == '' || props.userName == '') 
 				return dispatch(AppAction.LoginError({userName:props.userName, loginError:'Passwort und UserName eintragen!'}));
-			//Syntax.code("fetch({0}, {method:'post', body:{2}, mode:'cors',credentials: 'omit', headers: {'Access-Control-Allow-Origin': 'https://pitverwaltung.de', 'Access-Control-Allow-Credentials': 'true'}}).then(function(res){ return res.json()}).then(function(d){console.log(d)}).catch(function(error ) {console.error('Error:', error)})", 
-			//props.api, fetched, fD);
+			var req:XMLHttpRequest = new XMLHttpRequest();//,headers: {'Content-Type': 'application/json; charset=utf-8'}'Content-Type': 'application/json; charset=utf-8',
+			req.open('GET', '${props.api}?' + App.queryString2({action:'login', className:'auth.User', userName:props.userName, pass: props.pass}));
+		});
+	}*/
+
+	public static function loginReq(props:LoginState) 
+	{
+		return Thunk.Action(function(dispatch:Dispatch, getState:Void->model.AppState){
+			trace(props);
+			//trace(getState());
+			var fD:FormData = new FormData();
+			fD.append('action', 'hmm');
+			fD.append('className', 'auth.User');
+			fD.append('userName', props.userName);
+			fD.append('pass', props.pass);
+			if (props.pass == '' || props.userName == '') 
+				return dispatch(AppAction.LoginError({userName:props.userName, loginError:'Passwort und UserName eintragen!'}));
 			var req:XMLHttpRequest = new XMLHttpRequest();//,headers: {'Content-Type': 'application/json; charset=utf-8'}'Content-Type': 'application/json; charset=utf-8',
 			req.open('GET', '${props.api}?' + App.queryString2({action:'login', className:'auth.User', userName:props.userName, pass: props.pass}));
 			req.setRequestHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");

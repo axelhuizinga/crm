@@ -35,7 +35,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 	{
 		super(props);	
 		
-		sideMenu = 	null;/* {
+		/*sideMenu = 	null; {
 			menuBlocks:[
 			//{handler:null, label:'Create History Trigger'},//TODO: ADD HANDLER - REMOVE AUTORUN ON MOUNT
 			//	{handler:this.importExternalUsers,label:'Importiere Externe Benutzer'}
@@ -184,7 +184,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 								className = "is-striped is-fullwidth is-hoverable"/>
 							
 					</div>
-					<SMenu className="menu" items=${[]}/>
+					<SMenu className="menu" menuBlocks={state.sideMenu.menuBlocks}/>
 				</div>
         ');
     }	

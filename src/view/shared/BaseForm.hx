@@ -4,6 +4,7 @@ import haxe.Constraints.Function;
 import haxe.ds.StringMap;
 import haxe.http.HttpJs;
 import js.html.Event;
+import js.html.InputEvent;
 import me.cunity.debug.Out;
 import model.AppState;
 import react.ReactComponent.ReactComponentOf;
@@ -13,6 +14,7 @@ import react.router.Route.RouteRenderProps;
 import redux.Redux.Dispatch;
 import redux.Store;
 import view.dashboard.model.RolesFormModel;
+import view.shared.io.DataAccess;
 
 import view.table.Table.DataState;
 import view.shared.RouteTabProps;
@@ -45,8 +47,9 @@ typedef FormField =
 	?dataField:String,
 	?dataFormat:Function,
 	?type:FormElement,
+	?readonly:Bool,
 	?required:Bool,
-	?onChange:Event->Void,
+	?handleChange:InputEvent->Void,
 	?placeholder:String,
 	?validate:Any->Bool
 }
@@ -54,28 +57,31 @@ typedef FormField =
  typedef FormProps =
  {
 	>RouteTabProps,
-	?classPath:String,
+	//?dataClassPath:String,
 	?elements:StringMap<FormField>,
-	?data:Dynamic,
-	?store:Store<AppState>,
-	?handleChange:Event->Void,
-	?handleSubmit:Event->Void,
-	?name:String
+	//?data:Dynamic,
+	//?store:Store<AppState>,
+	?handleChange:Bool,
+	?handleSubmit:Bool,
+	?name:String,
+	?submit:FormState->Dispatch
  }
 
 typedef FormState =
 {
-	var classPath:String;
-	//@:optional var content:Array<String>;
-	@:arrayAccess
-	@:optional var data:Map<String,Dynamic>;
-	var clean:Bool;
-	var hasError:Bool;
-	@:optional var loading:Bool;
-	@:optional var fields:StringMap<FormField>;
-	@:optional var values:StringMap<Dynamic>;
-	@:optional var submitted:Bool;
-	@:optional var errors:StringMap<String>;
+	?dataClassPath:String,
+	?viewClassPath:String,
+	?data:Map<String,Dynamic>,
+	clean:Bool,
+	?handleChange:InputEvent->Void,
+	?handleSubmit:InputEvent->Void,	
+	hasError:Bool,
+	?loading:Bool,
+	?fields:StringMap<FormField>,
+	?values:StringMap<Dynamic>,
+	?sideMenu:SMenuProps,
+	?submitted:Bool,
+	?errors:StringMap<String>
 }
 
 
@@ -83,24 +89,24 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 {
 	var mounted:Bool;
 	var requests:Array<HttpJs>;	
-	var sideMenu:SMenuProps;
-	@:arrayAccess
+	//var sideMenu:SMenuProps;
 	var dataDisplay:Map<String,DataState>;//TODO: CHECK4INTEGRATION INTO state or props
+	
 	
 	public function new(?props:FormProps) 
 	{
-		super(props);		
+		super(props);	
 		mounted = false;
-		requests = [];
-		sideMenu = {menuBlocks:[]};
+		requests = [];		
 		state = {
 			data:new StringMap(),
-			classPath:'',
+			viewClassPath:'',
 			//content:new Array(),
 			clean:true,
 			errors:new StringMap(),
-			values:new StringMap(),
-			fields:new StringMap(),
+			//values:new StringMap(),
+			//fields:new StringMap(),
+			sideMenu: {menuBlocks:null},
 			submitted:false,
 			hasError:false		
 		};
@@ -137,15 +143,15 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 	{
 		//Out.dumpObject(reactEventSource);
 		trace(props.match);
-		var classPath:String = reactEventSource.target.getAttribute('data-classpath');
-		trace(classPath + ':' + state.classPath);
-		if (state.classPath != classPath)
+		var viewClassPath:String = reactEventSource.target.getAttribute('data-classpath');
+		trace(viewClassPath + ':' + state.viewClassPath);
+		if (state.viewClassPath != viewClassPath)
 		{
-			setState({classPath:classPath});
+			setState({viewClassPath:viewClassPath});
 		}
 	}
 	
-	function displayDebug(fieldName:String):ReactFragment
+	/*function displayDebug(fieldName:String):ReactFragment
 	{
 		//trace (state.values.get(fieldName));
 		if (state.values.exists(fieldName))
@@ -170,6 +176,6 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 			rC.push(jsx('<div key=${k++}>${c.user_group}</div>'));
 		}
 		return rC;
-	}
+	}*/
 	
 }
