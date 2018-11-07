@@ -158,7 +158,7 @@ class SettingsForm extends BaseForm
 		{
 			case "shared.io.User":
 				jsx('
-					<User ${...props} fullWidth={true}/>				
+					<User ${...props} handleChange={true} handleSubmit={true} fullWidth={true}/>				
 				');				
 			default:
 				null;

@@ -2,6 +2,7 @@ package view.shared.io;
 
 import haxe.Serializer;
 import haxe.ds.StringMap;
+import js.html.Event;
 import js.html.InputEvent;
 import model.AjaxLoader;
 import react.ReactComponent;
@@ -10,6 +11,8 @@ import react.ReactMacro.jsx;
 import view.shared.SMenu;
 import view.shared.io.DataAccessForm;
 import view.shared.io.DataAccess.DataSource;
+
+using Lambda;
 
 /**
  * ...
@@ -95,20 +98,61 @@ class User extends DataAccessForm
 				if (data.rows == null)
 					return;
 				view = dataAccess['edit'].view;
-				trace(data.rows.length);
-				var dataRows:Array<Dynamic> = data.rows;
-				trace(Reflect.fields(dataRows[0]));
-				trace(dataRows[0].active);
-				setState({data:obj2map(dataRows[0]), loading:false});					
+				
+				//trace(data.rows.length);
+				//trace(state.values);
+				var skeys:Array<String> = untyped dataAccess['edit'].view.keys().arr;
+				var data:Map<String,String> = obj2map(data.rows[0],skeys.filter(function(k) return !dataAccess['edit'].view[k].readonly));
+				trace(data);
+				//trace(Reflect.fields(dataRows[0]));
+				//trace(dataRows[0].active);
+				setState({data:data, values:createStateValues(data, view), loading:false});					
 			}
 		));
 		//setState({viewClassPath:"shared.io.User.edit"});
 		//setState({dataClassPath:"auth.User.edit"});
 	}
 	
-	public function save()
+	override public function save(evt:Event)
 	{
+		evt.preventDefault();
+		trace(state.data);
+		trace(state.values);
 		
+		/*var vKeys:Iterator<String> = dataAccess['edit'].view.keys();
+		while (vKeys.hasNext() )
+		{
+			skeys.push(vKeys.next());
+		}
+		trace(skeys.toString());*/
+		//trace();
+		//return;
+		requests.push(AjaxLoader.load(	
+			'${App.config.api}', 
+			{
+				userName:props.userName,
+				jwt:props.jwt,
+				className:'auth.User',
+				action:'save',
+				filter:'user_name|${props.userName}',
+				dataSource:Serializer.run(state.values)
+			},
+			function(data:Dynamic)
+			{
+				trace(data);
+				if (data.rows == null)
+					return;
+				view = dataAccess['edit'].view;
+				
+				//trace(data.rows.length);
+				//trace(state.values);
+				var data:Map<String,String> = obj2map(data.rows[0]);
+				trace(data);
+				//trace(Reflect.fields(dataRows[0]));
+				//trace(dataRows[0].active);
+				setState({data:data, values:createStateValues(data, view), loading:false});					
+			}
+		));
 	}
 	
 	public function new(?props:DataFormProps)
@@ -124,7 +168,8 @@ class User extends DataAccessForm
 	
 	override function render()
 	{
-		trace(state.data);
+		if(state.values != null)
+		trace(state.values);
 		return jsx('
 			<form className="form60">
 				${renderElements()}

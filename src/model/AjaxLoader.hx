@@ -35,7 +35,7 @@ typedef AsyncDataLoader =
 		trace('POST? ' + params!=null);
 		req.request(params != null);
 		return req;
-	}
+	} 
 	
 	var cB:Dynamic->Void;
 	public function new(?cb:String->Void)
@@ -43,24 +43,18 @@ typedef AsyncDataLoader =
 		cB = cb;
 	}
 	
-	function _onData(data:String)
+	function _onData(response:String)
 	{
-		if (data.length > 0)
+		if (response.length > 0)
 		{
-			var dataObj = Json.parse(data);
+			var dataObj = Json.parse(response);
 			if (dataObj.error != '')
 			{
 				trace(dataObj.error);
 				trace(App.store.getState().appWare.history);
 				//return;
-				dataObj.data.error = dataObj.error;
+				dataObj.data = {error: dataObj.error, rows:[]};
 			}
-			if (dataObj.data == null)
-			{
-				dataObj.info = "No data";
-			}
-			if (dataObj.data.rows != null)
-			trace(dataObj.data.rows.length);
 			if (cB != null)
 				cB(dataObj.data);					
 		}

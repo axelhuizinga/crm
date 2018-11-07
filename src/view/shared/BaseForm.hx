@@ -41,7 +41,7 @@ typedef FormField =
 	?className:String,
 	?name:String,
 	?label:String,
-	?value:Any,
+	?value:String,
 	?dataBase:String, 
 	?dataTable:String,
 	?dataField:String,
@@ -51,7 +51,7 @@ typedef FormField =
 	?required:Bool,
 	?handleChange:InputEvent->Void,
 	?placeholder:String,
-	?validate:Any->Bool
+	?validate:String->Bool
 }
  
  typedef FormProps =
@@ -63,6 +63,8 @@ typedef FormField =
 	//?store:Store<AppState>,
 	?handleChange:Bool,
 	?handleSubmit:Bool,
+	?handleChangeByParent:InputEvent->Void,
+	?handleSubmitByParent:InputEvent->Void,
 	?name:String,
 	?submit:FormState->Dispatch
  }
@@ -77,8 +79,8 @@ typedef FormState =
 	?handleSubmit:InputEvent->Void,	
 	hasError:Bool,
 	?loading:Bool,
-	?fields:StringMap<FormField>,
-	?values:StringMap<Dynamic>,
+	?fields:Map<String,FormField>,
+	?values:Map<String,String>,
 	?sideMenu:SMenuProps,
 	?submitted:Bool,
 	?errors:StringMap<String>
@@ -142,6 +144,7 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 	public function switchContent(reactEventSource:Dynamic)
 	{
 		//Out.dumpObject(reactEventSource);
+		trace(props.history);
 		trace(props.match);
 		var viewClassPath:String = reactEventSource.target.getAttribute('data-classpath');
 		trace(viewClassPath + ':' + state.viewClassPath);
