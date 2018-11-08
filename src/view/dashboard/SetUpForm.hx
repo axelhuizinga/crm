@@ -165,7 +165,8 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 	
     override public function render() {
 		trace(Reflect.fields(props));
-		if (state.hasError)
+		trace(state);
+		if (true || state.hasError)
 			return jsx('<h1>Fehler in ${Type.getClassName(Type.getClass(this))}.</h1>');		
 		trace(props.history == App.store.getState().appWare.history);
         return jsx('

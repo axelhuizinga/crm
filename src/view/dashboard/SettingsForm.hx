@@ -27,14 +27,14 @@ import view.shared.io.User;
 class SettingsForm extends BaseForm
 {
 
-	var MyUser:User;
+	var childFormProps:DataFormProps;
 	
 	public function new(?props:FormProps) 
 	{
 		super(props);	
-		var uProps:DataFormProps = ReactUtil.copy(props, {fullWidth: true});
-		//MyUser = cast React.createElement(view.shared.io.User, uProps);
-		//trace(MyUser.menuItems);
+		childFormProps = ReactUtil.copy(props, 
+			{fullWidth: true, setStateFromChild:setStateFromChild});
+		
 		if (props.jwt == null)
 		{
 			trace(props);
@@ -55,7 +55,7 @@ class SettingsForm extends BaseForm
 						isActive:true,
 						label:'UserDaten',
 						onActivate:switchContent,
-						items: User.menuItems
+						items: null//User.menuItems
 					},
 					'bookmarks'=>{
 						dataClassPath:'settings.Bookmarks',
@@ -143,11 +143,24 @@ class SettingsForm extends BaseForm
 		};
 	}	
 	
+	override public function render() {
+        return switch(state.viewClassPath)
+		{
+			case "shared.io.User":
+				jsx('
+					<User ${...childFormProps} sideMenu=${state.sideMenu}
+					handleChange={true} handleSubmit={true} fullWidth={true}/>
+				');				
+			default:
+				null;					
+		}				
+    }	
+	/*
     override public function render() {
         return jsx('		
 				<div className="columns">
 					<div className="tabComponentForm" children={renderContent()} />
-					<SMenu className="menu" menuBlocks={state.sideMenu.menuBlocks}/>					
+					<SMenu className="menu" menuBlocks={state.sideMenu.menuBlocks} />					
 				</div>		
         ');
     }	
@@ -158,11 +171,11 @@ class SettingsForm extends BaseForm
 		{
 			case "shared.io.User":
 				jsx('
-					<User ${...props} handleChange={true} handleSubmit={true} fullWidth={true}/>				
+					<User ${...childFormProps} handleChange={true} handleSubmit={true} fullWidth={true}/>				
 				');				
 			default:
 				null;
 		}
-	}
+	}*/
 	
 }

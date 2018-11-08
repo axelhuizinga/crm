@@ -45,7 +45,7 @@ typedef FormField =
 	?dataBase:String, 
 	?dataTable:String,
 	?dataField:String,
-	?dataFormat:Function,
+	?displayFormat:Function,
 	?type:FormElement,
 	?readonly:Bool,
 	?required:Bool,
@@ -66,6 +66,7 @@ typedef FormField =
 	?handleChangeByParent:InputEvent->Void,
 	?handleSubmitByParent:InputEvent->Void,
 	?name:String,
+	?sideMenu:SMenuProps,
 	?submit:FormState->Dispatch
  }
 
@@ -74,10 +75,10 @@ typedef FormState =
 	?dataClassPath:String,
 	?viewClassPath:String,
 	?data:Map<String,Dynamic>,
-	clean:Bool,
+	?clean:Bool,
 	?handleChange:InputEvent->Void,
 	?handleSubmit:InputEvent->Void,	
-	hasError:Bool,
+	?hasError:Bool,
 	?loading:Bool,
 	?fields:Map<String,FormField>,
 	?values:Map<String,String>,
@@ -140,6 +141,12 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 		trace('You should override me :)');
         return null;
     }	 
+	
+	public function setStateFromChild(newState:FormState)
+	{
+		setState(newState);
+		trace(newState);
+	}
 	
 	public function switchContent(reactEventSource:Dynamic)
 	{

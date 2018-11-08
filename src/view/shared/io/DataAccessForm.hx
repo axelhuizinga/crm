@@ -1,5 +1,6 @@
 package view.shared.io;
 
+import haxe.Constraints.Function;
 import haxe.ds.Map;
 import haxe.ds.StringMap;
 import haxe.http.HttpJs;
@@ -11,6 +12,7 @@ import view.shared.BaseForm.FormElement;
 import view.shared.BaseForm.FormField;
 import view.shared.BaseForm.FormState;
 import view.shared.BaseForm.FormProps;
+import view.shared.SMenu.SMenuProps;
 import view.shared.io.DataAccess.DataView;
 
 import react.PureComponent.PureComponentOf;
@@ -29,6 +31,7 @@ typedef DataFormProps =
 {
 	>FormProps,
 	?fullWidth:Bool,
+	?setStateFromChild:FormState->Void,
 }
 
 class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
@@ -50,6 +53,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 			hasError:false,
 			handleChange:setChangeHandler(),
 			handleSubmit:setSubmitHandler(),
+			sideMenu: props.sideMenu
 		};
 	}
 	
@@ -84,7 +88,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		{
 			if(view.exists(k))
 			{
-				vState[k] = (view[k].dataFormat == null?data[k]:view[k].dataFormat(data[k]));
+				vState[k] = (view[k].displayFormat == null?data[k]:view[k].displayFormat(data[k]));
 			}
 		}
 		//trace(vState);
@@ -124,8 +128,15 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		//Reflect.setField(s, t.name, t.value);
 		//trace(props.dispatch == App.store.dispatch);
 		//App.store.dispatch(AppAction.LoginChange(s));validate
-		setState({clean:false, values:vs});
+		setState({clean:false, sideMenu:updateMenu(),values:vs});
+		//props.setStateFromChild({clean:false});
 		//trace(this.state);
+	}
+	
+	function updateMenu():SMenuProps
+	{
+		trace('subclass task');
+		return null;
 	}
 	
 	function handleSubmit(e:InputEvent)
@@ -152,17 +163,17 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		var formField:FormField = view[name];
 		if(k==0)
 			trace(state.handleChange);
-		//var value:String = (formField.dataFormat == null?state.values[name]:formField.dataFormat(state.values[name]));
+		//var value:String = (formField.displayFormat == null?state.values[name]:formField.displayFormat(state.values[name]));
 		//trace('$field:$value');
-		return [
-		jsx('<label key={k++}>${formField.label}</label>'),switch(formField.type)
+		var field = switch(formField.type)
 		{
 			case Hidden:
 				jsx('<input key={k++} name=${name} type="hidden" defaultValue=${state.values[name]} readOnly=${formField.readonly}/>');
 			default:
 				jsx('<input key={k++} name=${name} defaultValue=${state.values[name]} onChange=${formField.readonly?null:state.handleChange} readOnly=${formField.readonly}/>');
 			
-		}];
+		};
+		return formField.type == Hidden? field:[jsx('<label key={k++}>${formField.label}</label>'), field];
 	}
 	
 	function renderElements():ReactFragment
@@ -174,15 +185,11 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		var k:Int = 0;
 		for (field in fields)
 		{
-			elements.push(jsx('<div key=${k} className="formField" >${renderField(field, k++)}</div>'));
+			elements.push(jsx('<div key=${k} className=${view[field].type==Hidden?null:"formField"} >${renderField(field, k++)}</div>'));
 		}
 		if (k > 0)
 		{
-			elements.push(jsx('
-			<div key=${k++} className="formField" >
-				<button className="submitr" onClick=${save} disabled=${state.clean} style=${{minWidth:"40%"}} >Speichern</button>
-			</div>
-			'));
+			/*add footer comps*/
 		}
 		return elements;
 	}
@@ -205,9 +212,20 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		return m;
 	}
 	
+	function filterMap(m:Map<String,String>, keys:Array<String>):Map<String,String>
+	{
+		var r:Map<String,String> = new Map();
+		for (k in keys)
+		{
+			r.set(k, m.get(k));
+		}
+		return r;
+	}
+	
 	public function save(evt:Event)
 	{
 		evt.preventDefault();
 		trace('your subclass has to override me to save anything!');
 	}
+	
 }

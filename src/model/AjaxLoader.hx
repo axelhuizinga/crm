@@ -32,7 +32,8 @@ typedef AsyncDataLoader =
 		var loader:AjaxLoader = new AjaxLoader(cB);
 		req.onData = loader._onData;
 		req.onError = function(err:String) trace(err);
-		trace('POST? ' + params!=null);
+		trace('POST? ' + params != null);
+		req.withCredentials = true;
 		req.request(params != null);
 		return req;
 	} 

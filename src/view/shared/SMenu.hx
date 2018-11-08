@@ -7,6 +7,7 @@ import js.html.InputElement;
 
 import react.PureComponent.PureComponentOf;
 import react.ReactComponent;
+import react.ReactComponent.ReactComponentOf;
 import react.ReactComponent.ReactFragment;
 import react.React;
 import react.ReactMacro.jsx;
@@ -23,6 +24,7 @@ using Lambda;
 typedef SMenuBlock =
 {
 	?dataClassPath:String,
+	?disabled:Bool,
 	?viewClassPath:String,
 	?className:String,
 	?onActivate:Function,
@@ -36,9 +38,10 @@ typedef SMenuBlock =
 
 typedef SMItem =
 {
-	?dataClassPath:String,
 	?className:String,
 	?component:ReactComponent,
+	?dataClassPath:String,
+	?disabled:Bool,	
 	?handler:Function,
 	?segment:String,
 	?img:String,
@@ -51,18 +54,19 @@ typedef SMenuProps =
 	?className:String,
 	?basePath:String,
 	?hidden:Bool,
-	?menuBlocks:StringMap<SMenuBlock>,
+	?menuBlocks:Map<String,SMenuBlock>,
 	?items:Array<SMItem>,
 	?right:Bool		
 }
 
 typedef SMenuState =
 {
-	hidden:Bool
+	?hidden:Bool,
+	?disabled:Bool
 }
 
 
-class SMenu extends PureComponentOf<SMenuProps,SMenuState>
+class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 
 {
 	var initialActiveHeaderRef:ReactRef<InputElement>;
@@ -116,12 +120,12 @@ class SMenu extends PureComponentOf<SMenuProps,SMenuState>
 	function renderItems(_items:Void->Array<SMItem>):ReactFragment
 	{
 		var items:Array<SMItem> = _items();
-		//trace(items);
+		trace(items);
 		if (items.length == 0)
 			return null;
 		var i:Int = 1;
 		return items.map(function(item:SMItem) return jsx('
-			<Button key=${i++} onClick=${item.handler}>${item.label}</Button>	
+			<Button key=${i++} onClick=${item.handler} disabled=${item.disabled}>${item.label}</Button>	
 		'));
 	}
 	
