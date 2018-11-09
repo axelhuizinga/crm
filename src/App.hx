@@ -59,7 +59,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		trace('userName:$userName jwt:$jwt ' + (!(App.userName == '' || App.jwt == '')?'Y':'N' ));
 		store = model.ApplicationStore.create();
 		state = store.getState();
-		CState.init(store);		
+		//CState.init(store);		
 		if (!(App.userName == '' || App.jwt == ''))
 		{			
 			trace(props);

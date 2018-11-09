@@ -75,9 +75,7 @@ class User extends DataAccessForm
 	{
 		return _instance == null? [] : _instance._menuItems;
 	}
-	
-	public var _menuItems:Array<SMItem>;
-	
+		
 	override 	function handleSubmit(e:InputEvent)
 	{
 		e.preventDefault();

@@ -79,6 +79,7 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 		// Display fallback UI
 		this.setState({ hasError: true });
 		trace(error);
+		trace(info);
 	}		
 	
 	override public function componentWillUnmount():Void 

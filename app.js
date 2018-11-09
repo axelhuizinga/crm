@@ -240,7 +240,6 @@ var App = function() {
 	haxe_Log.trace("userName:" + App.userName + " jwt:" + App.jwt + " " + (!(App.userName == "" || App.jwt == "") ? "Y" : "N"),{ fileName : "src/App.hx", lineNumber : 59, className : "App", methodName : "new"});
 	App.store = model_ApplicationStore.create();
 	this.state = App.store.getState();
-	model_CState.init(App.store);
 	if(!(App.userName == "" || App.jwt == "")) {
 		haxe_Log.trace(this.props,{ fileName : "src/App.hx", lineNumber : 65, className : "App", methodName : "new"});
 		var verifyRequest = new haxe_http_HttpJs("" + Std.string(App.config.api) + "?jwt=" + App.jwt + "&userName=" + App.userName + "&className=auth.User&action=clientVerify");
@@ -1444,6 +1443,7 @@ haxe_http_HttpJs.prototype = $extend(haxe_http_HttpBase.prototype,{
 	,request: function(post) {
 		var _gthis = this;
 		this.responseData = null;
+		haxe_Log.trace(post,{ fileName : "haxe/http/HttpJs.hx", lineNumber : 50, className : "haxe.http.HttpJs", methodName : "request"});
 		var r = this.req = js_Browser.createXMLHttpRequest();
 		var onreadystatechange = function(_) {
 			if(r.readyState != 4) {
@@ -2209,8 +2209,13 @@ me_cunity_debug_Out.fTrace = function(str,arr,i) {
 	}
 	me_cunity_debug_Out._trace(str_buf_b,i);
 };
-var model_AjaxLoader = function(cb) {
+var model_AjaxLoader = function(cb,p,r) {
+	if(p == null) {
+		p = false;
+	}
 	this.cB = cb;
+	this.post = p;
+	this.req = r;
 };
 model_AjaxLoader.__name__ = "model.AjaxLoader";
 model_AjaxLoader.load = function(url,params,cB) {
@@ -2232,21 +2237,70 @@ model_AjaxLoader.load = function(url,params,cB) {
 		haxe_Log.trace(err,{ fileName : "src/model/AjaxLoader.hx", lineNumber : 34, className : "model.AjaxLoader", methodName : "load"});
 	};
 	haxe_Log.trace("POST? " + Std.string(params) != null,{ fileName : "src/model/AjaxLoader.hx", lineNumber : 35, className : "model.AjaxLoader", methodName : "load"});
+	req.withCredentials = true;
 	req.request(params != null);
 	return req;
 };
+model_AjaxLoader.loadData = function(url,params,cB) {
+	var loader = model_AjaxLoader.queue(url,params,cB);
+	model_AjaxLoader.rqs.push(loader.req);
+	if(model_AjaxLoader.rqs.length == 1) {
+		model_AjaxLoader.rqs.shift().request(loader.post);
+	}
+	return loader.req;
+};
+model_AjaxLoader.queue = function(url,params,cB) {
+	var req = new haxe_http_HttpJs(url);
+	if(params != null) {
+		var _g = 0;
+		var _g1 = Reflect.fields(params);
+		while(_g < _g1.length) {
+			var k = _g1[_g];
+			++_g;
+			req.addParameter(k,Reflect.field(params,k));
+		}
+	}
+	req.addHeader("Access-Control-Allow-Methods","PUT, GET, POST, DELETE, OPTIONS");
+	req.addHeader("Access-Control-Allow-Origin","*");
+	var loader = new model_AjaxLoader(cB,params != null,req);
+	req.onData = $bind(loader,loader._onQueueData);
+	req.onError = function(err) {
+		haxe_Log.trace(err,{ fileName : "src/model/AjaxLoader.hx", lineNumber : 110, className : "model.AjaxLoader", methodName : "queue"});
+	};
+	haxe_Log.trace("POST? " + Std.string(params) != null,{ fileName : "src/model/AjaxLoader.hx", lineNumber : 111, className : "model.AjaxLoader", methodName : "queue"});
+	req.withCredentials = true;
+	return loader;
+};
 model_AjaxLoader.prototype = {
 	cB: null
+	,post: null
+	,req: null
 	,_onData: function(response) {
 		if(response.length > 0) {
 			var dataObj = JSON.parse(response);
 			if(dataObj.error != "") {
-				haxe_Log.trace(dataObj.error,{ fileName : "src/model/AjaxLoader.hx", lineNumber : 53, className : "model.AjaxLoader", methodName : "_onData"});
-				haxe_Log.trace(App.store.getState().appWare.history,{ fileName : "src/model/AjaxLoader.hx", lineNumber : 54, className : "model.AjaxLoader", methodName : "_onData"});
+				haxe_Log.trace(dataObj.error,{ fileName : "src/model/AjaxLoader.hx", lineNumber : 59, className : "model.AjaxLoader", methodName : "_onData"});
+				haxe_Log.trace(App.store.getState().appWare.history,{ fileName : "src/model/AjaxLoader.hx", lineNumber : 60, className : "model.AjaxLoader", methodName : "_onData"});
 				dataObj.data = { error : dataObj.error, rows : []};
 			}
 			if(this.cB != null) {
 				this.cB(dataObj.data);
+			}
+		}
+	}
+	,_onQueueData: function(response) {
+		if(response.length > 0) {
+			var dataObj = JSON.parse(response);
+			if(dataObj.error != "") {
+				haxe_Log.trace(dataObj.error,{ fileName : "src/model/AjaxLoader.hx", lineNumber : 76, className : "model.AjaxLoader", methodName : "_onQueueData"});
+				haxe_Log.trace(App.store.getState().appWare.history,{ fileName : "src/model/AjaxLoader.hx", lineNumber : 77, className : "model.AjaxLoader", methodName : "_onQueueData"});
+				dataObj.data = { error : dataObj.error, rows : []};
+			}
+			if(this.cB != null) {
+				this.cB(dataObj.data);
+			}
+			if(model_AjaxLoader.rqs.length > 0) {
+				model_AjaxLoader.rqs.shift().request(this.post);
 			}
 		}
 	}
@@ -3945,7 +3999,7 @@ view_dashboard_SetUpForm.prototype = $extend(view_shared_BaseForm.prototype,{
 	,componentDidMount: function() {
 		var _gthis = this;
 		view_shared_BaseForm.prototype.componentDidMount.call(this);
-		model_AjaxLoader.load("" + Std.string(App.config.api),{ userName : this.props.userName, jwt : this.props.jwt, className : "admin.CreateHistoryTrigger", action : "run"},function(data) {
+		model_AjaxLoader.loadData("" + Std.string(App.config.api),{ userName : this.props.userName, jwt : this.props.jwt, className : "admin.CreateHistoryTrigger", action : "run"},function(data) {
 			haxe_Log.trace(data,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 78, className : "view.dashboard.SetUpForm", methodName : "componentDidMount"});
 			if(data != null && data.length > 0) {
 				var sData = _gthis.state.data;
@@ -3959,7 +4013,7 @@ view_dashboard_SetUpForm.prototype = $extend(view_shared_BaseForm.prototype,{
 				_gthis.setState(tmp);
 			}
 		});
-		model_AjaxLoader.load("" + Std.string(App.config.api),{ userName : this.props.userName, jwt : this.props.jwt, className : "admin.CreateUsers", action : "fromViciDial"},function(data1) {
+		model_AjaxLoader.loadData("" + Std.string(App.config.api),{ userName : this.props.userName, jwt : this.props.jwt, className : "admin.CreateUsers", action : "fromViciDial"},function(data1) {
 			var rows = [].concat(data1.rows);
 			if(rows.length > 0) {
 				var sData1 = _gthis.state.data;
@@ -4054,42 +4108,23 @@ view_dashboard_SetUpForm.prototype = $extend(view_shared_BaseForm.prototype,{
 		} else {
 			_g3.h["contacts"] = value2;
 		}
-		tmp.push(model_AjaxLoader.load(tmp1,{ userName : tmp2, jwt : tmp3, className : "roles.Users", action : "list", filter : "active|TRUE", dataSource : haxe_Serializer.run(_g3)},function(data) {
+		tmp.push(model_AjaxLoader.loadData(tmp1,{ userName : tmp2, jwt : tmp3, className : "roles.Users", action : "list", filter : "active|TRUE", dataSource : haxe_Serializer.run(_g3)},function(data) {
 			haxe_Log.trace(data,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 161, className : "view.dashboard.SetUpForm", methodName : "importExternalUsers"});
 		}));
 	}
 	,render: function() {
 		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 167, className : "view.dashboard.SetUpForm", methodName : "render"});
-		if(this.state.hasError) {
-			var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("h1");
-			var c = js_Boot.getClass(this);
-			var tmp1 = c.__name__;
-			return React.createElement(tmp,{ },"Fehler in ",tmp1,".");
-		}
-		haxe_Log.trace(this.props.history == App.store.getState().appWare.history,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 170, className : "view.dashboard.SetUpForm", methodName : "render"});
-		var tmp2 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var tmp3 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var tmp4 = react__$ReactNode_ReactNode_$Impl_$.fromString("div");
-		var _this = this.state.data;
-		var tmp5 = __map_reserved["historyTrigger"] != null ? _this.getReserved("historyTrigger") : _this.h["historyTrigger"];
-		var tmp6 = React.createElement(tmp4,{ className : "pBlock"},this.renderContent(tmp5));
-		var tmp7 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromString("div"),{ className : "pBlock"},"Dummy");
-		var tmp8 = react__$ReactNode_ReactNode_$Impl_$.fromComp(view_table_Table);
-		var tmp9 = this.props;
-		var _this1 = this.state.data;
-		var tmp10 = __map_reserved["userGroups"] != null ? _this1.getReserved("userGroups") : _this1.h["userGroups"];
-		var _this2 = this.dataDisplay;
-		var tmp11 = __map_reserved["userGroups"] != null ? _this2.getReserved("userGroups") : _this2.h["userGroups"];
-		var tmp12 = React.createElement(tmp8,Object.assign({ },tmp9,{ id : "userGroups", data : tmp10, dataState : tmp11, className : "is-striped is-fullwidth is-hoverable"}));
-		var tmp13 = React.createElement(tmp3,{ className : "tabComponentForm columns"},tmp6,tmp7,tmp12);
-		var tmp14 = React.createElement(react__$ReactNode_ReactNode_$Impl_$.fromComp(view_shared_SMenu),{ className : "menu", menuBlocks : this.state.sideMenu.menuBlocks});
-		return React.createElement(tmp2,{ className : "columns  "},tmp13,tmp14);
+		haxe_Log.trace(this.state,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 168, className : "view.dashboard.SetUpForm", methodName : "render"});
+		var tmp = react__$ReactNode_ReactNode_$Impl_$.fromString("h1");
+		var c = js_Boot.getClass(this);
+		var tmp1 = c.__name__;
+		return React.createElement(tmp,{ },"Fehler in ",tmp1,".");
 	}
 	,renderContent: function(content) {
 		if(content == null || content.length == 0) {
 			return null;
 		}
-		haxe_Log.trace(content.length,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 196, className : "view.dashboard.SetUpForm", methodName : "renderContent"});
+		haxe_Log.trace(content.length,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 197, className : "view.dashboard.SetUpForm", methodName : "renderContent"});
 		var rC = [];
 		var k = 1;
 		var _g = 0;
@@ -4889,6 +4924,7 @@ me_cunity_debug_Out.skipFunctions = true;
 me_cunity_debug_Out.traceToConsole = false;
 me_cunity_debug_Out.traceTarget = me_cunity_debug_DebugOutput.NATIVE;
 me_cunity_debug_Out.aStack = haxe_CallStack.callStack;
+model_AjaxLoader.rqs = [];
 react_ReactDateTimeClock.displayName = "ReactDateTimeClock";
 react_ReactDateTimeClock.__fileName__ = "lib/react/ReactDateTimeClock.hx";
 react_router_bundle_BundleWrapper.defaultProps = { loading : react__$ReactNode_ReactNode_$Impl_$.fromFunction(react_router_bundle_BundleWrapper.DefaultLoader), error : react__$ReactNode_ReactNode_$Impl_$.fromFunction(react_router_bundle_BundleWrapper.DefaultError)};
@@ -5141,9 +5177,9 @@ view_shared_io_DataAccessForm.displayName = "DataAccessForm";
 view_shared_io_DataAccessForm.__fileName__ = "src/view/shared/io/DataAccessForm.hx";
 view_shared_io_User.dataAccess = (function($this) {
 	var $r;
-	var _g5 = new haxe_ds_StringMap();
+	var _g4 = new haxe_ds_StringMap();
 	{
-		var _g3 = new haxe_ds_StringMap();
+		var _g2 = new haxe_ds_StringMap();
 		var _g = new haxe_ds_StringMap();
 		if(__map_reserved["alias"] != null) {
 			_g.setReserved("alias","us");
@@ -5157,101 +5193,79 @@ view_shared_io_User.dataAccess = (function($this) {
 		}
 		var value = _g;
 		if(__map_reserved["users"] != null) {
-			_g3.setReserved("users",value);
+			_g2.setReserved("users",value);
 		} else {
-			_g3.h["users"] = value;
+			_g2.h["users"] = value;
 		}
 		var _g1 = new haxe_ds_StringMap();
 		if(__map_reserved["alias"] != null) {
-			_g1.setReserved("alias","ug");
+			_g1.setReserved("alias","co");
 		} else {
-			_g1.h["alias"] = "ug";
+			_g1.h["alias"] = "co";
 		}
 		if(__map_reserved["fields"] != null) {
-			_g1.setReserved("fields","name");
+			_g1.setReserved("fields","first_name,last_name,email");
 		} else {
-			_g1.h["fields"] = "name";
+			_g1.h["fields"] = "first_name,last_name,email";
 		}
 		if(__map_reserved["jCond"] != null) {
-			_g1.setReserved("jCond","ug.id=us.user_group");
+			_g1.setReserved("jCond","contact=co.id");
 		} else {
-			_g1.h["jCond"] = "ug.id=us.user_group";
+			_g1.h["jCond"] = "contact=co.id";
 		}
 		var value1 = _g1;
-		if(__map_reserved["user_groups"] != null) {
-			_g3.setReserved("user_groups",value1);
-		} else {
-			_g3.h["user_groups"] = value1;
-		}
-		var _g2 = new haxe_ds_StringMap();
-		if(__map_reserved["alias"] != null) {
-			_g2.setReserved("alias","co");
-		} else {
-			_g2.h["alias"] = "co";
-		}
-		if(__map_reserved["fields"] != null) {
-			_g2.setReserved("fields","first_name,last_name,email");
-		} else {
-			_g2.h["fields"] = "first_name,last_name,email";
-		}
-		if(__map_reserved["jCond"] != null) {
-			_g2.setReserved("jCond","contact=co.id");
-		} else {
-			_g2.h["jCond"] = "contact=co.id";
-		}
-		var value2 = _g2;
 		if(__map_reserved["contacts"] != null) {
-			_g3.setReserved("contacts",value2);
+			_g2.setReserved("contacts",value1);
 		} else {
-			_g3.h["contacts"] = value2;
+			_g2.h["contacts"] = value1;
 		}
-		var _g4 = new haxe_ds_StringMap();
-		var value3 = { label : "UserID", readonly : true, type : view_shared_FormElement.Hidden};
+		var _g3 = new haxe_ds_StringMap();
+		var value2 = { label : "UserID", readonly : true, type : view_shared_FormElement.Hidden};
 		if(__map_reserved["user_name"] != null) {
-			_g4.setReserved("user_name",value3);
+			_g3.setReserved("user_name",value2);
 		} else {
-			_g4.h["user_name"] = value3;
+			_g3.h["user_name"] = value2;
 		}
-		var value4 = { label : "Vorname"};
+		var value3 = { label : "Vorname"};
 		if(__map_reserved["first_name"] != null) {
-			_g4.setReserved("first_name",value4);
+			_g3.setReserved("first_name",value3);
 		} else {
-			_g4.h["first_name"] = value4;
+			_g3.h["first_name"] = value3;
 		}
-		var value5 = { label : "Name"};
+		var value4 = { label : "Name"};
 		if(__map_reserved["last_name"] != null) {
-			_g4.setReserved("last_name",value5);
+			_g3.setReserved("last_name",value4);
 		} else {
-			_g4.h["last_name"] = value5;
+			_g3.h["last_name"] = value4;
 		}
-		var value6 = { label : "Email"};
+		var value5 = { label : "Email"};
 		if(__map_reserved["email"] != null) {
-			_g4.setReserved("email",value6);
+			_g3.setReserved("email",value5);
 		} else {
-			_g4.h["email"] = value6;
+			_g3.h["email"] = value5;
 		}
-		var value7 = { label : "Letze Anmeldung", readonly : true, displayFormat : view_shared_io_DataAccessForm.localDate};
+		var value6 = { label : "Letze Anmeldung", readonly : true, displayFormat : view_shared_io_DataAccessForm.localDate};
 		if(__map_reserved["last_login"] != null) {
-			_g4.setReserved("last_login",value7);
+			_g3.setReserved("last_login",value6);
 		} else {
-			_g4.h["last_login"] = value7;
+			_g3.h["last_login"] = value6;
 		}
-		var value8 = { data : _g3, view : _g4};
+		var value7 = { data : _g2, view : _g3};
 		if(__map_reserved["edit"] != null) {
-			_g5.setReserved("edit",value8);
+			_g4.setReserved("edit",value7);
 		} else {
-			_g5.h["edit"] = value8;
+			_g4.h["edit"] = value7;
 		}
 	}
 	{
-		var value9 = { data : null, view : null};
+		var value8 = { data : null, view : null};
 		if(__map_reserved["save"] != null) {
-			_g5.setReserved("save",value9);
+			_g4.setReserved("save",value8);
 		} else {
-			_g5.h["save"] = value9;
+			_g4.h["save"] = value8;
 		}
 	}
-	$r = _g5;
+	$r = _g4;
 	return $r;
 }(this));
 view_shared_io_User.displayName = "User";

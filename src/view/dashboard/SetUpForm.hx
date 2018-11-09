@@ -19,6 +19,7 @@ import model.AjaxLoader;
 import view.shared.BaseForm;
 import view.shared.BaseForm.FormProps;
 import view.shared.SMenu;
+import view.shared.io.DB;
 import view.table.Table;
 
 /**
@@ -34,7 +35,26 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 	public function new(?props:FormProps) 
 	{
 		super(props);	
-		
+		trace('ok');
+		//trace(state);
+		state = ReactUtil.copy(state, {
+			sideMenu:{
+				menuBlocks:[
+					'DbTools'=>{
+						dataClassPath:'settings.Design',
+						viewClassPath:'shared.io.Design',
+						isActive:true,
+						label:'DB Design',
+						onActivate:switchContent,
+						items:function() return []
+					}				
+				]
+			},
+			viewClassPath:"shared.io.DB",
+			loading:true
+		});
+		//trace(state);
+		requests = [];			
 		/*sideMenu = 	null; {
 			menuBlocks:[
 			//{handler:null, label:'Create History Trigger'},//TODO: ADD HANDLER - REMOVE AUTORUN ON MOUNT
@@ -61,13 +81,15 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 	override function componentDidCatch(error, info) {
 		// Display fallback UI
 		this.setState({ hasError: true });
-		trace(error);
+		trace(info);
 	}	
 	
 	override public function componentDidMount():Void 
 	{
 		super.componentDidMount();
-		AjaxLoader.load('${App.config.api}', 
+		trace('ok');
+		return;
+		AjaxLoader.loadData('${App.config.api}', 
 			{
 				userName:props.userName,
 				jwt:props.jwt,
@@ -84,8 +106,8 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 					setState(ReactUtil.copy(state, {data:sData}));				
 				}
 			});
-		
-		AjaxLoader.load(
+		/*
+		AjaxLoader.loadData(
 			'${App.config.api}', 
 			{
 				userName:props.userName,
@@ -111,7 +133,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 					setState(ReactUtil.copy(state, {data:sData}));				
 				}
 			}
-		);		
+		);	*/	
 			
 	}
 	
@@ -119,7 +141,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 	{
 		Out.dumpObjectTree(ev);
 		trace(untyped ev.currentTarget._targetInst);
-		/*requests.push(AjaxLoader.load(
+		/*requests.push(AjaxLoader.loadData(
 			'${App.config.api}', 
 			{
 				userName:props.userName,
@@ -136,7 +158,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 			}
 		));*/
 		
-		requests.push(AjaxLoader.load(
+		requests.push(AjaxLoader.loadData(
 			'${App.config.api}', 
 			{
 				userName:props.userName,
@@ -163,12 +185,28 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 		));
 	}
 	
-    override public function render() {
+    override public function render() 
+	{
+		trace(state.sideMenu);
+		return switch(state.viewClassPath)
+		{
+			case "shared.io.DB":
+				jsx('
+					<DB ${...props} sideMenu=${state.sideMenu}
+					handleChange={false} handleSubmit={false} fullWidth={true}/>
+				');				
+			default:
+				null;					
+		}
+	}
+	
+    public function render2() {
 		trace(Reflect.fields(props));
-		trace(state);
-		if (true || state.hasError)
+		trace(state.data == null);
+		if (state.data == null)
+			return null;
+		if (state.hasError)
 			return jsx('<h1>Fehler in ${Type.getClassName(Type.getClass(this))}.</h1>');		
-		trace(props.history == App.store.getState().appWare.history);
         return jsx('
 				<div className="columns  ">
 					<div className="tabComponentForm columns">
@@ -176,13 +214,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 								${renderContent(state.data.get('historyTrigger'))}
 							</div>
 
-							<div className="pBlock" >
-								Dummy
-							</div>
-							
-								<Table id="userGroups" ${...props} data = ${state.data.get('userGroups')}
-								dataState = ${dataDisplay["userGroups"]}
-								className = "is-striped is-fullwidth is-hoverable"/>
+
 							
 					</div>
 					<SMenu className="menu" menuBlocks={state.sideMenu.menuBlocks}/>
@@ -190,6 +222,16 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
         ');
     }	
 	//${displayDebug('userGroups')}<div className="pBlock" ></div>
+	/**
+							<div className="pBlock" >
+								Dummy
+							</div>
+							
+								<Table id="userGroups" ${...props} data = ${state.data.get('userGroups')}
+								dataState = ${dataDisplay["userGroups"]}
+								className = "is-striped is-fullwidth is-hoverable"/>	   
+	
+	**/
 	function renderContent(content:Array<String>):ReactFragment
 	{
 		if (content == null || content.length == 0)

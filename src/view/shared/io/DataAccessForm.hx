@@ -13,6 +13,7 @@ import view.shared.BaseForm.FormField;
 import view.shared.BaseForm.FormState;
 import view.shared.BaseForm.FormProps;
 import view.shared.SMenu.SMenuProps;
+import view.shared.SMenu.SMItem;
 import view.shared.io.DataAccess.DataView;
 
 import react.PureComponent.PureComponentOf;
@@ -39,6 +40,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	var mounted:Bool;
 	var requests:Array<HttpJs>;	
 	var view:DataView;
+	var _menuItems:Array<SMItem>;
 	
 	public function new(?props:DataFormProps) 
 	{
