@@ -1,8 +1,10 @@
 package view.shared.io;
 
+import haxe.Unserializer;
 import model.AjaxLoader;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
+import react.ReactUtil;
 import view.shared.SMenu;
 import view.shared.SMenu.SMItem;
 import view.shared.io.DataAccessForm;
@@ -33,9 +35,9 @@ class DB extends DataAccessForm
 			{handler:save, label:'Speichern', disabled:state.clean},
 		];
 		var sideMenu = state.sideMenu;
-		trace(sideMenu);
+		//trace(sideMenu);
 		sideMenu.menuBlocks['DbTools'].items = function() return _menuItems;
-		setState({sideMenu:sideMenu});		
+		state = ReactUtil.copy(state, {sideMenu:sideMenu});		
 	}
 	
 	//override public function save(ev:ReactEvent):Void{}
@@ -56,13 +58,33 @@ class DB extends DataAccessForm
 			function(data:Dynamic)
 			{
 				trace(data);
-				if (data.rows == null)
+				if (data.error != null)
 					return;
+				var fieldNames:Map<String,String> = null;
+				try{
+					fieldNames = Unserializer.run(data);
+				}
+				catch (ex:Dynamic)
+				{
+					trace(ex);
+					return;
+				}
+				 
+				setState({data:fieldNames});
 		}));
+		trace(props.history);
+		trace(props.match);
+		//setState({viewClassPath:viewClassPath});
 	}
 	
 	function renderResults()
 	{
+		if (state.data != null)
+		return switch(state.viewClassPath)
+		{
+			default:
+				null;
+		}
 		return null;
 	}
 	
@@ -70,7 +92,7 @@ class DB extends DataAccessForm
 	{
 		if(state.values != null)
 		trace(state.values);
-		trace(state);
+		trace(props.match.params.segment);
 		//return null;
 		return jsx('
 		<div className="columns">

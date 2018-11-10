@@ -64,6 +64,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 {
 	var browserHistory:History;
 	var dispatchInitial:Dispatch;
+	var mounted:Bool;
 	static var _me:UiView;
 
 	static function mapStateToProps(aState:AppState) {
@@ -88,12 +89,13 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 		browserHistory = App.store.getState().appWare.history;// BrowserHistory.create({basename:"/"});
 		//ApplicationStore.startHistoryListener(App.store, browserHistory);
 		//trace(this.props.appWare.user.state.lastName);
-		//trace(this.props);
+		mounted = false;
 		_me = this;
     }
 
 	override function componentDidCatch(error, info) {
 		// Display fallback UI
+		if(mounted)
 		this.setState({ hasError: true });
 		// You can also log the error to an error reporting service
 		//logErrorToMyService(error, info);
@@ -101,7 +103,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 	}
 
     override function componentDidMount() {
-
+		mounted = true;
     }
 
 	var tabList:Array<Dynamic> = [];

@@ -77,6 +77,7 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 	
 	override function componentDidCatch(error, info) {
 		// Display fallback UI
+		if(mounted)
 		this.setState({ hasError: true });
 		trace(error);
 		trace(info);

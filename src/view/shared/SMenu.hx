@@ -83,6 +83,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 		trace(initialActiveHeaderRef.current);
 		if (initialActiveHeaderRef.current != null)
 		{
+			trace(initialActiveHeaderRef.current.value);
 			initialActiveHeaderRef.current.checked = true;
 		}
 	}
@@ -95,7 +96,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 		var header:Array<ReactFragment> = new Array();
 		var i:Int = 1;		
 		props.menuBlocks.iter(function(block:SMenuBlock) header.push( jsx('
-		<input type="radio" key=${i} id=${"sMenuPanel-"+(i++)} name="accordion-select" data-classpath=${block.dataClassPath} onChange=${block.onActivate} value=${block.segment} ref=${block.isActive?initialActiveHeaderRef:null}/>
+		<input type="radio" key=${i} id=${"sMenuPanel-"+(i++)} name="accordion-select" data-classpath=${block.dataClassPath} onChange=${block.onActivate} data-segment=${block.segment} ref=${block.isActive?initialActiveHeaderRef:null}/>
 		')));
 		return header;
 	}
@@ -120,7 +121,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 	function renderItems(_items:Void->Array<SMItem>):ReactFragment
 	{
 		var items:Array<SMItem> = _items();
-		trace(items);
+		//trace(items);
 		if (items.length == 0)
 			return null;
 		var i:Int = 1;

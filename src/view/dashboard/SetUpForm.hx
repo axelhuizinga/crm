@@ -41,8 +41,8 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 			sideMenu:{
 				menuBlocks:[
 					'DbTools'=>{
-						dataClassPath:'settings.Design',
-						viewClassPath:'shared.io.Design',
+						dataClassPath:'model.tools.DB',
+						viewClassPath:'shared.io.DB',
 						isActive:true,
 						label:'DB Design',
 						onActivate:switchContent,
@@ -80,6 +80,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 	
 	override function componentDidCatch(error, info) {
 		// Display fallback UI
+		if(mounted)
 		this.setState({ hasError: true });
 		trace(info);
 	}	
@@ -212,10 +213,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 					<div className="tabComponentForm columns">
 							<div className="pBlock" >
 								${renderContent(state.data.get('historyTrigger'))}
-							</div>
-
-
-							
+							</div>						
 					</div>
 					<SMenu className="menu" menuBlocks={state.sideMenu.menuBlocks}/>
 				</div>

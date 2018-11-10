@@ -1,3 +1,4 @@
+import haxe.http.HttpJs;
 import view.shared.io.User;
 
 /**
@@ -5,7 +6,7 @@ import view.shared.io.User;
  * @author axel@cunity.me
  */
 
-import haxe.http.HttpJs;
+//import haxe.http.HttpJs;
 import haxe.Json;
 import history.BrowserHistory;
 import history.History;
@@ -14,7 +15,7 @@ import js.Browser;
 import js.Cookie;
 import js.Error;
 import js.Promise;
-import js.html.XMLHttpRequest;
+//import js.html.XMLHttpRequest;
 import me.cunity.debug.Out;
 import model.ApplicationStore;
 import model.CState;
@@ -27,6 +28,7 @@ import redux.StoreMethods;
 import react.React;
 import redux.react.Provider;
 import Webpack.*;
+import model.AjaxLoader;
 import model.AppState;
 import action.AppAction;
 
@@ -52,8 +54,9 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	public static var userName:String = Cookie.get('user.userName');
 	public static var jwt:String = Cookie.get('user.jwt');
 
-    public function new() 
+    public function new(?props:AppProps) 
 	{
+		super(props);
 		_app = this;
 		//props = { waiting:true};
 		trace('userName:$userName jwt:$jwt ' + (!(App.userName == '' || App.jwt == '')?'Y':'N' ));
@@ -63,24 +66,16 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		if (!(App.userName == '' || App.jwt == ''))
 		{			
 			trace(props);
-			//trace(bulmaAccordion);
-			var verifyRequest = new HttpJs('${App.config.api}?jwt=${App.jwt}&userName=${App.userName}&className=auth.User&action=clientVerify');
-			verifyRequest.addHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
-			verifyRequest.addHeader('Access-Control-Allow-Origin', 'pitverwaltung.de');
-			verifyRequest.withCredentials = false;
-			verifyRequest.onData = function(data:String)
-			{
-				trace(data);
-				var verifyData = Json.parse(data);
+			var aj:HttpJs = AjaxLoader.loadData(App.config.api,
+			{jwt:App.jwt, userName:App.userName, className:'auth.User', action:'clientVerify'}, 
+			function(verifyData:Dynamic){
 				trace(verifyData);
 				if (verifyData.error != null && verifyData.error !='')
 				{
 					App.jwt = null;
 					store.dispatch(AppAction.LoginRequired({jwt:'',loginError:verifyData.error,userName:App.userName,waiting:false}));
-					//_app.props = { waiting:false};
-					trace(verifyData);
 				}
-				else if (verifyData.data != null && verifyData.data.content == 'OK')
+				else if (verifyData.content != null && verifyData.content == 'OK')
 				{
 					trace('verifyData:{verifyData.content}');
 					var uState:UserProps = state.appWare.user;
@@ -88,13 +83,8 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 					store.dispatch(AppAction.LoginComplete(uState));
 					//setState({appware:{user:uState}});
 					//_app.props = { waiting:false}; 
-				}			
-			}
-			verifyRequest.onError = function(msg:String)
-			{
-				trace(msg);
-			}
-			verifyRequest.request();
+				}		
+			});
 		}
 		else
 		{// WE HAVE EITHER NO JWT OR USERNAME
@@ -106,13 +96,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		trace(state.appWare.user);
 		
 		//state.appWare.history.listen(CState.historyChange);
-		//trace(state);
-		//trace(Type.typeof(state.appWare.user.jwt));
-		//trace(state.appWare.user.jwt);
 		trace(Reflect.fields(state));
-		super();
-		//trace(this.state);
-        //state = { route:'', themeColor:'red', locale:'de', hasError: false, history:browserHistory};
     }
 
     override function componentDidMount()
