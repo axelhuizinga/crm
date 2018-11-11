@@ -57,6 +57,11 @@ class StatusBar extends ReactComponentOf<StatusBarProps,Dynamic>
 		trace('start delay at $s set timer start in ${(60 - s ) } seconds');
 		//return;
 		Timer.delay(function(){
+			if (!mounted)
+			{
+				trace('not mounted - will do nothing');
+				return;
+			}
 			trace('timer start at ${Date.now().getSeconds()}');
 			//store.dispatch(Tick(Date.now()));
 			this.setState({ date: Date.now()});
@@ -69,6 +74,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,Dynamic>
 	
 	override public function componentWillUnmount()
 	{
+		mounted = false;
 		if(timer !=null)
 			timer.stop();
 	}	

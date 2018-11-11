@@ -138,11 +138,11 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 			
 	}
 	
-	public function importExternalUsers(ev:ReactEvent):Void
+	/*public function importExternalUsers(ev:ReactEvent):Void
 	{
 		Out.dumpObjectTree(ev);
 		trace(untyped ev.currentTarget._targetInst);
-		/*requests.push(AjaxLoader.loadData(
+		requests.push(AjaxLoader.loadData(
 			'${App.config.api}', 
 			{
 				userName:props.userName,
@@ -157,7 +157,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 					trace(Json.parse(data));
 				}
 			}
-		));*/
+		));
 		
 		requests.push(AjaxLoader.loadData(
 			'${App.config.api}', 
@@ -184,7 +184,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 				trace(data);
 			}
 		));
-	}
+	}*/
 	
     override public function render() 
 	{

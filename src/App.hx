@@ -141,7 +141,10 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	
 	public static function logOut()
 	{
-		store.dispatch(AppAction.LogOut({userName:userName, jwt:null}));
+		Cookie.set('user.jwt', '', -10, '/');
+		trace(Cookie.get('user.jwt')); 
+		trace(Cookie.all());
+		store.dispatch(AppAction.LogOut({userName:userName, jwt:''}));
 		//_app.forceUpdate();
 	}
 	

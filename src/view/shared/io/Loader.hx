@@ -1,24 +1,24 @@
-package model;
+package view.shared.io;
 import haxe.ds.StringMap;
 import haxe.http.HttpJs;
-import haxe.Json;
-import react.ReactComponent;
+import haxe.Unserializer;
+//import react.ReactComponent;
 
 /**
  * ...
  * @author axel@cunity.me
  */
 
-typedef AsyncDataLoader =
+/*typedef AsyncDataLoader =
 {
 	url:String,
 	?params:StringMap<String>,
 	?cB:String->Void,
 	?dataField:String,
 	?component:ReactComponent
-}
+}*/
 
- class AjaxLoader 
+class Loader 
 {	
 	public static function load(url:String, ?params:Dynamic,?cB:Dynamic->Void):HttpJs
 	{
@@ -29,7 +29,7 @@ typedef AsyncDataLoader =
 		}		
 		req.addHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
 		req.addHeader('Access-Control-Allow-Origin', '*');
-		var loader:AjaxLoader = new AjaxLoader(cB);
+		var loader:Loader = new Loader(cB);
 		req.onData = loader._onData;
 		req.onError = function(err:String) trace(err);
 		trace('POST? ' + params != null);
@@ -71,7 +71,7 @@ typedef AsyncDataLoader =
 	
 	function _onError(err:String)
 	{
-		
+		trace(err);
 	}
 
 	function _onQueueData(response:String)
@@ -97,14 +97,14 @@ typedef AsyncDataLoader =
 
 	public static function loadData(url:String, ?params:Dynamic,?cB:Dynamic->Void):HttpJs
 	{
-		var loader:AjaxLoader = queue(url, params, cB);
+		var loader:Loader = queue(url, params, cB);
 		rqs.push(loader.req);
 		if (rqs.length == 1)
 			rqs.shift().request(loader.post);
 		return loader.req;
 	}
 
-	public static function queue(url:String, ?params:Dynamic,?cB:Dynamic->Void):AjaxLoader
+	public static function queue(url:String, ?params:Dynamic,?cB:Dynamic->Void):Loader
 	{
 		var req = new HttpJs(url); 
 		if(params!=null) for (k in Reflect.fields(params))
@@ -113,7 +113,7 @@ typedef AsyncDataLoader =
 		}		
 		req.addHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
 		req.addHeader('Access-Control-Allow-Origin', '*');
-		var loader:AjaxLoader = new AjaxLoader(cB, params, req);
+		var loader:Loader = new Loader(cB, params, req);
 		loader.url = url;
 		req.onData = loader._onQueueData;
 		req.onError = function(err:String) trace(err);

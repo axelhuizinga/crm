@@ -43,17 +43,19 @@ class AsyncUserAction
 	public static function loginReq(props:LoginState) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->model.AppState){
-			trace(props);
+			//trace(props);
 			//trace(getState());
 			var fD:FormData = new FormData();
-			fD.append('action', 'hmm');
+			fD.append('action', 'login');
 			fD.append('className', 'auth.User');
 			fD.append('userName', props.userName);
 			fD.append('pass', props.pass);
 			if (props.pass == '' || props.userName == '') 
 				return dispatch(AppAction.LoginError({userName:props.userName, loginError:'Passwort und UserName eintragen!'}));
 			var req:XMLHttpRequest = new XMLHttpRequest();//,headers: {'Content-Type': 'application/json; charset=utf-8'}'Content-Type': 'application/json; charset=utf-8',
-			req.open('GET', '${props.api}?' + App.queryString2({action:'login', className:'auth.User', userName:props.userName, pass: props.pass}));
+			//+ App.queryString2({action:'login', className:'auth.User', userName:props.userName, pass: props.pass})
+			req.open('POST', '${props.api}');
+			//req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 			req.setRequestHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
 			req.setRequestHeader('Access-Control-Allow-Origin','*');
 			req.onload = function()
@@ -78,7 +80,8 @@ class AsyncUserAction
 			};
 			var spin:Dynamic = dispatch(AppAction.LoginWait);
 			req.withCredentials = true;
-			req.send();
+			//req.send(Json.stringify({action:'login', className:'auth.User', userName:props.userName, pass: props.pass}));
+			req.send(fD);
 			trace(spin);
 			return spin;
 		});
@@ -96,9 +99,12 @@ class AsyncUserAction
 			trace(getState());
 			if (props.userName == '') 
 				return dispatch(AppAction.LoginError({userName:props.userName, loginError:'UserId fehlt!'}));
-			
+			var fD:FormData = new FormData();
+			fD.append('action', 'logOff');
+			fD.append('className', 'auth.User');
+			fD.append('userName', props.userName);
 			var req:XMLHttpRequest = new XMLHttpRequest();
-			req.open('GET', '${props.api}?' + App.queryString2({action:'logout', className:'auth.User', userName:props.userName, pass: props.pass}));
+			req.open('POST', '${props.api}');
 			req.onload = function()
 			{
 				 if (req.status == 200) {
@@ -107,6 +113,7 @@ class AsyncUserAction
 					trace(jRes.jwt);
 					Cookie.set('user.userName', props.userName);
 					Cookie.set('user.jwt', jRes.jwt);
+					trace(Cookie.get('user.jwt'));
 					return dispatch(AppAction.LoginComplete({userName:props.userName, jwt:jRes.jwt, waiting:false}));
 				} else {
 					  // Otherwise reject with the status text
@@ -115,7 +122,7 @@ class AsyncUserAction
 				}
 			};
 			var spin:Dynamic = dispatch(AppAction.LoginWait);
-			req.send();
+			req.send(fD);
 			trace(spin);
 			return spin;			
 		});

@@ -52,8 +52,6 @@ class DB extends DataAccessForm
 				jwt:props.jwt,
 				className:'tools.DB',
 				action:'createFieldList',
-				//filter:'user_name|${props.userName}',
-				//dataSource:null//Serializer.run(dataAccess['edit'].data)
 			},
 			function(data:Dynamic)
 			{
@@ -68,8 +66,7 @@ class DB extends DataAccessForm
 				{
 					trace(ex);
 					return;
-				}
-				 
+				}				 
 				setState({data:fieldNames});
 		}));
 		trace(props.history);

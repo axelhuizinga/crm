@@ -16,9 +16,7 @@ import view.shared.RouteTabProps;
 
 typedef LoginState = 
 {
-	//> RouteRenderProps,
 	?api:Dynamic,
-	//?dispatch: Dispatch,
 	?waiting:Bool,
 	?error:Dynamic,
 	?userName:String,
@@ -59,7 +57,6 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 		trace(dispatch);
 		return {
 			submitLogin: function(lState:LoginState) return dispatch(AsyncUserAction.loginReq(lState))
-			//dispatch:dispatch
 		};
 	}
 	
