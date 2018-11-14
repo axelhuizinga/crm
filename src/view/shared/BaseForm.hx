@@ -80,8 +80,8 @@ typedef FormState =
 	?handleSubmit:InputEvent->Void,	
 	?hasError:Bool,
 	?loading:Bool,
-	?fields:Map<String,FormField>,
-	?values:Map<String,String>,
+	?fields:Map<String,FormField>,//VIEW FORMFIELDS
+	?values:Map<String,String>,//FORMATTED DISPLAY VALUES
 	?sideMenu:SMenuProps,
 	?submitted:Bool,
 	?errors:StringMap<String>

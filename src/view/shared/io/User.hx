@@ -43,7 +43,7 @@ class User extends DataAccessForm
 {
 	public static var dataAccess:DataAccess = [
 		'edit' =>{
-			data:[
+			source:[
 				"users" => ["alias" => 'us',
 					"fields" => 'user_name,last_login'],
 			/*	"user_groups" => [
@@ -64,7 +64,7 @@ class User extends DataAccessForm
 			]
 		},
 		'save' => {
-			data:null,
+			source:null,
 			view:null
 		}
 	];
@@ -76,7 +76,7 @@ class User extends DataAccessForm
 		return _instance == null? [] : _instance._menuItems;
 	}
 		
-	override 	function handleSubmit(e:InputEvent)
+	override function handleSubmit(e:InputEvent)
 	{
 		e.preventDefault();
 	}
@@ -84,7 +84,7 @@ class User extends DataAccessForm
 	public function edit(ev:ReactEvent):Void
 	{
 		trace('hi :)');
-		requests.push(AjaxLoader.load(	
+		requests.push(Loader.loadData(	
 			'${App.config.api}', 
 			{
 				userName:props.userName,
@@ -92,23 +92,25 @@ class User extends DataAccessForm
 				className:'auth.User',
 				action:'edit',
 				filter:'user_name|${props.userName}',
-				dataSource:Serializer.run(dataAccess['edit'].data)
+				dataSource:Serializer.run(dataAccess['edit'].source)
 			},
-			function(data:Dynamic)
+			function(data:Array<Map<String,String>>)
 			{
 				trace(data);
-				if (data.rows == null)
+				if (data == null)
 					return;
-				view = dataAccess['edit'].view;
-				
-				//trace(data.rows.length);
-				//trace(state.values);
-				
-				var data:Map<String,String> = obj2map(data.rows[0]);
-				trace(data);
+				if (data[0].exists('ERROR'))
+				{
+					trace(data[0]['ERROR']);
+					return;
+				}
 				//trace(Reflect.fields(dataRows[0]));
 				//trace(dataRows[0].active);
-				setState({data:data, values:createStateValues(data, view), loading:false});					
+				setState({
+					data:data[0],
+					fields:dataAccess['edit'].view,
+					values:createStateValues(data[0], 
+					dataAccess['edit'].view), loading:false});					
 			}
 		));
 		//setState({viewClassPath:"shared.io.User.edit"});
@@ -130,7 +132,7 @@ class User extends DataAccessForm
 		trace(skeys.toString());*/
 		//trace();
 		//return;,
-		requests.push(AjaxLoader.load(	
+		requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
 				userName:props.userName,
@@ -140,20 +142,11 @@ class User extends DataAccessForm
 				filter:'user_name|${props.userName}',
 				dataSource:Serializer.run(filterMap(state.values, skeys))
 			},
-			function(data:Dynamic)
+			function(data:Map<String,Dynamic>)
 			{
 				trace(data);
-				if (data.rows == null)
-					return;
-				view = dataAccess['edit'].view;
-				
-				//trace(data.rows.length);
-				//trace(state.values);
-				var data:Map<String,String> = obj2map(data.rows[0]);
-				trace(data);
-				//trace(Reflect.fields(dataRows[0]));
-				//trace(dataRows[0].active);
-				setState({data:data, values:createStateValues(data, view), loading:false});					
+
+				setState({data:data, loading:false});					
 			}
 		));
 	}

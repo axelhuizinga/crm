@@ -29,7 +29,7 @@ class Loader
 		}		
 		req.addHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
 		req.addHeader('Access-Control-Allow-Origin', '*');
-		var loader:Loader = new Loader(cB);
+		var loader:Loader = new Loader(cB, params, req);
 		req.onData = loader._onData;
 		req.onError = function(err:String) trace(err);
 		trace('POST? ' + params != null);
@@ -56,16 +56,22 @@ class Loader
 	{
 		if (response.length > 0)
 		{
-			var dataObj = Json.parse(response);
-			if (dataObj.error != '')
-			{
-				trace(dataObj.error);
-				trace(App.store.getState().appWare.history);
-				//return;
-				dataObj.data = {error: dataObj.error, rows:[]};
+			var dataObj:Map<String,Dynamic> = null;
+			try{
+				dataObj = Unserializer.run(response);
 			}
+			catch (ex:Dynamic)
+			{
+				trace(ex);
+				return;
+			}
+			if (dataObj.exists('ERROR'))
+			{
+				trace(dataObj['ERROR']);
+				return;
+			}			
 			if (cB != null)
-				cB(dataObj.data);					
+				cB(dataObj);						
 		}
 	}
 	
@@ -76,18 +82,25 @@ class Loader
 
 	function _onQueueData(response:String)
 	{
+		trace(response);
 		if (response.length > 0)
 		{
-			var dataObj = Json.parse(response);
-			if (dataObj.error != '')
-			{
-				trace(dataObj.error);
-				trace(App.store.getState().appWare.history);
-				//return;
-				dataObj.data = {error: dataObj.error, rows:[]};
+			var dataObj:Array<Map<String,Dynamic>> = null;
+			try{
+				dataObj = Unserializer.run(response);
+				trace(dataObj);
 			}
-			if (cB != null)
-				cB(dataObj.data);	
+			catch (ex:Dynamic)
+			{
+				trace(ex);
+				return;
+			}
+			if (response.indexOf('ERROR')>-1)
+			{
+				trace(response);
+			}			
+			else if (cB != null)
+				cB(dataObj);	
 			if (rqs.length > 0)
 				rqs.shift().request(post);
 		}

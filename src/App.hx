@@ -157,17 +157,17 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 
 	public static function queryString2(params:Dynamic)
 	{
-		   var query = Reflect.fields(params)
-					.map(function(k){
-						 if (Std.is(Reflect.field(params, k), Array))
-						 {
-							return Reflect.field(params, k)
-							  .map(function(val){
-								  k.urlEncode() + '[]=' + val.urlEncode();
-							  })
-							  .join('&');
-					 }
-					 return k.urlEncode() + '=' + StringTools.urlEncode(Reflect.field(params, k));
+		var query = Reflect.fields(params)
+			.map(function(k){
+				 if (Std.is(Reflect.field(params, k), Array))
+				 {
+					return Reflect.field(params, k)
+					  .map(function(val){
+						  k.urlEncode() + '[]=' + val.urlEncode();
+					  })
+					  .join('&');
+				}
+			 return k.urlEncode() + '=' + StringTools.urlEncode(Reflect.field(params, k));
 		})
 		.join('&');
 		trace(query);

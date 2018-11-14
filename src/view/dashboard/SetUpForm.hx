@@ -106,85 +106,8 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 					sData.set('historyTrigger', Json.parse(data).data.rows);
 					setState(ReactUtil.copy(state, {data:sData}));				
 				}
-			});
-		/*
-		AjaxLoader.loadData(
-			'${App.config.api}', 
-			{
-				userName:props.userName,
-				jwt:props.jwt,
-				className:'admin.CreateUsers',
-				action:'fromViciDial'
-			},
-			function(data){
-				//trace(data); 
-				var rows:Array<Dynamic> = [].concat(data.rows);
-				if (rows.length > 0)
-				{
-					var sData:StringMap<Dynamic> = state.data;
-					
-					var i:Int = 1;
-					sData.set('userGroups', rows.map(function(row:Dynamic){
-						var retRow:Dynamic = {key:i++};
-						for(fn in dataDisplay["userGroups"].columns.keys()) {
-							Reflect.setField(retRow, fn, Reflect.field(row, fn));
-						}
-						return retRow;
-					}));
-					setState(ReactUtil.copy(state, {data:sData}));				
-				}
-			}
-		);	*/	
-			
+			});			
 	}
-	
-	/*public function importExternalUsers(ev:ReactEvent):Void
-	{
-		Out.dumpObjectTree(ev);
-		trace(untyped ev.currentTarget._targetInst);
-		requests.push(AjaxLoader.loadData(
-			'${App.config.api}', 
-			{
-				userName:props.userName,
-				jwt:props.jwt,
-				firstName:props.firstName,
-				className:'admin.CreateUsers',
-				action:'importExternal'
-			},
-			function(data){
-				if (data.length > 0)
-				{
-					trace(Json.parse(data));
-				}
-			}
-		));
-		
-		requests.push(AjaxLoader.loadData(
-			'${App.config.api}', 
-			{
-				userName:props.userName,
-				jwt:props.jwt,
-				className:'roles.Users',
-				action:'list',
-				filter:'active|TRUE',
-				dataSource:Serializer.run([
-					"users" => ["alias" => 'us',
-						"fields" => 'user_name,last_login'],
-					"user_groups" => [
-						"alias" => 'ug', 
-						"fields" => 'name', 
-						"jCond"=>'ug.id=us.user_group'],
-					"contacts" => [
-						"alias" => 'co', 
-						"fields" => 'first_name,last_name,email', 
-						"jCond"=>'contact=co.id']
-				])
-			},
-			function(data){
-				trace(data);
-			}
-		));
-	}*/
 	
     override public function render() 
 	{
@@ -200,36 +123,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 				null;					
 		}
 	}
-	
-    public function render2() {
-		trace(Reflect.fields(props));
-		trace(state.data == null);
-		if (state.data == null)
-			return null;
-		if (state.hasError)
-			return jsx('<h1>Fehler in ${Type.getClassName(Type.getClass(this))}.</h1>');		
-        return jsx('
-				<div className="columns  ">
-					<div className="tabComponentForm columns">
-							<div className="pBlock" >
-								${renderContent(state.data.get('historyTrigger'))}
-							</div>						
-					</div>
-					<SMenu className="menu" menuBlocks={state.sideMenu.menuBlocks}/>
-				</div>
-        ');
-    }	
-	//${displayDebug('userGroups')}<div className="pBlock" ></div>
-	/**
-							<div className="pBlock" >
-								Dummy
-							</div>
-							
-								<Table id="userGroups" ${...props} data = ${state.data.get('userGroups')}
-								dataState = ${dataDisplay["userGroups"]}
-								className = "is-striped is-fullwidth is-hoverable"/>	   
-	
-	**/
+
 	function renderContent(content:Array<String>):ReactFragment
 	{
 		if (content == null || content.length == 0)

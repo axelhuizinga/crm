@@ -26,7 +26,7 @@ typedef DataView = Map<String,FormField>;
 
 typedef DataRelation =
 {
-	data:DataSource,
+	source:DataSource,
 	view:DataView	
 }
 

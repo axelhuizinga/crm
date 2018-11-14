@@ -40,7 +40,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 {
 	var mounted:Bool;
 	var requests:Array<HttpJs>;	
-	var view:DataView;
+	//var dView:DataView;
 	var _menuItems:Array<SMItem>;
 	
 	public function new(?props:DataFormProps) 
@@ -163,7 +163,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	
 	function renderField(name:String, k:Int):ReactFragment
 	{
-		var formField:FormField = view[name];
+		var formField:FormField = state.fields[name];
 		if(k==0)
 			trace(state.handleChange);
 		//var value:String = (formField.displayFormat == null?state.values[name]:formField.displayFormat(state.values[name]));
@@ -183,12 +183,12 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	{
 		if(state.data.empty())
 			return null;
-		var fields:Iterator<String> = view.keys();
+		var fields:Iterator<String> = state.fields.keys();
 		var elements:Array<ReactFragment> = [];
 		var k:Int = 0;
 		for (field in fields)
 		{
-			elements.push(jsx('<div key=${k} className=${view[field].type==Hidden?null:"formField"} >${renderField(field, k++)}</div>'));
+			elements.push(jsx('<div key=${k} className=${state.fields[field].type==Hidden?null:"formField"} >${renderField(field, k++)}</div>'));
 		}
 		if (k > 0)
 		{

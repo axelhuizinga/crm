@@ -1,7 +1,6 @@
 package view.shared.io;
 
 import haxe.Unserializer;
-import model.AjaxLoader;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
@@ -9,6 +8,7 @@ import view.shared.SMenu;
 import view.shared.SMenu.SMItem;
 import view.shared.io.DataAccessForm;
 import view.shared.io.DataAccess.DataSource;
+import view.shared.io.Loader;
 
 
 /**
@@ -45,29 +45,24 @@ class DB extends DataAccessForm
 	public function createFieldList(ev:ReactEvent):Void
 	{
 		trace('hi :)');
-		requests.push(AjaxLoader.load(	
+		requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
 				userName:props.userName,
 				jwt:props.jwt,
 				className:'tools.DB',
 				action:'createFieldList',
+				update:'1'
 			},
-			function(data:Dynamic)
+			function(data:Map<String,String>)
 			{
 				trace(data);
-				if (data.error != null)
-					return;
-				var fieldNames:Map<String,String> = null;
-				try{
-					fieldNames = Unserializer.run(data);
-				}
-				catch (ex:Dynamic)
+				if (data.exists('error'))
 				{
-					trace(ex);
+					trace(data['error']);
 					return;
 				}				 
-				setState({data:fieldNames});
+				setState({data:data});
 		}));
 		trace(props.history);
 		trace(props.match);
