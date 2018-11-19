@@ -1,21 +1,27 @@
 package view.shared.io;
 
 import haxe.Constraints.Function;
+import haxe.ds.Either;
 import haxe.ds.Map;
 import haxe.ds.StringMap;
 import haxe.http.HttpJs;
+import js.html.DOMStringMap;
 import js.html.Event;
+import js.html.HTMLCollection;
 import js.html.InputElement;
 import js.html.InputEvent;
+import js.html.TableRowElement;
+import js.html.XMLHttpRequest;
 import react.addon.intl.IntlMixin;
 import view.shared.BaseForm.FormElement;
 import view.shared.BaseForm.FormField;
 import view.shared.BaseForm.FormState;
 import view.shared.BaseForm.FormProps;
+import view.shared.BaseForm.OneOf;
 import view.shared.SMenu.SMenuProps;
 import view.shared.SMenu.SMItem;
 import view.shared.io.DataAccess.DataView;
-
+import view.table.Table.DataState;
 import react.PureComponent.PureComponentOf;
 import react.ReactComponent.ReactFragment;
 import react.ReactMacro.jsx;
@@ -39,8 +45,9 @@ typedef DataFormProps =
 class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 {
 	var mounted:Bool;
-	var requests:Array<HttpJs>;	
-	//var dView:DataView;
+	var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;	
+	var dataAccess:DataAccess;
+	var dataDisplay:Map<String,DataState>;
 	var _menuItems:Array<SMItem>;
 	
 	public function new(?props:DataFormProps) 
@@ -56,8 +63,44 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 			hasError:false,
 			handleChange:setChangeHandler(),
 			handleSubmit:setSubmitHandler(),
-			sideMenu: props.sideMenu
+			sideMenu: props.sideMenu,
+			selectedRows:new Array()
 		};
+	}
+
+	function createStateValuesArray(data:Array<Map<String,String>>, view:DataView):Array<Map<String,String>>
+	{
+		return [ for (r in data) createStateValues(r, view) ];
+	}
+	
+	function createStateValues(data:Map<String,String>, view:DataView):Map<String,String>
+	{
+		var vState:Map<String,String> = new Map();
+		//trace(data.keys());
+		//trace(view.keys());
+		for (k in data.keys())
+		{
+			if(view.exists(k))
+			{
+				vState[k] = (view[k].displayFormat == null?data[k]:view[k].displayFormat(data[k]));
+			}
+		}
+		//trace(vState);
+		return vState;
+	}
+		
+	function selectedRowsMap():Array<Map<String,String>>
+	{
+		return [for (r in state.selectedRows) selectedRowMap(r)];
+	}
+	
+	function selectedRowMap(row:TableRowElement):Map<String,String>
+	{
+		var rM:Map<String,String> = [
+			for (c in row.cells)
+				c.dataset.name => c.innerHTML
+		];
+		return rM;
 	}
 	
 	function setChangeHandler():InputEvent->Void
@@ -82,20 +125,11 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		return null;
 	}
 	
-	function createStateValues(data:Map<String,String>, view:DataView):Map<String,String>
+	public function setStateFromChild(newState:FormState)
 	{
-		var vState:Map<String,String> = new Map();
-		//trace(data.keys());
-		//trace(view.keys());
-		for (k in data.keys())
-		{
-			if(view.exists(k))
-			{
-				vState[k] = (view[k].displayFormat == null?data[k]:view[k].displayFormat(data[k]));
-			}
-		}
-		//trace(vState);
-		return vState;
+		newState = ReactUtil.copy(newState, {sideMenu:updateMenu()});
+		setState(newState);
+		trace(newState);
 	}
 	
 	override public function componentDidMount():Void 
@@ -108,17 +142,16 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	{
 		mounted=false;
 		for (r in requests)
-			r.cancel();
+		{
+			switch(r)
+			{
+				//HttpJs
+				case Left(v): v.cancel();
+				//XMLHttpRequest
+				case Right(v): v.abort();
+			}			
+		}
 	}
-	
-	//componentWillReceiveProps 
-	/*
-	static function mapDispatchToProps(dispatch:Dispatch) {
-		trace(dispatch);
-		return {
-			submit: function(fState:FormState) return dispatch(AsyncUserAction.loginReq(fState))
-		};
-	}*/
 	
 	function handleChange(e:InputEvent)
 	{
@@ -166,14 +199,31 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		var formField:FormField = state.fields[name];
 		if(k==0)
 			trace(state.handleChange);
-		//var value:String = (formField.displayFormat == null?state.values[name]:formField.displayFormat(state.values[name]));
-		//trace('$field:$value');
+
 		var field = switch(formField.type)
 		{
 			case Hidden:
 				jsx('<input key={k++} name=${name} type="hidden" defaultValue=${state.values[name]} readOnly=${formField.readonly}/>');
 			default:
 				jsx('<input key={k++} name=${name} defaultValue=${state.values[name]} onChange=${formField.readonly?null:state.handleChange} readOnly=${formField.readonly}/>');
+			
+		};
+		return formField.type == Hidden? field:[jsx('<label key={k++}>${formField.label}</label>'), field];
+	}
+	
+	function renderField4Array(name:String, k:Int, r:Int):ReactFragment
+	{
+		var formField:FormField = state.fields[name];
+		if(k==0)
+			trace(state.handleChange);
+		trace(state.valuesArray[r]);
+		trace(formField);
+		var field = switch(formField.type)
+		{
+			case Hidden:
+				jsx('<input key={k++} name=${name} type="hidden" defaultValue=${state.valuesArray[r][name]} readOnly=${formField.readonly}/>');
+			default:
+				jsx('<input key={k++} name=${name} defaultValue=${state.valuesArray[r][name]} onChange=${formField.readonly?null:state.handleChange} readOnly=${formField.readonly}/>');
 			
 		};
 		return formField.type == Hidden? field:[jsx('<label key={k++}>${formField.label}</label>'), field];
@@ -195,6 +245,50 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 			/*add footer comps*/
 		}
 		return elements;
+	}
+	
+	function renderElementsArray():ReactFragment
+	{
+		if(state.dataTable.empty())
+			return null;
+		var formRows: Array<ReactFragment> = [];
+		var r:Int = 0;
+		for (dR in state.dataTable)
+		{
+			formRows.push(jsx('
+			<div className="formDataInRow" key=${r} >${renderElements4Array(r++)}</div>
+			'));
+		}
+		return formRows;
+	}
+	
+	function renderElements4Array(r:Int):ReactFragment
+	{
+		var fields:Iterator<String> = state.fields.keys();
+		var elements:Array<ReactFragment> = [];
+		var k:Int = 0;
+		for(field in fields)
+		{
+			elements.push(jsx('<div key=${k} className=${state.fields[field].type==Hidden?null:"formFieldInline"} >${renderField4Array(field, k++, r)}</div>'));
+		}
+		if (k > 0)
+		{
+			/*add footer comps*/
+		}
+		return elements;
+	}
+	
+	function renderModalForm():ReactFragment
+	{
+		return jsx('
+		<div className="modal is-active">
+		  <div className="modal-background"></div>
+		  <div className="modal-content">
+			${state.data.empty()? renderElementsArray():renderElements()}
+		  </div>
+		  <button className="modal-close is-large" aria-label="close"></button>
+		</div>
+		');
 	}
 	
 	static function localDate(d:String):String
@@ -230,5 +324,4 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		evt.preventDefault();
 		trace('your subclass has to override me to save anything!');
 	}
-	
 }

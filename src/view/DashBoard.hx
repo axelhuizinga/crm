@@ -197,7 +197,7 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 	{
 		//trace(rprops);<Route path="/dashboard/roles"  {...props} component=${RolesForm} />
 		//trace(Reflect.fields(rprops));
-		trace(rprops.children);
+		//trace(rprops.children);
 		return jsx('
 		<li className=${rprops.location.pathname.indexOf(rprops.to) == 0 ?"is-active":""}><NavLink to=${rprops.to}>${rprops.children}</NavLink></li>
 		');

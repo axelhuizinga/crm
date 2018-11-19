@@ -15,7 +15,6 @@ import view.shared.BaseForm.FormState;
    dataClassPath=><action>=>[?'alias',?'fields',?'jCond'] each=>String
 **/
    
-//typedef DataSource = Map<String,Map<String,Map<String,String>>>;
 typedef DataSource = Map<String,Map<String,String>>;
 
 /**

@@ -29,11 +29,11 @@ class Utils
 		
 	}
 	
-	public static function dynaMap(object:Dynamic):Map<String,Any>
+	public static function dynaMap(object:Dynamic):Map<String,String>
 	{
 		return [
 			for (k in Reflect.fields(object))
-				k => Reflect.field(object, k)
+				k => Std.string(Reflect.field(object, k))
 		];
 	}
 	

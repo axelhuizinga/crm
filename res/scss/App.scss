@@ -1,6 +1,5 @@
 @charset "utf-8";
-@import "../bulma/bulma.sass";
-@import "../../node_modules/bulma-extensions/bulma-accordion/dist/css/bulma-accordion.sass";
+
 
 /**
 @mixin tabsradius($br){
@@ -27,6 +26,7 @@ $lightRed: rgb(251, 220, 220);
 $primary: #601111;
 $darkSun: #fabf32;
 $lightSun: hsl(49, 95%, 99%);
+$modal-background-background-color: hsl(270, 10%, 80%);
 $sun: rgb(251, 220, 80);
 $borderHeadCol:0.6px dotted $lightGreen;
 $tabs-boxed-link-radius: 0.3rem;//@include tabsradius(5);
@@ -36,6 +36,9 @@ $tableHeaderHeight: 2rem;
 /**/
 $darkGradient1:linear-gradient($lightGreen,$darkGreen, $darkGreen);	 
 $darkGradient:linear-gradient($lightBlue 0%, $paleBlue 32%);	 
+
+@import "../bulma/bulma.sass";
+@import "../../node_modules/bulma-extensions/bulma-accordion/dist/css/bulma-accordion.sass";
 
 *{
 	border-collapse:collapse;
@@ -476,7 +479,21 @@ h1 {
 form{
 	margin:1rem auto;
 }
-.form60 .formField
+.form60, .modal-content
+{
+	display:flex;
+	margin: auto;
+	flex-direction:column;
+	width:auto;
+	align-content:center;
+}
+.formDataInRow
+{
+	flex-direction:row;
+	flex-wrap:nowrap;
+	display:flex;
+}
+.form60 .formField, .form60 .formDataInRow
 {
 	min-width:60rem;
 }
@@ -491,6 +508,12 @@ form{
 {
 	width:50%;
 }
+.formFieldInline
+{
+	flex:0 1 auto;
+	display:flex
+}
+
 /*side menu*/
 .is-right .menu
 {

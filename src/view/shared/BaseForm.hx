@@ -1,10 +1,14 @@
 package view.shared;
 
 import haxe.Constraints.Function;
+import haxe.ds.Either;
 import haxe.ds.StringMap;
 import haxe.http.HttpJs;
 import js.html.Event;
+import js.html.HTMLCollection;
 import js.html.InputEvent;
+import js.html.TableRowElement;
+import js.html.XMLHttpRequest;
 import me.cunity.debug.Out;
 import model.AppState;
 import react.ReactComponent.ReactComponentOf;
@@ -21,14 +25,16 @@ import view.shared.RouteTabProps;
 import view.shared.SMenu.SMItem;
 import view.shared.SMenu.SMenuProps;
 
-enum FormElement
+@:enum
+abstract FormElement(String)
 {
-	Hidden;
-	Input;
-	Checkbox;
-	Radio;
-	Select;
-	TextArea;
+	var Button = 'Button';
+	var Hidden = 'Hidden';
+	var Input = 'Input';
+	var Checkbox = 'Checkbox';
+	var Radio = 'Radio';
+	var Select = 'Select';
+	var TextArea = 'TextArea';
 }
 
 /**
@@ -75,23 +81,43 @@ typedef FormState =
 	?dataClassPath:String,
 	?viewClassPath:String,
 	?data:Map<String,Dynamic>,
+	?dataTable:Array<Map<String,Dynamic>>,
 	?clean:Bool,
+	?selectedRows:Array<TableRowElement>,
 	?handleChange:InputEvent->Void,
 	?handleSubmit:InputEvent->Void,	
 	?hasError:Bool,
 	?loading:Bool,
 	?fields:Map<String,FormField>,//VIEW FORMFIELDS
+	?valuesArray:Array<Map<String,String>>,//FORMATTED DISPLAY VALUES
 	?values:Map<String,String>,//FORMATTED DISPLAY VALUES
 	?sideMenu:SMenuProps,
 	?submitted:Bool,
 	?errors:StringMap<String>
 }
 
+abstract OneOf<A, B>(Either<A, B>) from Either<A, B> to Either<A, B> {
+  @:from inline static function fromA<A, B>(a:A):OneOf<A, B> {
+    return Left(a);
+  }
+  @:from inline static function fromB<A, B>(b:B):OneOf<A, B> {
+    return Right(b);  
+  } 
+    
+  @:to inline function toA():Null<A> return switch(this) {
+    case Left(a): a; 
+    default: null;
+  }
+  @:to inline function toB():Null<B> return switch(this) {
+    case Right(b): b;
+    default: null;
+  }
+}
 
 class BaseForm extends ReactComponentOf<FormProps, FormState> 
 {
 	var mounted:Bool;
-	var requests:Array<HttpJs>;	
+	var requests:Array<OneOf<HttpJs,XMLHttpRequest>>;	
 	//var sideMenu:SMenuProps;
 	var dataDisplay:Map<String,DataState>;//TODO: CHECK4INTEGRATION INTO state or props
 	
@@ -134,7 +160,15 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 	{
 		mounted=false;
 		for (r in requests)
-			r.cancel();
+		{
+			switch(r)
+			{
+				//HttpJs
+				case Left(v): v.cancel();
+				//XMLHttpRequest
+				case Right(v): v.abort();
+			}
+		}
 	}	
 	
     override function render() {

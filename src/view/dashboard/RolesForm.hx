@@ -5,11 +5,14 @@ import haxe.Serializer;
 import haxe.ds.StringMap;
 import haxe.Json;
 import haxe.http.HttpJs;
+import haxe.io.Bytes;
 import model.AjaxLoader;
 import model.AppState;
 import react.ReactComponent.ReactFragment;
 import react.ReactComponent;
+import shared.DbData;
 import view.shared.BaseForm;
+import view.shared.io.BinaryLoader;
 import view.table.Table;
 //import view.grid.Grid.DataCell;
 //import view.grid.Grid.SortDirection;
@@ -27,15 +30,9 @@ using Lambda;
  * @author axel@cunity.me
  */
 
-//@:expose('default')
 @:connect
 class RolesForm extends BaseForm
-{
-	//var requests:Array<HttpJs>;
-// StringMap<DataState>;
-	//user,pass,full_name,user_level,user_group,active
-		
-	var settings: ReactableSettings;
+{		
 	
 	public function new(?props:FormProps) 
 	{
@@ -202,7 +199,7 @@ class RolesForm extends BaseForm
 				}
 			}
 		));*/
-		requests.push(AjaxLoader.load(
+		requests.push(BinaryLoader.create(
 			'${App.config.api}', 
 			{
 				userName:props.userName,
@@ -223,11 +220,13 @@ class RolesForm extends BaseForm
 						"jCond"=>'contact=co.id']
 				])
 			},
-			function(data){
-				var dataRows:Array<Dynamic> = data.rows;
-				trace(Reflect.fields(dataRows[0]));
-				trace(dataRows[0].active);
-				setState({data:['userList'=>dataRows], loading:false});					
+			function(dBytes:Bytes)
+			{
+				trace(dBytes.toString());
+				var u:hxbit.Serializer = new hxbit.Serializer();
+				var data:DbData = u.unserialize(dBytes, DbData);
+				trace(Reflect.fields(data.dataRows[0]));
+				setState({data:['userList'=>data.dataRows], loading:false});					
 			}
 		));
 	}

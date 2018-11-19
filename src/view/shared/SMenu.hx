@@ -132,6 +132,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 	
 	override public function render()
 	{
+		trace('...');
 		return jsx('
 		<div className="is-right is-hidden-mobile">
 			<aside className="menu">

@@ -1,5 +1,6 @@
 -lib haxe-loader
 -lib history
+-lib hxbit
 -lib react
 -lib react-router-4
 -lib redux
@@ -9,6 +10,7 @@
 -lib event-types
 -lib js-object
 -lib tink_hxx
+-lib msgpack-haxe
 
 -cp ..\lib
 -cp lib

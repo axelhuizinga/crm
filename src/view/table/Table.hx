@@ -6,6 +6,7 @@ import haxe.ds.StringMap;
 import haxe.extern.EitherType;
 import js.html.DOMRect;
 import js.html.Element;
+import js.html.HTMLCollection;
 import js.html.MouseEvent;
 import js.html.Node;
 import js.html.NodeList;
@@ -21,6 +22,8 @@ import react.ReactComponent;
 import react.ReactComponent.*;
 import react.ReactMacro.jsx;
 import shared.Utils;
+import view.shared.BaseForm.FormState;
+import view.shared.io.DataAccessForm;
 using Lambda;
 
 /**
@@ -30,6 +33,7 @@ using Lambda;
 
 typedef DataState =
 {
+	?altGroupPos:Int,
 	columns:StringMap<DataColumn>,
 	?defaultSearch:StringMap<DataColumn>,
 	?search:StringMap<DataColumn>
@@ -113,20 +117,22 @@ typedef TableProps =
 	?onPageChange:SortProps->Void,
 	?onSort:Int->Void,
 	?pageButtonLimit:Int,
-	?sortable:EitherType<Bool, Array<EitherType<String,Dynamic>>>
+	?parentForm:DataAccessForm,
+	?sortable:EitherType<Bool, Array<EitherType<String,Dynamic>>>,
+	//?setStateFromChild:FormState->Void,
 }
 
 typedef TableState =
 {
 	?enteredRow:Int,
 	?selectedRow:Int,
-	?selectedRows:Array<Int>,
+	?selectedRows:Array<TableRowElement>,
 	?_rowCells:Array<Element>,
 	?_selectedCells:Array<Element>,
 	?_isSelected:Bool
 }
 
-class Table extends ReactComponentOf<TableProps, Dynamic>
+class Table extends ReactComponentOf<TableProps, TableState>
 {
 	var fieldNames:Array<String>;
 	var tableRef:ReactRef<TableElement>;
@@ -147,6 +153,7 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 			fieldNames.push(k);
 		}	
 		trace(fieldNames);
+		state = {selectedRows:[]};
 	}
 	
 	override public function render():ReactFragment
@@ -164,7 +171,7 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 			</section>
 			');					
 		}		
-		
+		//trace(props.data);
 		tableRef = React.createRef();
 		fixedHeader = React.createRef();
 		tHeadRef = React.createRef();
@@ -194,33 +201,11 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 				</div>
 				<div className="pager">
 				</div>
-			</div>		
-			
-							
+			</div>
 		');		
 	}
 			
 	/**
-	   <div className="fixed-table-container sort-decoration">
-				<div className="fixed-table-container-inner">		
-					<table className=${props.className} ref={tableRef}>
-						<thead>
-							<tr ref=${tHeadRef}>
-								${renderHeaderRow()}
-							</tr>
-						</thead>
-						<tbody>
-						${renderRows()}
-						</tbody>
-					</table>
-				</div>
-				<div className="header-background" >
-					<div className="thead" ref={fixedHeader}>
-					${renderHeaderDisplay()}
-					</div>				
-				</div>
-			</div>	
-	${renderHeaderRow()}
 	   @return
 	**/
 
@@ -271,11 +256,9 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 		return headerRow;
 	}	
 
-	function renderCells(rD:Dynamic, row:Int):ReactFragment
+	function renderCells(rdMap:Map<String,String>, row:Int):ReactFragment
 	{
-		@:arrayAccess
-		var rdMap:Map<String,Any> = Utils.dynaMap(rD);
-		trace(rdMap['active']);
+		//trace(rdMap);
 		var column:Int = 0;
 		var cells:Array<DataCell> = fieldNames.map(function(fN:String){
 					var columnDataState:DataColumn = props.dataState.columns.get(fN);
@@ -297,7 +280,7 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 			if (!cD.show)
 			 continue;
 			rCs.push(
-			jsx('<td className=${cD.className} key=${"r"+cD.pos.row+"c"+cD.pos.column} data-grow=${cD.flexGrow!=null?cD.flexGrow:null}>
+			jsx('<td className=${cD.className} data-name=${cD.name} key=${"r"+cD.pos.row+"c"+cD.pos.column} data-grow=${cD.flexGrow!=null?cD.flexGrow:null}>
 				${cD.dataDisplay}
 			</td>'));
 		}
@@ -322,16 +305,49 @@ class Table extends ReactComponentOf<TableProps, Dynamic>
 	
 	public function select(mEv:MouseEvent)
 	{
-		trace(mEv.target);
+		trace(mEv.altKey);
 		trace(mEv.currentTarget);
 		var htRow:TableRowElement = cast(mEv.currentTarget, TableRowElement);
-		htRow.classList.toggle('is-selected');
+		var rows:HTMLCollection = htRow.parentElement.children;
+		if (mEv.altKey)
+		{
+			selectAltGroup(props.dataState.altGroupPos, htRow);
+		}
+		else if (mEv.ctrlKey)
+		{			
+			for (r in rows)
+				r.classList.toggle('is-selected');
+		}
+		else 
+			htRow.classList.toggle('is-selected');
+		var selRows:Array<TableRowElement> = new Array();
+		for (r in rows)
+		{
+			if (r.classList.contains('is-selected'))
+				selRows.push(cast r);
+		}
+		setState({selectedRows:selRows});
+		props.parentForm.setStateFromChild({selectedRows:selRows});
+	}
+	
+	function selectAltGroup(altGroupPos:Int, cRow:TableRowElement):Void
+	{
+		var groupName:String = cRow.cells.item(altGroupPos).textContent;
+		var tEl:TableElement = cast cRow.parentElement;
+		for (i in 0...tEl.children.length)
+		{
+			var row:TableRowElement = cast tEl.children.item(i);
+			trace(row.cells.item(altGroupPos).nodeValue + '==' + groupName);
+			if(row.cells.item(altGroupPos).textContent==groupName)
+				row.classList.toggle('is-selected');
+		}
+		
 	}
 	
 	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)//,snapshot:Dynamic
 	{
 		trace(headerUpdated); 
-//#return;
+
 		if (tHeadRef != null)
 		{
 			if (headerUpdated)

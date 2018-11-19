@@ -41,34 +41,6 @@ typedef UserFilter = Dynamic;
 
 class User extends DataAccessForm
 {
-	public static var dataAccess:DataAccess = [
-		'edit' =>{
-			source:[
-				"users" => ["alias" => 'us',
-					"fields" => 'user_name,last_login'],
-			/*	"user_groups" => [
-					"alias" => 'ug',
-					"fields" => 'name',
-					"jCond"=>'ug.id=us.user_group'],*/
-				"contacts" => [
-					"alias" => 'co',
-					"fields" => 'first_name,last_name,email',
-					"jCond"=>'contact=co.id']
-			],
-			view:[
-				'user_name'=>{label:'UserID',readonly:true, type:Hidden},
-				'first_name'=>{label:'Vorname'},
-				'last_name'=>{label:'Name'},
-				'email' => {label:'Email'},
-				'last_login'=>{label:'Letze Anmeldung',readonly:true, displayFormat:DataAccessForm.localDate}
-			]
-		},
-		'save' => {
-			source:null,
-			view:null
-		}
-	];
-	
 	static var _instance:User;
 
 	public static function menuItems():Array<SMItem>
@@ -162,9 +134,7 @@ class User extends DataAccessForm
 		var sideMenu = state.sideMenu;
 		sideMenu.menuBlocks['user'].items = function() return _menuItems;
 		setState({sideMenu:sideMenu});
-		//super(props, state);
 		trace(_menuItems);
-		//trace(this.props);children={renderContent()}
 	}
 	
 	override function updateMenu():SMenuProps
@@ -180,6 +150,32 @@ class User extends DataAccessForm
 	
 	override function render()
 	{
+		if (dataAccess == null)
+		{
+			dataAccess = [
+				'edit' =>{
+					source:[
+						"users" => ["alias" => 'us',
+							"fields" => 'user_name,last_login'],
+						"contacts" => [
+							"alias" => 'co',
+							"fields" => 'first_name,last_name,email',
+							"jCond"=>'contact=co.id']
+					],
+					view:[
+						'user_name'=>{label:'UserID',readonly:true, type:Hidden},
+						'first_name'=>{label:'Vorname'},
+						'last_name'=>{label:'Name'},
+						'email' => {label:'Email'},
+						'last_login'=>{label:'Letze Anmeldung',readonly:true, displayFormat:DataAccessForm.localDate}
+					]
+				},
+				'save' => {
+					source:null,
+					view:null
+				}
+			];			
+		}
 		if(state.values != null)
 		trace(state.values);
 		return jsx('

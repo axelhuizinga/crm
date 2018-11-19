@@ -2,6 +2,7 @@ package view.shared.io;
 import haxe.ds.StringMap;
 import haxe.http.HttpJs;
 import haxe.Unserializer;
+//import org.msgpack.MsgPack;
 //import react.ReactComponent;
 
 /**
@@ -56,6 +57,7 @@ class Loader
 	{
 		if (response.length > 0)
 		{
+			trace(response);
 			var dataObj:Map<String,Dynamic> = null;
 			try{
 				dataObj = Unserializer.run(response);

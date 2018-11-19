@@ -111,7 +111,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 	
     override public function render() 
 	{
-		trace(state.sideMenu);
+		//trace(state.sideMenu);
 		return switch(state.viewClassPath)
 		{
 			case "shared.io.DB":

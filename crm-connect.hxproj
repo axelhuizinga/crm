@@ -32,12 +32,14 @@
   <haxelib>
     <library name="haxe-loader" />
     <library name="history" />
+    <library name="hxbit" />
     <library name="react" />
     <library name="react-router-4" />
     <library name="redux" />
     <library name="redux-connect" />
     <library name="CommentString" />
     <library name="tink_hxx" />
+    <library name="msgpack-haxe" />
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
