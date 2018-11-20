@@ -1,4 +1,6 @@
 import haxe.http.HttpJs;
+import js.html.ButtonElement;
+import js.html.DivElement;
 import view.shared.io.User;
 
 /**
@@ -53,12 +55,24 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	public static var config:Dynamic = Webpack.require('../bin/config.js').config;
 	public static var userName:String = Cookie.get('user.userName');
 	public static var jwt:String = Cookie.get('user.jwt');
-
+	public static var modalBox:DivElement = null;// React.createRef();
     public function new(?props:AppProps) 
 	{
 		super(props);
 		_app = this;
 		//props = { waiting:true};
+		//<div className="modal is-active"><div className="modal-background"></div><button className="modal-close is-large" aria-label="close"></button></div>
+		modalBox = Browser.document.createDivElement();
+		modalBox.className = 'modal';
+		var bg:DivElement = Browser.document.createDivElement();
+		bg.className = "modal-background";
+		modalBox.appendChild(bg);
+		var close:ButtonElement = Browser.document.createButtonElement();
+		close.className = "modal-close is-large";
+		close.setAttribute('aria-label', 'close');
+		modalBox.appendChild(close);
+		Browser.document.body.appendChild(modalBox);
+	trace(modalBox);
 		trace('userName:$userName jwt:$jwt ' + (!(App.userName == '' || App.jwt == '')?'Y':'N' ));
 		store = model.ApplicationStore.create();
 		state = store.getState();

@@ -90,19 +90,20 @@ class DB extends DataAccessForm
 		trace(state.selectedRows.length);
 		var data = selectedRowsMap();
 		trace(data);
-		setState({
+		renderModalForm({
+			data:new Map(),
 			dataTable:data,
 			viewClassPath:'shared.io.DB.editTableFields',			
 			fields:dataAccess['editTableFields'].view,
 			valuesArray:createStateValuesArray(data, dataAccess['editTableFields'].view), 
 			loading:false			
 		});	
+		
 	}
 	
 	public function showFieldList(ev:ReactEvent):Void
 	{
-		//requests.push(Loader.load(	
-		//
+		selectAllRows(true);
 		requests.push( BinaryLoader.create(
 			'${App.config.api}', 
 			{
@@ -115,7 +116,6 @@ class DB extends DataAccessForm
 			{
 				var u:hxbit.Serializer = new hxbit.Serializer();
 				var data:DbData = u.unserialize(dBytes, DbData);
-				//var data:Array<Map<String,Dynamic>> = u.unserialize(dBytes, DbData).dataRows;
 				if (data.dataRows.length==0)
 				{
 					var error:Map<String,Dynamic> = data.dataErrors;
@@ -173,7 +173,7 @@ class DB extends DataAccessForm
 					className = "is-striped is-hoverable" fullWidth={true}/>				
 				');	
 			case 'shared.io.DB.editTableFields':
-				renderModalForm();
+				null;
 			default:
 				null;
 		}
@@ -185,14 +185,12 @@ class DB extends DataAccessForm
 		if(state.values != null)
 			trace(state.values);
 		trace(props.match.params.segment);
-		//return null;
+		//return null;<form className="form60"></form>	
 		return jsx('
 		<div className="columns">
-			<div className="tabComponentForm"  >
-				<form className="form60">
-					${renderResults()}
-				</form>					
-			</div>
+			<form className="tabComponentForm"  >
+				${renderResults()}
+			</form>
 			<SMenu className="menu" menuBlocks={state.sideMenu.menuBlocks} />					
 		</div>	
 		');		

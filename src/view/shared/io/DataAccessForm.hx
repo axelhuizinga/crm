@@ -12,6 +12,7 @@ import js.html.InputElement;
 import js.html.InputEvent;
 import js.html.TableRowElement;
 import js.html.XMLHttpRequest;
+import react.ReactDOM;
 import react.addon.intl.IntlMixin;
 import view.shared.BaseForm.FormElement;
 import view.shared.BaseForm.FormField;
@@ -47,8 +48,10 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	var mounted:Bool;
 	var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;	
 	var dataAccess:DataAccess;
+	var formColElements:Map<String,Array<FormField>>;
 	var dataDisplay:Map<String,DataState>;
 	var _menuItems:Array<SMItem>;
+	var _fstate:FormState;
 	
 	public function new(?props:DataFormProps) 
 	{
@@ -169,6 +172,17 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		//trace(this.state);
 	}
 	
+	function selectAllRows(unselect:Bool = false)
+	{
+		for (r in state.selectedRows)
+		{
+			if (unselect)
+				r.classList.remove('is-selected');
+			else
+				r.classList.add('is-selected');
+		}
+	}
+	
 	function updateMenu():SMenuProps
 	{
 		trace('subclass task');
@@ -213,17 +227,17 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	
 	function renderField4Array(name:String, k:Int, r:Int):ReactFragment
 	{
-		var formField:FormField = state.fields[name];
+		var formField:FormField = _fstate.fields[name];
 		if(k==0)
-			trace(state.handleChange);
-		trace(state.valuesArray[r]);
+			trace(_fstate.handleChange);
+		trace(_fstate.valuesArray[r]);
 		trace(formField);
 		var field = switch(formField.type)
 		{
 			case Hidden:
-				jsx('<input key={k++} name=${name} type="hidden" defaultValue=${state.valuesArray[r][name]} readOnly=${formField.readonly}/>');
+				jsx('<input key={k++} name=${name} type="hidden" defaultValue=${_fstate.valuesArray[r][name]} readOnly=${formField.readonly}/>');
 			default:
-				jsx('<input key={k++} name=${name} defaultValue=${state.valuesArray[r][name]} onChange=${formField.readonly?null:state.handleChange} readOnly=${formField.readonly}/>');
+				jsx('<input key={k++} name=${name} defaultValue=${_fstate.valuesArray[r][name]} onChange=${formField.readonly?null:_fstate.handleChange} readOnly=${formField.readonly}/>');
 			
 		};
 		return formField.type == Hidden? field:[jsx('<label key={k++}>${formField.label}</label>'), field];
@@ -247,48 +261,105 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		return elements;
 	}
 	
-	function renderElementsArray():ReactFragment
+	function createElementsArray():ReactFragment
 	{
-		if(state.dataTable.empty())
+		if(_fstate.dataTable.empty())
 			return null;
+		formColElements = new StringMap();
+		addFormColumns();
 		var formRows: Array<ReactFragment> = [];
 		var r:Int = 0;
-		for (dR in state.dataTable)
+		for (dR in _fstate.dataTable)
 		{
+			var fields:Iterator<String> = _fstate.fields.keys();
+			for(field in fields)
+			{
+				var fF:FormField = _fstate.fields[field];
+				formColElements[field].push({
+					className:fF.className,
+					name:fF.name,
+					//?label:String,
+					value:fF.value,
+					//?dataBase:String, 
+					//?dataTable:String,
+					//?dataField:String,
+					displayFormat:fF.displayFormat,
+					type:fF.type,
+					readonly:fF.readonly,
+					required:fF.required,
+					handleChange:fF.handleChange,
+					placeholder:fF.placeholder,
+					validate:fF.validate
+				});
+			}/* 
 			formRows.push(jsx('
 			<div className="formDataInRow" key=${r} >${renderElements4Array(r++)}</div>
-			'));
+			'));*/
 		}
 		return formRows;
 	}
 	
-	function renderElements4Array(r:Int):ReactFragment
+	function addFormColumns():Void
 	{
-		var fields:Iterator<String> = state.fields.keys();
-		var elements:Array<ReactFragment> = [];
-		var k:Int = 0;
+		var fields:Iterator<String> = _fstate.fields.keys();
 		for(field in fields)
 		{
-			elements.push(jsx('<div key=${k} className=${state.fields[field].type==Hidden?null:"formFieldInline"} >${renderField4Array(field, k++, r)}</div>'));
+			formColElements[field] = new Array();
 		}
-		if (k > 0)
-		{
-			/*add footer comps*/
-		}
-		return elements;
 	}
 	
-	function renderModalForm():ReactFragment
+	function renderColumns():ReactFragment
 	{
-		return jsx('
-		<div className="modal is-active">
+		var fields:Iterator<String> = _fstate.fields.keys();
+		var cols:Array<ReactFragment> = [];
+		for(name in fields)
+		{
+			var formField:FormField = _fstate.fields[name];		
+			cols.push( jsx('<div className="column" data-name=${name} ></div>'));
+		}
+		return cols;
+	}
+	
+	function renderRows(r:Int):ReactFragment
+	{
+		
+		var elements:Array<ReactFragment> = [];
+		var k:Int = 0;
+		var fields:Iterator<String> = _fstate.fields.keys();
+		for(name in fields)
+		{
+			var formField:FormField = _fstate.fields[name];
+			if(k==0)
+				trace(_fstate.handleChange);
+			trace(_fstate.valuesArray[r]);
+			trace(formField);
+			elements.push( switch(formField.type)
+			{
+				case Hidden:
+					jsx('<input key={k++} name=${name} type="hidden" defaultValue=${_fstate.valuesArray[r][name]} readOnly=${formField.readonly}/>');
+				default:
+					jsx('<input key={k++} name=${name} defaultValue=${_fstate.valuesArray[r][name]} onChange=${formField.readonly?null:_fstate.handleChange} readOnly=${formField.readonly}/>');
+				
+			});		
+		}
+			//elements.push(jsx('<div key=${k} className=${formColElements[field].type==Hidden?null:"formFieldInline"} >${renderField4Array(field, k++, r)}</div>'));
+		
+		return elements;
+	}
+	//<div className="modal is-active">
+	function renderModalForm(fState:FormState):ReactFragment
+	{
+		_fstate = fState;
+		App.modalBox.classList.toggle('is-active');
+		return ReactDOM.render( jsx('
+		<>
 		  <div className="modal-background"></div>
+		  <button className="modal-close is-large" aria-label="close" onClick=${function(_)App.modalBox.classList.toggle("is-active")}></button>
 		  <div className="modal-content">
-			${state.data.empty()? renderElementsArray():renderElements()}
+			${_fstate.data.empty()? createElementsArray():renderElements()}
 		  </div>
-		  <button className="modal-close is-large" aria-label="close"></button>
-		</div>
-		');
+		 </> 
+		'), App.modalBox);
 	}
 	
 	static function localDate(d:String):String
