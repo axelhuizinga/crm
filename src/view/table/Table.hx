@@ -164,9 +164,9 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		if (props.data == null || props.data.length == 0)
 		{
 			return jsx('
-			<section className="hero is-alt">
-			  <div className="hero-body">
-			  <div className="loader"  style=${{width:'3rem', height:'3rem', margin:'auto', borderWidth:'0.58rem'}}/>
+			<section className="hero is-alt" style={{flexGrow:1}}>
+	<div className="hero-body" style={{flexGrow:0}}>
+			  <div className="loader"  style=${{width:'6rem', height:'6rem', margin:'auto', borderWidth:'0.64rem', alignSelf:'center'}}/>
 			  </div>
 			</section>
 			');					

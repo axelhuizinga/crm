@@ -27,6 +27,7 @@ $primary: #601111;
 $darkSun: #fabf32;
 $lightSun: hsl(49, 95%, 99%);
 $modal-background-background-color: hsl(270, 10%, 80%);
+$modal-content-width: auto;
 $sun: rgb(251, 220, 80);
 $borderHeadCol:0.6px dotted $lightGreen;
 $tabs-boxed-link-radius: 0.3rem;//@include tabsradius(5);
@@ -222,6 +223,14 @@ h1 {
 }*/
   
 /* END OF STICKY TABLE HEADER */
+
+/* flex */
+.column
+{
+	display:flex;
+	flex-direction:column;
+	flex-grow:0;
+}
 
 .formContainer
 {
@@ -434,6 +443,33 @@ h1 {
 {
 	flex:auto;
 }
+.modal-card-foot {
+	justify-content:center;
+}
+.modal-card-title
+{
+	text-align:center;
+}
+.modal-card-body{
+    display: flex;	
+	justify-content:center;
+}
+.modal-card-body.header{
+	/*padding:0.3rem 1.5rem 0px 1.5rem;*/
+	height: auto;
+	margin: -1rem 0px 0px;
+
+}
+.column.header{
+	flex-grow:1;
+	text-align:center;
+	font-weight:bold;
+	padding:0px;
+
+}
+
+
+/*	TABS NAV */
 .tabs{
 	overflow:visible;
 }

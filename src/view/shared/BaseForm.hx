@@ -93,7 +93,8 @@ typedef FormState =
 	?values:Map<String,String>,//FORMATTED DISPLAY VALUES
 	?sideMenu:SMenuProps,
 	?submitted:Bool,
-	?errors:StringMap<String>
+	?errors:StringMap<String>,
+	?title:String
 }
 
 abstract OneOf<A, B>(Either<A, B>) from Either<A, B> to Either<A, B> {

@@ -2,6 +2,7 @@ package view.shared.io;
 
 import haxe.Json;
 import haxe.Unserializer;
+import haxe.ds.StringMap;
 import haxe.io.Bytes;
 import hxbit.Serializer;
 import js.html.FormData;
@@ -14,7 +15,7 @@ import react.ReactUtil;
 import redux.IReducer;
 import shared.DbData;
 import view.dashboard.model.DBFormsModel;
-import view.shared.BaseForm.FormElement.*;
+import view.shared.BaseForm.FormField;
 import view.shared.SMenu;
 import view.shared.SMenu.SMItem;
 import view.shared.io.DataAccessForm;
@@ -89,14 +90,17 @@ class DB extends DataAccessForm
 	{
 		trace(state.selectedRows.length);
 		var data = selectedRowsMap();
-		trace(data);
+		var view:Map<String,FormField> = dataAccess['editTableFields'].view.copy();
+		trace(dataAccess['editTableFields'].view['table_name']);
+		//trace(data);
 		renderModalForm({
 			data:new Map(),
 			dataTable:data,
 			viewClassPath:'shared.io.DB.editTableFields',			
-			fields:dataAccess['editTableFields'].view,
+			fields:view,
 			valuesArray:createStateValuesArray(data, dataAccess['editTableFields'].view), 
-			loading:false			
+			loading:false,
+			title:'Tabellenfelder Eigenschaften'
 		});	
 		
 	}

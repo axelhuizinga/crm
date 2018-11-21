@@ -1,6 +1,7 @@
 package view.shared.io;
 
 import haxe.Constraints.Function;
+import haxe.EnumTools;
 import haxe.ds.Either;
 import haxe.ds.Map;
 import haxe.ds.StringMap;
@@ -12,8 +13,10 @@ import js.html.InputElement;
 import js.html.InputEvent;
 import js.html.TableRowElement;
 import js.html.XMLHttpRequest;
+import macrotools.AbstractEnumTools;
 import react.ReactDOM;
 import react.addon.intl.IntlMixin;
+import view.shared.BaseForm;
 import view.shared.BaseForm.FormElement;
 import view.shared.BaseForm.FormField;
 import view.shared.BaseForm.FormState;
@@ -132,7 +135,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	{
 		newState = ReactUtil.copy(newState, {sideMenu:updateMenu()});
 		setState(newState);
-		trace(newState);
+		//trace(newState);
 	}
 	
 	override public function componentDidMount():Void 
@@ -267,19 +270,20 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 			return null;
 		formColElements = new StringMap();
 		addFormColumns();
-		var formRows: Array<ReactFragment> = [];
-		var r:Int = 0;
 		for (dR in _fstate.dataTable)
 		{
 			var fields:Iterator<String> = _fstate.fields.keys();
-			for(field in fields)
+			for (name in fields)			
 			{
-				var fF:FormField = _fstate.fields[field];
-				formColElements[field].push({
+				if(_fstate.fields[name].type == FormElement.Hidden)
+					continue;
+				var fF:FormField = _fstate.fields[name];
+				//trace(name + '=>' + Std.string(fF));
+				formColElements[name].push({
 					className:fF.className,
-					name:fF.name,
+					name:name,
 					//?label:String,
-					value:fF.value,
+					value:fF.displayFormat == null?dR[name]: fF.displayFormat(dR[name]),
 					//?dataBase:String, 
 					//?dataTable:String,
 					//?dataField:String,
@@ -296,49 +300,69 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 			<div className="formDataInRow" key=${r} >${renderElements4Array(r++)}</div>
 			'));*/
 		}
-		return formRows;
+		return renderColumns();
 	}
 	
 	function addFormColumns():Void
 	{
 		var fields:Iterator<String> = _fstate.fields.keys();
-		for(field in fields)
+		for(name in fields)
 		{
-			formColElements[field] = new Array();
+			if (_fstate.fields[name].type == FormElement.Hidden)
+				continue;
+			formColElements[name] = new Array();
 		}
 	}
 	
 	function renderColumns():ReactFragment
 	{
-		var fields:Iterator<String> = _fstate.fields.keys();
+		var fields:Iterator<String> = formColElements.keys();
 		var cols:Array<ReactFragment> = [];
+		var col:Int = 0;
 		for(name in fields)
 		{
-			var formField:FormField = _fstate.fields[name];		
-			cols.push( jsx('<div className="column" data-name=${name} ></div>'));
+			cols.push( jsx('
+			<div key=${col++} className="column" data-name=${name}>${renderRows(name)}</div>'));
 		}
 		return cols;
 	}
 	
-	function renderRows(r:Int):ReactFragment
+	function renderColumnHeaders():ReactFragment
 	{
-		
-		var elements:Array<ReactFragment> = [];
-		var k:Int = 0;
 		var fields:Iterator<String> = _fstate.fields.keys();
+		var cols:Array<ReactFragment> = [];
 		for(name in fields)
 		{
-			var formField:FormField = _fstate.fields[name];
-			if(k==0)
-				trace(_fstate.handleChange);
+			if (_fstate.fields[name].type == FormElement.Hidden)
+				continue;			
+			var formField:FormField = _fstate.fields[name];		
+			cols.push( jsx('
+			<div className="column header" data-name=${name}>${formField.label}</div>'));
+		}
+		return cols;
+	}
+	
+	function renderRows(name:String):ReactFragment
+	{		
+		var elements:Array<ReactFragment> = [];
+		var r:Int = 0;
+		trace(name);
+		for (fF in formColElements[name])
+		{
 			trace(_fstate.valuesArray[r]);
-			trace(formField);
-			elements.push( switch(formField.type)
+			trace(fF);
+			elements.push(switch(fF.type)
 			{
 				case Hidden:
-					jsx('<input key={k++} name=${name} type="hidden" defaultValue=${_fstate.valuesArray[r][name]} readOnly=${formField.readonly}/>');
+					jsx('<input key={r++} name=${fF.name} type="hidden" defaultValue=${fF.value} readOnly=${fF.readonly}/>');
+				case BaseForm.FormElement.Select:
+					jsx('
+					<select name=${fF.name}>
+					${renderSelectOptions(fF.type)}
+					</select>
+					');
 				default:
-					jsx('<input key={k++} name=${name} defaultValue=${_fstate.valuesArray[r][name]} onChange=${formField.readonly?null:_fstate.handleChange} readOnly=${formField.readonly}/>');
+					jsx('<input key={r++} name=${fF.name} defaultValue=${fF.value} onChange=${fF.readonly?null:fF.handleChange} readOnly=${fF.readonly}/>');
 				
 			});		
 		}
@@ -346,21 +370,59 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		
 		return elements;
 	}
-	//<div className="modal is-active">
+	
+	function renderSelectOptions(sel:FormElement):ReactFragment
+	{
+		//var sel:String = cast fel;
+		var opts = AbstractEnumTools.getValues(FormElement);
+		trace(opts);
+		var rOpts:Array<ReactFragment> = [];
+		for (opt in opts)
+			rOpts.push(jsx('
+			<option selected=${opt==sel}>${cast opt}</option>
+			'));
+		return rOpts;
+		return null;
+	}
+	
+	function renderModalFormBodyHeader():ReactFragment
+	{
+		if (_fstate.dataTable == null || _fstate.dataTable.length == 0)
+			return null;
+		return jsx('
+		<section className="modal-card-body header">
+			<!-- Content Header ... -->
+			${renderColumnHeaders()}
+		</section>
+		');
+	}
+	
 	function renderModalForm(fState:FormState):ReactFragment
 	{
 		_fstate = fState;
 		App.modalBox.classList.toggle('is-active');
 		return ReactDOM.render( jsx('
 		<>
-		  <div className="modal-background"></div>
-		  <button className="modal-close is-large" aria-label="close" onClick=${function(_)App.modalBox.classList.toggle("is-active")}></button>
-		  <div className="modal-content">
-			${_fstate.data.empty()? createElementsArray():renderElements()}
-		  </div>
+		  <div className="modal-background" onClick=${function(_)App.modalBox.classList.toggle("is-active")}></div>
+		   <div className="modal-card">
+				<header class="modal-card-head">
+				  <p class="modal-card-title">${_fstate.title}</p>
+				  <button class="delete" aria-label="close" onClick=${function(_)App.modalBox.classList.toggle("is-active")}></button>
+				</header>
+				${renderModalFormBodyHeader()}
+				<section class="modal-card-body">
+				  <!-- Content ... -->
+						${_fstate.data.empty()? createElementsArray():renderElements()}
+				</section>
+				<footer class="modal-card-foot">
+				  <button class="button is-success" onClick=${function(_)App.modalBox.classList.toggle("is-active")}>Save changes</button>
+				  <button class="button" onClick=${function(_)App.modalBox.classList.toggle("is-active")}>Cancel</button>
+				</footer>
+			</div>
 		 </> 
 		'), App.modalBox);
 	}
+//  <button className="modal-close is-large is-success" aria-label="close" onClick=${function(_)App.modalBox.classList.toggle("is-active")}></button>
 	
 	static function localDate(d:String):String
 	{
