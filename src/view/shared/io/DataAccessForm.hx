@@ -6,7 +6,7 @@ import haxe.ds.Either;
 import haxe.ds.Map;
 import haxe.ds.StringMap;
 import haxe.http.HttpJs;
-import js.html.DOMStringMap;
+import js.html.*;
 import js.html.Event;
 import js.html.HTMLCollection;
 import js.html.InputElement;
@@ -29,6 +29,8 @@ import view.table.Table.DataState;
 import react.PureComponent.PureComponentOf;
 import react.ReactComponent.ReactFragment;
 import react.ReactMacro.jsx;
+import react.React;
+import react.ReactRef;
 import react.ReactUtil;
 import redux.Redux;
 
@@ -55,6 +57,8 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	var dataDisplay:Map<String,DataState>;
 	var _menuItems:Array<SMItem>;
 	var _fstate:FormState;
+	var modalFormTableHeader:ReactRef<DivElement>;
+	var modalFormTableBody:ReactRef<DivElement>;
 	
 	public function new(?props:DataFormProps) 
 	{
@@ -228,24 +232,6 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		return formField.type == Hidden? field:[jsx('<label key={k++}>${formField.label}</label>'), field];
 	}
 	
-	function renderField4Array(name:String, k:Int, r:Int):ReactFragment
-	{
-		var formField:FormField = _fstate.fields[name];
-		if(k==0)
-			trace(_fstate.handleChange);
-		trace(_fstate.valuesArray[r]);
-		trace(formField);
-		var field = switch(formField.type)
-		{
-			case Hidden:
-				jsx('<input key={k++} name=${name} type="hidden" defaultValue=${_fstate.valuesArray[r][name]} readOnly=${formField.readonly}/>');
-			default:
-				jsx('<input key={k++} name=${name} defaultValue=${_fstate.valuesArray[r][name]} onChange=${formField.readonly?null:_fstate.handleChange} readOnly=${formField.readonly}/>');
-			
-		};
-		return formField.type == Hidden? field:[jsx('<label key={k++}>${formField.label}</label>'), field];
-	}
-	
 	function renderElements():ReactFragment
 	{
 		if(state.data.empty())
@@ -256,10 +242,6 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		for (field in fields)
 		{
 			elements.push(jsx('<div key=${k} className=${state.fields[field].type==Hidden?null:"formField"} >${renderField(field, k++)}</div>'));
-		}
-		if (k > 0)
-		{
-			/*add footer comps*/
 		}
 		return elements;
 	}
@@ -295,10 +277,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 					placeholder:fF.placeholder,
 					validate:fF.validate
 				});
-			}/* 
-			formRows.push(jsx('
-			<div className="formDataInRow" key=${r} >${renderElements4Array(r++)}</div>
-			'));*/
+			}
 		}
 		return renderColumns();
 	}
@@ -322,7 +301,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		for(name in fields)
 		{
 			cols.push( jsx('
-			<div key=${col++} className="column" data-name=${name}>${renderRows(name)}</div>'));
+			<div key=${col++} className="col" data-name=${name}>${renderRows(name)}</div>'));
 		}
 		return cols;
 	}
@@ -337,44 +316,62 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 				continue;			
 			var formField:FormField = _fstate.fields[name];		
 			cols.push( jsx('
-			<div className="column header" data-name=${name}>${formField.label}</div>'));
+			<div className="col">
+			<div className="form-table-cell">
+			<div className="header" data-name=${name}>${formField.label}</div>
+			</div>
+			</div>
+			'));
 		}
 		return cols;
 	}
 	
+	function renderRowCells(fF:FormField,r:Int):ReactFragment
+	{
+		return switch(fF.type)
+			{
+				case Checkbox:
+					jsx('<input key={r} name=${fF.name} type="checkbox" defaultValue=${fF.value} readOnly=${fF.readonly}/>');
+				case Hidden:
+					jsx('<input key={r} name=${fF.name} type="hidden" defaultValue=${fF.value} readOnly=${fF.readonly}/>');
+				case BaseForm.FormElement.Select:
+					jsx('
+					<select name=${fF.name}>
+					${renderSelectOptions(fF.value)}
+					</select>
+					');
+				default:
+					jsx('<input key={r} name=${fF.name} defaultValue=${fF.value} onChange=${fF.readonly?null:fF.handleChange} readOnly=${fF.readonly}/>');
+				
+			}		
+	}
+//style=${{visibility:"collapse"}} 
 	function renderRows(name:String):ReactFragment
 	{		
 		var elements:Array<ReactFragment> = [];
 		var r:Int = 0;
 		trace(name);
+		elements.push( jsx('
+		<div className="form-table-cell">
+		<div className = "header" data-name= ${name}>${_fstate.fields[name].label}</div>
+		</div>'));		
 		for (fF in formColElements[name])
 		{
-			trace(_fstate.valuesArray[r]);
-			trace(fF);
-			elements.push(switch(fF.type)
-			{
-				case Hidden:
-					jsx('<input key={r++} name=${fF.name} type="hidden" defaultValue=${fF.value} readOnly=${fF.readonly}/>');
-				case BaseForm.FormElement.Select:
-					jsx('
-					<select name=${fF.name}>
-					${renderSelectOptions(fF.type)}
-					</select>
-					');
-				default:
-					jsx('<input key={r++} name=${fF.name} defaultValue=${fF.value} onChange=${fF.readonly?null:fF.handleChange} readOnly=${fF.readonly}/>');
-				
-			});		
-		}
-			//elements.push(jsx('<div key=${k} className=${formColElements[field].type==Hidden?null:"formFieldInline"} >${renderField4Array(field, k++, r)}</div>'));
-		
+			//trace(_fstate.valuesArray[r]);
+			//trace(fF);
+			elements.push(
+			jsx('
+			<div className="form-table-cell">${renderRowCells(fF, r++)}</div>
+			'));		
+		}		
 		return elements;
 	}
 	
-	function renderSelectOptions(sel:FormElement):ReactFragment
+	function renderSelectOptions(fel:FormElement):ReactFragment
 	{
-		//var sel:String = cast fel;
-		var opts = AbstractEnumTools.getValues(FormElement);
+		var sel:String = cast fel;
+		var opts:Array<String> = AbstractEnumTools.getValues(FormElement).map(function(fE:FormElement) return cast fE);
+		trace(sel);
 		trace(opts);
 		var rOpts:Array<ReactFragment> = [];
 		for (opt in opts)
@@ -382,15 +379,15 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 			<option selected=${opt==sel}>${cast opt}</option>
 			'));
 		return rOpts;
-		return null;
 	}
 	
 	function renderModalFormBodyHeader():ReactFragment
 	{
+		modalFormTableHeader = React.createRef();
 		if (_fstate.dataTable == null || _fstate.dataTable.length == 0)
 			return null;
 		return jsx('
-		<section className="modal-card-body header">
+		<section className="modal-card-body header" ref=${modalFormTableHeader}>
 			<!-- Content Header ... -->
 			${renderColumnHeaders()}
 		</section>
@@ -400,29 +397,45 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	function renderModalForm(fState:FormState):ReactFragment
 	{
 		_fstate = fState;
+		modalFormTableBody = React.createRef();
 		App.modalBox.classList.toggle('is-active');
 		return ReactDOM.render( jsx('
 		<>
 		  <div className="modal-background" onClick=${function(_)App.modalBox.classList.toggle("is-active")}></div>
 		   <div className="modal-card">
-				<header class="modal-card-head">
-				  <p class="modal-card-title">${_fstate.title}</p>
-				  <button class="delete" aria-label="close" onClick=${function(_)App.modalBox.classList.toggle("is-active")}></button>
+				<header className="modal-card-head">
+				  <p className="modal-card-title">${_fstate.title}</p>
+				  <button className="delete" aria-label="close" onClick=${function(_)App.modalBox.classList.toggle("is-active")}></button>
 				</header>
 				${renderModalFormBodyHeader()}
-				<section class="modal-card-body">
+				<section className="modal-card-body" ref=${modalFormTableBody}>
 				  <!-- Content ... -->
 						${_fstate.data.empty()? createElementsArray():renderElements()}
 				</section>
-				<footer class="modal-card-foot">
-				  <button class="button is-success" onClick=${function(_)App.modalBox.classList.toggle("is-active")}>Save changes</button>
-				  <button class="button" onClick=${function(_)App.modalBox.classList.toggle("is-active")}>Cancel</button>
+				<footer className="modal-card-foot">
+				  <button className = "button is-success" 
+				  onClick = ${function(_){
+					  if (_fstate.handleSubmit != null)
+					  {
+						  _fstate.handleSubmit({no:1});
+					  }
+					  App.modalBox.classList.toggle("is-active"); 					  
+				  }} > Speichern</button>
+				  <button className="button" onClick=${function(_)App.modalBox.classList.toggle("is-active")}>Schließen</button>
 				</footer>
 			</div>
 		 </> 
-		'), App.modalBox);
+		'), App.modalBox, adjustModalFormColumns);
 	}
-//  <button className="modal-close is-large is-success" aria-label="close" onClick=${function(_)App.modalBox.classList.toggle("is-active")}></button>
+
+	function adjustModalFormColumns()
+	{
+		trace(modalFormTableHeader);
+		for (child in modalFormTableHeader.current.children)
+		{
+			trace(child);
+		}
+	}
 	
 	static function localDate(d:String):String
 	{
@@ -430,9 +443,9 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		return DateTools.format(Date.fromString(d), "%d.%m.%Y %H:%M");
 	}
 	
-	function obj2map(obj:Dynamic, ?fields:Array<String>):Map<String,String>
+	function obj2map(obj:Dynamic, ?fields:Array<String>):Map<String,Dynamic>
 	{
-		var m:Map<String,String> = new Map();
+		var m:Map<String,Dynamic> = new Map();
 		if (fields == null)
 			fields = Reflect.fields(obj);
 		for (field in fields)
@@ -442,9 +455,9 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		return m;
 	}
 	
-	function filterMap(m:Map<String,String>, keys:Array<String>):Map<String,String>
+	function filterMap(m:Map<String,Dynamic>, keys:Array<String>):Map<String,Dynamic>
 	{
-		var r:Map<String,String> = new Map();
+		var r:Map<String,Dynamic> = new Map();
 		for (k in keys)
 		{
 			r.set(k, m.get(k));

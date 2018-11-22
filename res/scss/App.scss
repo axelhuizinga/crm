@@ -102,14 +102,18 @@ h1 {
 	padding:0rem 0.5rem 0rem;
 	border: 1px solid $primary;
 }
-.footer .column
+.footer .col
 {
-	padding:0px;
+	margin:0px 0.5rem;
+	flex-direction:row;
 }
 /*.footer .icon
 {
-	padding-top:0.35rem;
+	margin:0.35rem 0.5rem 0rem;
 }*/
+.footer .column{
+	padding:0rem;
+}
 .pBlock
 {
 	display:inline-block;
@@ -225,7 +229,7 @@ h1 {
 /* END OF STICKY TABLE HEADER */
 
 /* flex */
-.column
+.col
 {
 	display:flex;
 	flex-direction:column;
@@ -460,15 +464,25 @@ h1 {
 	margin: -1rem 0px 0px;
 
 }
-.column.header{
-	flex-grow:1;
+.header
+{
+	font-weight:bold;	
 	text-align:center;
-	font-weight:bold;
-	padding:0px;
-
 }
-
-
+/*.col.header{
+	flex-grow:1;
+	padding:0px;
+}*/
+.form-table-cell{
+	padding:0.1rem 0.3rem;
+	min-height:1.8rem;
+	display: flex;
+    align-items: center;
+    justify-items: center;
+}
+.form-table-cell *{
+	border:none;
+}
 /*	TABS NAV */
 .tabs{
 	overflow:visible;

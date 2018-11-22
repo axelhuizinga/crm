@@ -49,7 +49,7 @@ class DB extends DataAccessForm
 			{handler:createFieldList, label:'Create Fields Table', segment:'createFieldList'},
 			{handler:showFieldList, label:'Table Fields', segment:'showFieldList'},
 			{handler:editTableFields, label:'Bearbeiten', disabled:state.selectedRows.length==0},
-			{handler:save, label:'Speichern', disabled:state.clean},
+			//{handler:save, label:'Speichern', disabled:state.clean},
 		];
 		var sideMenu = state.sideMenu;
 		//trace(sideMenu);
@@ -96,6 +96,7 @@ class DB extends DataAccessForm
 		renderModalForm({
 			data:new Map(),
 			dataTable:data,
+			handleSubmit: saveTableFields,
 			viewClassPath:'shared.io.DB.editTableFields',			
 			fields:view,
 			valuesArray:createStateValuesArray(data, dataAccess['editTableFields'].view), 
@@ -103,6 +104,11 @@ class DB extends DataAccessForm
 			title:'Tabellenfelder Eigenschaften'
 		});	
 		
+	}
+	
+	public function saveTableFields(vA:Array<Map<String,Dynamic>>):Void
+	{
+		trace(vA);
 	}
 	
 	public function showFieldList(ev:ReactEvent):Void
@@ -155,6 +161,7 @@ class DB extends DataAccessForm
 					'field_name'=>{label:'Feldname',readonly:true},
 					'element'=>{label:'Eingabefeld', type:Select},
 					'readonly' => {label:'Readonly', type:Checkbox},
+					'required' => {label:'Required', type:Checkbox},
 					'any'=>{label:'Eigenschaften',readonly:true, type:Hidden}
 				]
 			},
@@ -208,7 +215,7 @@ class DB extends DataAccessForm
 			{handler:createFieldList, label:'Create Fields Table', segment:'createFieldList'},
 			{handler:showFieldList, label:'Table Fields', segment:'showFieldList'},
 			{handler:editTableFields, label:'Bearbeiten', disabled:state.selectedRows.length==0},
-			{handler:save, label:'Speichern', disabled:state.clean},
+			//{handler:saveTableFields, label:'Speichern', disabled:state.clean},
 		];
 		return sideMenu;
 	}

@@ -149,19 +149,6 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 		</>
 			');
 			
-		/**						<Switch></Switch>{...props} 	<section className="tabContent2path="/dashboard"> </section>	<Route path="/dashboard"  {...props} ><Route path="/dashboard/roles" ><RolesForm  {...props}/></Route>
-			<Switch>
-				<Route path="/dashboard/settings"  {...props} component={RolesForm}/>
-			</Switch>				
-		 * <Route path="/dashboard/settings"  {...props} ><SettingsForm/></Route>
-		 * </Route>
-		 * <Route path="/dashboard/roles"  {...props} >RolesForm</Route>
-				<Route path="/dashboard/settings"  {...props} component={SettingsForm} exact={true}/>
-				<Route path="/dashboard/settings"  {...props} component={SettingsForm} exact={true}/>
-
-		   			
-					<Route path="/dashboard/settings"  {...props} >Settings</Route>
-		**/
     }
 	
 	function internalRedirect()

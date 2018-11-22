@@ -47,7 +47,7 @@ typedef FormField =
 	?className:String,
 	?name:String,
 	?label:String,
-	?value:String,
+	?value:Dynamic,
 	?dataBase:String, 
 	?dataTable:String,
 	?dataField:String,
@@ -85,12 +85,12 @@ typedef FormState =
 	?clean:Bool,
 	?selectedRows:Array<TableRowElement>,
 	?handleChange:InputEvent->Void,
-	?handleSubmit:InputEvent->Void,	
+	?handleSubmit:Dynamic->Void,	
 	?hasError:Bool,
 	?loading:Bool,
 	?fields:Map<String,FormField>,//VIEW FORMFIELDS
 	?valuesArray:Array<Map<String,String>>,//FORMATTED DISPLAY VALUES
-	?values:Map<String,String>,//FORMATTED DISPLAY VALUES
+	?values:Map<String,Dynamic>,//FORMATTED DISPLAY VALUES
 	?sideMenu:SMenuProps,
 	?submitted:Bool,
 	?errors:StringMap<String>,
