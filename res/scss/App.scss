@@ -234,8 +234,13 @@ h1 {
 	display:flex;
 	flex-direction:column;
 	flex-grow:0;
+	align-items: center;
+	/*border: 0.5px solid grey;*/
 }
-
+/*.col:nth-of-type(even)
+{
+	background-color:grey;
+}*/
 .formContainer
 {
 	flex-grow:1;
@@ -456,12 +461,17 @@ h1 {
 }
 .modal-card-body{
     display: flex;	
+	padding:0px 0.8rem;
 	justify-content:center;
+}
+form.modal-card-body{
+	margin:0px
 }
 .modal-card-body.header{
 	/*padding:0.3rem 1.5rem 0px 1.5rem;*/
 	height: auto;
-	margin: -1rem 0px 0px;
+	min-height:1.8rem;
+	margin: 0px 0px;
 
 }
 .header

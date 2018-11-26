@@ -11,6 +11,7 @@ import react.ReactMacro.jsx;
 import view.shared.SMenu;
 import view.shared.io.DataAccessForm;
 import view.shared.io.DataAccess.DataSource;
+import view.table.Table;
 
 using Lambda;
 
@@ -79,7 +80,7 @@ class User extends DataAccessForm
 				//trace(Reflect.fields(dataRows[0]));
 				//trace(dataRows[0].active);
 				setState({
-					data:data[0],
+					//data:data[0],
 					fields:dataAccess['edit'].view,
 					values:createStateValues(data[0], 
 					dataAccess['edit'].view), loading:false});					
@@ -114,11 +115,11 @@ class User extends DataAccessForm
 				filter:'user_name|${props.userName}',
 				dataSource:Serializer.run(filterMap(state.values, skeys))
 			},
-			function(data:Map<String,Dynamic>)
+			function(data:Array<Map<String,String>>)
 			{
 				trace(data);
-
-				setState({data:data, loading:false});					
+				//props.parentForm.setStateFromChild({dataTable:data, loading:false});
+				//setState({dataTable:[data], loading:false});					
 			}
 		));
 	}
@@ -146,6 +147,21 @@ class User extends DataAccessForm
 			{handler:save, label:'Speichern', disabled:state.clean},
 		];
 		return sideMenu;
+	}
+	
+	function renderContent():ReactFragment
+	{
+		return switch(state.dataClassPath)
+		{
+			case "userList":
+				jsx('
+					<Table id="userList" data=${state.data == null? null:state.dataTable}
+					${...props} dataState = ${dataDisplay["userList"]} 
+					className = "is-striped is-hoverable" fullWidth={true}/>				
+				');				
+			default:
+				null;
+		}
 	}
 	
 	override function render()

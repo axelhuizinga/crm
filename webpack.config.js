@@ -5,7 +5,7 @@ const buildTarget = process.env.TARGET || 'web';
 
 const isProd = buildMode === 'production';
 
-const sourcemapsMode = isProd ? 'eval-source-map' : undefined;
+const sourcemapsMode = isProd ? 'hidden-source-map':'eval-source-map' ;
 
 // Plugins
 const webpack = require('webpack');
@@ -63,7 +63,7 @@ module.exports = {
 	https: true,
         port: 9000,
         overlay: true,
-        hot: true,	    
+        hot: true,  
 	inline: true,
 	headers: {
 		"Access-Control-Allow-Origin": "https://pitverwaltung.de",

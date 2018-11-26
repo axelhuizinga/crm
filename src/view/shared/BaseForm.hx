@@ -53,6 +53,7 @@ typedef FormField =
 	?dataField:String,
 	?displayFormat:Function,
 	?type:FormElement,
+	?primary:Bool,
 	?readonly:Bool,
 	?required:Bool,
 	?handleChange:InputEvent->Void,
@@ -80,8 +81,8 @@ typedef FormState =
 {
 	?dataClassPath:String,
 	?viewClassPath:String,
-	?data:Map<String,Dynamic>,
-	?dataTable:Array<Map<String,Dynamic>>,
+	?data:Map<String,String>,
+	?dataTable:Array<Map<String,String>>,
 	?clean:Bool,
 	?selectedRows:Array<TableRowElement>,
 	?handleChange:InputEvent->Void,

@@ -16,9 +16,11 @@
 -cp lib
 -cp src
 -js app.js
+-dce full
+#--no-traces
 -main Go
 
--D debug
+#-D debug
 -D react_hot
 -D modular_nomaps
 -D webpack

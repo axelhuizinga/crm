@@ -6,9 +6,12 @@ import haxe.ds.StringMap;
 import haxe.io.Bytes;
 import hxbit.Serializer;
 import js.html.FormData;
+import js.html.FormDataIterator;
 import js.html.HTMLCollection;
+import me.cunity.debug.Out;
 import org.msgpack.Decoder;
 import org.msgpack.MsgPack;
+import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
@@ -106,9 +109,44 @@ class DB extends DataAccessForm
 		
 	}
 	
-	public function saveTableFields(vA:Array<Map<String,Dynamic>>):Void
+	/*public function saveTableFields(elements:HTMLCollection):Void
 	{
-		trace(vA);
+		trace(elements.length);
+		for (el in elements)
+		{
+			trace(el);
+		}
+	}*/
+	
+	public function saveTableFields(vA:FormData):Void
+	{
+		Out.dumpObject(vA);
+		trace(vA.entries());
+		trace(vA.entries().next());
+		var keys:FormDataIterator = vA.keys();
+		var k:Dynamic = keys.next();
+		trace(k);
+		trace(keys.next());
+		/*var max:Int = 5;
+		while (k = keys.next() != null)
+		{
+			trace(k);
+			//trace(k.value + '=>');
+			if (max-- == 0)
+				break;
+			//trace(k.value + '=>' + vA.getAll(k.value));
+		}*/
+		var keys:Iterator<String> = dataAccess['editTableFields'].view.keys();
+		for (k in keys)
+		{
+			trace(k);
+			trace(vA.getAll(k));
+		}
+		/*vA.forEach(function(el:Dynamic){
+				trace(el);
+				trace(vA.getAll(el));
+			});
+		}*/
 	}
 	
 	public function showFieldList(ev:ReactEvent):Void
@@ -119,6 +157,7 @@ class DB extends DataAccessForm
 			{
 				userName:props.userName,
 				jwt:props.jwt,
+				fields:'id,table_name,field_name,readonly,element,"any"',
 				className:'tools.DB',
 				action:'createFieldList'
 			},
@@ -162,7 +201,8 @@ class DB extends DataAccessForm
 					'element'=>{label:'Eingabefeld', type:Select},
 					'readonly' => {label:'Readonly', type:Checkbox},
 					'required' => {label:'Required', type:Checkbox},
-					'any'=>{label:'Eigenschaften',readonly:true, type:Hidden}
+					'any' => {label:'Eigenschaften', readonly:true, type:Hidden},
+					'id' =>{primary:true, type:Hidden}
 				]
 			},
 			'saveTableFields' => {
@@ -172,7 +212,7 @@ class DB extends DataAccessForm
 		];			
 	}
 	
-	function renderResults()
+	function renderResults():ReactFragment
 	{
 		if (state.data != null)
 		return switch(state.viewClassPath)
@@ -191,7 +231,7 @@ class DB extends DataAccessForm
 		return null;
 	}
 	
-	override function render()
+	override function render():ReactFragment
 	{
 		if(state.values != null)
 			trace(state.values);

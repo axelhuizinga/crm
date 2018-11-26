@@ -22,7 +22,9 @@ import react.ReactComponent;
 import react.ReactComponent.*;
 import react.ReactMacro.jsx;
 import shared.Utils;
+import view.shared.BaseForm;
 import view.shared.BaseForm.FormState;
+import view.shared.BaseForm.OneOf;
 import view.shared.io.DataAccessForm;
 using Lambda;
 
@@ -102,7 +104,7 @@ typedef SortProps =
 typedef TableProps =
 {
 	?className:String,
-	data:Array<Dynamic>,
+	data:Array<Map<String,String>>,
 	dataState:DataState,
 	?disableHeader:Bool,
 	?oddClassName: String,
@@ -118,6 +120,7 @@ typedef TableProps =
 	?onSort:Int->Void,
 	?pageButtonLimit:Int,
 	?parentForm:DataAccessForm,
+	?primary:String,//defaults to 'id'
 	?sortable:EitherType<Bool, Array<EitherType<String,Dynamic>>>,
 	//?setStateFromChild:FormState->Void,
 }
@@ -259,6 +262,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	function renderCells(rdMap:Map<String,String>, row:Int):ReactFragment
 	{
 		//trace(rdMap);
+		trace(rdMap.remove('primary'));
 		var column:Int = 0;
 		var cells:Array<DataCell> = fieldNames.map(function(fN:String){
 					var columnDataState:DataColumn = props.dataState.columns.get(fN);
@@ -287,16 +291,20 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		return rCs;
 	}
 	
-	function renderRows(?dRows:Array<Dynamic>):ReactFragment
+	function renderRows(?dRows:Array<Map<String,String>>):ReactFragment
 	{
 		if (dRows == null)
 			dRows = props.data;
 		var dRs:Array<ReactFragment> = [];
 		var row:Int = 0;
 		for (dR in dRows)
-		{			
+		{
+			var primary:String = (props.primary!=null && props.primary.length > 0?props.primary:'id');
+			var id:String = (dR.exists(primary)? 'id=${dR.get(primary)} ':'');
+			if (row == 1)
+				trace(dR);
 			dRs.push(
-			jsx('<tr key=${"r"+row} ref=${row==0?rowRef:null} onClick={select}>
+			jsx('<tr id=${id} key=${"r"+row} ref=${row==0?rowRef:null} onClick={select}>
 				${renderCells(dR, row++)}				
 			</tr>'));
 		}//

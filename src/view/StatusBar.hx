@@ -5,7 +5,6 @@ import haxe.Timer;
 import bulma_components.*;
 import react.Partial;
 import react.ReactComponent.ReactComponentOf;
-import react.ReactComponentMacro;
 import react.ReactDateTimeClock;
 import view.shared.io.User;
 

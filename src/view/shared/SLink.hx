@@ -4,7 +4,7 @@ import haxe.Constraints.Function;
 import action.LocationAction;
 import model.AppState;
 import react.ReactComponent.ReactComponentOfProps;
-import react.ReactMacro;
+import react.ReactMacro.jsx;
 import react.ReactMouseEvent;
 import react.ReactPropTypes;
 import react.router.NavLink;
@@ -59,7 +59,7 @@ class SLink extends ReactComponentOfProps<SLinkProps>
 	
 	override public function render()
 	{
-		return  ReactMacro.jsx('<a href={props.to} onClick={handleClick} >{props.children}</a>');
+		return  jsx('<a href={props.to} onClick={handleClick} >{props.children}</a>');
 	}
 }
 	

@@ -336,7 +336,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 					jsx('<input key={r} name=${fF.name} type="hidden" defaultValue=${fF.value} readOnly=${fF.readonly}/>');
 				case BaseForm.FormElement.Select:
 					jsx('
-					<select name=${fF.name}>
+					<select name=${fF.name} defaultValue=${fF.value}>
 					${renderSelectOptions(fF.value)}
 					</select>
 					');
@@ -352,7 +352,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		var r:Int = 0;
 		trace(name);
 		elements.push( jsx('
-		<div className="form-table-cell">
+		<div className="form-table-cell" style=${{minHeight:"0px",height:"0px",overflow:"hidden",padding:"0px 0.3rem"}}>
 		<div className = "header" data-name= ${name}>${_fstate.fields[name].label}</div>
 		</div>'));		
 		for (fF in formColElements[name])
@@ -371,12 +371,11 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	{
 		var sel:String = cast fel;
 		var opts:Array<String> = AbstractEnumTools.getValues(FormElement).map(function(fE:FormElement) return cast fE);
-		trace(sel);
-		trace(opts);
+		//trace(sel);		trace(opts);selected=${opt==sel}
 		var rOpts:Array<ReactFragment> = [];
 		for (opt in opts)
 			rOpts.push(jsx('
-			<option selected=${opt==sel}>${cast opt}</option>
+			<option >$opt</option>
 			'));
 		return rOpts;
 	}
@@ -408,16 +407,20 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 				  <button className="delete" aria-label="close" onClick=${function(_)App.modalBox.classList.toggle("is-active")}></button>
 				</header>
 				${renderModalFormBodyHeader()}
-				<section className="modal-card-body" ref=${modalFormTableBody}>
+				<form className="modal-card-body" ref=${modalFormTableBody}>
 				  <!-- Content ... -->
 						${_fstate.data.empty()? createElementsArray():renderElements()}
-				</section>
+				</form>
 				<footer className="modal-card-foot">
 				  <button className = "button is-success" 
 				  onClick = ${function(_){
 					  if (_fstate.handleSubmit != null)
 					  {
-						  _fstate.handleSubmit({no:1});
+						  var fD:FormData = new FormData(cast modalFormTableBody.current);
+						  trace(fD);
+						  _fstate.handleSubmit(fD);
+						  //_fstate.handleSubmit(cast modalFormTableBody.current);
+						  //_fstate.handleSubmit(cast(modalFormTableBody.current, js.html.FormElement).elements);
 					  }
 					  App.modalBox.classList.toggle("is-active"); 					  
 				  }} > Speichern</button>
@@ -431,9 +434,15 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	function adjustModalFormColumns()
 	{
 		trace(modalFormTableHeader);
-		for (child in modalFormTableHeader.current.children)
+		var bodyCols:HTMLCollection = modalFormTableBody.current.children;
+		var headerCols:HTMLCollection = modalFormTableHeader.current.children;
+		var i:Int = 0;
+		for (child in bodyCols)
 		{
-			trace(child);
+			//trace(child.classList + ':' + child.offsetWidth);
+			headerCols.item(i++).setAttribute('style', 'width:' + child.offsetWidth + 'px');
+			//child.setAttribute('style', 'width:' + child.offsetWidth + 'px');
+			//trace('${"set child" + i + "to:" + child.offsetWidth + "=>"}'+ headerCols[i-1].offsetWidth);
 		}
 	}
 	

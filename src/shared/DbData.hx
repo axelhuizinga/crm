@@ -13,7 +13,7 @@ class DbData implements Serializable
 
 	@:s public var dataErrors:Map<String,Dynamic>;
 	@:s public var dataInfo:Map<String,Dynamic>;
-	@:s public var dataRows:Array<Map<String,Dynamic>>;
+	@:s public var dataRows:Array<Map<String,String>>;
 	
 	public function new() 
 	{
