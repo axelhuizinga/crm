@@ -144,6 +144,7 @@ class SettingsForm extends BaseForm
 	}	
 	
 	override public function render() {
+        trace(state.viewClassPath);
         return switch(state.viewClassPath)
 		{
 			case "shared.io.User":

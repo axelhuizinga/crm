@@ -55,6 +55,7 @@ typedef SMenuProps =
 	?basePath:String,
 	?hidden:Bool,
 	?menuBlocks:Map<String,SMenuBlock>,
+	//?items:Map<String,SMItem>,
 	?items:Array<SMItem>,
 	?right:Bool		
 }
@@ -62,9 +63,15 @@ typedef SMenuProps =
 typedef SMenuState =
 {
 	?hidden:Bool,
-	?disabled:Bool
+	?disabled:Bool,
+	?interactionStates:Map<String,InteractionState>
 }
 
+typedef  InteractionState =
+{
+	var disables:Array<String>;
+	var enables:Array<String>;
+}
 
 class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 
@@ -110,7 +117,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 		props.menuBlocks.iter(function(block:SMenuBlock) panels.push( jsx('	
 			<div className="panel" key=${i}>
 			  <label className="panel-heading" htmlFor=${"sMenuPanel-"+i}>${block.label}</label>
-			  <div className=${"panel-block body-"+(i++)} children=${renderItems(block.items)}/>
+			  <div className=${"panel-block body-"+(i++)} children=${renderItems(block.items())}/>
 			</div>		
 		')));
 		return panels;
@@ -118,16 +125,18 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 	
 	// <button className="toggle" aria-label="toggle"></button>
 	
-	function renderItems(_items:Void->Array<SMItem>):ReactFragment
+	function renderItems(items:Array<SMItem>):ReactFragment
+	//function renderItems(items:Void->Map<String,SMItem>):ReactFragment
 	{
-		var items:Array<SMItem> = _items();
+		//var items:Map<String,SMItem> = _items();
+		//var items:Array<SMItem> = _items();
 		//trace(items);
 		if (items.length == 0)
 			return null;
 		var i:Int = 1;
 		return items.map(function(item:SMItem) return jsx('
 			<Button key=${i++} onClick=${item.handler} disabled=${item.disabled}>${item.label}</Button>	
-		'));
+		')).array();
 	}
 	
 	override public function render()

@@ -22,6 +22,7 @@ class SettingsFormModel
 		'user_name'=>{label:'Benutzer'},
 		'first_name'=>{label:'Vorname'},
 		'last_name'=>{label:'Name'},
+		'email'=>{label:'Email'},		
 		'name'=>{label:'UserGroup'},		
 		'active' => {label:'Aktiv', className:'', 'type':FormElement.Checkbox},
 		'user_id' => {'type':FormElement.Hidden}

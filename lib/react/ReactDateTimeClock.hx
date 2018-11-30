@@ -13,9 +13,9 @@ import react.DateTimePicker;
 
 typedef DateTimeProps =
 {
-	className:String,
-	locale:String,
-	input:Bool,
+	?className:String,
+	?locale:String,
+	?input:Bool,
 	value:Any
 }
 

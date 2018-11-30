@@ -22,6 +22,7 @@ import view.shared.io.DataAccess;
 
 import view.table.Table.DataState;
 import view.shared.RouteTabProps;
+import view.shared.SMenu.InteractionState;
 import view.shared.SMenu.SMItem;
 import view.shared.SMenu.SMenuProps;
 
@@ -31,6 +32,7 @@ abstract FormElement(String)
 	var Button = 'Button';
 	var Hidden = 'Hidden';
 	var Input = 'Input';
+	var Password = 'Input';
 	var Checkbox = 'Checkbox';
 	var Radio = 'Radio';
 	var Select = 'Select';
@@ -198,7 +200,13 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 		}
 	}
 	
-	/*function displayDebug(fieldName:String):ReactFragment
+	/*public static function addInteractionState(name:String, iS:InteractionState):Void
+	{
+		trace(name + ':' + iS);
+		interactionStates.set(name, iS);
+	}
+	
+	function displayDebug(fieldName:String):ReactFragment
 	{
 		//trace (state.values.get(fieldName));
 		if (state.values.exists(fieldName))

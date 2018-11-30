@@ -15,6 +15,7 @@ class RolesFormModel
 		'user_name'=>{label:'Benutzer'},
 		'first_name'=>{label:'Vorname', flexGrow:0},
 		'last_name'=>{label:'Name', flexGrow:0},
+		'email'=>{label:'Email'},
 		'name'=>{label:'UserGroup', flexGrow:1},		
 		'active' => {label:'Aktiv', className:'cRight', 
 			cellFormat:function(v:Bool) return (v?'J':'N')},

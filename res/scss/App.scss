@@ -447,6 +447,11 @@ h1 {
 
 .error, .error::placeholder { color: red}
 
+.required:after{
+	color:red;
+	content:" *";
+}
+
 /*bulma overrides*/
 .is-fullheight
 {

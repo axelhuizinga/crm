@@ -59,6 +59,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	var _fstate:FormState;
 	var modalFormTableHeader:ReactRef<DivElement>;
 	var modalFormTableBody:ReactRef<DivElement>;
+	var autoFocus:ReactRef<InputElement>;
 	
 	public function new(?props:DataFormProps) 
 	{
@@ -166,7 +167,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	function handleChange(e:InputEvent)
 	{
 		var t:InputElement = cast e.target;
-		trace('${t.name} ${t.value}');
+		//trace('${t.name} ${t.value}');
 		var vs = state.values;
 		trace(vs.toString());
 		vs[t.name] = t.value;
