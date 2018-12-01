@@ -3,6 +3,8 @@ package action.async;
 //import buddy.internal.sys.Js;
 
 import haxe.Json;
+import haxe.http.HttpJs;
+import haxe.io.Bytes;
 import js.Cookie;
 import js.Syntax;
 import js.html.FormData;
@@ -13,8 +15,11 @@ import js.html.XMLHttpRequest;
 
 import redux.Redux.Dispatch;
 import redux.thunk.Thunk;
+import shared.DbData;
 import view.LoginForm.LoginState;
 import view.shared.BaseForm.FormState;
+import view.shared.BaseForm.OneOf;
+import view.shared.io.BinaryLoader;
 /**
  * ...
  * @author axel@cunity.me
@@ -22,25 +27,48 @@ import view.shared.BaseForm.FormState;
 
 class AsyncUserAction 
 {
-	/*public static function submitReq(props:FormState) 
+	public static function loginReq(props:LoginState, ?requests:Array<OneOf<HttpJs, XMLHttpRequest>>) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->model.AppState){
 			trace(props);
 			//trace(getState());
-			var fD:FormData = new FormData();
-			fD.append('action', 'login');
-			fD.append('className', 'auth.User');
-			return dispatch(AppAction.LoginError({userName:props.userName, loginError:'?'}));
-			fD.append('userName', props.userName);
-			fD.append('pass', props.pass);
 			if (props.pass == '' || props.userName == '') 
 				return dispatch(AppAction.LoginError({userName:props.userName, loginError:'Passwort und UserName eintragen!'}));
-			var req:XMLHttpRequest = new XMLHttpRequest();//,headers: {'Content-Type': 'application/json; charset=utf-8'}'Content-Type': 'application/json; charset=utf-8',
-			req.open('GET', '${props.api}?' + App.queryString2({action:'login', className:'auth.User', userName:props.userName, pass: props.pass}));
+			var spin:Dynamic = dispatch(AppAction.LoginWait);
+			trace(spin);
+			var bL:XMLHttpRequest = BinaryLoader.create(
+			'${App.config.api}', 
+			{				
+				userName:props.userName,
+				jwt:props.jwt,
+				className:'auth.User',
+				action:'login',
+				pass:props.pass
+			},
+			function(dBytes:Bytes)
+			{
+				//trace(dBytes.toString());
+				var u:hxbit.Serializer = new hxbit.Serializer();
+				var data:DbData = u.unserialize(dBytes, DbData);
+				if (data.dataErrors.keys().hasNext())
+				{
+					return dispatch(AppAction.LoginError({userName:props.userName, loginError:data.dataErrors.iterator().next()}));
+				}
+				Cookie.set('user.userName', props.userName, null, '/');
+				Cookie.set('user.jwt', data.dataInfo['jwt'], null, '/');
+				trace(Cookie.get('user.jwt'));
+				return dispatch(AppAction.LoginComplete(
+					{userName:props.userName, jwt:data.dataInfo['jwt'], waiting:false}));				
+			});
+			if (requests != null)
+			{
+				requests.push(bL);
+			}
+			return null;
 		});
-	}*/
-
-	public static function loginReq(props:LoginState) 
+	}
+	
+	public static function loginReq0(props:LoginState) 
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->model.AppState){
 			//trace(props);
@@ -86,6 +114,7 @@ class AsyncUserAction
 			return spin;
 		});
 	}
+	
 	
 	public static function fetched(d:Dynamic):Void
 	{

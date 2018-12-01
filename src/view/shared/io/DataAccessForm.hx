@@ -87,8 +87,8 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	function createStateValues(data:Map<String,String>, view:DataView):Map<String,String>
 	{
 		var vState:Map<String,String> = new Map();
-		//trace(data.keys());
-		//trace(view.keys());
+		trace(data.keys());
+		trace(view.keys());
 		for (k in data.keys())
 		{
 			if(view.exists(k))
@@ -169,8 +169,9 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		var t:InputElement = cast e.target;
 		//trace('${t.name} ${t.value}');
 		var vs = state.values;
-		trace(vs.toString());
+		//trace(vs.toString());
 		vs[t.name] = t.value;
+		trace(vs.toString());
 		//t.className = 'input';
 		//Reflect.setField(s, t.name, t.value);
 		//trace(props.dispatch == App.store.dispatch);

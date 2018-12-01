@@ -141,7 +141,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 				  </h2>
 				</div>
 				<div className="form2">
-				  <form name="form" onSubmit={handleSubmit} autoComplete="new-password" >
+				  <form name="form" onSubmit={handleSubmit}  >
 					<div className="formField">
 						<label className="userIcon" forhtml="login-username">
 							<span className="hidden">User ID</span></label>
@@ -164,14 +164,14 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 		  </div>
 		</section>		
 		');
-	}
+	}//autoComplete="new-pass"
 	
 	function errorStyle(name:String):String
 	{
 		var eStyle = "form-input " + switch(name)
 		{
 			case "pass":
-				var res = props.loginError == "password"?"input error":"input";
+				var res = props.loginError == "pass"?"input error":"input";
 				trace(res);
 				res;
 				

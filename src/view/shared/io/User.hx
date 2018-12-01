@@ -67,17 +67,18 @@ class User extends DataAccessForm
 				{
 					source:[
 						"users" => [
-							"fields" => 'user_name,change_pass_required,password']
+							"fields" => 'user_name,change_pass_required,pass']
 					],
 					view:[
 						'user_name' => {type:Hidden},
-						'password' =>{type:Password}
+						'pass' => {type:Password},
+						'new_pass' => {type:Password}
 					]
 				},
 				'edit' =>{
 					source:[
 						"users" => ["alias" => 'us',
-							"fields" => 'user_name,last_login,change_pass_required,password'],
+							"fields" => 'user_name,last_login,change_pass_required,pass'],
 						"contacts" => [
 							"alias" => 'co',
 							"fields" => 'first_name,last_name,email',
@@ -85,7 +86,7 @@ class User extends DataAccessForm
 					],
 					view:[
 						'user_name'=>{label:'UserID',readonly:true, type:Hidden},
-						'password'=>{label:'Passwort', type:Hidden},
+						'pass'=>{label:'Passwort', type:Hidden},
 						'first_name'=>{label:'Vorname'},
 						'last_name'=>{label:'Name'},
 						'email' => {label:'Email'},
@@ -122,9 +123,9 @@ class User extends DataAccessForm
 				if (data.dataRows[0]['change_pass_required'] == '1')
 				{
 					setState({data:data.dataRows[0], dataClassPath:'changePassword',
-					fields:dataAccess['edit'].view,
+					fields:dataAccess['changePassword'].view,
 					values:createStateValues(data.dataRows[0], 
-					dataAccess['edit'].view), loading:false});					
+					dataAccess['changePassword'].view), loading:false});					
 				}
 				else setState({data:data.dataRows[0], dataClassPath:'edit',
 					fields:dataAccess['edit'].view,
@@ -136,8 +137,8 @@ class User extends DataAccessForm
 	
 	override public function componentDidUpdate(prevProps:DataFormProps, prevState:FormState):Void 
 	{
-		trace(prevProps);
-		trace(prevState);
+		//trace(prevProps);
+		//trace(prevState);
 		if(autoFocus!=null)
 		autoFocus.current.focus();
 	}
@@ -145,6 +146,9 @@ class User extends DataAccessForm
 	public function changePassword(ev:ReactEvent):Void
 	{
 		trace(dataAccess['changePassword'].source);
+		trace(state.values);
+		if (state.values['new_pass'] != state.values['new_pass_confirm'])
+		return setState({errors:['new_pass'=>'Passwörter stimmen nicht überein!']});
 		requests.push(BinaryLoader.create(
 			'${App.config.api}', 
 			{				
@@ -153,12 +157,12 @@ class User extends DataAccessForm
 				className:'auth.User',
 				action:'changePassword',
 				filter:'user_name|${props.userName}',
-				values:['password'=>state.values['password']],
+				values:['pass'=>state.values['pass'],'new_pass'=>state.values['new_pass']],
 				dataSource:Serializer.run(dataAccess['changePassword'].source)				
 			},
 			function(dBytes:Bytes)
 			{
-				//trace(dBytes.toString());
+				trace(dBytes.toString());
 				var u:hxbit.Serializer = new hxbit.Serializer();
 				var data:DbData = u.unserialize(dBytes, DbData);
 				trace(Reflect.fields(data));
@@ -268,7 +272,7 @@ class User extends DataAccessForm
 	
 	override function updateMenu():SMenuProps
 	{
-		trace('${Type.getClassName(Type.getClass(this))} task');
+		//trace('${Type.getClassName(Type.getClass(this))} task');
 		//dataClassPath:'changePassword'
 		var sideMenu = state.sideMenu;
 		sideMenu.menuBlocks['user'].items = function() return [
@@ -290,15 +294,15 @@ class User extends DataAccessForm
 				<>
 					<div className="formField">
 						<label className="required">Aktuelles Passwort</label>
-						<input name="password" type="password" autoFocus="true" ref=${autoFocus}/>
+						<input name="pass" type="password"  onChange=${state.handleChange} autoFocus="true" ref=${autoFocus}/>
 					</div>	
 					<div className="formField">
 						<label className="required">Neues Passwort</label>
-						<input name="new_password" type="password" onChange=${state.handleChange}/>
+						<input name="new_pass" type="password" onChange=${state.handleChange}/>
 					</div>				
 					<div className="formField">
 						<label className="required">Neues Passwort bestätigen</label>
-						<input name="new_password_confirm" type="password" onChange=${state.handleChange}/>
+						<input name="new_pass_confirm" type="password" onChange=${state.handleChange}/>
 					</div>
 				</>				
 				');
