@@ -21,6 +21,8 @@ class DBFormsModel
 		'field_name'=>{label:'Feldname',editable:false},
 		'element'=>{label:'Formularelement'},
 		'readonly'=>{label:'Readonly', cellFormat:formatBool},
+		'required'=>{label:'Required', cellFormat:formatBool},
+		'use_as_index'=>{label:'Index', cellFormat:formatBool},
 		'any'=>{label:'Eigenschaften', flexGrow:1
 			//cellFormat:function(v:Dynamic) {trace(v); return (v == null?'{}':v); }
 		}

@@ -96,7 +96,7 @@ class DB extends DataAccessForm
 		var view:Map<String,FormField> = dataAccess['editTableFields'].view.copy();
 		trace(dataAccess['editTableFields'].view['table_name']);
 		//trace(data);
-		renderModalForm({
+		renderModalRRForm({
 			data:new Map(),
 			dataTable:data,
 			handleSubmit: saveTableFields,
@@ -201,6 +201,7 @@ class DB extends DataAccessForm
 					'element'=>{label:'Eingabefeld', type:Select},
 					'readonly' => {label:'Readonly', type:Checkbox},
 					'required' => {label:'Required', type:Checkbox},
+					'use_as_index' => {label:'Index', type:Checkbox},
 					'any' => {label:'Eigenschaften', readonly:true, type:Hidden},
 					'id' =>{primary:true, type:Hidden}
 				]
@@ -247,7 +248,7 @@ class DB extends DataAccessForm
 		');		
 	}
 	
-	override function updateMenu():SMenuProps
+	override function updateMenu(?viewClassPath:String):SMenuProps
 	{
 		trace('${Type.getClassName(Type.getClass(this))} task');
 		var sideMenu = state.sideMenu;

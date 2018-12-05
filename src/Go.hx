@@ -12,7 +12,7 @@ class Go
 	public static function main()
 	{
 		Log.trace = Out._trace;
-		trace('hi :)');
+		trace('hi :) ${Out.suspended}');
 		App.config = Webpack.require('../bin/config.js').config;
 		App.user_name = Cookie.get('user.user_name');
 		App.jwt = Cookie.get('user.jwt');

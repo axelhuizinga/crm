@@ -28,6 +28,7 @@ import react.ReactEvent;
 import redux.Store;
 import redux.StoreMethods;
 import react.React;
+import react.ReactRef;
 import redux.react.Provider;
 import Webpack.*;
 import model.AjaxLoader;
@@ -55,7 +56,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	public static var config:Dynamic = null;// Webpack.require('../bin/config.js').config;
 	public static var user_name:String = Cookie.get('user.user_name');
 	public static var jwt:String = Cookie.get('user.jwt');
-	public static var modalBox:DivElement = null;// React.createRef();
+	public static var modalBox:ReactRef<DivElement> = React.createRef();
     public function new(?props:AppProps) 
 	{
 		super(props);
@@ -63,7 +64,8 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		//props = { waiting:true};
 		//<div className="modal is-active"><div className="modal-background"></div><button className="modal-close is-large" aria-label="close"></button></div>
 		
-		modalBox = Browser.document.createDivElement();
+		/*modalBox = React.createRef();
+		Browser.document.createDivElement();
 		modalBox.className = 'modal';
 		var bg:DivElement = Browser.document.createDivElement();
 		bg.className = "modal-background";
@@ -72,7 +74,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		close.className = "modal-close is-large";
 		close.setAttribute('aria-label', 'close');
 		modalBox.appendChild(close);
-		Browser.document.body.appendChild(modalBox);
+		Browser.document.body.appendChild(modalBox);*/
 		trace(modalBox);
 		trace('user_name:$user_name jwt:$jwt ' + (!(App.user_name == '' || App.jwt == '')?'Y':'N' ));
 		store = model.ApplicationStore.create();
@@ -93,7 +95,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 				else if (verifyData.content != null && verifyData.content == 'OK')
 				{
 					trace('verifyData:{verifyData.content}');
-					var uState:UserProps = state.appWare.user;
+					var uState:UserProps = {loggedIn: true, jwt:App.jwt, user_name:App.user_name};
 					uState.waiting = false;
 					store.dispatch(AppAction.LoginComplete(uState));
 					//setState({appware:{user:uState}});

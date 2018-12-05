@@ -54,10 +54,10 @@ class User extends DataAccessForm
 {
 	static var _instance:User;
 
-	public static function menuItems():Array<SMItem>
+	/*public static function menuItems():Array<SMItem>
 	{
 		return _instance == null? [] : _instance._menuItems;
-	}
+	}*/
 		
 	override function handleSubmit(e:InputEvent)
 	{
@@ -128,23 +128,32 @@ class User extends DataAccessForm
 					setState({data:data.dataRows[0], viewClassPath:'changePassword',
 					fields:dataAccess['changePassword'].view,
 					values:createStateValues(data.dataRows[0], 
-					dataAccess['changePassword'].view), loading:false});					
+					dataAccess['changePassword'].view), loading:false});	
+					App.store.dispatch(AppAction.User({
+						first_name:data.dataRows[0]['first_name'],
+						last_name:data.dataRows[0]['last_name'],
+						user_name:App.user_name,
+						email:data.dataRows[0]['email'],
+						pass:'',
+						waiting:false,
+						last_login:Date.fromString(data.dataRows[0]['last_login']),
+					}));				
 				}
 				else{
 					setState({data:data.dataRows[0], viewClassPath:'edit',
 					fields:dataAccess['edit'].view,
 					values:createStateValues(data.dataRows[0], 
 					dataAccess['edit'].view), loading:false});	
-					var user:Dynamic = App.store.getState().appWare.user;
+					trace(Date.fromString(data.dataRows[0]['last_login']));
 					App.store.dispatch(AppAction.User({
-							first_name:data.dataRows[0]['first_name'],
-							last_name:data.dataRows[0]['last_name'],
-							user_name:App.user_name,
-							email:data.dataRows[0]['email'],
-							pass:'',
-							waiting:false,
-							last_login:Date.fromString(data.dataRows[0]['last_login']),
-						}));
+						first_name:data.dataRows[0]['first_name'],
+						last_name:data.dataRows[0]['last_name'],
+						user_name:App.user_name,
+						email:data.dataRows[0]['email'],
+						pass:'',
+						waiting:false,
+						last_login:Date.fromString(data.dataRows[0]['last_login']),
+					}));
 				} 				
 			}
 		));
@@ -154,6 +163,9 @@ class User extends DataAccessForm
 	{
 		//trace(prevProps);
 		//trace(prevState);
+		trace(state.values);
+		trace(App.store.getState().appWare.user);
+		trace(state.viewClassPath);
 		if(autoFocus!=null)
 		autoFocus.current.focus();
 	}
@@ -161,13 +173,18 @@ class User extends DataAccessForm
 	public function changePassword(ev:ReactEvent):Void
 	{
 		trace(state.values);
+		trace(state.viewClassPath);
 		if(state.viewClassPath!='changePassword')
+		{
+			updateMenu('changePassword');
 			return setState({viewClassPath:'changePassword'});
+		}
+			
 		if (state.values['new_pass'] != state.values['new_pass_confirm'])
 			return setState({errors:['changePassword'=>'Die Passwörter stimmen nicht überein!']});
 		if (state.values['new_pass'] == state.values['pass'])
 			return setState({errors:['changePassword'=>'Das Passwort muss geändert werden!']});
-		trace(App.store.getState().appWare.user.dynaMap());
+		trace(App.store.getState().appWare.user);
 		requests.push(BinaryLoader.create(
 			'${App.config.api}', 
 			{				
@@ -195,7 +212,7 @@ class User extends DataAccessForm
 					setState({
 						viewClassPath:'edit',
 						fields:dataAccess['edit'].view,
-						values:createStateValues(App.store.getState().appWare.user.dynaMap(), dataAccess['changePassword'].view),
+						values:createStateValues(App.store.getState().appWare.user.dynaMap(), dataAccess['edit'].view),
 					 	loading:false});
 				}
 				else trace(data.dataErrors);				
@@ -278,7 +295,7 @@ class User extends DataAccessForm
 	public function new(?props:DataFormProps)
 	{
 		super(props);
-		_instance = this;		
+		//_instance = this;		
 		_menuItems = [
 			//{handler:edit, label:'Bearbeiten', segment:'edit'},
 			{handler:save, label:'Speichern', disabled:state.clean},
@@ -286,8 +303,10 @@ class User extends DataAccessForm
 		];
 		var sideMenu = state.sideMenu;
 		sideMenu.menuBlocks['user'].items = function() return _menuItems;
-		ReactUtil.copy(state,{sideMenu:sideMenu,viewClassPath:"edit",});
 		trace(_menuItems);
+		state = ReactUtil.copy(state,{sideMenu:sideMenu,viewClassPath:"edit",});
+		trace(state.viewClassPath);
+
 	}
 
 	/*override function handleChange(e:InputEvent)
@@ -302,7 +321,7 @@ class User extends DataAccessForm
 		//trace(this.state);
 	}*/
 	
-	override function updateMenu():SMenuProps
+	override function updateMenu(?viewClassPath:String):SMenuProps
 	{
 		var sideMenu = state.sideMenu;
 		sideMenu.menuBlocks['user'].items = function() {
@@ -319,7 +338,8 @@ class User extends DataAccessForm
 						{handler:changePassword, label:'Passwort ändern'},
 					];
 			}
-		}				
+		}			
+		//trace(sideMenu.menuBlocks['user'].items);	
 		return sideMenu;
 	}
 	

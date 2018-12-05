@@ -26,7 +26,6 @@ import view.shared.io.User;
 @:connect
 class SettingsForm extends BaseForm
 {
-
 	var childFormProps:DataFormProps;
 	
 	public function new(?props:FormProps) 

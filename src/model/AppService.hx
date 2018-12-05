@@ -1,4 +1,5 @@
 package model;
+import react.ReactSharedInternals.Update;
 import App;
 import action.AppAction;
 import haxe.Http;
@@ -98,7 +99,9 @@ class AppService
 				
 			case LoginComplete(uState):
 				trace(uState);
-				copy(state, {user:uState});			
+				copy(state, {
+					user:copy(state.user,uState)
+				});		
 				
 			case LogOut(uState):
 				trace(uState);
@@ -124,9 +127,14 @@ class AppService
 
 			case User(uState):
 			trace(state.user);
+			var cs:GlobalAppState = copy(state, {
+					user:copy(state.user,{first_name:uState.first_name, last_name:uState.last_name, email:uState.email, 
+					last_login:uState.last_login, pass:uState.pass, waiting:uState.waiting})
+				});	
+			trace(cs.user);
 				copy(state, {
 					user:copy(state.user,{first_name:uState.first_name, last_name:uState.last_name, email:uState.email, 
-					last_login:uState.last_login, pass:uState.pass})
+					last_login:uState.last_login, pass:uState.pass, waiting:uState.waiting})
 				});	
 			default:
 				state;
@@ -136,6 +144,9 @@ class AppService
 	public function middleware(action:AppAction, next:Void -> Dynamic)
 	{
 		trace(action);
+		var n = next();
+		trace(n);
+		return n;
 		return switch(action)
 		{
 			case AddComponent(path, cState):

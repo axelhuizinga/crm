@@ -17,6 +17,7 @@ import react.ReactComponent.*;
 import react.ReactMacro.jsx;
 import react.React.ReactChildren;
 import react.ReactPropTypes;
+import react.ReactRef;
 import redux.react.ReactRedux.connect;
 import redux.Store;
 import redux.Redux;
@@ -88,6 +89,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 		//trace(this.props.appWare.user.state.last_name);
 		mounted = false;
 		//_me = this;
+		App.modalBox = React.createRef();
     }
 
 	override function componentDidCatch(error, info) {
@@ -156,6 +158,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 			return jsx('
 			<$Router history={browserHistory} >
 			<>
+			<div class="modal" ref=${App.modalBox}/>
 				<div className="topNav">
 					<$Route path="/dashboard" {...props} component=${NavTabs}/>
 					<$Route path="/accounting" {...props} component=${NavTabs}/>

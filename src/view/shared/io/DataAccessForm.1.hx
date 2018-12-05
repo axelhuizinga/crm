@@ -34,13 +34,7 @@ import react.ReactMacro.jsx;
 import react.React;
 import react.ReactRef;
 import react.ReactUtil;
-import react.redux.form.LocalForm;
-import react.redux.form.Control;
-import react.redux.form.Control.*;
-//import react.redux.form.ControlReset;
-import react.redux.form.Errors;
-import react.redux.form.Field;
-import react.redux.form.Fieldset;
+import redux.Redux;
 
 using Lambda;
 
@@ -56,7 +50,7 @@ typedef DataFormProps =
 	?setStateFromChild:FormState->Void,
 }
 
-class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
+class DataAccessForm1 extends PureComponentOf<DataFormProps,FormState>
 {
 	var mounted:Bool;
 	var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;	
@@ -407,12 +401,12 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		');
 	}
 	
-		function renderModalForm(fState:FormState):ReactFragment
+	function renderModalForm(fState:FormState):ReactFragment
 	{
 		_fstate = fState;
 		modalFormTableBody = React.createRef();
-		App.modalBox.current.classList.toggle('is-active');
-		var click:Function = function(_)App.modalBox.current.classList.toggle("is-active");
+		App.modalBox.classList.toggle('is-active');
+		var click:Function = function(_)App.modalBox.classList.toggle("is-active");
 		var submit:Function = function(_){
 			if (_fstate.handleSubmit != null)
 			{
@@ -422,7 +416,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 				//_fstate.handleSubmit(cast modalFormTableBody.current);
 				//_fstate.handleSubmit(cast(modalFormTableBody.current, js.html.FormElement).elements);
 			}
-			App.modalBox.current.classList.toggle("is-active"); 					  
+			App.modalBox.classList.toggle("is-active"); 					  
 		}
 		return ReactDOM.render( 
 			jsx('
@@ -445,93 +439,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 				</footer>
 			</div>
 		</> 
-		'), App.modalBox.current, adjustModalFormColumns);
-	}
-
-	function renderModalRRForm(fState:FormState):ReactFragment
-	{
-		_fstate = fState;
-		trace(fState);
-		var submitRR:Dynamic->Event->Void = function(tfd, ev){
-			trace(tfd);
-		}
-		App.modalBox.current.classList.toggle('is-active');//${renderModalFormBodyHeader()}
-		var click:Function = function(_)App.modalBox.current.classList.toggle("is-active");		
-		return ReactDOM.render( 
-			jsx('
-		<>
-		  	<div className="modal-background" onClick=${click}></div>
-		   	<div className="modal-card">
-				<header className="modal-card-head">
-				  <p className="modal-card-title">${_fstate.title}</p>
-				  <button className="delete" aria-label="close" onClick=${click}></button>
-				</header>
-				
-				<div className="modal-card-body">
-				<LocalForm ref=${modalFormTableBody} model="formFields" onSubmit=${submitRR} >
-				  <!-- Content ... -->
-					<div>
-					<label>Test</label>
-					<Control type="checkbox" model=".some" validators=${{required: function(val) return val != null}} />
-					</div>
-					<$Field model="user.bag">
-					<label>
-						<input type="radio" value="plastic" />
-						<span>Plastic</span>
-					</label>
-					<label>
-						<input type="radio" value="paper" />
-						<span>Paper</span>
-					</label>
-					</$Field>
-
-				</LocalForm>
-				</div>
-				<footer className="modal-card-foot">
-					<button model="formFields" disabled=${{valid: false}} store=${App.store}>
-						Speichern
-					</button>
-					<button type="reset" model="formFields"  >Schließen</button>
-				</footer>
-			</div>
-		</> 
-		'), App.modalBox.current);//adjustModalFormColumns
-		return null;
-		modalFormTableBody = React.createRef();
-
-		var submit:Function = function(_){
-			if (_fstate.handleSubmit != null)
-			{
-				var fD:FormData = new FormData(cast modalFormTableBody.current);
-				trace(fD);
-				_fstate.handleSubmit(fD);
-				//_fstate.handleSubmit(cast modalFormTableBody.current);
-				//_fstate.handleSubmit(cast(modalFormTableBody.current, js.html.FormElement).elements);
-			}
-			App.modalBox.current.classList.toggle("is-active"); 					  
-		}
-		return ReactDOM.render( 
-			jsx('
-		<>
-		  	<div className="modal-background" onClick=${click}></div>
-		   	<div className="modal-card">
-				<header className="modal-card-head">
-				  <p className="modal-card-title">${_fstate.title}</p>
-				  <button className="delete" aria-label="close" onClick=${click}></button>
-				</header>
-				${renderModalFormBodyHeader()}
-				<form className="modal-card-body" ref=${modalFormTableBody}>
-				  <!-- Content ... -->
-					${_fstate.data.empty()? createElementsArray():renderElements()}
-				</form>
-				<footer className="modal-card-foot">
-				  <button className = "button is-success" 
-				  onClick = ${submit} > Speichern</button>
-				  <button className="button" onClick=${click}>Schließen</button>
-				</footer>
-			</div>
-		</> 
-		'), App.modalBox.current, adjustModalFormColumns);
+		'), App.modalBox, adjustModalFormColumns);
 	}
 
 	function adjustModalFormColumns()
