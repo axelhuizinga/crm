@@ -60,7 +60,7 @@ typedef AsyncDataLoader =
 			if (dataObj.error != '')
 			{
 				trace(dataObj.error);
-				trace(App.store.getState().appWare.history);
+				//trace(App.store.getState().appWare.history);
 				//return;
 				dataObj.data = {error: dataObj.error, rows:[]};
 			}
@@ -82,7 +82,7 @@ typedef AsyncDataLoader =
 			if (dataObj.error != '')
 			{
 				trace(dataObj.error);
-				trace(App.store.getState().appWare.history);
+				//trace(App.store.getState().appWare.history);
 				//return;
 				dataObj.data = {error: dataObj.error, rows:[]};
 			}

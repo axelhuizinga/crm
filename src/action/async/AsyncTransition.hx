@@ -24,24 +24,24 @@ class AsyncTransition
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->model.AppState){
 			trace(getState());
-			if (props.pass == '' || props.userName == '') 
-				return dispatch(AppAction.LoginError({userName:props.userName, loginError:{requestError:'Passwort und UserId eintragen!'}}));
+			if (props.pass == '' || props.user_name == '') 
+				return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:{requestError:'Passwort und UserId eintragen!'}}));
 			
 			var req:XMLHttpRequest = new XMLHttpRequest();
-			req.open('GET', '${props.api}?' + App.queryString2({action:'login', className:'auth.User', userName:props.userName, pass: props.pass}));
+			req.open('GET', '${props.api}?' + App.queryString2({action:'login', className:'auth.User', user_name:props.user_name, pass: props.pass}));
 			req.onload = function()
 			{
 				 if (req.status == 200) {
 					 // OK
 					var jRes:LoginState = Json.parse( req.response);
 					trace(jRes.jwt);
-					Cookie.set('user.userName', props.userName);
+					Cookie.set('user.user_name', props.user_name);
 					Cookie.set('user.jwt', jRes.jwt);
-					return dispatch(AppAction.LoginComplete({userName:props.userName, jwt:jRes.jwt, waiting:false}));
+					return dispatch(AppAction.LoginComplete({user_name:props.user_name, jwt:jRes.jwt, waiting:false}));
 				} else {
 					  // Otherwise reject with the status text
 					  // which will hopefully be a meaningful error
-					return dispatch(AppAction.LoginError({userName:props.userName, loginError:{requestError:req.statusText}}));
+					return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:{requestError:req.statusText}}));
 				}
 			};
 			var spin:Dynamic = dispatch(AppAction.LoginWait);
@@ -55,24 +55,24 @@ class AsyncTransition
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->model.AppState){
 			trace(getState());
-			if (props.userName == '') 
-				return dispatch(AppAction.LoginError({userName:props.userName, loginError:{requestError:'UserId fehlt!'}}));
+			if (props.user_name == '') 
+				return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:{requestError:'UserId fehlt!'}}));
 			
 			var req:XMLHttpRequest = new XMLHttpRequest();
-			req.open('GET', '${props.api}?' + App.queryString2({action:'logout', className:'auth.User', userName:props.userName, pass: props.pass}));
+			req.open('GET', '${props.api}?' + App.queryString2({action:'logout', className:'auth.User', user_name:props.user_name, pass: props.pass}));
 			req.onload = function()
 			{
 				 if (req.status == 200) {
 					 // OK
 					var jRes:LoginState = Json.parse( req.response);
 					trace(jRes.jwt);
-					Cookie.set('user.userName', props.userName);
+					Cookie.set('user.user_name', props.user_name);
 					Cookie.set('user.jwt', jRes.jwt);
-					return dispatch(AppAction.LoginComplete({userName:props.userName, jwt:jRes.jwt, waiting:false}));
+					return dispatch(AppAction.LoginComplete({user_name:props.user_name, jwt:jRes.jwt, waiting:false}));
 				} else {
 					  // Otherwise reject with the status text
 					  // which will hopefully be a meaningful error
-					return dispatch(AppAction.LoginError({userName:props.userName, loginError:{requestError:req.statusText}}));
+					return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:{requestError:req.statusText}}));
 				}
 			};
 			var spin:Dynamic = dispatch(AppAction.LoginWait);

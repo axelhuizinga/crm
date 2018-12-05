@@ -127,9 +127,9 @@ class RolesForm extends BaseForm
 		requests.push(AjaxLoader.load(
 			'${App.config.api}', 
 			{
-				userName:props.userName,
+				user_name:props.user_name,
 				jwt:props.jwt,
-				firstName:props.firstName,
+				first_name:props.first_name,
 				className:'admin.CreateUsers',
 				action:'importExternal'
 			},
@@ -145,9 +145,9 @@ class RolesForm extends BaseForm
 			var uState = aState.appWare.user;
 			trace(uState);		
 			return {
-				userName:uState.userName,
+				user_name:uState.user_name,
 				jwt:uState.jwt,
-				firstName:uState.firstName
+				first_name:uState.first_name
 			};
 		};
 	}	
@@ -160,9 +160,9 @@ class RolesForm extends BaseForm
 		/*requests.push(AjaxLoader.load(
 			'${App.config.api}', 
 			{
-				userName:props.userName,
+				user_name:props.user_name,
 				jwt:props.jwt,
-				firstName:props.firstName,
+				first_name:props.first_name,
 				className:'admin.CreateUsers',
 				action:'getViciDialUsers'
 			},
@@ -181,9 +181,9 @@ class RolesForm extends BaseForm
 		requests.push(AjaxLoader.load(
 			'${App.config.api}', 
 			{
-				userName:props.userName,
+				user_name:props.user_name,
 				jwt:props.jwt,
-				firstName:props.firstName,
+				first_name:props.first_name,
 				className:'admin.CreateUsers',
 				action:'getViciDialUsers'
 			},
@@ -202,7 +202,7 @@ class RolesForm extends BaseForm
 		requests.push(BinaryLoader.create(
 			'${App.config.api}', 
 			{
-				userName:props.userName,
+				user_name:props.user_name,
 				jwt:props.jwt,
 				className:'roles.Users',
 				action:'list',

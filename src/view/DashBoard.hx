@@ -49,7 +49,7 @@ typedef DashBoardState =
 @:connect
 class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 {
-	static var user = {firstName:'dummy'};
+	static var user = {first_name:'dummy'};
 	var mounted:Bool = false;
 	var rendered:Bool = false;
 	var renderCount:Int = 0;
@@ -106,14 +106,14 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 			
 			return {
 				appConfig:aState.appWare.config,
-				userName:uState.userName,
+				user_name:uState.user_name,
 				pass:uState.pass,
 				jwt:uState.jwt,
 				isMounted:(aState.appWare.compState.exists('dashboard') && aState.appWare.compState.get('dashboard').isMounted),
 				loggedIn:uState.loggedIn,
 				loginError:uState.loginError,
-				lastLoggedIn:uState.lastLoggedIn,
-				firstName:uState.firstName,
+				last_login:uState.last_login,
+				first_name:uState.first_name,
 				redirectAfterLogin:aState.appWare.redirectAfterLogin,
 				//locationHistory:aState.appWare.history,
 				waiting:uState.waiting

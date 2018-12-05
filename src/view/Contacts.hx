@@ -56,13 +56,13 @@ class Contacts extends ReactComponentOfProps<RouteTabProps>
 			
 			return {
 				appConfig:aState.appWare.config,
-				userName:uState.userName,
+				user_name:uState.user_name,
 				pass:uState.pass,
 				jwt:uState.jwt,
 				loggedIn:uState.loggedIn,
 				loginError:uState.loginError,
-				lastLoggedIn:uState.lastLoggedIn,
-				firstName:uState.firstName,
+				last_login:uState.last_login,
+				first_name:uState.first_name,
 				redirectAfterLogin:aState.appWare.redirectAfterLogin,
 				waiting:uState.waiting
 			};
@@ -74,8 +74,8 @@ class Contacts extends ReactComponentOfProps<RouteTabProps>
 		trace(props.history.location.pathname);
 		//Out.dumpObjectTree(props);
 		trace(Reflect.fields(props));
-		trace('${props.userName} => ${props.jwt}' + (( props.jwt == null )?' should Login' : ' Login OK' ));
-		if (props.waiting || props.userName == null || props.jwt == null || props.jwt == '')
+		trace('${props.user_name} => ${props.jwt}' + (( props.jwt == null )?' should Login' : ' Login OK' ));
+		if (props.waiting || props.user_name == null || props.jwt == null || props.jwt == '')
 		{
 			// WE NEED TO LOGIN FIRST
 			return jsx('<LoginForm  {...props}/>');

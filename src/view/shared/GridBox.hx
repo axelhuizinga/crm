@@ -25,9 +25,9 @@ import shared.Utils;
 	sortBy:String,
 	scrollToIndex: Int,
 	?defaultSort:Dynamic, 	
-	?userName:String,
+	?user_name:String,
 	?jwt:String,
-	?firstName:String
+	?first_name:String
 }
 
 typedef BaseGridState =

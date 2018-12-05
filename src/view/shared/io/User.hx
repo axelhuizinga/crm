@@ -1,5 +1,7 @@
 package view.shared.io;
 
+import action.AppAction;
+import tink.core.Error.Stack;
 import haxe.Serializer;
 import haxe.ds.StringMap;
 import haxe.io.Bytes;
@@ -20,6 +22,7 @@ import view.shared.io.DataAccess.DataSource;
 import view.table.Table;
 
 using Lambda;
+using shared.Utils;
 
 /**
  * ...
@@ -29,15 +32,16 @@ using Lambda;
 typedef UserProps =
 {
 	?contact:Int,
-	?firstName:String,
-	?lastName:String,
+	?first_name:String,
+	?last_name:String,
+	?email:String,
 	?active:Bool,
 	?loggedIn:Bool,
-	?lastLoggedIn:Date,
+	?last_login:Date,
 	?loginError:Dynamic,
 	?jwt:String,
 	?pass:String,
-	userName:String,
+	user_name:String,
 	?redirectAfterLogin:String,
 	?waiting:Bool
 }
@@ -63,74 +67,85 @@ class User extends DataAccessForm
 	override public function componentDidMount():Void 
 	{
 		dataAccess = [
-				'changePassword' =>
-				{
-					source:[
-						"users" => [
-							"fields" => 'user_name,change_pass_required,pass']
-					],
-					view:[
-						'user_name' => {type:Hidden},
-						'pass' => {type:Password},
-						'new_pass' => {type:Password}
-					]
-				},
-				'edit' =>{
-					source:[
-						"users" => ["alias" => 'us',
-							"fields" => 'user_name,last_login,change_pass_required,pass'],
-						"contacts" => [
-							"alias" => 'co',
-							"fields" => 'first_name,last_name,email',
-							"jCond"=>'contact=co.id']
-					],
-					view:[
-						'user_name'=>{label:'UserID',readonly:true, type:Hidden},
-						'pass'=>{label:'Passwort', type:Hidden},
-						'first_name'=>{label:'Vorname'},
-						'last_name'=>{label:'Name'},
-						'email' => {label:'Email'},
-						'last_login'=>{label:'Letze Anmeldung',readonly:true, displayFormat:DataAccessForm.localDate}
-					]
-				},
-				'save' => {
-					source:null,
-					view:null
-				}
-			];	
+			'changePassword' =>
+			{
+				source:[
+					"users" => [
+						"fields" => 'user_name,change_pass_required,password']
+				],
+				view:[
+					'user_name' => {type:Hidden},
+					'pass' => {type:Password},
+					'new_pass' => {type:Password}
+				]
+			},
+			'edit' =>{
+				source:[
+					"users" => ["alias" => 'us',
+						"fields" => 'user_name,last_login,change_pass_required,password'],
+					"contacts" => [
+						"alias" => 'co',
+						"fields" => 'first_name,last_name,email',
+						"jCond"=>'contact=co.id']
+				],
+				view:[
+					'user_name'=>{label:'UserID',readonly:true, type:Hidden},
+					'pass'=>{label:'Passwort', type:Hidden},
+					'first_name'=>{label:'Vorname'},
+					'last_name'=>{label:'Name'},
+					'email' => {label:'Email'},
+					'last_login'=>{label:'Letze Anmeldung',readonly:true, displayFormat:DataAccessForm.localDate}
+				]
+			},
+			'save' => {
+				source:null,
+				view:null
+			}
+		];	
 
 		super.componentDidMount();
 			
 		requests.push(BinaryLoader.create(
 			'${App.config.api}', 
 			{				
-				userName:props.userName,
+				user_name:props.user_name,
 				jwt:props.jwt,
 				className:'auth.User',
 				action:'edit',
-				filter:'user_name|${props.userName}',
-				dataSource:Serializer.run(dataAccess['edit'].source)				
+				filter:'user_name|${props.user_name}',
+				dataSource:Serializer.run(dataAccess['edit'].source)			
 			},
 			function(dBytes:Bytes)
 			{
-				//trace(dBytes.toString());
+				trace(dBytes.toString());
 				var u:hxbit.Serializer = new hxbit.Serializer();
 				var data:DbData = u.unserialize(dBytes, DbData);
 				trace(Reflect.fields(data));
 				trace(data);
 				trace(Reflect.fields(data.dataRows[0]));
-				//setState({dataTable:data.dataRows, loading:false});			
 				if (data.dataRows[0]['change_pass_required'] == '1')
 				{
-					setState({data:data.dataRows[0], dataClassPath:'changePassword',
+					setState({data:data.dataRows[0], viewClassPath:'changePassword',
 					fields:dataAccess['changePassword'].view,
 					values:createStateValues(data.dataRows[0], 
 					dataAccess['changePassword'].view), loading:false});					
 				}
-				else setState({data:data.dataRows[0], dataClassPath:'edit',
+				else{
+					setState({data:data.dataRows[0], viewClassPath:'edit',
 					fields:dataAccess['edit'].view,
 					values:createStateValues(data.dataRows[0], 
-					dataAccess['edit'].view), loading:false});					
+					dataAccess['edit'].view), loading:false});	
+					var user:Dynamic = App.store.getState().appWare.user;
+					App.store.dispatch(AppAction.User({
+							first_name:data.dataRows[0]['first_name'],
+							last_name:data.dataRows[0]['last_name'],
+							user_name:App.user_name,
+							email:data.dataRows[0]['email'],
+							pass:'',
+							waiting:false,
+							last_login:Date.fromString(data.dataRows[0]['last_login']),
+						}));
+				} 				
 			}
 		));
 	}
@@ -145,20 +160,23 @@ class User extends DataAccessForm
 	
 	public function changePassword(ev:ReactEvent):Void
 	{
-		trace(dataAccess['changePassword'].source);
 		trace(state.values);
+		if(state.viewClassPath!='changePassword')
+			return setState({viewClassPath:'changePassword'});
 		if (state.values['new_pass'] != state.values['new_pass_confirm'])
-		return setState({errors:['new_pass'=>'Passwörter stimmen nicht überein!']});
+			return setState({errors:['changePassword'=>'Die Passwörter stimmen nicht überein!']});
+		if (state.values['new_pass'] == state.values['pass'])
+			return setState({errors:['changePassword'=>'Das Passwort muss geändert werden!']});
+		trace(App.store.getState().appWare.user.dynaMap());
 		requests.push(BinaryLoader.create(
 			'${App.config.api}', 
 			{				
-				userName:props.userName,
+				user_name:props.user_name,
 				jwt:props.jwt,
 				className:'auth.User',
 				action:'changePassword',
-				filter:'user_name|${props.userName}',
-				values:['pass'=>state.values['pass'],'new_pass'=>state.values['new_pass']],
-				dataSource:Serializer.run(dataAccess['changePassword'].source)				
+				new_pass:state.values['new_pass'],
+				pass:state.values['pass']
 			},
 			function(dBytes:Bytes)
 			{
@@ -171,14 +189,16 @@ class User extends DataAccessForm
 				{
 					trace(data.dataErrors.toString());
 				}
-				if (data.dataInfo['result'] == 'OK')
+				if (data.dataInfo['changePassword'] == 'OK')
 				{
-					setState({data:data.dataRows[0], dataClassPath:'edit',
-					fields:dataAccess['edit'].view,
-					values:createStateValues(data.dataRows[0], 
-					dataAccess['edit'].view), loading:false});
+					trace(App.store.getState().appWare.user.dynaMap());
+					setState({
+						viewClassPath:'edit',
+						fields:dataAccess['edit'].view,
+						values:createStateValues(App.store.getState().appWare.user.dynaMap(), dataAccess['changePassword'].view),
+					 	loading:false});
 				}
-				else trace(data.dataInfo);				
+				else trace(data.dataErrors);				
 			}
 		));
 	}
@@ -189,11 +209,11 @@ class User extends DataAccessForm
 		requests.push(Loader.loadData(	
 			'${App.config.api}', 
 			{
-				userName:props.userName,
+				user_name:props.user_name,
 				jwt:props.jwt,
 				className:'auth.User',
 				action:'edit',
-				filter:'user_name|${props.userName}',
+				filter:'user_name|${props.user_name}',
 				dataSource:Serializer.run(dataAccess['edit'].source)
 			},
 			function(data:Array<Map<String,String>>)
@@ -216,7 +236,7 @@ class User extends DataAccessForm
 			}
 		));
 		//setState({viewClassPath:"shared.io.User.edit"});
-		//setState({dataClassPath:"auth.User.edit"});
+		//setState({viewClassPath:"auth.User.edit"});
 	}
 	
 	override public function save(evt:Event)
@@ -238,11 +258,11 @@ class User extends DataAccessForm
 		requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
-				userName:props.userName,
+				user_name:props.user_name,
 				jwt:props.jwt,
 				className:'auth.User',
 				action:'save',
-				filter:'user_name|${props.userName}',
+				filter:'user_name|${props.user_name}',
 				dataSource:Serializer.run(dataAccess['edit'].source)
 				//dataSource:Serializer.run(filterMap(state.values, skeys))
 			},
@@ -262,36 +282,58 @@ class User extends DataAccessForm
 		_menuItems = [
 			//{handler:edit, label:'Bearbeiten', segment:'edit'},
 			{handler:save, label:'Speichern', disabled:state.clean},
-			{handler:changePassword, label:'Passwort ändern', disabled:state.clean},
+			{handler:changePassword, label:'Passwort ändern'},
 		];
 		var sideMenu = state.sideMenu;
 		sideMenu.menuBlocks['user'].items = function() return _menuItems;
-		ReactUtil.copy(state,{sideMenu:sideMenu,dataClassPath:"edit",});
+		ReactUtil.copy(state,{sideMenu:sideMenu,viewClassPath:"edit",});
 		trace(_menuItems);
 	}
+
+	/*override function handleChange(e:InputEvent)
+	{
+		var t:InputElement = cast e.target;
+		var vs = state.values;
+		vs[t.name] = t.value;
+		trace(vs.toString());
+
+		setState({clean:false, sideMenu:updateMenu(),values:vs});
+		//props.setStateFromChild({clean:false});
+		//trace(this.state);
+	}*/
 	
 	override function updateMenu():SMenuProps
 	{
-		//trace('${Type.getClassName(Type.getClass(this))} task');
-		//dataClassPath:'changePassword'
 		var sideMenu = state.sideMenu;
-		sideMenu.menuBlocks['user'].items = function() return [
-			//{handler:edit, label:'Bearbeiten', segment:'edit'},
-			{handler:save, label:'Speichern', disabled:state.clean},
-			{handler:changePassword, label:'Passwort ändern', disabled:state.clean},
-		];
+		sideMenu.menuBlocks['user'].items = function() {
+			return switch(state.viewClassPath)
+			{
+				case "changePassword":		
+					[
+						{handler:changePassword, label:'Speichern', disabled:state.clean},
+						{handler:function (_)setState({viewClassPath:'edit',clean:true}), label:'Abbrechen'},
+					];
+				default:
+					[
+						{handler:save, label:'Speichern', disabled:state.clean},
+						{handler:changePassword, label:'Passwort ändern'},
+					];
+			}
+		}				
 		return sideMenu;
 	}
 	
 	function renderContent():ReactFragment
 	{
-		return switch(state.dataClassPath)
+		trace(state.viewClassPath);
+		return switch(state.viewClassPath)
 		{
 			case "edit":		
 				renderElements();
 			case "changePassword":
 				jsx('
 				<>
+					${renderErrors('changePassword')}
 					<div className="formField">
 						<label className="required">Aktuelles Passwort</label>
 						<input name="pass" type="password"  onChange=${state.handleChange} autoFocus="true" ref=${autoFocus}/>
@@ -309,6 +351,18 @@ class User extends DataAccessForm
 			default:
 				null;
 		}
+	}
+
+	function renderErrors(name:String):ReactFragment
+	{
+		trace(name+':'+state.errors.exists(name));
+		if(state.errors.exists(name))
+		return jsx('
+		<div  className="formField">
+			${state.errors.get(name)}
+		</div>
+		');
+		return null;
 	}
 	
 	override function render()

@@ -71,9 +71,9 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 			trace(uState);		
 			return {
 				//appConfig:aState.appWare.config,
-				userName:uState.userName,
+				user_name:uState.user_name,
 				jwt:uState.jwt,
-				firstName:uState.firstName
+				first_name:uState.first_name
 			};
 		};
 	}	
@@ -92,7 +92,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 		return;
 		AjaxLoader.loadData('${App.config.api}', 
 			{
-				userName:props.userName,
+				user_name:props.user_name,
 				jwt:props.jwt,
 				className:'admin.CreateHistoryTrigger',
 				action:'run'				

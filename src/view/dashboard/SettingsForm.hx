@@ -136,9 +136,9 @@ class SettingsForm extends BaseForm
 			var uState = aState.appWare.user;
 			trace(uState);		
 			return {
-				userName:uState.userName,
+				user_name:uState.user_name,
 				jwt:uState.jwt,
-				firstName:uState.firstName
+				first_name:uState.first_name
 			};
 		};
 	}	

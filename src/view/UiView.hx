@@ -58,26 +58,23 @@ typedef UIProps =
 	?user:UserProps
 }
 
-//@:expose('default')
+
 @:connect
 class UiView extends ReactComponentOf<UIProps, Dynamic>
 {
 	var browserHistory:History;
 	var dispatchInitial:Dispatch;
 	var mounted:Bool;
-	static var _me:UiView;
+	//static var _me:UiView;
 
 	static function mapStateToProps(aState:AppState) {
 			trace(aState.appWare.user);
-			//if(_me != null)
-				//trace(_me.props);
-			var uState:UserProps = aState.appWare.user;
+			var p:Dynamic = {
+				user:aState.appWare.user
+			};
+			trace(p);
 			return {
-				user:{
-					waiting:aState.appWare.user.waiting,
-					userName:uState.userName,
-					jwt:uState.jwt
-				}
+				user:aState.appWare.user
 			};
 	}
 	
@@ -88,9 +85,9 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 		state = {hasError:false};
 		browserHistory = App.store.getState().appWare.history;// BrowserHistory.create({basename:"/"});
 		//ApplicationStore.startHistoryListener(App.store, browserHistory);
-		//trace(this.props.appWare.user.state.lastName);
+		//trace(this.props.appWare.user.state.last_name);
 		mounted = false;
-		_me = this;
+		//_me = this;
     }
 
 	override function componentDidCatch(error, info) {
@@ -105,6 +102,11 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
     override function componentDidMount() {
 		mounted = true;
     }
+	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)//,snapshot:Dynamic
+	{
+		trace(prevState);
+		trace(prevProps);
+	}
 
 	var tabList:Array<Dynamic> = [];
 	/*	{ 'key': 1, 'component': DashBoard, 'label': 'DashBoard', 'url': '/dashboard' },
@@ -131,7 +133,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 		if (state.hasError) {
 		  return jsx('<h1>Something went wrong.</h1>');
 		}
-		if (props.user.waiting)
+		if (false && props.user.waiting)
 		{
 			return jsx('
 			<section className="hero is-alt is-fullheight">
@@ -142,13 +144,15 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 			');		
 		}
 		
-		if(props.user.userName == null || props.user.userName == '' || props.user.jwt == null || props.user.jwt == '')
+		//if(props.user.user_name == null || props.user.user_name == '' || props.user.jwt == null || props.user.jwt == '')
+		if(props.user.jwt == null || props.user.jwt == '')
 		{
 			// WE NEED TO LOGIN FIRST
 			return jsx('<LoginForm {...props.user}/>');
 		}
 		else
 		{			
+			trace('render Router :)');
 			return jsx('
 			<$Router history={browserHistory} >
 			<>

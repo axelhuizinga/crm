@@ -19,7 +19,7 @@ typedef LoginState =
 	?api:Dynamic,
 	?waiting:Bool,
 	?error:Dynamic,
-	?userName:String,
+	?user_name:String,
 	?pass:String,
 	?jwt:String
 }
@@ -49,7 +49,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 			trace(props.match.path + ':' + props.match.url);	
 		}
 		trace(props);
-		state = {api:props.api,userName:'',pass:''};
+		state = {api:props.api,user_name:'',pass:''};
 		super(props);
 	}
 
@@ -67,7 +67,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 			var uState = aState.appWare.user;
 
 			trace(uState);
-			trace(aState.appWare.config);
+			//trace(aState.appWare.config);
 			
 			return {
 				api:aState.appWare.config.api,
@@ -75,9 +75,9 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 				jwt:uState.jwt,
 				loggedIn:uState.loggedIn,
 				loginError:uState.loginError,
-				lastLoggedIn:uState.lastLoggedIn,
-				firstName:uState.firstName,
-				userName:uState.userName,
+				last_login:uState.last_login,
+				first_name:uState.first_name,
+				user_name:uState.user_name,
 				redirectAfterLogin:aState.appWare.redirectAfterLogin,
 				waiting:uState.waiting
 			};
@@ -103,9 +103,9 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 		e.preventDefault();
 		trace(props.dispatch); //return;
 		//this.setState({waiting:true});
-		//props.dispatch(AppAction.Login("{userName:state.userName,pass:state.pass}"));
+		//props.dispatch(AppAction.Login("{user_name:state.user_name,pass:state.pass}"));
 		//trace(props.dispatch);
-		props.submitLogin({userName:state.userName, pass:state.pass,api:props.api});
+		props.submitLogin({user_name:state.user_name, pass:state.pass,api:props.api, jwt:''});
 		//trace(_dispatch == App.store.dispatch);
 		//trace(App.store.dispatch(AsyncUserAction.loginReq(state)));
 		//trace(props.dispatch(AppAction.LoginReq(state)));
@@ -143,11 +143,11 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 				<div className="form2">
 				  <form name="form" onSubmit={handleSubmit}  >
 					<div className="formField">
-						<label className="userIcon" forhtml="login-username">
+						<label className="userIcon" forhtml="login-user_name">
 							<span className="hidden">User ID</span></label>
-						<input id = "login-username"  name = "userName" 
-							className=${errorStyle("userName") + "form-input"}  
-							placeholder="User ID" value={state.userName} onChange={handleChange} />
+						<input id = "login-user_name"  name = "user_name" 
+							className=${errorStyle("user_name") + "form-input"}  
+							placeholder="User ID" value={state.user_name} onChange={handleChange} />
 					</div>
 					<div className="formField">
 						<label className="lockIcon" forhtml="login-pass">
@@ -175,8 +175,8 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 				trace(res);
 				res;
 				
-			case "userName":
-				props.loginError == "userName"?"input error":"input";
+			case "user_name":
+				props.loginError == "user_name"?"input error":"input";
 			
 			default:
 				'';

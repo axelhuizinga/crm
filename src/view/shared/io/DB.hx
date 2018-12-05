@@ -68,7 +68,7 @@ class DB extends DataAccessForm
 		requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
-				userName:props.userName,
+				user_name:props.user_name,
 				jwt:props.jwt,
 				className:'tools.DB',
 				action:'createFieldList',
@@ -155,7 +155,7 @@ class DB extends DataAccessForm
 		requests.push( BinaryLoader.create(
 			'${App.config.api}', 
 			{
-				userName:props.userName,
+				user_name:props.user_name,
 				jwt:props.jwt,
 				fields:'id,table_name,field_name,readonly,element,"any"',
 				className:'tools.DB',

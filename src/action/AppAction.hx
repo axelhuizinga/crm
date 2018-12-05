@@ -29,6 +29,8 @@ enum AppAction
 	//AddContact(id:Int);
 	SetLocale(locale:String);
 	SetTheme(color:String);
+
+	User(state:UserProps);
 	//Users(filter:UserFilter);
 	//SetEntries(entries:Array<DataCell>);
 }

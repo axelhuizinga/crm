@@ -98,22 +98,22 @@ class StatusBar extends ReactComponentOf<StatusBarProps,Dynamic>
 	
 	override public function render()
 	{
-		var userName:String = 'Gast';
+		var user_name:String = 'Gast';
 		var userIcon:String = 'fa fa-user-o';
 		//trace(props.user);
 		if (props.user != null)
 		{
-		 userName = props.user.firstName != null &&  props.user.firstName !='' ?
-		[props.user.firstName , props.user.lastName].join(' ') : props.user.userName;
+		 user_name = props.user.first_name != null &&  props.user.first_name !='' ?
+		[props.user.first_name , props.user.last_name].join(' ') : props.user.user_name;
 		 userIcon = 'fa fa-user';			
 		}
-		//trace(userName +':' + cast userName.length);
+		//trace(user_name +':' + cast user_name.length);
 		return jsx('
 		<Footer>
 			<div className="statusbar">
 				<span className="column is-one-third" > Pfad: ${props.pathname}</span>				
 				<span className="column icon is-one-third">
-				<i className={userIcon}></i> ${userName}
+				<i className={userIcon}></i> ${user_name}
 				</span>
 				<ReactDateTimeClock value={state.date}  className="flex-end" />
 			</div>

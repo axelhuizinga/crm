@@ -1,5 +1,6 @@
 package view.shared.io;
 
+import shared.DbData;
 import haxe.Constraints.Function;
 import haxe.EnumTools;
 import haxe.ds.Either;
@@ -53,6 +54,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	var mounted:Bool;
 	var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;	
 	var dataAccess:DataAccess;
+	var dbData:DbData;
 	var formColElements:Map<String,Array<FormField>>;
 	var dataDisplay:Map<String,DataState>;
 	var _menuItems:Array<SMItem>;
@@ -71,12 +73,14 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		state = {
 			data:new StringMap(),
 			clean:true,
+			errors:new StringMap(),
 			hasError:false,
 			handleChange:setChangeHandler(),
 			handleSubmit:setSubmitHandler(),
 			sideMenu: props.sideMenu,
 			selectedRows:new Array()
 		};
+		dbData = new DbData();
 	}
 
 	function createStateValuesArray(data:Array<Map<String,String>>, view:DataView):Array<Map<String,String>>
@@ -96,7 +100,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 				vState[k] = (view[k].displayFormat == null?data[k]:view[k].displayFormat(data[k]));
 			}
 		}
-		//trace(vState);
+		trace(vState);
 		return vState;
 	}
 		
@@ -203,9 +207,9 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		e.preventDefault();
 		//trace(props.dispatch); //return;
 		this.setState({submitted:true});
-		//props.dispatch(AppAction.Login("{userName:state.userName,pass:state.pass}"));
+		//props.dispatch(AppAction.Login("{user_name:state.user_name,pass:state.pass}"));
 		//trace(props.dispatch);
-		//props.submit({userName:state.userName, pass:state.pass,api:props.api});
+		//props.submit({user_name:state.user_name, pass:state.pass,api:props.api});
 		//trace(_dispatch == App.store.dispatch);
 		//trace(App.store.dispatch(AsyncUserAction.loginReq(state)));
 		//trace(props.dispatch(AppAction.LoginReq(state)));
@@ -400,36 +404,39 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		_fstate = fState;
 		modalFormTableBody = React.createRef();
 		App.modalBox.classList.toggle('is-active');
-		return ReactDOM.render( jsx('
+		var click:Function = function(_)App.modalBox.classList.toggle("is-active");
+		var submit:Function = function(_){
+			if (_fstate.handleSubmit != null)
+			{
+				var fD:FormData = new FormData(cast modalFormTableBody.current);
+				trace(fD);
+				_fstate.handleSubmit(fD);
+				//_fstate.handleSubmit(cast modalFormTableBody.current);
+				//_fstate.handleSubmit(cast(modalFormTableBody.current, js.html.FormElement).elements);
+			}
+			App.modalBox.classList.toggle("is-active"); 					  
+		}
+		return ReactDOM.render( 
+			jsx('
 		<>
-		  <div className="modal-background" onClick=${function(_)App.modalBox.classList.toggle("is-active")}></div>
-		   <div className="modal-card">
+		  	<div className="modal-background" onClick=${click}></div>
+		   	<div className="modal-card">
 				<header className="modal-card-head">
 				  <p className="modal-card-title">${_fstate.title}</p>
-				  <button className="delete" aria-label="close" onClick=${function(_)App.modalBox.classList.toggle("is-active")}></button>
+				  <button className="delete" aria-label="close" onClick=${click}></button>
 				</header>
 				${renderModalFormBodyHeader()}
 				<form className="modal-card-body" ref=${modalFormTableBody}>
 				  <!-- Content ... -->
-						${_fstate.data.empty()? createElementsArray():renderElements()}
+					${_fstate.data.empty()? createElementsArray():renderElements()}
 				</form>
 				<footer className="modal-card-foot">
 				  <button className = "button is-success" 
-				  onClick = ${function(_){
-					  if (_fstate.handleSubmit != null)
-					  {
-						  var fD:FormData = new FormData(cast modalFormTableBody.current);
-						  trace(fD);
-						  _fstate.handleSubmit(fD);
-						  //_fstate.handleSubmit(cast modalFormTableBody.current);
-						  //_fstate.handleSubmit(cast(modalFormTableBody.current, js.html.FormElement).elements);
-					  }
-					  App.modalBox.classList.toggle("is-active"); 					  
-				  }} > Speichern</button>
-				  <button className="button" onClick=${function(_)App.modalBox.classList.toggle("is-active")}>Schließen</button>
+				  onClick = ${submit} > Speichern</button>
+				  <button className="button" onClick=${click}>Schließen</button>
 				</footer>
 			</div>
-		 </> 
+		</> 
 		'), App.modalBox, adjustModalFormColumns);
 	}
 

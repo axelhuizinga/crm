@@ -52,8 +52,8 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 
 	public static var store:Store<AppState>;
 
-	public static var config:Dynamic = Webpack.require('../bin/config.js').config;
-	public static var userName:String = Cookie.get('user.userName');
+	public static var config:Dynamic = null;// Webpack.require('../bin/config.js').config;
+	public static var user_name:String = Cookie.get('user.user_name');
 	public static var jwt:String = Cookie.get('user.jwt');
 	public static var modalBox:DivElement = null;// React.createRef();
     public function new(?props:AppProps) 
@@ -62,6 +62,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		_app = this;
 		//props = { waiting:true};
 		//<div className="modal is-active"><div className="modal-background"></div><button className="modal-close is-large" aria-label="close"></button></div>
+		
 		modalBox = Browser.document.createDivElement();
 		modalBox.className = 'modal';
 		var bg:DivElement = Browser.document.createDivElement();
@@ -72,22 +73,22 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		close.setAttribute('aria-label', 'close');
 		modalBox.appendChild(close);
 		Browser.document.body.appendChild(modalBox);
-	trace(modalBox);
-		trace('userName:$userName jwt:$jwt ' + (!(App.userName == '' || App.jwt == '')?'Y':'N' ));
+		trace(modalBox);
+		trace('user_name:$user_name jwt:$jwt ' + (!(App.user_name == '' || App.jwt == '')?'Y':'N' ));
 		store = model.ApplicationStore.create();
 		state = store.getState();
 		//CState.init(store);		
-		if (!(App.userName == '' || App.jwt == ''))
+		if (!(App.user_name == '' || App.jwt == ''))
 		{			
-			trace(props);
+			trace('clientVerify');
 			var aj:HttpJs = AjaxLoader.loadData(App.config.api,
-			{jwt:App.jwt, userName:App.userName, className:'auth.User', action:'clientVerify'}, 
+			{jwt:App.jwt, user_name:App.user_name, className:'auth.User', action:'clientVerify'}, 
 			function(verifyData:Dynamic){
 				trace(verifyData);
 				if (verifyData.error != null && verifyData.error !='')
 				{
 					App.jwt = null;
-					store.dispatch(AppAction.LoginRequired({jwt:'',loginError:verifyData.error,userName:App.userName,waiting:false}));
+					store.dispatch(AppAction.LoginRequired({jwt:'',loginError:verifyData.error,user_name:App.user_name,waiting:false}));
 				}
 				else if (verifyData.content != null && verifyData.content == 'OK')
 				{
@@ -101,12 +102,12 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 			});
 		}
 		else
-		{// WE HAVE EITHER NO JWT OR USERNAME
-			store.dispatch(AppAction.LoginRequired({jwt:App.jwt,userName:App.userName,waiting:false}));
+		{// WE HAVE EITHER NO JWT OR user_name
+			store.dispatch(AppAction.LoginRequired({jwt:App.jwt,user_name:App.user_name,waiting:false}));
 			//props = { waiting:false};
 		}
-		trace(config);
-		trace(props);
+		//trace(App.config);
+		//trace(props);
 		trace(state.appWare.user);
 		
 		//state.appWare.history.listen(CState.historyChange);
@@ -128,22 +129,9 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	public static function edump(el:Dynamic){Out.dumpObject(el); return 'OK'; };
 
     override function render() {
-		//trace(state.appWare.history.location.pathname);
-		trace(props);
-		//trace(props.waiting);
-		trace(false && state.appWare.user.waiting);
-		if (false && state.appWare.user.waiting)
-		{
-			return jsx('
-			<section className="hero is-alt is-fullheight">
-			  <div className="hero-body">
-			  <div className="loader"  style=${{width:'7rem', height:'7rem', margin:'auto', borderWidth:'0.58rem'}}/>
-			  </div>
-			</section>
-			');		
-		}			
+		//trace(state.appWare.history.location.pathname);	store={store}		
         return jsx('
-			<Provider store={store}><UiView store={store}/></Provider>
+			<Provider store={store}><UiView /></Provider>
         ');		
     }
 
@@ -158,15 +146,15 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		Cookie.set('user.jwt', '', -10, '/');
 		trace(Cookie.get('user.jwt')); 
 		trace(Cookie.all());
-		store.dispatch(AppAction.LogOut({userName:userName, jwt:''}));
+		store.dispatch(AppAction.LogOut({user_name:user_name, jwt:''}));
 		//_app.forceUpdate();
 	}
 	
 	public static function logIn()
 	{
-		trace(userName);
+		trace(user_name);
 		//_app.forceUpdate();
-		//return userName;
+		//return user_name;
 	}
 
 	public static function queryString2(params:Dynamic)

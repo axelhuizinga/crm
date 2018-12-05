@@ -36,5 +36,13 @@ class Utils
 				k => Std.string(Reflect.field(object, k))
 		];
 	}
+
+	public static function dynaDynMap(object:Dynamic):Map<String,Map<String,String>>
+	{
+		return [
+			for (k in Reflect.fields(object))
+				k => dynaMap(Reflect.field(object, k))			
+		];
+	}
 	
 }

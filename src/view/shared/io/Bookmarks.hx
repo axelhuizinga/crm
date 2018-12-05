@@ -17,15 +17,15 @@ import view.shared.io.DataAccess.DataSource;
 typedef UserProps =
 {
 	?contact:Int,
-	?firstName:String,
-	?lastName:String,
+	?first_name:String,
+	?last_name:String,
 	?active:Bool,
 	?loggedIn:Bool,
-	?lastLoggedIn:Date,
+	?last_login:Date,
 	?loginError:Dynamic,
 	?jwt:String,
 	?pass:String,
-	userName:String,
+	user_name:String,
 	?redirectAfterLogin:String,
 	?waiting:Bool
 }
@@ -92,11 +92,11 @@ class Bookmarks extends DataAccessForm
 		requests.push(AjaxLoader.load(	
 			'${App.config.api}', 
 			{
-				userName:props.userName,
+				user_name:props.user_name,
 				jwt:props.jwt,
 				className:'auth.User',
 				action:'edit',
-				filter:'user_name|${props.userName}',
+				filter:'user_name|${props.user_name}',
 				dataSource:Serializer.run(view.shared.io.User.userModel)
 			},
 			function(data:Dynamic )

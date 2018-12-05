@@ -56,13 +56,13 @@ class QC extends ReactComponentOf<RouteTabProps, Dynamic>
 			
 			return {
 				appConfig:aState.appWare.config,
-				userName:uState.userName,
+				user_name:uState.user_name,
 				pass:uState.pass,
 				jwt:uState.jwt,
 				loggedIn:uState.loggedIn,
 				loginError:uState.loginError,
-				lastLoggedIn:uState.lastLoggedIn,
-				firstName:uState.firstName,
+				last_login:uState.last_login,
+				first_name:uState.first_name,
 				redirectAfterLogin:aState.appWare.redirectAfterLogin,
 				waiting:uState.waiting
 			};
@@ -71,7 +71,7 @@ class QC extends ReactComponentOf<RouteTabProps, Dynamic>
 	
     override function render() {
 		trace(props);
-		if (props.waiting || props.userName == '' || props.jwt == null || props.jwt == '')
+		if (props.waiting || props.user_name == '' || props.jwt == null || props.jwt == '')
 		{
 			// WE NEED TO LOGIN FIRST
 			return jsx('<LoginForm {...props}/>');

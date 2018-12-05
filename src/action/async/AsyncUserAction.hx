@@ -32,14 +32,14 @@ class AsyncUserAction
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->model.AppState){
 			trace(props);
 			//trace(getState());
-			if (props.pass == '' || props.userName == '') 
-				return dispatch(AppAction.LoginError({userName:props.userName, loginError:'Passwort und UserName eintragen!'}));
+			if (props.pass == '' || props.user_name == '') 
+				return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:'Passwort und user_name eintragen!'}));
 			var spin:Dynamic = dispatch(AppAction.LoginWait);
 			trace(spin);
 			var bL:XMLHttpRequest = BinaryLoader.create(
 			'${App.config.api}', 
 			{				
-				userName:props.userName,
+				user_name:props.user_name,
 				jwt:props.jwt,
 				className:'auth.User',
 				action:'login',
@@ -52,13 +52,13 @@ class AsyncUserAction
 				var data:DbData = u.unserialize(dBytes, DbData);
 				if (data.dataErrors.keys().hasNext())
 				{
-					return dispatch(AppAction.LoginError({userName:props.userName, loginError:data.dataErrors.iterator().next()}));
+					return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:data.dataErrors.iterator().next()}));
 				}
-				Cookie.set('user.userName', props.userName, null, '/');
+				Cookie.set('user.user_name', props.user_name, null, '/');
 				Cookie.set('user.jwt', data.dataInfo['jwt'], null, '/');
 				trace(Cookie.get('user.jwt'));
 				return dispatch(AppAction.LoginComplete(
-					{userName:props.userName, jwt:data.dataInfo['jwt'], waiting:false}));				
+					{user_name:props.user_name, jwt:data.dataInfo['jwt'], waiting:false}));				
 			});
 			if (requests != null)
 			{
@@ -76,12 +76,12 @@ class AsyncUserAction
 			var fD:FormData = new FormData();
 			fD.append('action', 'login');
 			fD.append('className', 'auth.User');
-			fD.append('userName', props.userName);
+			fD.append('user_name', props.user_name);
 			fD.append('pass', props.pass);
-			if (props.pass == '' || props.userName == '') 
-				return dispatch(AppAction.LoginError({userName:props.userName, loginError:'Passwort und UserName eintragen!'}));
+			if (props.pass == '' || props.user_name == '') 
+				return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:'Passwort und user_name eintragen!'}));
 			var req:XMLHttpRequest = new XMLHttpRequest();//,headers: {'Content-Type': 'application/json; charset=utf-8'}'Content-Type': 'application/json; charset=utf-8',
-			//+ App.queryString2({action:'login', className:'auth.User', userName:props.userName, pass: props.pass})
+			//+ App.queryString2({action:'login', className:'auth.User', user_name:props.user_name, pass: props.pass})
 			req.open('POST', '${props.api}');
 			//req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 			req.setRequestHeader('Access-Control-Allow-Methods', "PUT, GET, POST, DELETE, OPTIONS");
@@ -94,21 +94,21 @@ class AsyncUserAction
 					trace(jRes);
 					if (jRes.error != null)
 					{
-						return dispatch(AppAction.LoginError({userName:props.userName, loginError:jRes.error}));
+						return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:jRes.error}));
 					}
-					Cookie.set('user.userName', props.userName, null, '/');
+					Cookie.set('user.user_name', props.user_name, null, '/');
 					Cookie.set('user.jwt', jRes.jwt, null, '/');
 					trace(Cookie.get('user.jwt'));
-					return dispatch(AppAction.LoginComplete({userName:props.userName, jwt:jRes.jwt, waiting:false}));
+					return dispatch(AppAction.LoginComplete({user_name:props.user_name, jwt:jRes.jwt, waiting:false}));
 				} else {
 					  // Otherwise reject with the status text
 					  // which will hopefully be a meaningful error
-					return dispatch(AppAction.LoginError({userName:props.userName, loginError:'?'}));
+					return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:'?'}));
 				}
 			};
 			var spin:Dynamic = dispatch(AppAction.LoginWait);
 			req.withCredentials = true;
-			//req.send(Json.stringify({action:'login', className:'auth.User', userName:props.userName, pass: props.pass}));
+			//req.send(Json.stringify({action:'login', className:'auth.User', user_name:props.user_name, pass: props.pass}));
 			req.send(fD);
 			trace(spin);
 			return spin;
@@ -126,12 +126,12 @@ class AsyncUserAction
 	{
 		return Thunk.Action(function(dispatch:Dispatch, getState:Void->model.AppState){
 			trace(getState());
-			if (props.userName == '') 
-				return dispatch(AppAction.LoginError({userName:props.userName, loginError:'UserId fehlt!'}));
+			if (props.user_name == '') 
+				return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:'UserId fehlt!'}));
 			var fD:FormData = new FormData();
 			fD.append('action', 'logOff');
 			fD.append('className', 'auth.User');
-			fD.append('userName', props.userName);
+			fD.append('user_name', props.user_name);
 			var req:XMLHttpRequest = new XMLHttpRequest();
 			req.open('POST', '${props.api}');
 			req.onload = function()
@@ -140,14 +140,14 @@ class AsyncUserAction
 					 // OK
 					var jRes:LoginState = Json.parse( req.response);
 					trace(jRes.jwt);
-					Cookie.set('user.userName', props.userName);
+					Cookie.set('user.user_name', props.user_name);
 					Cookie.set('user.jwt', jRes.jwt);
 					trace(Cookie.get('user.jwt'));
-					return dispatch(AppAction.LoginComplete({userName:props.userName, jwt:jRes.jwt, waiting:false}));
+					return dispatch(AppAction.LoginComplete({user_name:props.user_name, jwt:jRes.jwt, waiting:false}));
 				} else {
 					  // Otherwise reject with the status text
 					  // which will hopefully be a meaningful error
-					return dispatch(AppAction.LoginError({userName:props.userName, loginError:req.statusText}));
+					return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:req.statusText}));
 				}
 			};
 			var spin:Dynamic = dispatch(AppAction.LoginWait);

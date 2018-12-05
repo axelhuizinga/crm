@@ -75,7 +75,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 			return {
 				user:{
 					waiting:aState.appWare.user.waiting,
-					userName:uState.userName,
+					user_name:uState.user_name,
 					jwt:uState.jwt
 				}
 			};
@@ -88,7 +88,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 		state = {hasError:false};
 		browserHistory = App.store.getState().appWare.history;// BrowserHistory.create({basename:"/"});
 		//ApplicationStore.startHistoryListener(App.store, browserHistory);
-		//trace(this.props.appWare.user.state.lastName);
+		//trace(this.props.appWare.user.state.last_name);
 		mounted = false;
 		_me = this;
     }
@@ -142,7 +142,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 			');		
 		}
 		
-		if(props.user.userName == null || props.user.userName == '' || props.user.jwt == null || props.user.jwt == '')
+		if(props.user.user_name == null || props.user.user_name == '' || props.user.jwt == null || props.user.jwt == '')
 		{
 			// WE NEED TO LOGIN FIRST
 			return jsx('<LoginForm {...props.user}/>');

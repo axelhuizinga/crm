@@ -14,17 +14,17 @@ class Go
 		Log.trace = Out._trace;
 		trace('hi :)');
 		App.config = Webpack.require('../bin/config.js').config;
-		App.userName = Cookie.get('user.userName');
+		App.user_name = Cookie.get('user.user_name');
 		App.jwt = Cookie.get('user.jwt');
 
 
-		if (App.userName == null || App.userName == 'undefined' ) App.userName = '';
+		if (App.user_name == null || App.user_name == 'undefined' ) App.user_name = '';
 		if (App.jwt == null || App.jwt == 'undefined') App.jwt = '';
 		
 		//store = model.ApplicationStore.create();
 		//state = store.getState();
 		//CState.init(store);
-		trace(App.config);
+		//trace(App.config);
 		
 		render(createRoot());
 	}

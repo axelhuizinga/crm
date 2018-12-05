@@ -16,6 +16,7 @@ import react.router.ReactRouter;
 import history.BrowserHistory;
 import history.History;
 import model.CState;
+import model.AppState;
 import model.GlobalAppState;
 import Webpack.*;
 
@@ -26,7 +27,7 @@ import Webpack.*;
 
 class AppService 
 	implements IReducer<AppAction, GlobalAppState>
-	implements IMiddleware<AppAction, model.AppState>
+	implements IMiddleware<AppAction, AppState>
 {
 
 	public var initState:GlobalAppState = {
@@ -39,12 +40,13 @@ class AppService
 		routeHistory: new Array(),
 		userList:[],
 		user:{
-			//id:App.id,
-			firstName:'',
-			lastName:'',
-			userName:App.userName,
+			first_name:'',
+			last_name:'',
+			user_name:App.user_name,
+			email:'',
 			pass:'',
 			waiting:true,
+			last_login:null,
 			jwt:App.jwt
 		}
 	};
@@ -57,24 +59,18 @@ class AppService
 	public function new() 
 	{
 		//var appCconf:Dynamic = App.config;//Webpack.require('../../bin/config.js');
-		trace('OK');
+		//trace('OK');
 		//initState.config = Reflect.field(appCconf, 'default');		
 		//initState.config = appCconf;		
-		trace(initState.config);
+		//trace(initState.config);
 	}
 	
 	public function reduce(state:GlobalAppState, action:AppAction):GlobalAppState
 	{
 		trace(action);
-		trace(state.compState.get('dashboard'));
+		//trace(state.compState.get('dashboard'));
 		return switch(action)
 		{
-			/*case AddComponent(path, cState):
-				if (state.compState.exists(path))
-				{
-					var sComp:CompState = state.compState.get(path);
-					sComp.lastMounted = cState.lastMounted;
-				}*/
 			case Load:
 				copy(state, {
 					loading:true
@@ -82,7 +78,7 @@ class AppService
 			
 			case LoginChange(uState):
 				copy(state, {
-					user:{userName:uState.userName, pass:uState.pass}
+					user:{user_name:uState.user_name, pass:uState.pass}
 				});
 			case LoginRequired(uState):
 				trace(uState);
@@ -92,7 +88,7 @@ class AppService
 				
 			case LoginError(err):
 				trace(err);
-				//if(err.userName==state.user.userName)
+				//if(err.user_name==state.user.user_name)
 				copy(state, {user:{loginError:err.loginError}});
 				//else
 					///state;
@@ -125,7 +121,13 @@ class AppService
 					});
 				}
 				else state;
-				
+
+			case User(uState):
+			trace(state.user);
+				copy(state, {
+					user:copy(state.user,{first_name:uState.first_name, last_name:uState.last_name, email:uState.email, 
+					last_login:uState.last_login, pass:uState.pass})
+				});	
 			default:
 				state;
 		}

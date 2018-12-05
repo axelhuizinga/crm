@@ -66,9 +66,9 @@ class Accounting extends ReactComponentOfProps<RouteTabProps>
 				jwt:uState.jwt,
 				loggedIn:uState.loggedIn,
 				loginError:uState.loginError,
-				lastLoggedIn:uState.lastLoggedIn,
-				firstName:uState.firstName,
-				userName:uState.userName,
+				last_login:uState.last_login,
+				first_name:uState.first_name,
+				user_name:uState.user_name,
 				redirectAfterLogin:aState.appWare.redirectAfterLogin,
 				waiting:uState.waiting
 			};
@@ -76,7 +76,7 @@ class Accounting extends ReactComponentOfProps<RouteTabProps>
 	}	
 	
     override function render() {
-		if (props.waiting || props.userName == '' || props.jwt == null || props.jwt == '')
+		if (props.waiting || props.user_name == '' || props.jwt == null || props.jwt == '')
 		{
 			// WE NEED TO LOGIN FIRST
 			return jsx('<LoginForm {...props}/>');

@@ -52,7 +52,7 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 	{
 		var state = App.store.getState().appWare.user;
 		//trace(state);
-		if (state.waiting || state.userName == '' || state.jwt == null || state.jwt == '')
+		if (state.waiting || state.user_name == '' || state.jwt == null || state.jwt == '')
 		{
 			// WE REQUIRE TO LOGIN FIRST
 			return null;
