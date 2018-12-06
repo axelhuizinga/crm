@@ -96,10 +96,11 @@ class DB extends DataAccessForm
 		var view:Map<String,FormField> = dataAccess['editTableFields'].view.copy();
 		trace(dataAccess['editTableFields'].view['table_name']);
 		//trace(data);
-		renderModalRRForm({
+		renderModalForm({
 			data:new Map(),
 			dataTable:data,
 			handleSubmit: saveTableFields,
+			model:'tableFields',
 			viewClassPath:'shared.io.DB.editTableFields',			
 			fields:view,
 			valuesArray:createStateValuesArray(data, dataAccess['editTableFields'].view), 
@@ -118,9 +119,11 @@ class DB extends DataAccessForm
 		}
 	}*/
 	
-	public function saveTableFields(vA:FormData):Void
+	public function saveTableFields(vA:Dynamic):Void
 	{
-		Out.dumpObject(vA);
+		trace(vA);
+		//Out.dumpObject(vA);
+		return;
 		trace(vA.entries());
 		trace(vA.entries().next());
 		var keys:FormDataIterator = vA.keys();

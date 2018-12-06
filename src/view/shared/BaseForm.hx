@@ -91,6 +91,7 @@ typedef FormState =
 	?handleSubmit:Dynamic->Void,	
 	?hasError:Bool,
 	?loading:Bool,
+	?model:String,
 	?fields:Map<String,FormField>,//VIEW FORMFIELDS
 	?valuesArray:Array<Map<String,String>>,//FORMATTED DISPLAY VALUES
 	?values:Map<String,Dynamic>,//FORMATTED DISPLAY VALUES

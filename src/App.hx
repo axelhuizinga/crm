@@ -133,8 +133,10 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
     override function render() {
 		//trace(state.appWare.history.location.pathname);	store={store}		
         return jsx('
-			<Provider store={store}><UiView /></Provider>
-        ');		
+		<>
+			<Provider store={store}><UiView/></Provider>
+		</>			
+        ');		//nn<div className="modal" ref=${App.modalBox}/>
     }
 
 	public static function jsxDump(el:Dynamic):String

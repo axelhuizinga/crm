@@ -1,5 +1,6 @@
 package view.shared.io;
 
+import shared.Utils;
 import js.Syntax;
 import shared.DbData;
 import haxe.Constraints.Function;
@@ -54,6 +55,7 @@ typedef DataFormProps =
 	>FormProps,
 	?fullWidth:Bool,
 	?setStateFromChild:FormState->Void,
+	model:String
 }
 
 class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
@@ -69,6 +71,8 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	var modalFormTableHeader:ReactRef<DivElement>;
 	var modalFormTableBody:ReactRef<DivElement>;
 	var autoFocus:ReactRef<InputElement>;
+	var initialState:Dynamic;
+
 	
 	public function new(?props:DataFormProps) 
 	{
@@ -237,12 +241,12 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		var field = switch(formField.type)
 		{
 			case Hidden:
-				jsx('<input key={k++} name=${name} type="hidden" defaultValue=${state.values[name]} readOnly=${formField.readonly}/>');
+				jsx('<input key=${Utils.genKey(k++)} name=${name} type="hidden" defaultValue=${state.values[name]} readOnly=${formField.readonly}/>');
 			default:
-				jsx('<input key={k++} name=${name} defaultValue=${state.values[name]} onChange=${formField.readonly?null:state.handleChange} readOnly=${formField.readonly}/>');
+				jsx('<input key=${Utils.genKey(k++)} name=${name} defaultValue=${state.values[name]} onChange=${formField.readonly?null:state.handleChange} readOnly=${formField.readonly}/>');
 			
 		};
-		return formField.type == Hidden? field:[jsx('<label key={k++}>${formField.label}</label>'), field];
+		return formField.type == Hidden? field:[jsx('<label key=${Utils.genKey(k++)}>${formField.label}</label>'), field];
 	}
 	
 	function renderElements():ReactFragment
@@ -254,7 +258,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		var k:Int = 0;
 		for (field in fields)
 		{
-			elements.push(jsx('<div key=${k} className=${state.fields[field].type==Hidden?null:"formField"} >${renderField(field, k++)}</div>'));
+			elements.push(jsx('<div key=${Utils.genKey(k++)} className=${state.fields[field].type==Hidden?null:"formField"} >${renderField(field, k)}</div>'));
 		}
 		return elements;
 	}
@@ -314,7 +318,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		for(name in fields)
 		{
 			cols.push( jsx('
-			<div key=${col++} className="col" data-name=${name}>${renderRows(name)}</div>'));
+			<div key=${Utils.genKey(name +'_' + col++)} className="col" data-name=${name}>${renderRows(name)}</div>'));
 		}
 		return cols;
 	}
@@ -323,13 +327,14 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	{
 		var fields:Iterator<String> = _fstate.fields.keys();
 		var cols:Array<ReactFragment> = [];
+		var c:Int = 0;
 		for(name in fields)
 		{
 			if (_fstate.fields[name].type == FormElement.Hidden)
 				continue;			
 			var formField:FormField = _fstate.fields[name];		
 			cols.push( jsx('
-			<div className="col">
+			<div key=${Utils.genKey(c++)} className="col">
 			<div className="form-table-cell">
 			<div className="header" data-name=${name}>${formField.label}</div>
 			</div>
@@ -339,43 +344,44 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		return cols;
 	}
 	
-	function renderRowCells(fF:FormField,r:Int):ReactFragment
+	function renderRowCell(fF:FormField,k:Int):ReactFragment
 	{
+		//trace(fF.value);
 		return switch(fF.type)
-			{
-				case Checkbox:
-				trace(fF.value);
-					jsx('<input key={r} name=${fF.name} type="checkbox" defaultValue=${fF.value==null?'off':'on'} readOnly=${fF.readonly}/>');
-				case Hidden:
-					jsx('<input key={r} name=${fF.name} type="hidden" defaultValue=${fF.value} readOnly=${fF.readonly}/>');
-				case BaseForm.FormElement.Select:
-					jsx('
-					<select name=${fF.name} defaultValue=${fF.value}>
-					${renderSelectOptions(fF.value)}
-					</select>
-					');
-				default:
-					jsx('<input key={r} name=${fF.name} defaultValue=${fF.value} onChange=${fF.readonly?null:fF.handleChange} readOnly=${fF.readonly}/>');
-				
-			}		
+		{
+			case Checkbox:
+			trace(fF.value);
+				jsx('<$ControlCheckbox key=${Utils.genKey(k++)} model=${'.'+fF.name+'[]'}   defaultValue=${fF.value==null?'off':'on'} readOnly=${fF.readonly}/>');
+			case Hidden:
+				jsx('<$Control key=${Utils.genKey(k++)} model=${'.'+fF.name+'[]'} type="hidden" defaultValue=${fF.value} readOnly=${fF.readonly}/>');
+			case BaseForm.FormElement.Select:
+				jsx('
+				<$ControlSelect model=${'.'+fF.name+'[]'}  defaultValue=${fF.value}>
+				${renderSelectOptions(fF.value)}
+				</$ControlSelect>
+				');
+			default:
+				jsx('<$Control key=${Utils.genKey(k++)} model=${"."+fF.name+'[]'} defaultValue=${fF.value} onChange=${fF.readonly?null:fF.handleChange} readOnly=${fF.readonly}/>');
+			
+		}		
 	}
 //style=${{visibility:"collapse"}} 
 	function renderRows(name:String):ReactFragment
 	{		
 		var elements:Array<ReactFragment> = [];
-		var r:Int = 0;
-		trace(name);
+		var k:Int = 0;
+		//trace(name);
 		elements.push( jsx('
-		<div className="form-table-cell" style=${{minHeight:"0px",height:"0px",overflow:"hidden",padding:"0px 0.3rem"}}>
+		<div  key=${Utils.genKey(k++)} className="form-table-cell" style=${{minHeight:"0px",height:"0px",overflow:"hidden",padding:"0px 0.3rem"}}>
 		<div className = "header" data-name= ${name}>${_fstate.fields[name].label}</div>
 		</div>'));		
 		for (fF in formColElements[name])
 		{
-			//trace(_fstate.valuesArray[r]);
+			//trace(_fstate.valuesArray[k]);
 			//trace(fF);
 			elements.push(
 			jsx('
-			<div className="form-table-cell">${renderRowCells(fF, r++)}</div>
+			<div key=${Utils.genKey(k++)} className="form-table-cell">${renderRowCell(fF, k++)}</div>
 			'));		
 		}		
 		return elements;
@@ -387,9 +393,10 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		var opts:Array<String> = AbstractEnumTools.getValues(FormElement).map(function(fE:FormElement) return cast fE);
 		//trace(sel);		trace(opts);selected=${opt==sel}
 		var rOpts:Array<ReactFragment> = [];
+		var k:Int=0;
 		for (opt in opts)
 			rOpts.push(jsx('
-			<option >$opt</option>
+			<option key=${Utils.genKey(k++)}>$opt</option>
 			'));
 		return rOpts;
 	}
@@ -407,138 +414,70 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		');
 	}
 	
-		function renderModalForm(fState:FormState):ReactFragment
+
+	function renderModalForm(fState:FormState):ReactFragment
 	{
 		_fstate = fState;
+		//trace(_fstate); 
+		trace(App.modalBox);
 		modalFormTableBody = React.createRef();
 		App.modalBox.current.classList.toggle('is-active');
 		var click:Function = function(_)App.modalBox.current.classList.toggle("is-active");
-		var submit:Function = function(_){
-			if (_fstate.handleSubmit != null)
-			{
-				var fD:FormData = new FormData(cast modalFormTableBody.current);
-				trace(fD);
-				_fstate.handleSubmit(fD);
-				//_fstate.handleSubmit(cast modalFormTableBody.current);
-				//_fstate.handleSubmit(cast(modalFormTableBody.current, js.html.FormElement).elements);
-			}
-			App.modalBox.current.classList.toggle("is-active"); 					  
-		}
-		return ReactDOM.render( 
-			jsx('
-		<>
-		  	<div className="modal-background" onClick=${click}></div>
-		   	<div className="modal-card">
-				<header className="modal-card-head">
-				  <p className="modal-card-title">${_fstate.title}</p>
-				  <button className="delete" aria-label="close" onClick=${click}></button>
-				</header>
-				${renderModalFormBodyHeader()}
-				<form className="modal-card-body" ref=${modalFormTableBody}>
-				  <!-- Content ... -->
-					${_fstate.data.empty()? createElementsArray():renderElements()}
-				</form>
-				<footer className="modal-card-foot">
-				  <button className = "button is-success" 
-				  onClick = ${submit} > Speichern</button>
-				  <button className="button" onClick=${click}>Schließen</button>
-				</footer>
-			</div>
-		</> 
-		'), App.modalBox.current, adjustModalFormColumns);
-	}
-
-	function renderModalRRForm(fState:FormState):ReactFragment
-	{
-		_fstate = fState;
-		trace(fState);
-		var submitRR:Dynamic->Event->Void = function(tfd, ev){
+		var submit:Dynamic->Event->Void = function(tfd, ev){
 			trace(tfd);
-		}
-		App.modalBox.current.classList.toggle('is-active');//${renderModalFormBodyHeader()}
-		var click:Function = function(_)App.modalBox.current.classList.toggle("is-active");		
-		return ReactDOM.render( 
-			jsx('
-		<>
-		  	<div className="modal-background" onClick=${click}></div>
-		   	<div className="modal-card">
-				<header className="modal-card-head">
-				  <p className="modal-card-title">${_fstate.title}</p>
-				  <button className="delete" aria-label="close" onClick=${click}></button>
-				</header>
-				
-				<div className="modal-card-body">
-				<LocalForm ref=${modalFormTableBody} model="formFields" onSubmit=${submitRR} >
-				  <!-- Content ... -->
-					<div>
-					<label>Test</label>
-					<Control type="checkbox" model=".some" validators=${{required: function(val) return val != null}} />
-					</div>
-					<$Field model="user.bag">
-					<label>
-						<input type="radio" value="plastic" />
-						<span>Plastic</span>
-					</label>
-					<label>
-						<input type="radio" value="paper" />
-						<span>Paper</span>
-					</label>
-					</$Field>
-
-				</LocalForm>
-				</div>
-				<footer className="modal-card-foot">
-					<button model="formFields" disabled=${{valid: false}} store=${App.store}>
-						Speichern
-					</button>
-					<button type="reset" model="formFields"  >Schließen</button>
-				</footer>
-			</div>
-		</> 
-		'), App.modalBox.current);//adjustModalFormColumns
-		return null;
-		modalFormTableBody = React.createRef();
-
-		var submit:Function = function(_){
 			if (_fstate.handleSubmit != null)
 			{
-				var fD:FormData = new FormData(cast modalFormTableBody.current);
-				trace(fD);
-				_fstate.handleSubmit(fD);
-				//_fstate.handleSubmit(cast modalFormTableBody.current);
-				//_fstate.handleSubmit(cast(modalFormTableBody.current, js.html.FormElement).elements);
+				_fstate.handleSubmit(tfd);
 			}
-			App.modalBox.current.classList.toggle("is-active"); 					  
-		}
+		};
+		initialState = {
+			table_name:'',
+			field_name:'',
+			element:Input,
+			readonly:'',
+			required:'off',
+			use_as_index:'off',
+			//		'any' => {label:'Eigenschaften', readonly:true, type:Hidden},
+			//		'id' =>{primary:true, type:Hidden}
+		};
+
 		return ReactDOM.render( 
 			jsx('
 		<>
 		  	<div className="modal-background" onClick=${click}></div>
 		   	<div className="modal-card">
-				<header className="modal-card-head">
-				  <p className="modal-card-title">${_fstate.title}</p>
-				  <button className="delete" aria-label="close" onClick=${click}></button>
-				</header>
-				${renderModalFormBodyHeader()}
-				<form className="modal-card-body" ref=${modalFormTableBody}>
-				  <!-- Content ... -->
-					${_fstate.data.empty()? createElementsArray():renderElements()}
-				</form>
-				<footer className="modal-card-foot">
-				  <button className = "button is-success" 
-				  onClick = ${submit} > Speichern</button>
-				  <button className="button" onClick=${click}>Schließen</button>
-				</footer>
+			   	<LocalForm onSubmit=${submit} model=${fState.model} initialState=${initialState} >
+					<header className="modal-card-head">
+					<p className="modal-card-title">${_fstate.title}</p>
+					<ControlButton className="delete" aria-label="close" changeAction=${click} model=${fState.model}></ControlButton>
+					</header>
+					${renderModalFormBodyHeader()}
+					<div className="modal-card-body"  ref=${modalFormTableBody}>					
+					<!-- Content ... -->
+						${_fstate.data.empty()? createElementsArray():renderElements()}
+					</div>
+					<footer className="modal-card-foot">
+					<ControlButton className="button is-success" model=${fState.model} type="submit"> Speichern</ControlButton>
+					<ControlReset className="button" model=${fState.model}>Schließen</ControlReset>
+					</footer>
+				</LocalForm>
 			</div>
 		</> 
 		'), App.modalBox.current, adjustModalFormColumns);
 	}
+
+	
 
 	function adjustModalFormColumns()
 	{
-		trace(modalFormTableHeader);
+		trace(modalFormTableHeader.current);
+		//return;
+		trace(modalFormTableBody.current.children);
 		var bodyCols:HTMLCollection = modalFormTableBody.current.children;
 		var headerCols:HTMLCollection = modalFormTableHeader.current.children;
+		trace(bodyCols);
+		if(bodyCols==null)
+			return;
 		var i:Int = 0;
 		for (child in bodyCols)
 		{
@@ -584,4 +523,6 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		evt.preventDefault();
 		trace('your subclass has to override me to save anything!');
 	}
+
+	static var ky:Dynamic->haxe.PosInfos->String = Utils.genKey;
 }

@@ -5,6 +5,7 @@
 -lib react-router-4
 -lib redux
 -lib redux-connect
+-lib react-redux-form
 -lib CommentString
 -lib reselect
 -lib event-types

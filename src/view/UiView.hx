@@ -154,11 +154,11 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 		}
 		else
 		{			
-			trace('render Router :)');
+			trace('render Router :)' + props.store);
 			return jsx('
 			<$Router history={browserHistory} >
 			<>
-			<div class="modal" ref=${App.modalBox}/>
+				<div className="modal" ref=${App.modalBox}/>
 				<div className="topNav">
 					<$Route path="/dashboard" {...props} component=${NavTabs}/>
 					<$Route path="/accounting" {...props} component=${NavTabs}/>
@@ -167,18 +167,18 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 					<$Route path="/reports" {...props} component=${NavTabs}/>
 				</div>
 				<div className="tabComponent">
-					<Route path="/"  component={RedirectBox} exact={true}/>				
-					<Route path="/dashboard" exact={true} component=${DashBoard}/>
-					<Route path="/dashboard/*" component=${DashBoard}/>
-					<Route path="/accounting" component=${Bundle.load(Accounting)}/>
-					<Route path="/contacts/edit/:id" component=${Bundle.load(Contacts)}/>
-					<Route path="/contacts" component=${Bundle.load(Contacts)}/>
-					<Route path="/qc" component=${Bundle.load(QC)}/>
-					<Route path="/reports" component=${Bundle.load(Reports)}/>
+					<$Route path="/"  component={RedirectBox} exact={true}/>				
+					<$Route path="/dashboard" exact={true} component=${DashBoard}/>
+					<$Route path="/dashboard/*" component=${DashBoard}/>
+					<$Route path="/accounting" component=${Bundle.load(Accounting)}/>
+					<$Route path="/contacts/edit/:id" component=${Bundle.load(Contacts)}/>
+					<$Route path="/contacts" component=${Bundle.load(Contacts)}/>
+					<$Route path="/qc" component=${Bundle.load(QC)}/>
+					<$Route path="/reports" component=${Bundle.load(Reports)}/>
 				</div>
 			</>
 			</$Router>
-			');
+			');//<div className="modal" ref=${App.modalBox}/>
 		}
 		
 	}

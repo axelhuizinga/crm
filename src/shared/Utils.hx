@@ -4,6 +4,9 @@ package shared;
  * ...
  * @author axel@cunity.me
  */
+
+import me.cunity.debug.Out;
+
 class Utils 
 {
 
@@ -43,6 +46,15 @@ class Utils
 			for (k in Reflect.fields(object))
 				k => dynaMap(Reflect.field(object, k))			
 		];
+	}
+
+	static var kIndex:Int = 0;
+	public static function genKey(v :Dynamic, ?i :haxe.PosInfos ) :String 
+	{
+		var msg = if( i != null ) i.fileName+":"+i.methodName +":"+i.lineNumber+":" else "";
+		var key:String = i.methodName + '_' + Std.string(++kIndex);
+		//untyped console.log('$msg $v $key');
+		return key;
 	}
 	
 }
