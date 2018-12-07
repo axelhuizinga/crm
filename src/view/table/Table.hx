@@ -300,11 +300,11 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		for (dR in dRows)
 		{
 			var primary:String = (props.primary!=null && props.primary.length > 0?props.primary:'id');
-			var id:String = (dR.exists(primary)? 'id=${dR.get(primary)} ':'');
+			var id:String = (dR.exists(primary)? '${dR.get(primary)} ':'');
 			if (row == 1)
 				trace(dR);
 			dRs.push(
-			jsx('<tr id=${id} key=${"r"+row} ref=${row==0?rowRef:null} onClick={select}>
+			jsx('<tr data-id=${id} key=${"r"+row} ref=${row==0?rowRef:null} onClick={select}>
 				${renderCells(dR, row++)}				
 			</tr>'));
 		}//

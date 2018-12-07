@@ -47,6 +47,7 @@ abstract FormElement(String)
 typedef FormField =
 {
 	?className:String,
+	?primaryId:String,
 	?name:String,
 	?label:String,
 	?value:Dynamic,

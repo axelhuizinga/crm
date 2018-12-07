@@ -126,6 +126,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 			for (c in row.cells)
 				c.dataset.name => c.innerHTML
 		];
+		rM['id'] = row.dataset.id;
 		return rM;
 	}
 	
@@ -269,18 +270,35 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 			return null;
 		formColElements = new StringMap();
 		addFormColumns();
+		var fields:Iterator<String> = _fstate.fields.keys();
+		var pID:String='';//PRIMARY ID
+		for (name in fields)			
+		{
+			if(_fstate.fields[name].type == FormElement.Hidden && _fstate.fields[name].primary)
+			{
+				pID = name;
+				break;		
+			}
+		}
+
 		for (dR in _fstate.dataTable)
 		{
-			var fields:Iterator<String> = _fstate.fields.keys();
+			fields = _fstate.fields.keys();
+			trace('>>>${dR['id']}<<<');
 			for (name in fields)			
 			{
+				//var primaryId:String = '';
 				if(_fstate.fields[name].type == FormElement.Hidden)
+				{
 					continue;
+				}
+					
 				var fF:FormField = _fstate.fields[name];
 				//trace(name + '=>' + Std.string(fF));
 				formColElements[name].push({
 					className:fF.className,
 					name:name,
+					primaryId:pID==''?'':dR[pID],
 					//?label:String,
 					value:fF.displayFormat == null?dR[name]: fF.displayFormat(dR[name]),
 					//?dataBase:String, 
@@ -347,21 +365,23 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	function renderRowCell(fF:FormField,k:Int):ReactFragment
 	{
 		//trace(fF.value);
+		var model:String = '.${fF.primaryId}.${fF.name}';
 		return switch(fF.type)
 		{
 			case Checkbox:
 			trace(fF.value);
-				jsx('<$ControlCheckbox key=${Utils.genKey(k++)} model=${'.'+fF.name+'[]'}   defaultValue=${fF.value==null?'off':'on'} readOnly=${fF.readonly}/>');
+				jsx('<$ControlCheckbox key=${Utils.genKey(k++)} model=${model} defaultValue=${fF.value==null?'off':'on'} readOnly=${fF.readonly}/>');
 			case Hidden:
-				jsx('<$Control key=${Utils.genKey(k++)} model=${'.'+fF.name+'[]'} type="hidden" defaultValue=${fF.value} readOnly=${fF.readonly}/>');
+				fF.primary ? null:
+				jsx('<$Control key=${Utils.genKey(k++)} model=${model}  type="hidden" defaultValue=${fF.value} readOnly=${fF.readonly}/>');
 			case BaseForm.FormElement.Select:
 				jsx('
-				<$ControlSelect model=${'.'+fF.name+'[]'}  defaultValue=${fF.value}>
+				<$ControlSelect model=${model}   defaultValue=${fF.value}>
 				${renderSelectOptions(fF.value)}
 				</$ControlSelect>
 				');
 			default:
-				jsx('<$Control key=${Utils.genKey(k++)} model=${"."+fF.name+'[]'} defaultValue=${fF.value} onChange=${fF.readonly?null:fF.handleChange} readOnly=${fF.readonly}/>');
+				jsx('<$Control key=${Utils.genKey(k++)} model=${model}  defaultValue=${fF.value} onChange=${fF.readonly?null:fF.handleChange} readOnly=${fF.readonly}/>');
 			
 		}		
 	}
@@ -418,7 +438,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	function renderModalForm(fState:FormState):ReactFragment
 	{
 		_fstate = fState;
-		//trace(_fstate); 
+		trace(_fstate); 
 		trace(App.modalBox);
 		modalFormTableBody = React.createRef();
 		App.modalBox.current.classList.toggle('is-active');
@@ -446,7 +466,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		<>
 		  	<div className="modal-background" onClick=${click}></div>
 		   	<div className="modal-card">
-			   	<LocalForm onSubmit=${submit} model=${fState.model} initialState=${initialState} >
+			   	<LocalForm onSubmit=${submit} model=${fState.model} initialState=${{}} >
 					<header className="modal-card-head">
 					<p className="modal-card-title">${_fstate.title}</p>
 					<ControlButton className="delete" aria-label="close" changeAction=${click} model=${fState.model}></ControlButton>

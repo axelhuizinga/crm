@@ -95,7 +95,7 @@ class DB extends DataAccessForm
 		var data = selectedRowsMap();
 		var view:Map<String,FormField> = dataAccess['editTableFields'].view.copy();
 		trace(dataAccess['editTableFields'].view['table_name']);
-		//trace(data);
+		trace(data[0]['id']+'<');
 		renderModalForm({
 			data:new Map(),
 			dataTable:data,
@@ -160,7 +160,7 @@ class DB extends DataAccessForm
 			{
 				user_name:props.user_name,
 				jwt:props.jwt,
-				fields:'id,table_name,field_name,readonly,element,"any"',
+				fields:'id,table_name,field_name,readonly,element,"any",use_as_index',
 				className:'tools.DB',
 				action:'createFieldList'
 			},
@@ -182,11 +182,12 @@ class DB extends DataAccessForm
 						trace('Keine Daten!');
 					}
 					return;
-				}				 
+				}		
+				trace(data.dataRows);
 				setState({dataTable:data.dataRows, viewClassPath:'shared.io.DB.showFieldList'});
 			}
 		));
-		setState({viewClassPath:'shared.io.DB.showFieldList'});
+		//setState({viewClassPath:'shared.io.DB.showFieldList'});
 	}
 	
 	override public function componentDidMount():Void 
