@@ -370,18 +370,18 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		{
 			case Checkbox:
 			trace(fF.value);
-				jsx('<$ControlCheckbox key=${Utils.genKey(k++)} model=${model}  readOnly=${fF.readonly}/>');
+				jsx('<$ControlCheckbox key=${Utils.genKey(k++)} model=${model} defaultValue=${fF.value==null?'off':'on'} readOnly=${fF.readonly}/>');
 			case Hidden:
 				fF.primary ? null:
-				jsx('<$Control key=${Utils.genKey(k++)} model=${model}  type="hidden"  readOnly=${fF.readonly}/>');
+				jsx('<$Control key=${Utils.genKey(k++)} model=${model}  type="hidden" defaultValue=${fF.value} readOnly=${fF.readonly}/>');
 			case BaseForm.FormElement.Select:
 				jsx('
-				<$ControlSelect model=${model}  >
+				<$ControlSelect model=${model}   defaultValue=${fF.value}>
 				${renderSelectOptions(fF.value)}
 				</$ControlSelect>
 				');
 			default:
-				jsx('<$Control key=${Utils.genKey(k++)} model=${model}   onChange=${fF.readonly?null:fF.handleChange} readOnly=${fF.readonly}/>');
+				jsx('<$Control key=${Utils.genKey(k++)} model=${model}  defaultValue=${fF.value} onChange=${fF.readonly?null:fF.handleChange} readOnly=${fF.readonly}/>');
 			
 		}		
 	}

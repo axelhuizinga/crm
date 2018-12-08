@@ -15,8 +15,8 @@ import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
-import redux.IReducer;
 import shared.DbData;
+import view.shared.BaseForm.FormElement;
 import view.dashboard.model.DBFormsModel;
 import view.shared.BaseForm.FormField;
 import view.shared.SMenu;
@@ -100,6 +100,33 @@ class DB extends DataAccessForm
 			data:new Map(),
 			dataTable:data,
 			handleSubmit: saveTableFields,
+			isConnected:true,
+			initialState: {
+				'113'  : {
+					table_name : 'accounts', 
+					field_name : 'edited_by', 
+					element : Input, 
+					readonly : 'on', 
+					required : 'on', 
+					use_as_index : false
+				}, 
+				'119'  : {
+					table_name : 'accounts', 
+					field_name : 'id', 
+					element : Input, 
+					readonly : 'on', 
+					required : 'on', 
+					use_as_index : 'on'
+				}, 
+				'122'  : {
+					table_name : 'bank_transfers', 
+					field_name : 'ba_id', 
+					element : Input, 
+					readonly : 'on', 
+					required : 'on', 
+					use_as_index : 'on'
+				}
+			},
 			model:'tableFields',
 			viewClassPath:'shared.io.DB.editTableFields',			
 			fields:view,
@@ -109,15 +136,6 @@ class DB extends DataAccessForm
 		});	
 		
 	}
-	
-	/*public function saveTableFields(elements:HTMLCollection):Void
-	{
-		trace(elements.length);
-		for (el in elements)
-		{
-			trace(el);
-		}
-	}*/
 	
 	public function saveTableFields(vA:Dynamic):Void
 	{
@@ -145,11 +163,6 @@ class DB extends DataAccessForm
 			trace(k);
 			trace(vA.getAll(k));
 		}
-		/*vA.forEach(function(el:Dynamic){
-				trace(el);
-				trace(vA.getAll(el));
-			});
-		}*/
 	}
 	
 	public function showFieldList(ev:ReactEvent):Void
@@ -160,7 +173,7 @@ class DB extends DataAccessForm
 			{
 				user_name:props.user_name,
 				jwt:props.jwt,
-				fields:'id,table_name,field_name,readonly,element,"any",use_as_index',
+				fields:'id,table_name,field_name,readonly,element,"any",required,use_as_index',
 				className:'tools.DB',
 				action:'createFieldList'
 			},
@@ -184,6 +197,7 @@ class DB extends DataAccessForm
 					return;
 				}		
 				trace(data.dataRows);
+				trace(data.dataRows[29]['id'] + '<<<');
 				setState({dataTable:data.dataRows, viewClassPath:'shared.io.DB.showFieldList'});
 			}
 		));
@@ -223,8 +237,10 @@ class DB extends DataAccessForm
 		return switch(state.viewClassPath)
 		{
 			case 'shared.io.DB.showFieldList':
+				trace(dataDisplay["fieldsList"]);
+				trace(state.dataTable[29]['id']+'<<<');
 				jsx('
-					<Table id="fieldsList" data=${state.dataTable == null? null:state.dataTable}
+					<Table id="fieldsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["fieldsList"]} parentForm=${this} 
 					className = "is-striped is-hoverable" fullWidth={true}/>				
 				');	
@@ -243,7 +259,7 @@ class DB extends DataAccessForm
 		trace(props.match.params.segment);
 		//return null;<form className="form60"></form>	
 		return jsx('
-		<div className="columns">
+		<div className="columns xAuto">
 			<form className="tabComponentForm"  >
 				${renderResults()}
 			</form>

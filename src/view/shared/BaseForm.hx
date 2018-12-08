@@ -71,6 +71,7 @@ typedef FormField =
 	?elements:StringMap<FormField>,
 	//?data:Dynamic,
 	//?store:Store<AppState>,
+	?isConnected:Bool,
 	?handleChange:Bool,
 	?handleSubmit:Bool,
 	?handleChangeByParent:InputEvent->Void,
@@ -91,7 +92,9 @@ typedef FormState =
 	?handleChange:InputEvent->Void,
 	?handleSubmit:Dynamic->Void,	
 	?hasError:Bool,
+	?isConnected:Bool,
 	?loading:Bool,
+	?initialState:Dynamic,
 	?model:String,
 	?fields:Map<String,FormField>,//VIEW FORMFIELDS
 	?valuesArray:Array<Map<String,String>>,//FORMATTED DISPLAY VALUES

@@ -115,6 +115,7 @@ typedef TableProps =
 	?fullWidth:Bool,
 	?id:String,
 	?itemsPerPage:Int,
+	?isConnected:Bool,
 	?onFilter:String->Void,
 	?onPageChange:SortProps->Void,
 	?onSort:Int->Void,
@@ -262,7 +263,8 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	function renderCells(rdMap:Map<String,String>, row:Int):ReactFragment
 	{
 		//trace(rdMap);
-		trace(rdMap.remove('primary'));
+		//trace(rdMap.remove('primary'));
+		trace(rdMap['use_as_index']);
 		var column:Int = 0;
 		var cells:Array<DataCell> = fieldNames.map(function(fN:String){
 					var columnDataState:DataColumn = props.dataState.columns.get(fN);
@@ -300,9 +302,13 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		for (dR in dRows)
 		{
 			var primary:String = (props.primary!=null && props.primary.length > 0?props.primary:'id');
-			var id:String = (dR.exists(primary)? '${dR.get(primary)} ':'');
+			var id:String = (dR.exists(primary)? '${dR.get(primary)}':'');
 			if (row == 1)
+			{
 				trace(dR);
+				trace('<tr data-id=${id}< ke..');
+			}
+				
 			dRs.push(
 			jsx('<tr data-id=${id} key=${"r"+row} ref=${row==0?rowRef:null} onClick={select}>
 				${renderCells(dR, row++)}				
@@ -371,6 +377,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			trace(fixedHeader.current.children.length);
 			trace(fixedHeader.current);// .firstElementChild.children.length);
 			tHeadRef.current.style.visibility = "collapse";						
+			trace(tHeadRef.current.nodeName + ':' + tHeadRef.current.style.visibility);						
 			var i:Int = 0;
 			var grow:Array<Int> = [];
 			if (props.fullWidth)
