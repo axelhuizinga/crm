@@ -1,3 +1,6 @@
+import js.html.TimeElement;
+import haxe.Timer;
+import haxe.ds.List;
 import haxe.http.HttpJs;
 import js.html.ButtonElement;
 import js.html.DivElement;
@@ -53,28 +56,35 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 
 	public static var store:Store<AppState>;
 
-	public static var config:Dynamic = null;// Webpack.require('../bin/config.js').config;
+	public static var config:Dynamic = Webpack.require('../bin/config.js').config;
 	public static var user_name:String = Cookie.get('user.user_name');
 	public static var jwt:String = Cookie.get('user.jwt');
 	public static var modalBox:ReactRef<DivElement> = React.createRef();
+	public static var onResizeComponents:List<Dynamic> = new List();
     public function new(?props:AppProps) 
 	{
 		super(props);
 		_app = this;
 		//props = { waiting:true};
 		//<div className="modal is-active"><div className="modal-background"></div><button className="modal-close is-large" aria-label="close"></button></div>
-		
-		/*modalBox = React.createRef();
-		Browser.document.createDivElement();
-		modalBox.className = 'modal';
-		var bg:DivElement = Browser.document.createDivElement();
-		bg.className = "modal-background";
-		modalBox.appendChild(bg);
-		var close:ButtonElement = Browser.document.createButtonElement();
-		close.className = "modal-close is-large";
-		close.setAttribute('aria-label', 'close');
-		modalBox.appendChild(close);
-		Browser.document.body.appendChild(modalBox);*/
+		var ti:Timer = null;
+		Browser.window.onresize = function ()
+		{
+			if(ti!=null)
+				ti.stop();
+			ti = Timer.delay(function ()
+			{
+				if(onResizeComponents.isEmpty())
+					return;
+				var cpi:Iterator<Dynamic>=onResizeComponents.iterator();
+				while (cpi.hasNext())
+				{
+					//var com:Dynamic = cpi.next();
+					//trace(com);
+					cpi.next().layOut();
+				}
+			},250);
+		}
 		trace(modalBox);
 		trace('user_name:$user_name jwt:$jwt ' + (!(App.user_name == '' || App.jwt == '')?'Y':'N' ));
 		store = model.ApplicationStore.create();

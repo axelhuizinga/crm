@@ -94,12 +94,12 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		dbData = new DbData();
 	}
 
-	function createStateValuesArray(data:Array<Map<String,String>>, view:DataView):Array<Map<String,String>>
+	function createStateValuesArray(data:Array<Map<String,String>>, view:DataView):Array<Map<String,Dynamic>>
 	{
 		return [ for (r in data) createStateValues(r, view) ];
 	}
 	
-	function createStateValues(data:Map<String,String>, view:DataView):Map<String,String>
+	function createStateValues(data:Map<String,Dynamic>, view:DataView):Map<String,Dynamic>
 	{
 		var vState:Map<String,String> = new Map();
 		trace(data.keys());
@@ -284,7 +284,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		for (dR in _fstate.dataTable)
 		{
 			fields = _fstate.fields.keys();
-			trace('>>>${dR['id']}<<<');
+			//trace('>>>${dR['id']}<<<');
 			for (name in fields)			
 			{
 				//var primaryId:String = '';
@@ -459,7 +459,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 			   	<LocalForm onSubmit=${submit} model=${fState.model} initialState=${fState.initialState} >
 					<header className="modal-card-head">
 					<p className="modal-card-title">${_fstate.title}</p>
-					<ControlButton className="delete" aria-label="close" changeAction=${click} model=${fState.model}></ControlButton>
+					<button className="delete" aria-label="close" onClick=${click} ></button>
 					</header>
 					${renderModalFormBodyHeader()}
 					<div className="modal-card-body"  ref=${modalFormTableBody}>					

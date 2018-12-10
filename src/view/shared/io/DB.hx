@@ -1,8 +1,9 @@
 package view.shared.io;
 
+import js.html.AreaElement;
 import haxe.Json;
 import haxe.Unserializer;
-import haxe.ds.StringMap;
+import haxe.ds.Map;
 import haxe.io.Bytes;
 import hxbit.Serializer;
 import js.html.FormData;
@@ -101,32 +102,7 @@ class DB extends DataAccessForm
 			dataTable:data,
 			handleSubmit: saveTableFields,
 			isConnected:true,
-			initialState: {
-				'113'  : {
-					table_name : 'accounts', 
-					field_name : 'edited_by', 
-					element : Input, 
-					readonly : 'on', 
-					required : 'on', 
-					use_as_index : false
-				}, 
-				'119'  : {
-					table_name : 'accounts', 
-					field_name : 'id', 
-					element : Input, 
-					readonly : 'on', 
-					required : 'on', 
-					use_as_index : 'on'
-				}, 
-				'122'  : {
-					table_name : 'bank_transfers', 
-					field_name : 'ba_id', 
-					element : Input, 
-					readonly : 'on', 
-					required : 'on', 
-					use_as_index : 'on'
-				}
-			},
+			initialState: initStateFromDataTable(data),
 			model:'tableFields',
 			viewClassPath:'shared.io.DB.editTableFields',			
 			fields:view,
@@ -135,6 +111,28 @@ class DB extends DataAccessForm
 			title:'Tabellenfelder Eigenschaften'
 		});	
 		
+	}
+
+	function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
+	{
+		var iS:Dynamic = {};
+		for(dR in dt)
+		{
+			var rS:Dynamic = {};
+			for(k in dR.keys())
+			{
+				trace(k);
+				if(dataDisplay['fieldsList'].columns[k].cellFormat == DBFormsModel.formatBool)
+				{
+					Reflect.setField(rS,k, dR[k] == 'Y');
+				}
+				else
+					Reflect.setField(rS,k, dR[k]);
+			}
+			Reflect.setField(iS, dR['id'], rS);			
+		}
+		trace(iS);
+		return iS;
 	}
 	
 	public function saveTableFields(vA:Dynamic):Void

@@ -2,7 +2,7 @@ package view.shared;
 
 import haxe.Constraints.Function;
 import haxe.ds.Either;
-import haxe.ds.StringMap;
+import haxe.ds.Map;
 import haxe.http.HttpJs;
 import js.html.Event;
 import js.html.HTMLCollection;
@@ -68,7 +68,7 @@ typedef FormField =
  {
 	>RouteTabProps,
 	//?dataClassPath:String,
-	?elements:StringMap<FormField>,
+	?elements:Map<String,FormField>,
 	//?data:Dynamic,
 	//?store:Store<AppState>,
 	?isConnected:Bool,
@@ -85,8 +85,8 @@ typedef FormState =
 {
 	?dataClassPath:String,
 	?viewClassPath:String,
-	?data:Map<String,String>,
-	?dataTable:Array<Map<String,String>>,
+	?data:Map<String,Dynamic>,
+	?dataTable:Array<Map<String,Dynamic>>,
 	?clean:Bool,
 	?selectedRows:Array<TableRowElement>,
 	?handleChange:InputEvent->Void,
@@ -97,11 +97,11 @@ typedef FormState =
 	?initialState:Dynamic,
 	?model:String,
 	?fields:Map<String,FormField>,//VIEW FORMFIELDS
-	?valuesArray:Array<Map<String,String>>,//FORMATTED DISPLAY VALUES
+	?valuesArray:Array<Map<String,Dynamic>>,//FORMATTED DISPLAY VALUES
 	?values:Map<String,Dynamic>,//FORMATTED DISPLAY VALUES
 	?sideMenu:SMenuProps,
 	?submitted:Bool,
-	?errors:StringMap<String>,
+	?errors:Map<String,String>,
 	?title:String
 }
 
@@ -137,11 +137,11 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 		mounted = false;
 		requests = [];		
 		state = {
-			data:new StringMap(),
+			data:new Map(),
 			viewClassPath:'',
 			//content:new Array(),
 			clean:true,
-			errors:new StringMap(),
+			errors:new Map(),
 			//values:new StringMap(),
 			//fields:new StringMap(),
 			sideMenu: {menuBlocks:null},

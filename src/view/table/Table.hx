@@ -1,8 +1,9 @@
 package view.table;
 
+import js.Browser;
 import haxe.Constraints.Function;
 import haxe.Timer;
-import haxe.ds.StringMap;
+import haxe.ds.Map;
 import haxe.extern.EitherType;
 import js.html.DOMRect;
 import js.html.Element;
@@ -36,26 +37,23 @@ using Lambda;
 typedef DataState =
 {
 	?altGroupPos:Int,
-	columns:StringMap<DataColumn>,
-	?defaultSearch:StringMap<DataColumn>,
-	?search:StringMap<DataColumn>
+	columns:Map<String,DataColumn>,
+	?defaultSearch:Map<String,DataColumn>,
+	?search:Map<String,DataColumn>
 }
 
 typedef DataColumn = 
 {
 	@:optional var cellFormat:Function;
-	@:value(' ')
 	@:optional var className:String;
 	@:optional var editable:Bool;
 	@:optional var flexGrow:Int;
-	@:value(' ')
 	@:optional var headerClassName:String;
 	@:optional var headerFormat:Function;
 	@:optional var headerStyle:Dynamic;
 	@:optional var label:String;
 	@:optional var name:String;
 	@:optional var search:SortDirection;
-	@:value(true)
 	@:optional var show:Bool;
 	@:optional var style:Dynamic;
 }
@@ -104,7 +102,7 @@ typedef SortProps =
 typedef TableProps =
 {
 	?className:String,
-	data:Array<Map<String,String>>,
+	data:Array<Map<String,Dynamic>>,
 	dataState:DataState,
 	?disableHeader:Bool,
 	?oddClassName: String,
@@ -260,11 +258,11 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		return headerRow;
 	}	
 
-	function renderCells(rdMap:Map<String,String>, row:Int):ReactFragment
+	function renderCells(rdMap:Map<String,Dynamic>, row:Int):ReactFragment
 	{
 		//trace(rdMap);
 		//trace(rdMap.remove('primary'));
-		trace(rdMap['use_as_index']);
+		//trace(rdMap['use_as_index']);
 		var column:Int = 0;
 		var cells:Array<DataCell> = fieldNames.map(function(fN:String){
 					var columnDataState:DataColumn = props.dataState.columns.get(fN);
@@ -293,15 +291,15 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		return rCs;
 	}
 	
-	function renderRows(?dRows:Array<Map<String,String>>):ReactFragment
+	function renderRows(?dRows:Array<Map<String,Dynamic>>):ReactFragment
 	{
 		if (dRows == null)
 			dRows = props.data;
 		var dRs:Array<ReactFragment> = [];
 		var row:Int = 0;
+		var primary:String = (props.primary!=null && props.primary.length > 0?props.primary:'id');
 		for (dR in dRows)
-		{
-			var primary:String = (props.primary!=null && props.primary.length > 0?props.primary:'id');
+		{			
 			var id:String = (dR.exists(primary)? '${dR.get(primary)}':'');
 			if (row == 1)
 			{
@@ -310,10 +308,11 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			}
 				
 			dRs.push(
-			jsx('<tr data-id=${id} key=${"r"+row} ref=${row==0?rowRef:null} onClick={select}>
+			jsx('<tr data-id=${id} title=${id} key=${"r"+row} ref=${row==0?rowRef:null} onClick={select}>
 				${renderCells(dR, row++)}				
 			</tr>'));
 		}//
+		trace(dRs.length);
 		return dRs;
 	}
 	
@@ -357,72 +356,92 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		}
 		
 	}
+
+	public function layOut():Void
+	{
+		trace(headerUpdated);
+		headerUpdated = true;			
+		var tableHeight:Float = tableRef.current.clientHeight;
+		//trace('tableHeight:$tableHeight');
+		//fixedHeader.current.parentElement.setAttribute('style', 'margin-top:-${tableHeight}px;');
+		var scrollBarWidth:Float = App.config.getScrollbarWidth();
+		var freeWidth:Float = tableRef.current.parentElement.offsetWidth - tableRef.current.offsetWidth - scrollBarWidth;
+		//trace('$scrollBarWidth freeWidth:$freeWidth ${tableRef.current.parentElement.offsetWidth} ${tableRef.current.offsetWidth}');
+		//trace(tHeadRef);// .current.cells[0].getBoundingClientRect().width);
+		//trace(fixedHeader.current.children.length);
+		//trace(fixedHeader.current);// .firstElementChild.children.length);
+		tHeadRef.current.style.visibility = "collapse";						
+		//trace(tHeadRef.current.nodeName + ':' + tHeadRef.current.style.visibility);						
+		var i:Int = 0;
+		var grow:Array<Int> = [];
+		if (props.fullWidth)
+		{
+			for (cell in rowRef.current.children)
+			{
+				var cGrow = cell.getAttribute('data-grow');
+				if (cGrow != null)
+				{
+					grow[i] = Std.parseInt(cGrow);
+					trace(grow[i]);
+				}
+				i++;
+			}		
+			var growSum:Int = 0;
+			grow.iter(function(el) growSum += (el==null?0:el));
+			//trace (grow +':' + growSum );
+			if (growSum > 0)
+			{
+				var growUnit:Float = freeWidth / growSum;
+				//trace(growSum);		
+				for (i in 0...grow.length)
+				{
+					if (grow[i] != 0)
+					{
+						rowRef.current.children.item(i).setAttribute(
+							'width', Std.string(grow[i] * growUnit + rowRef.current.children.item(i).offsetWidth) + 'px'
+						);
+					}
+				}					
+			}			
+		}
+		i = 0;
+		for (cell in tHeadRef.current.children)
+		{
+			var w:Float = cell.getBoundingClientRect().width;
+			var fixedHeaderCell = cast(fixedHeader.current.childNodes[i],Element);
+			fixedHeaderCell.setAttribute('style', 'width:${w}px');
+			i++;
+		}
+	}
 	
+	override function componentDidMount()//,snapshot:Dynamic
+	{
+		App.onResizeComponents.add(this);
+		Browser.window.requestAnimationFrame(function (t:Float)
+		{
+			trace(t);
+			layOut();
+		});
+	}
+
 	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)//,snapshot:Dynamic
 	{
-		trace(headerUpdated); 
+		trace(headerUpdated + ':' + tHeadRef); 
 
 		if (tHeadRef != null)
 		{
 			if (headerUpdated)
 				return;
-			headerUpdated = true;			
-			var tableHeight:Float = tableRef.current.clientHeight;
-			trace('tableHeight:$tableHeight');
-			//fixedHeader.current.parentElement.setAttribute('style', 'margin-top:-${tableHeight}px;');
-			var scrollBarWidth:Float = App.config.getScrollbarWidth();
-			var freeWidth:Float = tableRef.current.parentElement.offsetWidth - tableRef.current.offsetWidth - scrollBarWidth;
-			trace('$scrollBarWidth freeWidth:$freeWidth ${tableRef.current.parentElement.offsetWidth} ${tableRef.current.offsetWidth}');
-			trace(tHeadRef);// .current.cells[0].getBoundingClientRect().width);
-			trace(fixedHeader.current.children.length);
-			trace(fixedHeader.current);// .firstElementChild.children.length);
-			tHeadRef.current.style.visibility = "collapse";						
-			trace(tHeadRef.current.nodeName + ':' + tHeadRef.current.style.visibility);						
-			var i:Int = 0;
-			var grow:Array<Int> = [];
-			if (props.fullWidth)
-			{
-				for (cell in rowRef.current.children)
-				{
-					var cGrow = cell.getAttribute('data-grow');
-					if (cGrow != null)
-					{
-						grow[i] = Std.parseInt(cGrow);
-						trace(grow[i]);
-					}
-					i++;
-				}		
-				var growSum:Int = 0;
-				grow.iter(function(el) growSum += (el==null?0:el));
-				trace (grow +':' + growSum );
-				if (growSum > 0)
-				{
-					var growUnit:Float = freeWidth / growSum;
-					trace(growSum);		
-					for (i in 0...grow.length)
-					{
-						if (grow[i] != 0)
-						{
-							rowRef.current.children.item(i).setAttribute(
-								'width', Std.string(grow[i] * growUnit + rowRef.current.children.item(i).offsetWidth) + 'px'
-							);
-						}
-					}					
-				}
-
-				
-			}
-			i = 0;
-			for (cell in tHeadRef.current.children)
-			{
-				var w:Float = cell.getBoundingClientRect().width;
-				var fixedHeaderCell = cast(fixedHeader.current.childNodes[i],Element);
-				fixedHeaderCell.setAttribute('style', 'width:${w}px');
-				i++;
-			}
+			
 			//showDims(tHeadRef);
 			//nodeDims(fixedHeader.current);
 		}
+	}
+
+	override public function componentWillUnmount():Void 
+	{
+		trace('leaving...');
+		App.onResizeComponents.remove(this);
 	}
 	
 	function showDims(ref:Dynamic)

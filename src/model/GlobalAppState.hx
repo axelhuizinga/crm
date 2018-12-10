@@ -19,7 +19,7 @@ typedef CompState =
 
 typedef GlobalAppState = 
 {
-	compState:StringMap<CompState>,
+	//compState:StringMap<CompState>,
 	config:Dynamic,
 	?hasError:Bool,
 	history:History,

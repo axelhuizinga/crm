@@ -32,7 +32,7 @@ class AppService
 {
 
 	public var initState:GlobalAppState = {
-		compState: new StringMap(),
+		//compState: new StringMap(),
 		config:App.config,
 		history:BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}),
 		themeColor: 'green',
@@ -59,7 +59,6 @@ class AppService
 	
 	public function new() 
 	{
-		//var appCconf:Dynamic = App.config;//Webpack.require('../../bin/config.js');
 		//trace('OK');
 		//initState.config = Reflect.field(appCconf, 'default');		
 		//initState.config = appCconf;		
@@ -148,19 +147,7 @@ class AppService
 		trace(n);
 		return n;
 		return switch(action)
-		{
-			case AddComponent(path, cState):
-				//function(){
-					trace('?');
-					var state:GlobalAppState = store.getState().appWare;
-					if (!state.compState.exists(path))
-					{
-						state.compState.set(path, cState);
-					}
-					trace('$path isMounted:${state.compState.get(path).isMounted}');
-					next();
-				
-				
+		{			
 			/*case LoginReq(uState):
 				//store.getState().userService.
 				var n:Dynamic = next();

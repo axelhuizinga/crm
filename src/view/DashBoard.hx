@@ -101,15 +101,15 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 
 	static function mapStateToProps(aState:AppState) {
 			var uState:UserProps = aState.appWare.user;
-			trace(aState.appWare.compState);
-			trace(' ${aState.appWare.history.location.pathname + (aState.appWare.compState.exists('dashboard') && aState.appWare.compState.get('dashboard').isMounted ? "Y":"N")}');
+			//trace(aState.appWare.compState);
+			//trace(' ${aState.appWare.history.location.pathname + (aState.appWare.compState.exists('dashboard') && aState.appWare.compState.get('dashboard').isMounted ? "Y":"N")}');
 			
 			return {
 				appConfig:aState.appWare.config,
 				user_name:uState.user_name,
 				pass:uState.pass,
 				jwt:uState.jwt,
-				isMounted:(aState.appWare.compState.exists('dashboard') && aState.appWare.compState.get('dashboard').isMounted),
+			//	isMounted:mounted,
 				loggedIn:uState.loggedIn,
 				loginError:uState.loginError,
 				last_login:uState.last_login,
@@ -157,14 +157,14 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 		return null;
 	}
 	
-	function connectChild(name:String):Void
+	/*function connectChild(name:String):Void
 	{
 		this.addComponent();
 		//props.isMounted = true;
 		trace(props.isMounted);
-	}
+	}*/
 	
-	function routeConnect(p:Dynamic)
+	/*function routeConnect(p:Dynamic)
 	{
 		//p.component = match.url.split('/')[1]
 		p.connectChild = connectChild;
@@ -178,7 +178,7 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 		//return null;
 		p.component = 'RolesForm';
 		return jsx('<RouteBox {...p}/>');
-	}
+	}*/
 	
 	function TabLink(rprops)
 	{

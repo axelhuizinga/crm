@@ -90,22 +90,6 @@ haxe_ds_StringMap.prototype = {
 		}
 		return this.rh.hasOwnProperty("$" + key);
 	}
-	,remove: function(key) {
-		if(__map_reserved[key] != null) {
-			key = "$" + key;
-			if(this.rh == null || !this.rh.hasOwnProperty(key)) {
-				return false;
-			}
-			delete(this.rh[key]);
-			return true;
-		} else {
-			if(!this.h.hasOwnProperty(key)) {
-				return false;
-			}
-			delete(this.h[key]);
-			return true;
-		}
-	}
 	,keys: function() {
 		return HxOverrides.iter(this.arrayKeys());
 	}
@@ -265,22 +249,83 @@ HxOverrides.iter = function(a) {
 	}};
 };
 var React = require("react");
+var haxe_ds_List = function() {
+	this.length = 0;
+};
+$hxClasses["haxe.ds.List"] = haxe_ds_List;
+haxe_ds_List.__name__ = ["haxe","ds","List"];
+haxe_ds_List.prototype = {
+	h: null
+	,q: null
+	,length: null
+	,add: function(item) {
+		var x = new haxe_ds__$List_ListNode(item,null);
+		if(this.h == null) {
+			this.h = x;
+		} else {
+			this.q.next = x;
+		}
+		this.q = x;
+		this.length++;
+	}
+	,isEmpty: function() {
+		return this.h == null;
+	}
+	,remove: function(v) {
+		var prev = null;
+		var l = this.h;
+		while(l != null) {
+			if(l.item == v) {
+				if(prev == null) {
+					this.h = l.next;
+				} else {
+					prev.next = l.next;
+				}
+				if(this.q == l) {
+					this.q = prev;
+				}
+				this.length--;
+				return true;
+			}
+			prev = l;
+			l = l.next;
+		}
+		return false;
+	}
+	,iterator: function() {
+		return new haxe_ds__$List_ListIterator(this.h);
+	}
+	,__class__: haxe_ds_List
+};
 var App = function(props) {
 	React_Component.call(this,props);
 	App._app = this;
-	haxe_Log.trace(App.modalBox,{ fileName : "src/App.hx", lineNumber : 78, className : "App", methodName : "new"});
-	haxe_Log.trace("user_name:" + App.user_name + " jwt:" + App.jwt + " " + (!(App.user_name == "" || App.jwt == "") ? "Y" : "N"),{ fileName : "src/App.hx", lineNumber : 79, className : "App", methodName : "new"});
+	var ti = null;
+	window.onresize = function() {
+		if(ti != null) {
+			ti.stop();
+		}
+		ti = haxe_Timer.delay(function() {
+			if(App.onResizeComponents.isEmpty()) {
+				return;
+			}
+			var cpi = new haxe_ds__$List_ListIterator(App.onResizeComponents.h);
+			while(cpi.hasNext()) cpi.next().layOut();
+		},250);
+	};
+	haxe_Log.trace(App.modalBox,{ fileName : "src/App.hx", lineNumber : 88, className : "App", methodName : "new"});
+	haxe_Log.trace("user_name:" + App.user_name + " jwt:" + App.jwt + " " + (!(App.user_name == "" || App.jwt == "") ? "Y" : "N"),{ fileName : "src/App.hx", lineNumber : 89, className : "App", methodName : "new"});
 	App.store = model_ApplicationStore.create();
 	this.state = App.store.getState();
 	if(!(App.user_name == "" || App.jwt == "")) {
-		haxe_Log.trace("clientVerify",{ fileName : "src/App.hx", lineNumber : 85, className : "App", methodName : "new"});
+		haxe_Log.trace("clientVerify",{ fileName : "src/App.hx", lineNumber : 95, className : "App", methodName : "new"});
 		var aj = model_AjaxLoader.loadData(App.config.api,{ jwt : App.jwt, user_name : App.user_name, className : "auth.User", action : "clientVerify"},function(verifyData) {
-			haxe_Log.trace(verifyData,{ fileName : "src/App.hx", lineNumber : 89, className : "App", methodName : "new"});
+			haxe_Log.trace(verifyData,{ fileName : "src/App.hx", lineNumber : 99, className : "App", methodName : "new"});
 			if(verifyData.error != null && verifyData.error != "") {
 				App.jwt = null;
 				App.store.dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.LoginRequired({ jwt : "", loginError : verifyData.error, user_name : App.user_name, waiting : false})));
 			} else if(verifyData.content != null && verifyData.content == "OK") {
-				haxe_Log.trace("verifyData:{verifyData.content}",{ fileName : "src/App.hx", lineNumber : 97, className : "App", methodName : "new"});
+				haxe_Log.trace("verifyData:{verifyData.content}",{ fileName : "src/App.hx", lineNumber : 107, className : "App", methodName : "new"});
 				var uState = { loggedIn : true, jwt : App.jwt, user_name : App.user_name};
 				uState.waiting = false;
 				App.store.dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.LoginComplete(uState)));
@@ -289,27 +334,27 @@ var App = function(props) {
 	} else {
 		App.store.dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.LoginRequired({ jwt : App.jwt, user_name : App.user_name, waiting : false})));
 	}
-	haxe_Log.trace(this.state.appWare.user,{ fileName : "src/App.hx", lineNumber : 113, className : "App", methodName : "new"});
-	haxe_Log.trace(Reflect.fields(this.state),{ fileName : "src/App.hx", lineNumber : 116, className : "App", methodName : "new"});
+	haxe_Log.trace(this.state.appWare.user,{ fileName : "src/App.hx", lineNumber : 123, className : "App", methodName : "new"});
+	haxe_Log.trace(Reflect.fields(this.state),{ fileName : "src/App.hx", lineNumber : 126, className : "App", methodName : "new"});
 };
 $hxClasses["App"] = App;
 App.__name__ = ["App"];
 App.edump = function(el) {
-	me_cunity_debug_Out.dumpObject(el,{ fileName : "src/App.hx", lineNumber : 131, className : "App", methodName : "edump"});
+	me_cunity_debug_Out.dumpObject(el,{ fileName : "src/App.hx", lineNumber : 141, className : "App", methodName : "edump"});
 	return "OK";
 };
 App.jsxDump = function(el) {
-	me_cunity_debug_Out.dumpObject(el,{ fileName : "src/App.hx", lineNumber : 142, className : "App", methodName : "jsxDump"});
+	me_cunity_debug_Out.dumpObject(el,{ fileName : "src/App.hx", lineNumber : 154, className : "App", methodName : "jsxDump"});
 	return "OK";
 };
 App.logOut = function() {
 	js_Cookie.set("user.jwt","",-10,"/");
-	haxe_Log.trace(js_Cookie.get("user.jwt"),{ fileName : "src/App.hx", lineNumber : 149, className : "App", methodName : "logOut"});
-	haxe_Log.trace(js_Cookie.all(),{ fileName : "src/App.hx", lineNumber : 150, className : "App", methodName : "logOut"});
+	haxe_Log.trace(js_Cookie.get("user.jwt"),{ fileName : "src/App.hx", lineNumber : 161, className : "App", methodName : "logOut"});
+	haxe_Log.trace(js_Cookie.all(),{ fileName : "src/App.hx", lineNumber : 162, className : "App", methodName : "logOut"});
 	App.store.dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.LogOut({ user_name : App.user_name, jwt : ""})));
 };
 App.logIn = function() {
-	haxe_Log.trace(App.user_name,{ fileName : "src/App.hx", lineNumber : 157, className : "App", methodName : "logIn"});
+	haxe_Log.trace(App.user_name,{ fileName : "src/App.hx", lineNumber : 169, className : "App", methodName : "logIn"});
 };
 App.queryString2 = function(params) {
 	var query = Reflect.fields(params).map(function(k) {
@@ -323,7 +368,7 @@ App.queryString2 = function(params) {
 		var s = Reflect.field(params,k);
 		return query1 + encodeURIComponent(s);
 	}).join("&");
-	haxe_Log.trace(query,{ fileName : "src/App.hx", lineNumber : 177, className : "App", methodName : "queryString2"});
+	haxe_Log.trace(query,{ fileName : "src/App.hx", lineNumber : 189, className : "App", methodName : "queryString2"});
 	return query;
 };
 App.__super__ = React_Component;
@@ -331,10 +376,15 @@ App.prototype = $extend(React_Component.prototype,{
 	componentDidMount: function() {
 	}
 	,componentDidCatch: function(error,info) {
-		haxe_Log.trace(error,{ fileName : "src/App.hx", lineNumber : 128, className : "App", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "src/App.hx", lineNumber : 138, className : "App", methodName : "componentDidCatch"});
 	}
 	,render: function() {
-		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(redux_react_Provider), props : { store : App.store, children : { "$$typeof" : $$tre, type : view_UiView._connected, props : { }, key : null, ref : null}}, key : null, ref : null};
+		var tmp = react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment);
+		var tmp1 = $$tre;
+		var tmp2 = react__$ReactType_ReactType_$Impl_$.fromComp(redux_react_Provider);
+		var tmp3 = App.store;
+		var tmp4 = $$tre;
+		return React.createElement(tmp,{ },{ "$$typeof" : tmp1, type : tmp2, props : { store : tmp3, children : { "$$typeof" : tmp4, type : view_UiView._connected, props : { }, key : null, ref : null}}, key : null, ref : null});
 	}
 	,__class__: App
 });
@@ -463,7 +513,6 @@ Go.__name__ = ["Go"];
 Go.main = function() {
 	haxe_Log.trace = me_cunity_debug_Out._trace;
 	haxe_Log.trace("hi :) " + Std.string(me_cunity_debug_Out.suspended),{ fileName : "src/Go.hx", lineNumber : 15, className : "Go", methodName : "main"});
-	App.config = require("./bin/config.js").config;
 	App.user_name = js_Cookie.get("user.user_name");
 	App.jwt = js_Cookie.get("user.jwt");
 	if(App.user_name == null || App.user_name == "undefined") {
@@ -1812,30 +1861,6 @@ haxe_ds_IntMap.prototype = {
 		return HxOverrides.iter(a);
 	}
 	,__class__: haxe_ds_IntMap
-};
-var haxe_ds_List = function() {
-	this.length = 0;
-};
-$hxClasses["haxe.ds.List"] = haxe_ds_List;
-haxe_ds_List.__name__ = ["haxe","ds","List"];
-haxe_ds_List.prototype = {
-	h: null
-	,q: null
-	,length: null
-	,add: function(item) {
-		var x = new haxe_ds__$List_ListNode(item,null);
-		if(this.h == null) {
-			this.h = x;
-		} else {
-			this.q.next = x;
-		}
-		this.q = x;
-		this.length++;
-	}
-	,iterator: function() {
-		return new haxe_ds__$List_ListIterator(this.h);
-	}
-	,__class__: haxe_ds_List
 };
 var haxe_ds__$List_ListNode = function(item,next) {
 	this.item = item;
@@ -5235,7 +5260,7 @@ redux_IReducer.prototype = {
 	,__class__: redux_IReducer
 };
 var model_AppService = function() {
-	this.initState = { compState : new haxe_ds_StringMap(), config : App.config, history : history_BrowserHistory.createBrowserHistory({ basename : "/", getUserConfirmation : model_CState.confirmTransition}), themeColor : "green", locale : "de", redirectAfterLogin : window.location.pathname, routeHistory : [], userList : [], user : { first_name : "", last_name : "", user_name : App.user_name, email : "", pass : "", waiting : true, last_login : null, jwt : App.jwt}};
+	this.initState = { config : App.config, history : history_BrowserHistory.createBrowserHistory({ basename : "/", getUserConfirmation : model_CState.confirmTransition}), themeColor : "green", locale : "de", redirectAfterLogin : window.location.pathname, routeHistory : [], userList : [], user : { first_name : "", last_name : "", user_name : App.user_name, email : "", pass : "", waiting : true, last_login : null, jwt : App.jwt}};
 };
 $hxClasses["model.AppService"] = model_AppService;
 model_AppService.__name__ = ["model","AppService"];
@@ -5244,7 +5269,7 @@ model_AppService.prototype = {
 	initState: null
 	,store: null
 	,reduce: function(state,action) {
-		haxe_Log.trace(action,{ fileName : "src/model/AppService.hx", lineNumber : 71, className : "model.AppService", methodName : "reduce"});
+		haxe_Log.trace(action,{ fileName : "src/model/AppService.hx", lineNumber : 70, className : "model.AppService", methodName : "reduce"});
 		switch(action._hx_index) {
 		case 1:
 			return react_ReactUtil.copy(state,{ loading : true});
@@ -5253,21 +5278,21 @@ model_AppService.prototype = {
 			return react_ReactUtil.copy(state,{ user : { user_name : uState.user_name, pass : uState.pass}});
 		case 3:
 			var uState1 = action.state;
-			haxe_Log.trace(uState1,{ fileName : "src/model/AppService.hx", lineNumber : 101, className : "model.AppService", methodName : "reduce"});
+			haxe_Log.trace(uState1,{ fileName : "src/model/AppService.hx", lineNumber : 100, className : "model.AppService", methodName : "reduce"});
 			return react_ReactUtil.copy(state,{ user : react_ReactUtil.copy(state.user,uState1)});
 		case 4:
 			return react_ReactUtil.copy(state,{ waiting : true});
 		case 5:
 			var err = action.state;
-			haxe_Log.trace(err,{ fileName : "src/model/AppService.hx", lineNumber : 91, className : "model.AppService", methodName : "reduce"});
+			haxe_Log.trace(err,{ fileName : "src/model/AppService.hx", lineNumber : 90, className : "model.AppService", methodName : "reduce"});
 			return react_ReactUtil.copy(state,{ user : { loginError : err.loginError}});
 		case 6:
 			var uState2 = action.state;
-			haxe_Log.trace(uState2,{ fileName : "src/model/AppService.hx", lineNumber : 107, className : "model.AppService", methodName : "reduce"});
+			haxe_Log.trace(uState2,{ fileName : "src/model/AppService.hx", lineNumber : 106, className : "model.AppService", methodName : "reduce"});
 			return react_ReactUtil.copy(state,{ user : uState2});
 		case 7:
 			var uState3 = action.state;
-			haxe_Log.trace(uState3,{ fileName : "src/model/AppService.hx", lineNumber : 85, className : "model.AppService", methodName : "reduce"});
+			haxe_Log.trace(uState3,{ fileName : "src/model/AppService.hx", lineNumber : 84, className : "model.AppService", methodName : "reduce"});
 			return react_ReactUtil.copy(state,{ user : uState3});
 		case 8:
 			var locale = action.locale;
@@ -5287,18 +5312,18 @@ model_AppService.prototype = {
 			break;
 		case 10:
 			var uState4 = action.state;
-			haxe_Log.trace(state.user,{ fileName : "src/model/AppService.hx", lineNumber : 129, className : "model.AppService", methodName : "reduce"});
+			haxe_Log.trace(state.user,{ fileName : "src/model/AppService.hx", lineNumber : 128, className : "model.AppService", methodName : "reduce"});
 			var cs = react_ReactUtil.copy(state,{ user : react_ReactUtil.copy(state.user,{ first_name : uState4.first_name, last_name : uState4.last_name, email : uState4.email, last_login : uState4.last_login, pass : uState4.pass, waiting : uState4.waiting})});
-			haxe_Log.trace(cs.user,{ fileName : "src/model/AppService.hx", lineNumber : 134, className : "model.AppService", methodName : "reduce"});
+			haxe_Log.trace(cs.user,{ fileName : "src/model/AppService.hx", lineNumber : 133, className : "model.AppService", methodName : "reduce"});
 			return react_ReactUtil.copy(state,{ user : react_ReactUtil.copy(state.user,{ first_name : uState4.first_name, last_name : uState4.last_name, email : uState4.email, last_login : uState4.last_login, pass : uState4.pass, waiting : uState4.waiting})});
 		default:
 			return state;
 		}
 	}
 	,middleware: function(action,next) {
-		haxe_Log.trace(action,{ fileName : "src/model/AppService.hx", lineNumber : 146, className : "model.AppService", methodName : "middleware"});
+		haxe_Log.trace(action,{ fileName : "src/model/AppService.hx", lineNumber : 145, className : "model.AppService", methodName : "middleware"});
 		var n = next();
-		haxe_Log.trace(n,{ fileName : "src/model/AppService.hx", lineNumber : 148, className : "model.AppService", methodName : "middleware"});
+		haxe_Log.trace(n,{ fileName : "src/model/AppService.hx", lineNumber : 147, className : "model.AppService", methodName : "middleware"});
 		return n;
 	}
 	,__class__: model_AppService
@@ -5323,12 +5348,6 @@ model_CState.confirmTransition = function(message,callback) {
 		return;
 	}
 	callback(true);
-};
-model_CState.addComponent = function(comp) {
-	var state = model_CState.store.getState();
-	var d = model_CState.store.dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.AddComponent(comp.props.match.url.split("/")[1],{ clean : true, matchUrl : comp.props.match.url, pathname : comp.props.history.location.pathname, formFields : new haxe_ds_StringMap(), isMounted : true, lastMounted : new Date()})));
-	haxe_Log.trace(Promise.resolve(d),{ fileName : "src/model/CState.hx", lineNumber : 59, className : "model.CState", methodName : "addComponent"});
-	haxe_Log.trace(comp.props.history.location,{ fileName : "src/model/CState.hx", lineNumber : 68, className : "model.CState", methodName : "addComponent"});
 };
 var model_StatusBarService = function() {
 	this.initState = { pathname : window.location.pathname, date : new Date()};
@@ -5413,7 +5432,7 @@ var react_redux_form_Control = require("react-redux-form").Control;
 var react_redux_form_ControlCheckbox = require("react-redux-form").Control.checkbox;
 var react_redux_form_ControlSelect = require("react-redux-form").Control.select;
 var react_redux_form_ControlButton = require("react-redux-form").Control.button;
-var react_redux_form_Field = require("react-redux-form").Field;
+var react_redux_form_ControlReset = require("react-redux-form").Control.reset;
 var react_redux_form_LocalForm = require("react-redux-form").LocalForm;
 var react_router_NavLink = require("react-router-dom").NavLink;
 var react_router_ReactRouter = require("react-router");
@@ -5878,20 +5897,7 @@ shared_DbData.prototype = {
 							}
 							__ctx.out.add(b5);
 						}
-						var v15 = __map_reserved[k4] != null ? v12.getReserved(k4) : v12.h[k4];
-						if(v15 == null) {
-							__ctx.out.addByte(0);
-						} else {
-							var b6 = haxe_io_Bytes.ofString(v15);
-							var v16 = b6.length + 1;
-							if(v16 >= 0 && v16 < 128) {
-								__ctx.out.addByte(v16);
-							} else {
-								__ctx.out.addByte(128);
-								__ctx.out.addInt32(v16);
-							}
-							__ctx.out.add(b6);
-						}
+						__ctx.addDynamic(__map_reserved[k4] != null ? v12.getReserved(k4) : v12.h[k4]);
 					}
 				}
 			}
@@ -6115,25 +6121,12 @@ shared_DbData.prototype = {
 							k12 = s5;
 						}
 						var k4 = k12;
-						var v18 = __ctx.input.b[__ctx.inPos++];
-						if(v18 == 128) {
-							v18 = __ctx.input.getInt32(__ctx.inPos);
-							__ctx.inPos += 4;
-						}
-						var len12 = v18;
-						if(len12 == 0) {
-							v15 = null;
-						} else {
-							--len12;
-							var s6 = __ctx.input.getString(__ctx.inPos,len12);
-							__ctx.inPos += len12;
-							v15 = s6;
-						}
-						var v19 = v15;
+						v15 = __ctx.getDynamic();
+						var v18 = v15;
 						if(__map_reserved[k4] != null) {
-							m4.setReserved(k4,v19);
+							m4.setReserved(k4,v18);
 						} else {
-							m4.h[k4] = v19;
+							m4.h[k4] = v18;
 						}
 					}
 					e0 = m4;
@@ -6164,6 +6157,11 @@ shared_Utils.dynaMap = function(object) {
 		}
 	}
 	return _g;
+};
+shared_Utils.genKey = function(v,i) {
+	var msg = i != null ? i.fileName + ":" + i.methodName + ":" + i.lineNumber + ":" : "";
+	var key = i.methodName + "_" + Std.string(++shared_Utils.kIndex);
+	return key;
 };
 var view_Accounting = $hx_exports["default"] = function(props,context) {
 	this.mounted = false;
@@ -6264,30 +6262,7 @@ view_DashBoard.mapDispatchToProps = function(dispatch) {
 };
 view_DashBoard.mapStateToProps = function(aState) {
 	var uState = aState.appWare.user;
-	haxe_Log.trace(aState.appWare.compState,{ fileName : "src/view/DashBoard.hx", lineNumber : 104, className : "view.DashBoard", methodName : "mapStateToProps"});
-	var aState1 = aState.appWare.history.location.pathname;
-	var tmp;
-	var _this = aState.appWare.compState;
-	if(__map_reserved["dashboard"] != null ? _this.existsReserved("dashboard") : _this.h.hasOwnProperty("dashboard")) {
-		var _this1 = aState.appWare.compState;
-		tmp = (__map_reserved["dashboard"] != null ? _this1.getReserved("dashboard") : _this1.h["dashboard"]).isMounted;
-	} else {
-		tmp = false;
-	}
-	haxe_Log.trace(" " + (aState1 + (tmp ? "Y" : "N")),{ fileName : "src/view/DashBoard.hx", lineNumber : 105, className : "view.DashBoard", methodName : "mapStateToProps"});
-	var aState2 = aState.appWare.config;
-	var uState1 = uState.user_name;
-	var uState2 = uState.pass;
-	var uState3 = uState.jwt;
-	var tmp1;
-	var _this2 = aState.appWare.compState;
-	if(__map_reserved["dashboard"] != null ? _this2.existsReserved("dashboard") : _this2.h.hasOwnProperty("dashboard")) {
-		var _this3 = aState.appWare.compState;
-		tmp1 = (__map_reserved["dashboard"] != null ? _this3.getReserved("dashboard") : _this3.h["dashboard"]).isMounted;
-	} else {
-		tmp1 = false;
-	}
-	return { appConfig : aState2, user_name : uState1, pass : uState2, jwt : uState3, isMounted : tmp1, loggedIn : uState.loggedIn, loginError : uState.loginError, last_login : uState.last_login, first_name : uState.first_name, redirectAfterLogin : aState.appWare.redirectAfterLogin, waiting : uState.waiting};
+	return { appConfig : aState.appWare.config, user_name : uState.user_name, pass : uState.pass, jwt : uState.jwt, loggedIn : uState.loggedIn, loginError : uState.loginError, last_login : uState.last_login, first_name : uState.first_name, redirectAfterLogin : aState.appWare.redirectAfterLogin, waiting : uState.waiting};
 };
 view_DashBoard.__super__ = React_Component;
 view_DashBoard.prototype = $extend(React_Component.prototype,{
@@ -6335,21 +6310,6 @@ view_DashBoard.prototype = $extend(React_Component.prototype,{
 	,internalRedirect: function() {
 		this.props.history.push("/dashboard/settings");
 		return null;
-	}
-	,connectChild: function(name) {
-		model_CState.addComponent(this);
-		haxe_Log.trace(this.props.isMounted,{ fileName : "src/view/DashBoard.hx", lineNumber : 164, className : "view.DashBoard", methodName : "connectChild"});
-	}
-	,routeConnect: function(p) {
-		p.connectChild = $bind(this,this.connectChild);
-		haxe_Log.trace(Reflect.fields(p),{ fileName : "src/view/DashBoard.hx", lineNumber : 171, className : "view.DashBoard", methodName : "routeConnect"});
-		if(this.renderCount < 0) {
-			this.renderCount++;
-			haxe_Log.trace("renderCount:" + this.renderCount,{ fileName : "src/view/DashBoard.hx", lineNumber : 175, className : "view.DashBoard", methodName : "routeConnect"});
-			return null;
-		}
-		p.component = "RolesForm";
-		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_RouteBox), props : p, key : null, ref : null};
 	}
 	,TabLink: function(rprops) {
 		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("li"), props : { className : rprops.location.pathname.indexOf(rprops.to) == 0 ? "is-active" : "", children : React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_NavLink),{ to : rprops.to},rprops.children)}, key : null, ref : null};
@@ -6696,7 +6656,7 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 		if(this.props.user.jwt == null || this.props.user.jwt == "") {
 			return { "$$typeof" : $$tre, type : view_LoginForm._connected, props : this.props.user, key : null, ref : null};
 		} else {
-			haxe_Log.trace("render Router :)",{ fileName : "src/view/UiView.hx", lineNumber : 157, className : "view.UiView", methodName : "render"});
+			haxe_Log.trace("render Router :)" + Std.string(this.props.store),{ fileName : "src/view/UiView.hx", lineNumber : 157, className : "view.UiView", methodName : "render"});
 			var tmp = react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Router);
 			var tmp1 = { history : this.browserHistory};
 			var tmp2 = react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment);
@@ -6747,7 +6707,7 @@ view_shared_BaseForm.prototype = $extend(React_Component.prototype,{
 	}
 	,componentDidMount: function() {
 		this.mounted = true;
-		haxe_Log.trace(this.mounted,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 161, className : "view.shared.BaseForm", methodName : "componentDidMount"});
+		haxe_Log.trace(this.mounted,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 165, className : "view.shared.BaseForm", methodName : "componentDidMount"});
 	}
 	,componentWillUnmount: function() {
 		this.mounted = false;
@@ -6769,18 +6729,18 @@ view_shared_BaseForm.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,render: function() {
-		haxe_Log.trace("You should override me :)",{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 180, className : "view.shared.BaseForm", methodName : "render"});
+		haxe_Log.trace("You should override me :)",{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 184, className : "view.shared.BaseForm", methodName : "render"});
 		return null;
 	}
 	,setStateFromChild: function(newState) {
 		this.setState(newState);
-		haxe_Log.trace(newState,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 187, className : "view.shared.BaseForm", methodName : "setStateFromChild"});
+		haxe_Log.trace(newState,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 191, className : "view.shared.BaseForm", methodName : "setStateFromChild"});
 	}
 	,switchContent: function(reactEventSource) {
-		haxe_Log.trace(this.props.history,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 193, className : "view.shared.BaseForm", methodName : "switchContent"});
-		haxe_Log.trace(this.props.match,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 194, className : "view.shared.BaseForm", methodName : "switchContent"});
+		haxe_Log.trace(this.props.history,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 197, className : "view.shared.BaseForm", methodName : "switchContent"});
+		haxe_Log.trace(this.props.match,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 198, className : "view.shared.BaseForm", methodName : "switchContent"});
 		var viewClassPath = reactEventSource.target.getAttribute("data-classpath");
-		haxe_Log.trace(viewClassPath + ":" + this.state.viewClassPath,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 196, className : "view.shared.BaseForm", methodName : "switchContent"});
+		haxe_Log.trace(viewClassPath + ":" + this.state.viewClassPath,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 200, className : "view.shared.BaseForm", methodName : "switchContent"});
 		if(this.state.viewClassPath != viewClassPath) {
 			this.setState({ viewClassPath : viewClassPath});
 			this.props.history.push(this.props.match.url + "/" + viewClassPath);
@@ -7261,7 +7221,7 @@ var view_shared_io_DataAccessForm = function(props) {
 	this.mounted = false;
 	this.requests = [];
 	if(props != null) {
-		haxe_Log.trace(props.match,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 80, className : "view.shared.io.DataAccessForm", methodName : "new"});
+		haxe_Log.trace(props.match,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 83, className : "view.shared.io.DataAccessForm", methodName : "new"});
 	}
 	this.state = { data : new haxe_ds_StringMap(), clean : true, errors : new haxe_ds_StringMap(), hasError : false, handleChange : this.setChangeHandler(), handleSubmit : this.setSubmitHandler(), sideMenu : props.sideMenu, selectedRows : []};
 	this.dbData = new shared_DbData();
@@ -7269,8 +7229,8 @@ var view_shared_io_DataAccessForm = function(props) {
 $hxClasses["view.shared.io.DataAccessForm"] = view_shared_io_DataAccessForm;
 view_shared_io_DataAccessForm.__name__ = ["view","shared","io","DataAccessForm"];
 view_shared_io_DataAccessForm.localDate = function(d) {
-	haxe_Log.trace(d,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 565, className : "view.shared.io.DataAccessForm", methodName : "localDate"});
-	haxe_Log.trace(Date.parse(d),{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 566, className : "view.shared.io.DataAccessForm", methodName : "localDate"});
+	haxe_Log.trace(d,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 503, className : "view.shared.io.DataAccessForm", methodName : "localDate"});
+	haxe_Log.trace(Date.parse(d),{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 504, className : "view.shared.io.DataAccessForm", methodName : "localDate"});
 	return DateTools.format(new Date(Date.parse(d)),"%d.%m.%Y %H:%M");
 };
 view_shared_io_DataAccessForm.__super__ = React_PureComponent;
@@ -7286,6 +7246,7 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 	,modalFormTableHeader: null
 	,modalFormTableBody: null
 	,autoFocus: null
+	,initialState: null
 	,createStateValuesArray: function(data,view1) {
 		var _g = [];
 		var _g1 = 0;
@@ -7298,8 +7259,8 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 	}
 	,createStateValues: function(data,view1) {
 		var vState = new haxe_ds_StringMap();
-		haxe_Log.trace(data.keys(),{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 102, className : "view.shared.io.DataAccessForm", methodName : "createStateValues"});
-		haxe_Log.trace(view1.keys(),{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 103, className : "view.shared.io.DataAccessForm", methodName : "createStateValues"});
+		haxe_Log.trace(data.keys(),{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 105, className : "view.shared.io.DataAccessForm", methodName : "createStateValues"});
+		haxe_Log.trace(view1.keys(),{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 106, className : "view.shared.io.DataAccessForm", methodName : "createStateValues"});
 		var k = data.keys();
 		while(k.hasNext()) {
 			var k1 = k.next();
@@ -7312,7 +7273,7 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 				}
 			}
 		}
-		haxe_Log.trace(vState.toString(),{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 111, className : "view.shared.io.DataAccessForm", methodName : "createStateValues"});
+		haxe_Log.trace(vState.toString(),{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 114, className : "view.shared.io.DataAccessForm", methodName : "createStateValues"});
 		return vState;
 	}
 	,selectedRowsMap: function() {
@@ -7342,6 +7303,12 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 			}
 		}
 		var rM = _g;
+		var v = row.dataset.id;
+		if(__map_reserved["id"] != null) {
+			rM.setReserved("id",v);
+		} else {
+			rM.h["id"] = v;
+		}
 		return rM;
 	}
 	,setChangeHandler: function() {
@@ -7368,7 +7335,7 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 	}
 	,componentDidMount: function() {
 		this.mounted = true;
-		haxe_Log.trace(this.mounted,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 161, className : "view.shared.io.DataAccessForm", methodName : "componentDidMount"});
+		haxe_Log.trace(this.mounted,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 165, className : "view.shared.io.DataAccessForm", methodName : "componentDidMount"});
 	}
 	,componentWillUnmount: function() {
 		this.mounted = false;
@@ -7400,7 +7367,7 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 		} else {
 			vs.h[k] = value;
 		}
-		haxe_Log.trace(vs.toString(),{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 186, className : "view.shared.io.DataAccessForm", methodName : "handleChange"});
+		haxe_Log.trace(vs.toString(),{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 190, className : "view.shared.io.DataAccessForm", methodName : "handleChange"});
 		this.setState({ clean : false, sideMenu : this.updateMenu(), values : vs});
 	}
 	,selectAllRows: function(unselect) {
@@ -7420,7 +7387,7 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 		}
 	}
 	,updateMenu: function(viewClassPath) {
-		haxe_Log.trace("subclass task",{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 209, className : "view.shared.io.DataAccessForm", methodName : "updateMenu"});
+		haxe_Log.trace("subclass task",{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 213, className : "view.shared.io.DataAccessForm", methodName : "updateMenu"});
 		return null;
 	}
 	,handleSubmit: function(e) {
@@ -7434,7 +7401,7 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 		var _this = this.state.fields;
 		var formField = __map_reserved[name] != null ? _this.getReserved(name) : _this.h[name];
 		if(k == 0) {
-			haxe_Log.trace(this.state.handleChange,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 236, className : "view.shared.io.DataAccessForm", methodName : "renderField"});
+			haxe_Log.trace(this.state.handleChange,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 240, className : "view.shared.io.DataAccessForm", methodName : "renderField"});
 		}
 		var field;
 		var _g = formField.type;
@@ -7442,22 +7409,22 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 			var field1 = $$tre;
 			var field2 = react__$ReactType_ReactType_$Impl_$.fromString("input");
 			var _this1 = this.state.values;
-			field = { "$$typeof" : field1, type : field2, props : { name : name, defaultValue : __map_reserved[name] != null ? _this1.getReserved(name) : _this1.h[name], onChange : formField.readonly ? null : this.state.handleChange, readOnly : formField.readonly}, key : k++, ref : null};
+			field = { "$$typeof" : field1, type : field2, props : { name : name, defaultValue : __map_reserved[name] != null ? _this1.getReserved(name) : _this1.h[name], onChange : formField.readonly ? null : this.state.handleChange, readOnly : formField.readonly}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 247, className : "view.shared.io.DataAccessForm", methodName : "renderField"}), ref : null};
 		} else if(_g == "Hidden") {
 			var field3 = $$tre;
 			var field4 = react__$ReactType_ReactType_$Impl_$.fromString("input");
 			var _this2 = this.state.values;
-			field = { "$$typeof" : field3, type : field4, props : { name : name, type : "hidden", defaultValue : __map_reserved[name] != null ? _this2.getReserved(name) : _this2.h[name], readOnly : formField.readonly}, key : k++, ref : null};
+			field = { "$$typeof" : field3, type : field4, props : { name : name, type : "hidden", defaultValue : __map_reserved[name] != null ? _this2.getReserved(name) : _this2.h[name], readOnly : formField.readonly}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 245, className : "view.shared.io.DataAccessForm", methodName : "renderField"}), ref : null};
 		} else {
 			var field5 = $$tre;
 			var field6 = react__$ReactType_ReactType_$Impl_$.fromString("input");
 			var _this3 = this.state.values;
-			field = { "$$typeof" : field5, type : field6, props : { name : name, defaultValue : __map_reserved[name] != null ? _this3.getReserved(name) : _this3.h[name], onChange : formField.readonly ? null : this.state.handleChange, readOnly : formField.readonly}, key : k++, ref : null};
+			field = { "$$typeof" : field5, type : field6, props : { name : name, defaultValue : __map_reserved[name] != null ? _this3.getReserved(name) : _this3.h[name], onChange : formField.readonly ? null : this.state.handleChange, readOnly : formField.readonly}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 247, className : "view.shared.io.DataAccessForm", methodName : "renderField"}), ref : null};
 		}
 		if(formField.type == "Hidden") {
 			return field;
 		} else {
-			return [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("label"), props : { children : formField.label}, key : k++, ref : null},field];
+			return [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("label"), props : { children : formField.label}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 250, className : "view.shared.io.DataAccessForm", methodName : "renderField"}), ref : null},field];
 		}
 	}
 	,renderElements: function() {
@@ -7473,8 +7440,7 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 			var tmp = $$tre;
 			var tmp1 = react__$ReactType_ReactType_$Impl_$.fromString("div");
 			var _this = this.state.fields;
-			var tmp2 = k++;
-			elements.push({ "$$typeof" : tmp, type : tmp1, props : { className : (__map_reserved[field1] != null ? _this.getReserved(field1) : _this.h[field1]).type == "Hidden" ? null : "formField", children : this.renderField(field1,tmp2)}, key : k, ref : null});
+			elements.push({ "$$typeof" : tmp, type : tmp1, props : { className : (__map_reserved[field1] != null ? _this.getReserved(field1) : _this.h[field1]).type == "Hidden" ? null : "formField", children : this.renderField(field1,k++)}, key : shared_Utils.genKey(k - 1,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 262, className : "view.shared.io.DataAccessForm", methodName : "renderElements"}), ref : null});
 		}
 		return elements;
 	}
@@ -7484,23 +7450,41 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 		}
 		this.formColElements = new haxe_ds_StringMap();
 		this.addFormColumns();
+		var fields = this._fstate.fields.keys();
+		var pID = "";
+		var name = fields;
+		while(name.hasNext()) {
+			var name1 = name.next();
+			var tmp;
+			var _this = this._fstate.fields;
+			if((__map_reserved[name1] != null ? _this.getReserved(name1) : _this.h[name1]).type == "Hidden") {
+				var _this1 = this._fstate.fields;
+				tmp = (__map_reserved[name1] != null ? _this1.getReserved(name1) : _this1.h[name1]).primary;
+			} else {
+				tmp = false;
+			}
+			if(tmp) {
+				pID = name1;
+				break;
+			}
+		}
 		var _g = 0;
 		var _g1 = this._fstate.dataTable;
 		while(_g < _g1.length) {
 			var dR = _g1[_g];
 			++_g;
-			var fields = this._fstate.fields.keys();
-			var name = fields;
-			while(name.hasNext()) {
-				var name1 = name.next();
-				var _this = this._fstate.fields;
-				if((__map_reserved[name1] != null ? _this.getReserved(name1) : _this.h[name1]).type == "Hidden") {
+			fields = this._fstate.fields.keys();
+			var name2 = fields;
+			while(name2.hasNext()) {
+				var name3 = name2.next();
+				var _this2 = this._fstate.fields;
+				if((__map_reserved[name3] != null ? _this2.getReserved(name3) : _this2.h[name3]).type == "Hidden") {
 					continue;
 				}
-				var _this1 = this._fstate.fields;
-				var fF = __map_reserved[name1] != null ? _this1.getReserved(name1) : _this1.h[name1];
-				var _this2 = this.formColElements;
-				(__map_reserved[name1] != null ? _this2.getReserved(name1) : _this2.h[name1]).push({ className : fF.className, name : name1, value : fF.displayFormat == null ? __map_reserved[name1] != null ? dR.getReserved(name1) : dR.h[name1] : fF.displayFormat(__map_reserved[name1] != null ? dR.getReserved(name1) : dR.h[name1]), displayFormat : fF.displayFormat, type : fF.type, readonly : fF.readonly, required : fF.required, handleChange : fF.handleChange, placeholder : fF.placeholder, validate : fF.validate});
+				var _this3 = this._fstate.fields;
+				var fF = __map_reserved[name3] != null ? _this3.getReserved(name3) : _this3.h[name3];
+				var _this4 = this.formColElements;
+				(__map_reserved[name3] != null ? _this4.getReserved(name3) : _this4.h[name3]).push({ className : fF.className, name : name3, primaryId : pID == "" ? "" : __map_reserved[pID] != null ? dR.getReserved(pID) : dR.h[pID], value : fF.displayFormat == null ? __map_reserved[name3] != null ? dR.getReserved(name3) : dR.h[name3] : fF.displayFormat(__map_reserved[name3] != null ? dR.getReserved(name3) : dR.h[name3]), displayFormat : fF.displayFormat, type : fF.type, readonly : fF.readonly, required : fF.required, handleChange : fF.handleChange, placeholder : fF.placeholder, validate : fF.validate});
 			}
 		}
 		return this.renderColumns();
@@ -7531,13 +7515,14 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 		var name = fields;
 		while(name.hasNext()) {
 			var name1 = name.next();
-			cols.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "col", 'data-name' : name1, children : this.renderRows(name1)}, key : col++, ref : null});
+			cols.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "col", 'data-name' : name1, children : this.renderRows(name1)}, key : shared_Utils.genKey(name1 + "_" + col++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 339, className : "view.shared.io.DataAccessForm", methodName : "renderColumns"}), ref : null});
 		}
 		return cols;
 	}
 	,renderColumnHeaders: function() {
 		var fields = this._fstate.fields.keys();
 		var cols = [];
+		var c = 0;
 		var name = fields;
 		while(name.hasNext()) {
 			var name1 = name.next();
@@ -7547,49 +7532,51 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 			}
 			var _this1 = this._fstate.fields;
 			var formField = __map_reserved[name1] != null ? _this1.getReserved(name1) : _this1.h[name1];
-			cols.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "col", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "form-table-cell", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "header", 'data-name' : name1, children : formField.label}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null});
+			cols.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "col", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "form-table-cell", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "header", 'data-name' : name1, children : formField.label}, key : null, ref : null}}, key : null, ref : null}}, key : shared_Utils.genKey(c++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 355, className : "view.shared.io.DataAccessForm", methodName : "renderColumnHeaders"}), ref : null});
 		}
 		return cols;
 	}
-	,renderRowCell: function(fF,r) {
+	,renderRowCell: function(fF,k) {
+		var model = "." + fF.primaryId + "." + fF.name;
 		var _g = fF.type;
 		if(_g == null) {
-			var tmp = fF.readonly ? null : fF.handleChange;
-			return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_Control),{ key : r, name : fF.name, defaultValue : fF.value, onChange : tmp, readOnly : fF.readonly});
+			return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_Control),{ key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 384, className : "view.shared.io.DataAccessForm", methodName : "renderRowCell"}), model : model, onChange : fF.readonly ? null : fF.handleChange, readOnly : fF.readonly});
 		} else {
 			switch(_g) {
 			case "Checkbox":
-				haxe_Log.trace(fF.value,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 348, className : "view.shared.io.DataAccessForm", methodName : "renderRowCell"});
-				var tmp1 = fF.value == null ? "off" : "on";
-				return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlCheckbox),{ name : fF.name, defaultValue : tmp1, readOnly : fF.readonly});
+				haxe_Log.trace(fF.value,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 372, className : "view.shared.io.DataAccessForm", methodName : "renderRowCell"});
+				return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlCheckbox),{ key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 373, className : "view.shared.io.DataAccessForm", methodName : "renderRowCell"}), model : model, readOnly : fF.readonly});
 			case "Hidden":
-				return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("input"), props : { name : fF.name, type : "hidden", defaultValue : fF.value, readOnly : fF.readonly}, key : r, ref : null};
+				if(fF.primary) {
+					return null;
+				} else {
+					return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_Control),{ key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 376, className : "view.shared.io.DataAccessForm", methodName : "renderRowCell"}), model : model, type : "hidden", readOnly : fF.readonly});
+				}
+				break;
 			case "Select":
-				return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlSelect),{ name : fF.name, defaultValue : fF.value},this.renderSelectOptions(fF.value));
+				return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlSelect),{ model : model},this.renderSelectOptions(fF.value));
 			default:
-				var tmp2 = fF.readonly ? null : fF.handleChange;
-				return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_Control),{ key : r, name : fF.name, defaultValue : fF.value, onChange : tmp2, readOnly : fF.readonly});
+				return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_Control),{ key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 384, className : "view.shared.io.DataAccessForm", methodName : "renderRowCell"}), model : model, onChange : fF.readonly ? null : fF.handleChange, readOnly : fF.readonly});
 			}
 		}
 	}
 	,renderRows: function(name) {
 		var elements = [];
-		var r = 0;
-		haxe_Log.trace(name,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 368, className : "view.shared.io.DataAccessForm", methodName : "renderRows"});
+		var k = 0;
 		var tmp = $$tre;
 		var tmp1 = react__$ReactType_ReactType_$Impl_$.fromString("div");
 		var tmp2 = $$tre;
 		var tmp3 = react__$ReactType_ReactType_$Impl_$.fromString("div");
 		var _this = this._fstate.fields;
 		var tmp4 = __map_reserved[name] != null ? _this.getReserved(name) : _this.h[name];
-		elements.push({ "$$typeof" : tmp, type : tmp1, props : { className : "form-table-cell", style : { minHeight : "0px", height : "0px", overflow : "hidden", padding : "0px 0.3rem"}, children : { "$$typeof" : tmp2, type : tmp3, props : { className : "header", 'data-name' : name, children : tmp4.label}, key : null, ref : null}}, key : null, ref : null});
+		elements.push({ "$$typeof" : tmp, type : tmp1, props : { className : "form-table-cell", style : { minHeight : "0px", height : "0px", overflow : "hidden", padding : "0px 0.3rem"}, children : { "$$typeof" : tmp2, type : tmp3, props : { className : "header", 'data-name' : name, children : tmp4.label}, key : null, ref : null}}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 395, className : "view.shared.io.DataAccessForm", methodName : "renderRows"}), ref : null});
 		var _g = 0;
 		var _this1 = this.formColElements;
 		var _g1 = __map_reserved[name] != null ? _this1.getReserved(name) : _this1.h[name];
 		while(_g < _g1.length) {
 			var fF = _g1[_g];
 			++_g;
-			elements.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "form-table-cell", children : this.renderRowCell(fF,r++)}, key : "k$r", ref : null});
+			elements.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "form-table-cell", children : this.renderRowCell(fF,k++)}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 404, className : "view.shared.io.DataAccessForm", methodName : "renderRows"}), ref : null});
 		}
 		return elements;
 	}
@@ -7599,11 +7586,12 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 			return fE;
 		});
 		var rOpts = [];
+		var k = 0;
 		var _g = 0;
 		while(_g < opts.length) {
 			var opt = opts[_g];
 			++_g;
-			rOpts.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("option"), props : { children : opt}, key : null, ref : null});
+			rOpts.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("option"), props : { children : opt}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 419, className : "view.shared.io.DataAccessForm", methodName : "renderSelectOptions"}), ref : null});
 		}
 		return rOpts;
 	}
@@ -7617,12 +7605,15 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 	,renderModalForm: function(fState) {
 		var _gthis = this;
 		this._fstate = fState;
+		haxe_Log.trace(this._fstate,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 441, className : "view.shared.io.DataAccessForm", methodName : "renderModalForm"});
+		haxe_Log.trace(App.modalBox,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 442, className : "view.shared.io.DataAccessForm", methodName : "renderModalForm"});
+		this.modalFormTableBody = React.createRef();
 		react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox).classList.toggle("is-active");
 		var click = function(_) {
 			react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox).classList.toggle("is-active");
 		};
 		var submit = function(tfd,ev) {
-			haxe_Log.trace(tfd,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 418, className : "view.shared.io.DataAccessForm", methodName : "renderModalForm"});
+			haxe_Log.trace(tfd,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 447, className : "view.shared.io.DataAccessForm", methodName : "renderModalForm"});
 			if(_gthis._fstate.handleSubmit != null) {
 				_gthis._fstate.handleSubmit(tfd);
 			}
@@ -7631,56 +7622,22 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 		var tmp1 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "modal-background", onClick : click}, key : null, ref : null};
 		var tmp2 = $$tre;
 		var tmp3 = react__$ReactType_ReactType_$Impl_$.fromString("div");
-		var tmp4 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("header"), props : { className : "modal-card-head", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("p"), props : { className : "modal-card-title", children : this._fstate.title}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("button"), props : { className : "delete", 'aria-label' : "close", onClick : click}, key : null, ref : null}]}, key : null, ref : null};
-		var tmp5 = this.renderModalFormBodyHeader();
-		var tmp6 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_LocalForm),{ ref : this.modalFormTableBody, className : "modal-card-body", model : fState.model},Lambda.empty(this._fstate.data) ? this.createElementsArray() : this.renderElements());
-		var tmp7 = $$tre;
-		var tmp8 = react__$ReactType_ReactType_$Impl_$.fromString("footer");
-		var tmp9 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlButton),{ className : "button is-success", onClick : submit}," Speichern");
-		var tmp10 = $$tre;
-		return ReactDOM.render(React.createElement(tmp,{ },tmp1,{ "$$typeof" : tmp2, type : tmp3, props : { className : "modal-card", children : [tmp4,tmp5,tmp6,{ "$$typeof" : tmp7, type : tmp8, props : { className : "modal-card-foot", children : [tmp9,{ "$$typeof" : tmp10, type : react__$ReactType_ReactType_$Impl_$.fromString("button"), props : { className : "button", onClick : click, children : "Schließen"}, key : null, ref : null}]}, key : null, ref : null}]}, key : null, ref : null}),react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox),$bind(this,this.adjustModalFormColumns));
-	}
-	,renderModalRRForm: function(fState) {
-		var _gthis = this;
-		this._fstate = fState;
-		haxe_Log.trace(fState,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 462, className : "view.shared.io.DataAccessForm", methodName : "renderModalRRForm"});
-		var submitRR = function(tfd,ev) {
-			haxe_Log.trace(tfd,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 464, className : "view.shared.io.DataAccessForm", methodName : "renderModalRRForm"});
-		};
-		react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox).classList.toggle("is-active");
-		var click = function(_) {
-			react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox).classList.toggle("is-active");
-		};
-		var tmp = react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment);
-		var tmp1 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "modal-background", onClick : click}, key : null, ref : null};
-		var tmp2 = $$tre;
-		var tmp3 = react__$ReactType_ReactType_$Impl_$.fromString("div");
-		var tmp4 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("header"), props : { className : "modal-card-head", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("p"), props : { className : "modal-card-title", children : this._fstate.title}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("button"), props : { className : "delete", 'aria-label' : "close", onClick : click}, key : null, ref : null}]}, key : null, ref : null};
-		var tmp5 = $$tre;
-		var tmp6 = react__$ReactType_ReactType_$Impl_$.fromString("div");
-		var tmp7 = react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_LocalForm);
-		var tmp8 = { ref : this.modalFormTableBody, model : "formFields", onSubmit : submitRR};
-		var tmp9 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("label"), props : { children : "Test"}, key : null, ref : null},React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_Control),{ type : "checkbox", model : ".some", className : "checkbox", validators : { required : function(val) {
-			return val != null;
-		}}})]}, key : null, ref : null};
-		var tmp10 = react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_Field);
-		var tmp11 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("label"), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("input"), props : { type : "radio", value : "plastic"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("span"), props : { children : "Plastic"}, key : null, ref : null}]}, key : null, ref : null};
-		var tmp12 = $$tre;
-		var tmp13 = react__$ReactType_ReactType_$Impl_$.fromString("label");
-		var tmp14 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("input"), props : { type : "radio", value : "paper"}, key : null, ref : null};
-		var tmp15 = $$tre;
-		var tmp16 = { "$$typeof" : tmp5, type : tmp6, props : { className : "modal-card-body", children : React.createElement(tmp7,tmp8,tmp9,React.createElement(tmp10,{ model : "user.bag"},tmp11,{ "$$typeof" : tmp12, type : tmp13, props : { children : [tmp14,{ "$$typeof" : tmp15, type : react__$ReactType_ReactType_$Impl_$.fromString("span"), props : { children : "Paper"}, key : null, ref : null}]}, key : null, ref : null}))}, key : null, ref : null};
-		var tmp17 = $$tre;
-		var tmp18 = react__$ReactType_ReactType_$Impl_$.fromString("footer");
-		var tmp19 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("button"), props : { model : "formFields", disabled : { valid : false}, store : App.store, children : "Speichern"}, key : null, ref : null};
-		var tmp20 = $$tre;
-		return ReactDOM.render(React.createElement(tmp,{ },tmp1,{ "$$typeof" : tmp2, type : tmp3, props : { className : "modal-card", children : [tmp4,tmp16,{ "$$typeof" : tmp17, type : tmp18, props : { className : "modal-card-foot", children : [tmp19,{ "$$typeof" : tmp20, type : react__$ReactType_ReactType_$Impl_$.fromString("button"), props : { type : "reset", model : "formFields", children : "Schließen"}, key : null, ref : null}]}, key : null, ref : null}]}, key : null, ref : null}),react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox));
+		var tmp4 = react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_LocalForm);
+		var tmp5 = { onSubmit : submit, model : fState.model, initialState : fState.initialState};
+		var tmp6 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("header"), props : { className : "modal-card-head", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("p"), props : { className : "modal-card-title", children : this._fstate.title}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("button"), props : { className : "delete", 'aria-label' : "close", onClick : click}, key : null, ref : null}]}, key : null, ref : null};
+		var tmp7 = this.renderModalFormBodyHeader();
+		var tmp8 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromString("div"),{ ref : this.modalFormTableBody, className : "modal-card-body"},Lambda.empty(this._fstate.data) ? this.createElementsArray() : this.renderElements());
+		var tmp9 = $$tre;
+		var tmp10 = react__$ReactType_ReactType_$Impl_$.fromString("footer");
+		var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlButton),{ className : "button is-success", model : fState.model, type : "submit"},"Speichern");
+		return ReactDOM.render(React.createElement(tmp,{ },tmp1,{ "$$typeof" : tmp2, type : tmp3, props : { className : "modal-card", children : React.createElement(tmp4,tmp5,tmp6,tmp7,tmp8,{ "$$typeof" : tmp9, type : tmp10, props : { className : "modal-card-foot", children : [tmp11,React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlReset),{ className : "button", model : fState.model},"Reset")]}, key : null, ref : null})}, key : null, ref : null}),react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox),$bind(this,this.adjustModalFormColumns));
 	}
 	,adjustModalFormColumns: function() {
-		haxe_Log.trace(this.modalFormTableHeader,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 547, className : "view.shared.io.DataAccessForm", methodName : "adjustModalFormColumns"});
+		haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.modalFormTableHeader),{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 483, className : "view.shared.io.DataAccessForm", methodName : "adjustModalFormColumns"});
+		haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.modalFormTableBody).children,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 485, className : "view.shared.io.DataAccessForm", methodName : "adjustModalFormColumns"});
 		var bodyCols = react__$ReactRef_ReactRef_$Impl_$.get_current(this.modalFormTableBody).children;
 		var headerCols = react__$ReactRef_ReactRef_$Impl_$.get_current(this.modalFormTableHeader).children;
-		haxe_Log.trace(bodyCols,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 550, className : "view.shared.io.DataAccessForm", methodName : "adjustModalFormColumns"});
+		haxe_Log.trace(bodyCols,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 488, className : "view.shared.io.DataAccessForm", methodName : "adjustModalFormColumns"});
 		if(bodyCols == null) {
 			return;
 		}
@@ -7727,7 +7684,7 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 	}
 	,save: function(evt) {
 		evt.preventDefault();
-		haxe_Log.trace("your subclass has to override me to save anything!",{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 596, className : "view.shared.io.DataAccessForm", methodName : "save"});
+		haxe_Log.trace("your subclass has to override me to save anything!",{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 534, className : "view.shared.io.DataAccessForm", methodName : "save"});
 	}
 	,__class__: view_shared_io_DataAccessForm
 });
@@ -7757,38 +7714,65 @@ view_shared_io_DB.__super__ = view_shared_io_DataAccessForm;
 view_shared_io_DB.prototype = $extend(view_shared_io_DataAccessForm.prototype,{
 	createFieldList: function(ev) {
 		var _gthis = this;
-		haxe_Log.trace("hi :)",{ fileName : "src/view/shared/io/DB.hx", lineNumber : 67, className : "view.shared.io.DB", methodName : "createFieldList"});
+		haxe_Log.trace("hi :)",{ fileName : "src/view/shared/io/DB.hx", lineNumber : 68, className : "view.shared.io.DB", methodName : "createFieldList"});
 		this.requests.push(haxe_ds_Either.Left(view_shared_io_Loader.load("" + Std.string(App.config.api),{ user_name : this.props.user_name, jwt : this.props.jwt, className : "tools.DB", action : "createFieldList", update : "1"},function(data) {
-			haxe_Log.trace(data.toString(),{ fileName : "src/view/shared/io/DB.hx", lineNumber : 79, className : "view.shared.io.DB", methodName : "createFieldList"});
+			haxe_Log.trace(data.toString(),{ fileName : "src/view/shared/io/DB.hx", lineNumber : 80, className : "view.shared.io.DB", methodName : "createFieldList"});
 			if(__map_reserved["error"] != null ? data.existsReserved("error") : data.h.hasOwnProperty("error")) {
-				haxe_Log.trace(__map_reserved["error"] != null ? data.getReserved("error") : data.h["error"],{ fileName : "src/view/shared/io/DB.hx", lineNumber : 82, className : "view.shared.io.DB", methodName : "createFieldList"});
+				haxe_Log.trace(__map_reserved["error"] != null ? data.getReserved("error") : data.h["error"],{ fileName : "src/view/shared/io/DB.hx", lineNumber : 83, className : "view.shared.io.DB", methodName : "createFieldList"});
 				return;
 			}
 			_gthis.setState({ data : data, viewClassPath : "shared.io.DB.showFieldList"});
 		})));
-		haxe_Log.trace(this.props.history,{ fileName : "src/view/shared/io/DB.hx", lineNumber : 87, className : "view.shared.io.DB", methodName : "createFieldList"});
-		haxe_Log.trace(this.props.match,{ fileName : "src/view/shared/io/DB.hx", lineNumber : 88, className : "view.shared.io.DB", methodName : "createFieldList"});
+		haxe_Log.trace(this.props.history,{ fileName : "src/view/shared/io/DB.hx", lineNumber : 88, className : "view.shared.io.DB", methodName : "createFieldList"});
+		haxe_Log.trace(this.props.match,{ fileName : "src/view/shared/io/DB.hx", lineNumber : 89, className : "view.shared.io.DB", methodName : "createFieldList"});
 	}
 	,editTableFields: function(ev) {
-		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "src/view/shared/io/DB.hx", lineNumber : 94, className : "view.shared.io.DB", methodName : "editTableFields"});
+		haxe_Log.trace(this.state.selectedRows.length,{ fileName : "src/view/shared/io/DB.hx", lineNumber : 95, className : "view.shared.io.DB", methodName : "editTableFields"});
 		var data = this.selectedRowsMap();
 		var _this = this.dataAccess;
 		var view1 = (__map_reserved["editTableFields"] != null ? _this.getReserved("editTableFields") : _this.h["editTableFields"]).view.copy();
 		var _this1 = this.dataAccess;
 		var _this2 = (__map_reserved["editTableFields"] != null ? _this1.getReserved("editTableFields") : _this1.h["editTableFields"]).view;
-		haxe_Log.trace(__map_reserved["table_name"] != null ? _this2.getReserved("table_name") : _this2.h["table_name"],{ fileName : "src/view/shared/io/DB.hx", lineNumber : 97, className : "view.shared.io.DB", methodName : "editTableFields"});
+		haxe_Log.trace(__map_reserved["table_name"] != null ? _this2.getReserved("table_name") : _this2.h["table_name"],{ fileName : "src/view/shared/io/DB.hx", lineNumber : 98, className : "view.shared.io.DB", methodName : "editTableFields"});
+		var _this3 = data[0];
+		haxe_Log.trace((__map_reserved["id"] != null ? _this3.getReserved("id") : _this3.h["id"]) + "<",{ fileName : "src/view/shared/io/DB.hx", lineNumber : 99, className : "view.shared.io.DB", methodName : "editTableFields"});
 		var tmp = new haxe_ds_StringMap();
-		var _this3 = this.dataAccess;
-		this.renderModalForm({ data : tmp, dataTable : data, handleSubmit : $bind(this,this.saveTableFields), model : "tableFields", viewClassPath : "shared.io.DB.editTableFields", fields : view1, valuesArray : this.createStateValuesArray(data,(__map_reserved["editTableFields"] != null ? _this3.getReserved("editTableFields") : _this3.h["editTableFields"]).view), loading : false, title : "Tabellenfelder Eigenschaften"});
+		var tmp1 = this.initStateFromDataTable(data);
+		var _this4 = this.dataAccess;
+		this.renderModalForm({ data : tmp, dataTable : data, handleSubmit : $bind(this,this.saveTableFields), isConnected : true, initialState : tmp1, model : "tableFields", viewClassPath : "shared.io.DB.editTableFields", fields : view1, valuesArray : this.createStateValuesArray(data,(__map_reserved["editTableFields"] != null ? _this4.getReserved("editTableFields") : _this4.h["editTableFields"]).view), loading : false, title : "Tabellenfelder Eigenschaften"});
+	}
+	,initStateFromDataTable: function(dt) {
+		var iS = { };
+		var _g = 0;
+		while(_g < dt.length) {
+			var dR = dt[_g];
+			++_g;
+			var rS = { };
+			var k = dR.keys();
+			while(k.hasNext()) {
+				var k1 = k.next();
+				haxe_Log.trace(k1,{ fileName : "src/view/shared/io/DB.hx", lineNumber : 124, className : "view.shared.io.DB", methodName : "initStateFromDataTable"});
+				var _this = this.dataDisplay;
+				var _this1 = (__map_reserved["fieldsList"] != null ? _this.getReserved("fieldsList") : _this.h["fieldsList"]).columns;
+				if((__map_reserved[k1] != null ? _this1.getReserved(k1) : _this1.h[k1]).cellFormat == view_dashboard_model_DBFormsModel.formatBool) {
+					rS[k1] = (__map_reserved[k1] != null ? dR.getReserved(k1) : dR.h[k1]) == "Y";
+				} else {
+					rS[k1] = __map_reserved[k1] != null ? dR.getReserved(k1) : dR.h[k1];
+				}
+			}
+			iS[__map_reserved["id"] != null ? dR.getReserved("id") : dR.h["id"]] = rS;
+		}
+		haxe_Log.trace(iS,{ fileName : "src/view/shared/io/DB.hx", lineNumber : 134, className : "view.shared.io.DB", methodName : "initStateFromDataTable"});
+		return iS;
 	}
 	,saveTableFields: function(vA) {
-		haxe_Log.trace(vA,{ fileName : "src/view/shared/io/DB.hx", lineNumber : 124, className : "view.shared.io.DB", methodName : "saveTableFields"});
+		haxe_Log.trace(vA,{ fileName : "src/view/shared/io/DB.hx", lineNumber : 140, className : "view.shared.io.DB", methodName : "saveTableFields"});
 		return;
 	}
 	,showFieldList: function(ev) {
 		var _gthis = this;
 		this.selectAllRows(true);
-		this.requests.push(haxe_ds_Either.Right(view_shared_io_BinaryLoader.create("" + Std.string(App.config.api),{ user_name : this.props.user_name, jwt : this.props.jwt, fields : "id,table_name,field_name,readonly,element,\"any\"", className : "tools.DB", action : "createFieldList"},function(dBytes) {
+		this.requests.push(haxe_ds_Either.Right(view_shared_io_BinaryLoader.create("" + Std.string(App.config.api),{ user_name : this.props.user_name, jwt : this.props.jwt, fields : "id,table_name,field_name,readonly,element,\"any\",required,use_as_index", className : "tools.DB", action : "createFieldList"},function(dBytes) {
 			var u = new hxbit_Serializer();
 			var data = u.unserialize(dBytes,shared_DbData);
 			if(data.dataRows.length == 0) {
@@ -7798,16 +7782,18 @@ view_shared_io_DB.prototype = $extend(view_shared_io_DataAccessForm.prototype,{
 				while(eK.hasNext()) {
 					hasError = true;
 					var key = eK.next();
-					haxe_Log.trace(Std.string(__map_reserved[key] != null ? error.getReserved(key) : error.h[key]),{ fileName : "src/view/shared/io/DB.hx", lineNumber : 179, className : "view.shared.io.DB", methodName : "showFieldList"});
+					haxe_Log.trace(Std.string(__map_reserved[key] != null ? error.getReserved(key) : error.h[key]),{ fileName : "src/view/shared/io/DB.hx", lineNumber : 190, className : "view.shared.io.DB", methodName : "showFieldList"});
 				}
 				if(!hasError) {
-					haxe_Log.trace("Keine Daten!",{ fileName : "src/view/shared/io/DB.hx", lineNumber : 182, className : "view.shared.io.DB", methodName : "showFieldList"});
+					haxe_Log.trace("Keine Daten!",{ fileName : "src/view/shared/io/DB.hx", lineNumber : 193, className : "view.shared.io.DB", methodName : "showFieldList"});
 				}
 				return;
 			}
+			haxe_Log.trace(data.dataRows,{ fileName : "src/view/shared/io/DB.hx", lineNumber : 197, className : "view.shared.io.DB", methodName : "showFieldList"});
+			var _this = data.dataRows[29];
+			haxe_Log.trace(Std.string(__map_reserved["id"] != null ? _this.getReserved("id") : _this.h["id"]) + "<<<",{ fileName : "src/view/shared/io/DB.hx", lineNumber : 198, className : "view.shared.io.DB", methodName : "showFieldList"});
 			_gthis.setState({ dataTable : data.dataRows, viewClassPath : "shared.io.DB.showFieldList"});
 		})));
-		this.setState({ viewClassPath : "shared.io.DB.showFieldList"});
 	}
 	,componentDidMount: function() {
 		view_shared_io_DataAccessForm.prototype.componentDidMount.call(this);
@@ -7891,12 +7877,16 @@ view_shared_io_DB.prototype = $extend(view_shared_io_DataAccessForm.prototype,{
 				case "shared.io.DB.editTableFields":
 					return null;
 				case "shared.io.DB.showFieldList":
+					var _this = this.dataDisplay;
+					haxe_Log.trace(__map_reserved["fieldsList"] != null ? _this.getReserved("fieldsList") : _this.h["fieldsList"],{ fileName : "src/view/shared/io/DB.hx", lineNumber : 238, className : "view.shared.io.DB", methodName : "renderResults"});
+					var _this1 = this.state.dataTable[29];
+					haxe_Log.trace(Std.string(__map_reserved["id"] != null ? _this1.getReserved("id") : _this1.h["id"]) + "<<<",{ fileName : "src/view/shared/io/DB.hx", lineNumber : 239, className : "view.shared.io.DB", methodName : "renderResults"});
 					var tmp = $$tre;
 					var tmp1 = react__$ReactType_ReactType_$Impl_$.fromComp(view_table_Table);
 					var tmp2 = this.props;
-					var tmp3 = this.state.dataTable == null ? null : this.state.dataTable;
-					var _this = this.dataDisplay;
-					var tmp4 = __map_reserved["fieldsList"] != null ? _this.getReserved("fieldsList") : _this.h["fieldsList"];
+					var tmp3 = this.state.dataTable;
+					var _this2 = this.dataDisplay;
+					var tmp4 = __map_reserved["fieldsList"] != null ? _this2.getReserved("fieldsList") : _this2.h["fieldsList"];
 					return { "$$typeof" : tmp, type : tmp1, props : Object.assign({ },tmp2,{ id : "fieldsList", data : tmp3, dataState : tmp4, parentForm : this, className : "is-striped is-hoverable", fullWidth : true}), key : null, ref : null};
 				default:
 					return null;
@@ -7907,14 +7897,14 @@ view_shared_io_DB.prototype = $extend(view_shared_io_DataAccessForm.prototype,{
 	}
 	,render: function() {
 		if(this.state.values != null) {
-			haxe_Log.trace(this.state.values.toString(),{ fileName : "src/view/shared/io/DB.hx", lineNumber : 241, className : "view.shared.io.DB", methodName : "render"});
+			haxe_Log.trace(this.state.values.toString(),{ fileName : "src/view/shared/io/DB.hx", lineNumber : 256, className : "view.shared.io.DB", methodName : "render"});
 		}
-		haxe_Log.trace(this.props.match.params.segment,{ fileName : "src/view/shared/io/DB.hx", lineNumber : 242, className : "view.shared.io.DB", methodName : "render"});
-		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "columns", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("form"), props : { className : "tabComponentForm", children : this.renderResults()}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_SMenu), props : { className : "menu", menuBlocks : this.state.sideMenu.menuBlocks}, key : null, ref : null}]}, key : null, ref : null};
+		haxe_Log.trace(this.props.match.params.segment,{ fileName : "src/view/shared/io/DB.hx", lineNumber : 257, className : "view.shared.io.DB", methodName : "render"});
+		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "columns xAuto", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("form"), props : { className : "tabComponentForm", children : this.renderResults()}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_SMenu), props : { className : "menu", menuBlocks : this.state.sideMenu.menuBlocks}, key : null, ref : null}]}, key : null, ref : null};
 	}
 	,updateMenu: function(viewClassPath) {
 		var _gthis = this;
-		haxe_Log.trace("" + Type.getClassName(js_Boot.getClass(this)) + " task",{ fileName : "src/view/shared/io/DB.hx", lineNumber : 256, className : "view.shared.io.DB", methodName : "updateMenu"});
+		haxe_Log.trace("" + Type.getClassName(js_Boot.getClass(this)) + " task",{ fileName : "src/view/shared/io/DB.hx", lineNumber : 271, className : "view.shared.io.DB", methodName : "updateMenu"});
 		var sideMenu = this.state.sideMenu;
 		var _this = sideMenu.menuBlocks;
 		(__map_reserved["DbTools"] != null ? _this.getReserved("DbTools") : _this.h["DbTools"]).items = function() {
@@ -8202,37 +8192,39 @@ view_shared_io_User.prototype = $extend(view_shared_io_DataAccessForm.prototype,
 				var data2 = data.dataRows[0];
 				var _this3 = _gthis.dataAccess;
 				var b1 = __map_reserved["changePassword"] != null ? _this3.getReserved("changePassword") : _this3.h["changePassword"];
-				_gthis.setState({ data : data1, viewClassPath : "changePassword", fields : b, values : _gthis.createStateValues(data2,b1.view), loading : false});
-				var b2 = App.store;
+				var b2 = _gthis.createStateValues(data2,b1.view);
+				_gthis.setState({ data : data1, viewClassPath : "changePassword", fields : b, values : b2, loading : false});
+				var b3 = App.store;
 				var _this4 = data.dataRows[0];
-				var b3 = __map_reserved["first_name"] != null ? _this4.getReserved("first_name") : _this4.h["first_name"];
+				var b4 = __map_reserved["first_name"] != null ? _this4.getReserved("first_name") : _this4.h["first_name"];
 				var _this5 = data.dataRows[0];
-				var b4 = __map_reserved["last_name"] != null ? _this5.getReserved("last_name") : _this5.h["last_name"];
-				var b5 = App.user_name;
+				var b5 = __map_reserved["last_name"] != null ? _this5.getReserved("last_name") : _this5.h["last_name"];
+				var b6 = App.user_name;
 				var _this6 = data.dataRows[0];
-				var b6 = __map_reserved["email"] != null ? _this6.getReserved("email") : _this6.h["email"];
+				var b7 = __map_reserved["email"] != null ? _this6.getReserved("email") : _this6.h["email"];
 				var _this7 = data.dataRows[0];
-				b2.dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.User({ first_name : b3, last_name : b4, user_name : b5, email : b6, pass : "", waiting : false, last_login : HxOverrides.strDate(__map_reserved["last_login"] != null ? _this7.getReserved("last_login") : _this7.h["last_login"])})));
+				b3.dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.User({ first_name : b4, last_name : b5, user_name : b6, email : b7, pass : "", waiting : false, last_login : HxOverrides.strDate(__map_reserved["last_login"] != null ? _this7.getReserved("last_login") : _this7.h["last_login"])})));
 			} else {
 				var data3 = data.dataRows[0];
 				var _this8 = _gthis.dataAccess;
-				var b7 = (__map_reserved["edit"] != null ? _this8.getReserved("edit") : _this8.h["edit"]).view;
+				var b8 = (__map_reserved["edit"] != null ? _this8.getReserved("edit") : _this8.h["edit"]).view;
 				var data4 = data.dataRows[0];
 				var _this9 = _gthis.dataAccess;
-				var b8 = __map_reserved["edit"] != null ? _this9.getReserved("edit") : _this9.h["edit"];
-				_gthis.setState({ data : data3, viewClassPath : "edit", fields : b7, values : _gthis.createStateValues(data4,b8.view), loading : false});
+				var b9 = __map_reserved["edit"] != null ? _this9.getReserved("edit") : _this9.h["edit"];
+				var b10 = _gthis.createStateValues(data4,b9.view);
+				_gthis.setState({ data : data3, viewClassPath : "edit", fields : b8, values : b10, loading : false});
 				var _this10 = data.dataRows[0];
 				haxe_Log.trace(HxOverrides.strDate(__map_reserved["last_login"] != null ? _this10.getReserved("last_login") : _this10.h["last_login"]),{ fileName : "src/view/shared/io/User.hx", lineNumber : 147, className : "view.shared.io.User", methodName : "componentDidMount"});
-				var b9 = App.store;
+				var b11 = App.store;
 				var _this11 = data.dataRows[0];
-				var b10 = __map_reserved["first_name"] != null ? _this11.getReserved("first_name") : _this11.h["first_name"];
+				var b12 = __map_reserved["first_name"] != null ? _this11.getReserved("first_name") : _this11.h["first_name"];
 				var _this12 = data.dataRows[0];
-				var b11 = __map_reserved["last_name"] != null ? _this12.getReserved("last_name") : _this12.h["last_name"];
-				var b12 = App.user_name;
+				var b13 = __map_reserved["last_name"] != null ? _this12.getReserved("last_name") : _this12.h["last_name"];
+				var b14 = App.user_name;
 				var _this13 = data.dataRows[0];
-				var b13 = __map_reserved["email"] != null ? _this13.getReserved("email") : _this13.h["email"];
+				var b15 = __map_reserved["email"] != null ? _this13.getReserved("email") : _this13.h["email"];
 				var _this14 = data.dataRows[0];
-				b9.dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.User({ first_name : b10, last_name : b11, user_name : b12, email : b13, pass : "", waiting : false, last_login : HxOverrides.strDate(__map_reserved["last_login"] != null ? _this14.getReserved("last_login") : _this14.h["last_login"])})));
+				b11.dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.User({ first_name : b12, last_name : b13, user_name : b14, email : b15, pass : "", waiting : false, last_login : HxOverrides.strDate(__map_reserved["last_login"] != null ? _this14.getReserved("last_login") : _this14.h["last_login"])})));
 			}
 		})));
 	}
@@ -8304,7 +8296,8 @@ view_shared_io_User.prototype = $extend(view_shared_io_DataAccessForm.prototype,
 				var b5 = shared_Utils.dynaMap(App.store.getState().appWare.user);
 				var _this8 = _gthis.dataAccess;
 				var b6 = __map_reserved["edit"] != null ? _this8.getReserved("edit") : _this8.h["edit"];
-				_gthis.setState({ viewClassPath : "edit", fields : b4, values : _gthis.createStateValues(b5,b6.view), loading : false});
+				var b7 = _gthis.createStateValues(b5,b6.view);
+				_gthis.setState({ viewClassPath : "edit", fields : b4, values : b7, loading : false});
 			} else {
 				haxe_Log.trace(data.dataErrors.toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 218, className : "view.shared.io.User", methodName : "changePassword"});
 			}
@@ -8330,7 +8323,8 @@ view_shared_io_User.prototype = $extend(view_shared_io_DataAccessForm.prototype,
 			var data1 = data[0];
 			var _this4 = _gthis.dataAccess;
 			var a1 = __map_reserved["edit"] != null ? _this4.getReserved("edit") : _this4.h["edit"];
-			_gthis.setState({ fields : a, values : _gthis.createStateValues(data1,a1.view), loading : false});
+			var a2 = _gthis.createStateValues(data1,a1.view);
+			_gthis.setState({ fields : a, values : a2, loading : false});
 		})));
 	}
 	,save: function(evt) {
@@ -8425,7 +8419,7 @@ var view_table_Table = function(props) {
 		var k1 = k.next();
 		this.fieldNames.push(k1);
 	}
-	haxe_Log.trace(this.fieldNames,{ fileName : "src/view/table/Table.hx", lineNumber : 158, className : "view.table.Table", methodName : "new"});
+	haxe_Log.trace(this.fieldNames,{ fileName : "src/view/table/Table.hx", lineNumber : 157, className : "view.table.Table", methodName : "new"});
 	this.state = { selectedRows : []};
 };
 $hxClasses["view.table.Table"] = view_table_Table;
@@ -8441,9 +8435,9 @@ view_table_Table.prototype = $extend(React_Component.prototype,{
 	,headerUpdated: null
 	,render: function() {
 		if(this.props.data != null) {
-			haxe_Log.trace(this.props.data.length,{ fileName : "src/view/table/Table.hx", lineNumber : 165, className : "view.table.Table", methodName : "render"});
+			haxe_Log.trace(this.props.data.length,{ fileName : "src/view/table/Table.hx", lineNumber : 164, className : "view.table.Table", methodName : "render"});
 		}
-		haxe_Log.trace(this.props.className,{ fileName : "src/view/table/Table.hx", lineNumber : 166, className : "view.table.Table", methodName : "render"});
+		haxe_Log.trace(this.props.className,{ fileName : "src/view/table/Table.hx", lineNumber : 165, className : "view.table.Table", methodName : "render"});
 		if(this.props.data == null || this.props.data.length == 0) {
 			var tmp = $$tre;
 			var tmp1 = react__$ReactType_ReactType_$Impl_$.fromString("section");
@@ -8473,7 +8467,7 @@ view_table_Table.prototype = $extend(React_Component.prototype,{
 			}
 			headerRow.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("th"), props : { children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "th-box " + (hC.headerClassName != null ? hC.headerClassName : hC.className), children : [hC.label != null ? hC.label : hC.name,{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("span"), props : { className : "sort-box fa fa-sort"}, key : null, ref : null}]}, key : null, ref : null}}, key : field1, ref : null});
 		}
-		haxe_Log.trace(headerRow.length,{ fileName : "src/view/table/Table.hx", lineNumber : 235, className : "view.table.Table", methodName : "renderHeaderRow"});
+		haxe_Log.trace(headerRow.length,{ fileName : "src/view/table/Table.hx", lineNumber : 234, className : "view.table.Table", methodName : "renderHeaderRow"});
 		return headerRow;
 	}
 	,renderHeaderDisplay: function() {
@@ -8496,7 +8490,6 @@ view_table_Table.prototype = $extend(React_Component.prototype,{
 	}
 	,renderCells: function(rdMap,row) {
 		var _gthis = this;
-		haxe_Log.trace(rdMap.remove("primary"),{ fileName : "src/view/table/Table.hx", lineNumber : 265, className : "view.table.Table", methodName : "renderCells"});
 		var column = 0;
 		var cells = this.fieldNames.map(function(fN) {
 			var _this = _gthis.props.dataState.columns;
@@ -8526,24 +8519,26 @@ view_table_Table.prototype = $extend(React_Component.prototype,{
 		}
 		var dRs = [];
 		var row = 0;
+		var primary = this.props.primary != null && this.props.primary.length > 0 ? this.props.primary : "id";
 		var _g = 0;
 		while(_g < dRows.length) {
 			var dR = dRows[_g];
 			++_g;
-			var primary = this.props.primary != null && this.props.primary.length > 0 ? this.props.primary : "id";
-			var id = (__map_reserved[primary] != null ? dR.existsReserved(primary) : dR.h.hasOwnProperty(primary)) ? "id=" + (__map_reserved[primary] != null ? dR.getReserved(primary) : dR.h[primary]) + " " : "";
+			var id = (__map_reserved[primary] != null ? dR.existsReserved(primary) : dR.h.hasOwnProperty(primary)) ? "" + Std.string(__map_reserved[primary] != null ? dR.getReserved(primary) : dR.h[primary]) : "";
 			if(row == 1) {
-				haxe_Log.trace(dR.toString(),{ fileName : "src/view/table/Table.hx", lineNumber : 305, className : "view.table.Table", methodName : "renderRows"});
+				haxe_Log.trace(dR.toString(),{ fileName : "src/view/table/Table.hx", lineNumber : 306, className : "view.table.Table", methodName : "renderRows"});
+				haxe_Log.trace("<tr data-id=" + id + "< ke..",{ fileName : "src/view/table/Table.hx", lineNumber : 307, className : "view.table.Table", methodName : "renderRows"});
 			}
 			var tmp = react__$ReactType_ReactType_$Impl_$.fromString("tr");
 			var tmp1 = row == 0 ? this.rowRef : null;
-			dRs.push(React.createElement(tmp,{ key : "r" + row++, ref : tmp1, id : id, onClick : $bind(this,this.select)},this.renderCells(dR,row - 1)));
+			dRs.push(React.createElement(tmp,{ key : "r" + row++, ref : tmp1, 'data-id' : id, title : id, onClick : $bind(this,this.select)},this.renderCells(dR,row - 1)));
 		}
+		haxe_Log.trace(dRs.length,{ fileName : "src/view/table/Table.hx", lineNumber : 315, className : "view.table.Table", methodName : "renderRows"});
 		return dRs;
 	}
 	,select: function(mEv) {
-		haxe_Log.trace(mEv.altKey,{ fileName : "src/view/table/Table.hx", lineNumber : 316, className : "view.table.Table", methodName : "select"});
-		haxe_Log.trace(mEv.currentTarget,{ fileName : "src/view/table/Table.hx", lineNumber : 317, className : "view.table.Table", methodName : "select"});
+		haxe_Log.trace(mEv.altKey,{ fileName : "src/view/table/Table.hx", lineNumber : 321, className : "view.table.Table", methodName : "select"});
+		haxe_Log.trace(mEv.currentTarget,{ fileName : "src/view/table/Table.hx", lineNumber : 322, className : "view.table.Table", methodName : "select"});
 		var htRow = js_Boot.__cast(mEv.currentTarget , HTMLTableRowElement);
 		var rows = htRow.parentElement.children;
 		if(mEv.altKey) {
@@ -8578,73 +8573,81 @@ view_table_Table.prototype = $extend(React_Component.prototype,{
 		while(_g1 < _g) {
 			var i = _g1++;
 			var row = tEl.children.item(i);
-			haxe_Log.trace(row.cells.item(altGroupPos).nodeValue + "==" + groupName,{ fileName : "src/view/table/Table.hx", lineNumber : 348, className : "view.table.Table", methodName : "selectAltGroup"});
+			haxe_Log.trace(row.cells.item(altGroupPos).nodeValue + "==" + groupName,{ fileName : "src/view/table/Table.hx", lineNumber : 353, className : "view.table.Table", methodName : "selectAltGroup"});
 			if(row.cells.item(altGroupPos).textContent == groupName) {
 				row.classList.toggle("is-selected");
 			}
 		}
 	}
+	,layOut: function() {
+		haxe_Log.trace(this.headerUpdated,{ fileName : "src/view/table/Table.hx", lineNumber : 362, className : "view.table.Table", methodName : "layOut"});
+		this.headerUpdated = true;
+		var tableHeight = react__$ReactRef_ReactRef_$Impl_$.get_current(this.tableRef).clientHeight;
+		var scrollBarWidth = App.config.getScrollbarWidth();
+		var freeWidth = react__$ReactRef_ReactRef_$Impl_$.get_current(this.tableRef).parentElement.offsetWidth - react__$ReactRef_ReactRef_$Impl_$.get_current(this.tableRef).offsetWidth - scrollBarWidth;
+		react__$ReactRef_ReactRef_$Impl_$.get_current(this.tHeadRef).style.visibility = "collapse";
+		var i = 0;
+		var grow = [];
+		if(this.props.fullWidth) {
+			var _g = 0;
+			var _g1 = react__$ReactRef_ReactRef_$Impl_$.get_current(this.rowRef).children;
+			while(_g < _g1.length) {
+				var cell = _g1[_g];
+				++_g;
+				var cGrow = cell.getAttribute("data-grow");
+				if(cGrow != null) {
+					grow[i] = Std.parseInt(cGrow);
+					haxe_Log.trace(grow[i],{ fileName : "src/view/table/Table.hx", lineNumber : 385, className : "view.table.Table", methodName : "layOut"});
+				}
+				++i;
+			}
+			var growSum = 0;
+			Lambda.iter(grow,function(el) {
+				growSum += el == null ? 0 : el;
+			});
+			if(growSum > 0) {
+				var growUnit = freeWidth / growSum;
+				var _g11 = 0;
+				var _g2 = grow.length;
+				while(_g11 < _g2) {
+					var i1 = _g11++;
+					if(grow[i1] != 0) {
+						react__$ReactRef_ReactRef_$Impl_$.get_current(this.rowRef).children.item(i1).setAttribute("width",Std.string(grow[i1] * growUnit + react__$ReactRef_ReactRef_$Impl_$.get_current(this.rowRef).children.item(i1).offsetWidth) + "px");
+					}
+				}
+			}
+		}
+		i = 0;
+		var _g3 = 0;
+		var _g12 = react__$ReactRef_ReactRef_$Impl_$.get_current(this.tHeadRef).children;
+		while(_g3 < _g12.length) {
+			var cell1 = _g12[_g3];
+			++_g3;
+			var w = cell1.getBoundingClientRect().width;
+			var fixedHeaderCell = js_Boot.__cast(react__$ReactRef_ReactRef_$Impl_$.get_current(this.fixedHeader).childNodes[i] , HTMLElement);
+			fixedHeaderCell.setAttribute("style","width:" + w + "px");
+			++i;
+		}
+	}
+	,componentDidMount: function() {
+		var _gthis = this;
+		App.onResizeComponents.add(this);
+		window.requestAnimationFrame(function(t) {
+			haxe_Log.trace(t,{ fileName : "src/view/table/Table.hx", lineNumber : 422, className : "view.table.Table", methodName : "componentDidMount"});
+			_gthis.layOut();
+		});
+	}
 	,componentDidUpdate: function(prevProps,prevState) {
-		haxe_Log.trace(this.headerUpdated,{ fileName : "src/view/table/Table.hx", lineNumber : 357, className : "view.table.Table", methodName : "componentDidUpdate"});
+		haxe_Log.trace(Std.string(this.headerUpdated) + ":" + Std.string(this.tHeadRef),{ fileName : "src/view/table/Table.hx", lineNumber : 429, className : "view.table.Table", methodName : "componentDidUpdate"});
 		if(this.tHeadRef != null) {
 			if(this.headerUpdated) {
 				return;
 			}
-			this.headerUpdated = true;
-			var tableHeight = react__$ReactRef_ReactRef_$Impl_$.get_current(this.tableRef).clientHeight;
-			haxe_Log.trace("tableHeight:" + tableHeight,{ fileName : "src/view/table/Table.hx", lineNumber : 365, className : "view.table.Table", methodName : "componentDidUpdate"});
-			var scrollBarWidth = App.config.getScrollbarWidth();
-			var freeWidth = react__$ReactRef_ReactRef_$Impl_$.get_current(this.tableRef).parentElement.offsetWidth - react__$ReactRef_ReactRef_$Impl_$.get_current(this.tableRef).offsetWidth - scrollBarWidth;
-			haxe_Log.trace("" + scrollBarWidth + " freeWidth:" + freeWidth + " " + react__$ReactRef_ReactRef_$Impl_$.get_current(this.tableRef).parentElement.offsetWidth + " " + react__$ReactRef_ReactRef_$Impl_$.get_current(this.tableRef).offsetWidth,{ fileName : "src/view/table/Table.hx", lineNumber : 369, className : "view.table.Table", methodName : "componentDidUpdate"});
-			haxe_Log.trace(this.tHeadRef,{ fileName : "src/view/table/Table.hx", lineNumber : 370, className : "view.table.Table", methodName : "componentDidUpdate"});
-			haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.fixedHeader).children.length,{ fileName : "src/view/table/Table.hx", lineNumber : 371, className : "view.table.Table", methodName : "componentDidUpdate"});
-			haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.fixedHeader),{ fileName : "src/view/table/Table.hx", lineNumber : 372, className : "view.table.Table", methodName : "componentDidUpdate"});
-			react__$ReactRef_ReactRef_$Impl_$.get_current(this.tHeadRef).style.visibility = "collapse";
-			var i = 0;
-			var grow = [];
-			if(this.props.fullWidth) {
-				var _g = 0;
-				var _g1 = react__$ReactRef_ReactRef_$Impl_$.get_current(this.rowRef).children;
-				while(_g < _g1.length) {
-					var cell = _g1[_g];
-					++_g;
-					var cGrow = cell.getAttribute("data-grow");
-					if(cGrow != null) {
-						grow[i] = Std.parseInt(cGrow);
-						haxe_Log.trace(grow[i],{ fileName : "src/view/table/Table.hx", lineNumber : 384, className : "view.table.Table", methodName : "componentDidUpdate"});
-					}
-					++i;
-				}
-				var growSum = 0;
-				Lambda.iter(grow,function(el) {
-					growSum += el == null ? 0 : el;
-				});
-				haxe_Log.trace(Std.string(grow) + ":" + growSum,{ fileName : "src/view/table/Table.hx", lineNumber : 390, className : "view.table.Table", methodName : "componentDidUpdate"});
-				if(growSum > 0) {
-					var growUnit = freeWidth / growSum;
-					haxe_Log.trace(growSum,{ fileName : "src/view/table/Table.hx", lineNumber : 394, className : "view.table.Table", methodName : "componentDidUpdate"});
-					var _g11 = 0;
-					var _g2 = grow.length;
-					while(_g11 < _g2) {
-						var i1 = _g11++;
-						if(grow[i1] != 0) {
-							react__$ReactRef_ReactRef_$Impl_$.get_current(this.rowRef).children.item(i1).setAttribute("width",Std.string(grow[i1] * growUnit + react__$ReactRef_ReactRef_$Impl_$.get_current(this.rowRef).children.item(i1).offsetWidth) + "px");
-						}
-					}
-				}
-			}
-			i = 0;
-			var _g3 = 0;
-			var _g12 = react__$ReactRef_ReactRef_$Impl_$.get_current(this.tHeadRef).children;
-			while(_g3 < _g12.length) {
-				var cell1 = _g12[_g3];
-				++_g3;
-				var w = cell1.getBoundingClientRect().width;
-				var fixedHeaderCell = js_Boot.__cast(react__$ReactRef_ReactRef_$Impl_$.get_current(this.fixedHeader).childNodes[i] , HTMLElement);
-				fixedHeaderCell.setAttribute("style","width:" + w + "px");
-				++i;
-			}
 		}
+	}
+	,componentWillUnmount: function() {
+		haxe_Log.trace("leaving...",{ fileName : "src/view/table/Table.hx", lineNumber : 443, className : "view.table.Table", methodName : "componentWillUnmount"});
+		App.onResizeComponents.remove(this);
 	}
 	,showDims: function(ref) {
 		var i = 0;
@@ -8654,10 +8657,10 @@ view_table_Table.prototype = $extend(React_Component.prototype,{
 		while(_g < cells.length) {
 			var cell = cells[_g];
 			++_g;
-			haxe_Log.trace(cell.getBoundingClientRect().toJSON(),{ fileName : "src/view/table/Table.hx", lineNumber : 428, className : "view.table.Table", methodName : "showDims"});
+			haxe_Log.trace(cell.getBoundingClientRect().toJSON(),{ fileName : "src/view/table/Table.hx", lineNumber : 454, className : "view.table.Table", methodName : "showDims"});
 			s += cell.getBoundingClientRect().width;
 		}
-		haxe_Log.trace(" sum:" + s,{ fileName : "src/view/table/Table.hx", lineNumber : 431, className : "view.table.Table", methodName : "showDims"});
+		haxe_Log.trace(" sum:" + s,{ fileName : "src/view/table/Table.hx", lineNumber : 457, className : "view.table.Table", methodName : "showDims"});
 	}
 	,nodeDims: function(n) {
 		var i = 0;
@@ -8668,10 +8671,10 @@ view_table_Table.prototype = $extend(React_Component.prototype,{
 			var cell = cells[_g];
 			++_g;
 			var dRect = (js_Boot.__cast(cell , HTMLElement)).getBoundingClientRect().toJSON();
-			haxe_Log.trace(dRect,{ fileName : "src/view/table/Table.hx", lineNumber : 442, className : "view.table.Table", methodName : "nodeDims"});
+			haxe_Log.trace(dRect,{ fileName : "src/view/table/Table.hx", lineNumber : 468, className : "view.table.Table", methodName : "nodeDims"});
 			s += (js_Boot.__cast(cell , HTMLElement)).getBoundingClientRect().width;
 		}
-		haxe_Log.trace(" sum:" + s,{ fileName : "src/view/table/Table.hx", lineNumber : 446, className : "view.table.Table", methodName : "nodeDims"});
+		haxe_Log.trace(" sum:" + s,{ fileName : "src/view/table/Table.hx", lineNumber : 472, className : "view.table.Table", methodName : "nodeDims"});
 	}
 	,__class__: view_table_Table
 });
@@ -8705,9 +8708,11 @@ var DataView = $global.DataView || js_html_compat_DataView;
 var Uint8Array = $global.Uint8Array || js_html_compat_Uint8Array._new;
 App.fa = require("./node_modules/font-awesome/css/font-awesome.min.css");
 App.STYLES = require("App.scss");
+App.config = require("./bin/config.js").config;
 App.user_name = js_Cookie.get("user.user_name");
 App.jwt = js_Cookie.get("user.jwt");
 App.modalBox = React.createRef();
+App.onResizeComponents = new haxe_ds_List();
 DateTools.DAY_SHORT_NAMES = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 DateTools.DAY_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 DateTools.MONTH_SHORT_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -8740,6 +8745,7 @@ react_router_bundle_BundleWrapper.defaultProps = { loading : react__$ReactType_R
 redux_react_Provider.childContextTypes = { store : PropTypes.object.isRequired};
 redux_react_Provider.propTypes = { children : PropTypes.element.isRequired};
 shared_DbData.__clid = hxbit_Serializer.registerClass(shared_DbData);
+shared_Utils.kIndex = 0;
 view_Accounting._connected = (redux_react_ReactRedux.connect(view_Accounting.mapStateToProps,view_Accounting.mapDispatchToProps))(react__$ReactType_ReactType_$Impl_$.fromComp(view_Accounting));
 view_Accounting.__jsxStatic = view_Accounting._connected;
 view_Contacts._connected = (redux_react_ReactRedux.connect(view_Contacts.mapStateToProps))(react__$ReactType_ReactType_$Impl_$.fromComp(view_Contacts));
@@ -8823,6 +8829,14 @@ view_dashboard_model_DBFormsModel.fieldsListColumns = (function($this) {
 			_g.setReserved("any",value6);
 		} else {
 			_g.h["any"] = value6;
+		}
+	}
+	{
+		var value7 = { label : "ID", show : false};
+		if(__map_reserved["id"] != null) {
+			_g.setReserved("id",value7);
+		} else {
+			_g.h["id"] = value7;
 		}
 	}
 	$r = _g;
@@ -8953,6 +8967,7 @@ view_dashboard_model_RolesFormModel.dataDisplay = (function($this) {
 }(this));
 view_shared_SLink._connected = (redux_react_ReactRedux.connect(view_shared_SLink.mapStateToProps))(react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_SLink));
 view_shared_SLink.__jsxStatic = view_shared_SLink._connected;
+view_shared_io_DataAccessForm.ky = shared_Utils.genKey;
 view_shared_io_Loader.rqs = [];
 Go.main();
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
