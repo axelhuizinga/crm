@@ -5,11 +5,9 @@ package view.shared.io;
  * @author axel@cunity.me
  */
 
-import haxe.ds.StringMap;
-import view.shared.BaseForm.FormProps;
-import view.shared.BaseForm.FormElement;
-import view.shared.BaseForm.FormField;
-import view.shared.BaseForm.FormState;
+import haxe.ds.Map;
+import view.shared.BaseForm;
+import view.shared.BaseForm.*;
 
 /**
    dataClassPath=><action>=>[?'alias',?'fields',?'jCond'] each=>String
@@ -34,3 +32,4 @@ typedef DataRelation =
 **/
    
 typedef DataAccess = Map<String,DataRelation>;
+

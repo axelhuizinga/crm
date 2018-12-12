@@ -1,7 +1,7 @@
 package action;
 
 //import model.AppService;
-import model.GlobalAppState.CompState;
+//import model.GlobalAppState.CompState;
 import view.shared.io.User;
 //import model.UserService.UserAction;
 import view.shared.io.User.UserProps;
@@ -13,7 +13,7 @@ import view.shared.io.User.UserProps;
 enum AppAction 
 {
 	// COMPONENTS
-	AddComponent(path:String, cState:CompState);
+	//AddComponent(path:String, cState:CompState);
 	Load;
 	// LOGIN TODO: MOVE TO USERACTIONS
 	//LoginReq(state:UserProps);

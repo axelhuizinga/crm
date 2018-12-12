@@ -44,6 +44,7 @@ typedef DataState =
 
 typedef DataColumn = 
 {
+	@:optional var dbFormat:Function;
 	@:optional var cellFormat:Function;
 	@:optional var className:String;
 	@:optional var editable:Bool;
@@ -53,6 +54,7 @@ typedef DataColumn =
 	@:optional var headerStyle:Dynamic;
 	@:optional var label:String;
 	@:optional var name:String;
+	@:optional var title:String;
 	@:optional var search:SortDirection;
 	@:optional var show:Bool;
 	@:optional var style:Dynamic;
@@ -265,19 +267,19 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		//trace(rdMap['use_as_index']);
 		var column:Int = 0;
 		var cells:Array<DataCell> = fieldNames.map(function(fN:String){
-					var columnDataState:DataColumn = props.dataState.columns.get(fN);
-					var cD:DataCell = {
-						cellFormat:columnDataState.cellFormat,
-						className:columnDataState.className,
-						data:rdMap[fN],
-						dataDisplay:columnDataState.cellFormat != null ? columnDataState.cellFormat(rdMap[fN]):rdMap[fN],
-						flexGrow:columnDataState.flexGrow,
-						name:fN,
-						pos:{column:column++, row:row},
-						show:columnDataState.show != false
-					};
-					return cD;					
-				});
+			var columnDataState:DataColumn = props.dataState.columns.get(fN);
+			var cD:DataCell = {
+				cellFormat:columnDataState.cellFormat,
+				className:columnDataState.className,
+				data:rdMap[fN],
+				dataDisplay:columnDataState.cellFormat != null ? columnDataState.cellFormat(rdMap[fN]):rdMap[fN],
+				flexGrow:columnDataState.flexGrow,
+				name:fN,
+				pos:{column:column++, row:row},
+				show:columnDataState.show != false
+			};
+			return cD;					
+		});
 		var rCs:Array<ReactFragment> = [];
 		for (cD in cells)
 		{

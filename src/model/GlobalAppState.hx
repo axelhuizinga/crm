@@ -5,7 +5,7 @@ import haxe.ds.StringMap;
 import history.History;
 import history.Location;
 import view.shared.io.User.UserProps;
-import model.BaseFormData.FormElement;
+/*import model.BaseFormData.FormElement;
 
 typedef CompState = 
 {
@@ -15,7 +15,7 @@ typedef CompState =
 	formFields:StringMap<Array<FormElement>>,
 	isMounted:Bool,
 	lastMounted:Date
-}
+}*/
 
 typedef GlobalAppState = 
 {

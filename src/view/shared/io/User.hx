@@ -31,6 +31,7 @@ using shared.Utils;
 
 typedef UserProps =
 {
+	?change_pass_required:Bool,
 	?contact:Int,
 	?first_name:String,
 	?last_name:String,

@@ -17,13 +17,12 @@ import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
 import shared.DbData;
-import view.shared.BaseForm.FormElement;
+import shared.DBMetaData;
 import view.dashboard.model.DBFormsModel;
 import view.shared.BaseForm.FormField;
 import view.shared.SMenu;
 import view.shared.SMenu.SMItem;
 import view.shared.io.DataAccessForm;
-import view.shared.io.DataAccess.DataSource;
 import view.shared.io.Loader;
 import view.table.Table;
 
@@ -139,31 +138,31 @@ class DB extends DataAccessForm
 	{
 		trace(vA);
 		//Out.dumpObject(vA);
+		dbMetaData = new  DBMetaData();
+		dbMetaData.dataFields = dbMetaData.stateToDataParams(vA);
+		trace(dbMetaData.dataFields.get(111));
+		var s:hxbit.Serializer = new hxbit.Serializer();
+		
 		return;
-		trace(vA.entries());
-		trace(vA.entries().next());
-		var keys:FormDataIterator = vA.keys();
-		var k:Dynamic = keys.next();
-		trace(k);
-		trace(keys.next());
-		/*var max:Int = 5;
-		while (k = keys.next() != null)
-		{
-			trace(k);
-			//trace(k.value + '=>');
-			if (max-- == 0)
-				break;
-			//trace(k.value + '=>' + vA.getAll(k.value));
-		}*/
-		var keys:Iterator<String> = dataAccess['editTableFields'].view.keys();
-		for (k in keys)
-		{
-			trace(k);
-			trace(vA.getAll(k));
-		}
+		requests.push( BinaryLoader.create(
+			'${App.config.api}', 
+			{
+				user_name:props.user_name,
+				jwt:props.jwt,
+				fields:'readonly:readonly,element=:element,required=:required,use_as_index=:use_as_index',
+				className:'tools.DB',
+				action:'saveTableFields',
+				dbData:s.serialize(dbData)
+			},
+			function(dBytes:Bytes)
+			{				
+				var data:DbData = s.unserialize(dBytes, DbData);
+				trace(data);
+			}
+		));
 	}
 	
-	public function showFieldList(ev:ReactEvent):Void
+	public function showFieldList(_):Void
 	{
 		selectAllRows(true);
 		requests.push( BinaryLoader.create(
@@ -171,7 +170,7 @@ class DB extends DataAccessForm
 			{
 				user_name:props.user_name,
 				jwt:props.jwt,
-				fields:'id,table_name,field_name,readonly,element,"any",required,use_as_index',
+				fields:'id,table_name,field_name,readonly,element,required,use_as_index',
 				className:'tools.DB',
 				action:'createFieldList'
 			},
@@ -214,6 +213,7 @@ class DB extends DataAccessForm
 				view:[
 					'table_name'=>{label:'Tabelle',readonly:true},
 					'field_name'=>{label:'Feldname',readonly:true},
+					'field_type'=>{label:'Datentyp',type:Select},
 					'element'=>{label:'Eingabefeld', type:Select},
 					'readonly' => {label:'Readonly', type:Checkbox},
 					'required' => {label:'Required', type:Checkbox},

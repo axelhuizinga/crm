@@ -98,7 +98,9 @@ class AppService
 				
 			case LoginComplete(uState):
 				trace(uState);
-				copy(state, {
+				uState.loginError = null;
+				copy(state, //uState.change_pass_required?:
+				{
 					user:copy(state.user,uState)
 				});		
 				

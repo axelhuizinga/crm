@@ -22,6 +22,7 @@ export let config =
 			className:'cRight'
 		}
 	},
+	formatDate:'%d.%m.%Y',
 	locale:'de',
 	getScrollbarWidth:function(recalculate) {
 		var div1, div2;

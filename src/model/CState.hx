@@ -42,7 +42,7 @@ class CState
 		return false;
 	}
 	
-	public static function addComponent(comp:ReactComponent):Void
+	/*public static function addComponent(comp:ReactComponent):Void
 	{
 		var state:AppState = store.getState();
 		var d:Promise<Dynamic> = store.dispatch(AppAction.AddComponent(
@@ -59,14 +59,8 @@ class CState
 		trace(Promise.resolve(d));
 			//function(t:Dynamic){trace(t); }, 
 			//function(t){trace ('oops:$t');}));
-		/*d.then(fulFill, reject);
-		{
-			trace(fulFill);
-			trace(reject);
-			trace('OK');
-		};*/
 		trace(comp.props.history.location);
-	}
+	}*/
 	
 	//function fulFill(
 	

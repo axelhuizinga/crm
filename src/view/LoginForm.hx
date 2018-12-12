@@ -1,16 +1,12 @@
 package view;
 
-//import action.async.AsyncUserAction;
-import comments.StringTransform;
 import js.html.InputElement;
 import js.html.InputEvent;
 import js.html.XMLHttpRequest;
 import model.AppState;
-import react.ReactComponent;
 import react.ReactComponent.ReactComponentOf;
 import react.ReactMacro.jsx;
 import redux.Redux;
-import react.router.Route.RouteRenderProps;
 import action.async.AsyncUserAction;
 import view.shared.RouteTabProps;
 
