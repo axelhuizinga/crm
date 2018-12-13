@@ -135,7 +135,7 @@ class AppService
 			trace(cs.user);
 				copy(state, {
 					user:copy(state.user,{first_name:uState.first_name, last_name:uState.last_name, email:uState.email, 
-					last_login:uState.last_login, pass:uState.pass, waiting:uState.waiting})
+					last_login:uState.last_login, pass:uState.pass, new_pass:uState.new_pass, new_pass_confirm:uState.new_pass_confirm, waiting:uState.waiting})
 				});	
 			default:
 				state;

@@ -834,10 +834,12 @@ action_async_AsyncUserAction.loginReq = function(props,requests) {
 			var _this1 = data.dataInfo;
 			js_Cookie.set("user.jwt",__map_reserved["jwt"] != null ? _this1.getReserved("jwt") : _this1.h["jwt"],null,"/");
 			haxe_Log.trace(js_Cookie.get("user.jwt"),{ fileName : "src/action/async/AsyncUserAction.hx", lineNumber : 59, className : "action.async.AsyncUserAction", methodName : "loginReq"});
-			var props1 = props.user_name;
 			var _this2 = data.dataInfo;
-			var bL2 = __map_reserved["jwt"] != null ? _this2.getReserved("jwt") : _this2.h["jwt"];
-			return dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.LoginComplete({ change_pass_required : true, user_name : props1, jwt : bL2, waiting : false})));
+			var bL2 = __map_reserved["change_pass_required"] != null ? _this2.getReserved("change_pass_required") : _this2.h["change_pass_required"];
+			var props1 = props.user_name;
+			var _this3 = data.dataInfo;
+			var bL3 = __map_reserved["jwt"] != null ? _this3.getReserved("jwt") : _this3.h["jwt"];
+			return dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.LoginComplete({ change_pass_required : bL2 == true, user_name : props1, jwt : bL3, waiting : false})));
 		});
 		if(requests != null) {
 			requests.push(haxe_ds_Either.Right(bL));
@@ -5278,6 +5280,7 @@ model_AppService.prototype = {
 		case 2:
 			var uState1 = action.state;
 			haxe_Log.trace(uState1,{ fileName : "src/model/AppService.hx", lineNumber : 100, className : "model.AppService", methodName : "reduce"});
+			uState1.loginError = null;
 			return react_ReactUtil.copy(state,{ user : react_ReactUtil.copy(state.user,uState1)});
 		case 3:
 			return react_ReactUtil.copy(state,{ waiting : true});
@@ -5287,7 +5290,7 @@ model_AppService.prototype = {
 			return react_ReactUtil.copy(state,{ user : { loginError : err.loginError}});
 		case 5:
 			var uState2 = action.state;
-			haxe_Log.trace(uState2,{ fileName : "src/model/AppService.hx", lineNumber : 106, className : "model.AppService", methodName : "reduce"});
+			haxe_Log.trace(uState2,{ fileName : "src/model/AppService.hx", lineNumber : 108, className : "model.AppService", methodName : "reduce"});
 			return react_ReactUtil.copy(state,{ user : uState2});
 		case 6:
 			var uState3 = action.state;
@@ -5311,16 +5314,16 @@ model_AppService.prototype = {
 			break;
 		case 9:
 			var uState4 = action.state;
-			haxe_Log.trace(state.user,{ fileName : "src/model/AppService.hx", lineNumber : 128, className : "model.AppService", methodName : "reduce"});
+			haxe_Log.trace(state.user,{ fileName : "src/model/AppService.hx", lineNumber : 130, className : "model.AppService", methodName : "reduce"});
 			var cs = react_ReactUtil.copy(state,{ user : react_ReactUtil.copy(state.user,{ first_name : uState4.first_name, last_name : uState4.last_name, email : uState4.email, last_login : uState4.last_login, pass : uState4.pass, waiting : uState4.waiting})});
-			haxe_Log.trace(cs.user,{ fileName : "src/model/AppService.hx", lineNumber : 133, className : "model.AppService", methodName : "reduce"});
+			haxe_Log.trace(cs.user,{ fileName : "src/model/AppService.hx", lineNumber : 135, className : "model.AppService", methodName : "reduce"});
 			return react_ReactUtil.copy(state,{ user : react_ReactUtil.copy(state.user,{ first_name : uState4.first_name, last_name : uState4.last_name, email : uState4.email, last_login : uState4.last_login, pass : uState4.pass, waiting : uState4.waiting})});
 		}
 	}
 	,middleware: function(action,next) {
-		haxe_Log.trace(action,{ fileName : "src/model/AppService.hx", lineNumber : 145, className : "model.AppService", methodName : "middleware"});
+		haxe_Log.trace(action,{ fileName : "src/model/AppService.hx", lineNumber : 147, className : "model.AppService", methodName : "middleware"});
 		var n = next();
-		haxe_Log.trace(n,{ fileName : "src/model/AppService.hx", lineNumber : 147, className : "model.AppService", methodName : "middleware"});
+		haxe_Log.trace(n,{ fileName : "src/model/AppService.hx", lineNumber : 149, className : "model.AppService", methodName : "middleware"});
 		return n;
 	}
 	,__class__: model_AppService
@@ -7132,18 +7135,18 @@ view_shared_io_BinaryLoader.prototype = {
 	,__class__: view_shared_io_BinaryLoader
 };
 var view_LoginForm = function(props) {
-	haxe_Log.trace(Reflect.fields(props),{ fileName : "src/view/LoginForm.hx", lineNumber : 46, className : "view.LoginForm", methodName : "new"});
+	haxe_Log.trace(Reflect.fields(props),{ fileName : "src/view/LoginForm.hx", lineNumber : 42, className : "view.LoginForm", methodName : "new"});
 	if(props.match != null) {
-		haxe_Log.trace(props.match.path + ":" + props.match.url,{ fileName : "src/view/LoginForm.hx", lineNumber : 49, className : "view.LoginForm", methodName : "new"});
+		haxe_Log.trace(props.match.path + ":" + props.match.url,{ fileName : "src/view/LoginForm.hx", lineNumber : 45, className : "view.LoginForm", methodName : "new"});
 	}
-	haxe_Log.trace(props,{ fileName : "src/view/LoginForm.hx", lineNumber : 51, className : "view.LoginForm", methodName : "new"});
+	haxe_Log.trace(props,{ fileName : "src/view/LoginForm.hx", lineNumber : 47, className : "view.LoginForm", methodName : "new"});
 	this.state = { api : props.api, user_name : "", pass : ""};
 	React_Component.call(this,props);
 };
 $hxClasses["view.LoginForm"] = view_LoginForm;
 view_LoginForm.__name__ = ["view","LoginForm"];
 view_LoginForm.mapDispatchToProps = function(dispatch) {
-	haxe_Log.trace(dispatch,{ fileName : "src/view/LoginForm.hx", lineNumber : 57, className : "view.LoginForm", methodName : "mapDispatchToProps"});
+	haxe_Log.trace(dispatch,{ fileName : "src/view/LoginForm.hx", lineNumber : 53, className : "view.LoginForm", methodName : "mapDispatchToProps"});
 	return { submitLogin : function(lState) {
 		var tmp = action_async_AsyncUserAction.loginReq(lState);
 		return dispatch(redux__$Redux_Action_$Impl_$.map(tmp));
@@ -7152,7 +7155,7 @@ view_LoginForm.mapDispatchToProps = function(dispatch) {
 view_LoginForm.mapStateToProps = function() {
 	return function(aState) {
 		var uState = aState.appWare.user;
-		haxe_Log.trace(uState,{ fileName : "src/view/LoginForm.hx", lineNumber : 69, className : "view.LoginForm", methodName : "mapStateToProps"});
+		haxe_Log.trace(uState,{ fileName : "src/view/LoginForm.hx", lineNumber : 65, className : "view.LoginForm", methodName : "mapStateToProps"});
 		return { api : aState.appWare.config.api, pass : uState.pass, jwt : uState.jwt, loggedIn : uState.loggedIn, loginError : uState.loginError, last_login : uState.last_login, first_name : uState.first_name, user_name : uState.user_name, redirectAfterLogin : aState.appWare.redirectAfterLogin, waiting : uState.waiting};
 	};
 };
@@ -7161,19 +7164,19 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 	handleChange: function(e) {
 		var s = { };
 		var t = e.target;
-		haxe_Log.trace(t.name,{ fileName : "src/view/LoginForm.hx", lineNumber : 91, className : "view.LoginForm", methodName : "handleChange"});
-		haxe_Log.trace(t.value,{ fileName : "src/view/LoginForm.hx", lineNumber : 92, className : "view.LoginForm", methodName : "handleChange"});
+		haxe_Log.trace(t.name,{ fileName : "src/view/LoginForm.hx", lineNumber : 87, className : "view.LoginForm", methodName : "handleChange"});
+		haxe_Log.trace(t.value,{ fileName : "src/view/LoginForm.hx", lineNumber : 88, className : "view.LoginForm", methodName : "handleChange"});
 		s[t.name] = t.value;
-		haxe_Log.trace(this.props.dispatch == ($_=App.store,$bind($_,$_.dispatch)),{ fileName : "src/view/LoginForm.hx", lineNumber : 95, className : "view.LoginForm", methodName : "handleChange"});
+		haxe_Log.trace(this.props.dispatch == ($_=App.store,$bind($_,$_.dispatch)),{ fileName : "src/view/LoginForm.hx", lineNumber : 91, className : "view.LoginForm", methodName : "handleChange"});
 		this.setState(s);
 	}
 	,handleSubmit: function(e) {
 		e.preventDefault();
-		haxe_Log.trace(this.props.dispatch,{ fileName : "src/view/LoginForm.hx", lineNumber : 104, className : "view.LoginForm", methodName : "handleSubmit"});
+		haxe_Log.trace(this.props.dispatch,{ fileName : "src/view/LoginForm.hx", lineNumber : 100, className : "view.LoginForm", methodName : "handleSubmit"});
 		this.props.submitLogin({ user_name : this.state.user_name, pass : this.state.pass, api : this.props.api, jwt : ""});
 	}
 	,render: function() {
-		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/LoginForm.hx", lineNumber : 116, className : "view.LoginForm", methodName : "render"});
+		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/LoginForm.hx", lineNumber : 112, className : "view.LoginForm", methodName : "render"});
 		var style = { maxWidth : "32rem"};
 		if(this.props.waiting) {
 			return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("section"), props : { className : "hero is-alt is-fullheight", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "hero-body", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "loader", style : { width : "7rem", height : "7rem", margin : "auto", borderWidth : "0.58rem"}}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null};
@@ -7185,7 +7188,7 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 		switch(name) {
 		case "pass":
 			var res = this.props.loginError == "pass" ? "input error" : "input";
-			haxe_Log.trace(res,{ fileName : "src/view/LoginForm.hx", lineNumber : 175, className : "view.LoginForm", methodName : "errorStyle"});
+			haxe_Log.trace(res,{ fileName : "src/view/LoginForm.hx", lineNumber : 171, className : "view.LoginForm", methodName : "errorStyle"});
 			eStyle = res;
 			break;
 		case "user_name":
@@ -7195,7 +7198,7 @@ view_LoginForm.prototype = $extend(React_Component.prototype,{
 			eStyle = "";
 		}
 		var eStyle1 = "form-input " + eStyle;
-		haxe_Log.trace(eStyle1,{ fileName : "src/view/LoginForm.hx", lineNumber : 184, className : "view.LoginForm", methodName : "errorStyle"});
+		haxe_Log.trace(eStyle1,{ fileName : "src/view/LoginForm.hx", lineNumber : 180, className : "view.LoginForm", methodName : "errorStyle"});
 		return eStyle1;
 	}
 	,__class__: view_LoginForm

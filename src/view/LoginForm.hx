@@ -164,15 +164,15 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 	
 	function errorStyle(name:String):String
 	{
-		var eStyle = "form-input " + switch(name)
+		var eStyle = switch(name)
 		{
 			case "pass":
-				var res = props.loginError == "pass"?"input error":"input";
+				var res = props.loginError == "pass"?"error ":"";
 				trace(res);
 				res;
 				
 			case "user_name":
-				props.loginError == "user_name"?"input error":"input";
+				props.loginError == "user_name"?"error ":"";
 			
 			default:
 				'';

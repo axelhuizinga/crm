@@ -42,8 +42,9 @@ typedef UserProps =
 	?loginError:Dynamic,
 	?jwt:String,
 	?pass:String,
+	?new_pass:String,
+	?new_pass_confirm:String,
 	user_name:String,
-	?redirectAfterLogin:String,
 	?waiting:Bool
 }
 
@@ -136,6 +137,8 @@ class User extends DataAccessForm
 						user_name:App.user_name,
 						email:data.dataRows[0]['email'],
 						pass:'',
+						new_pass:'',
+						new_pass_confirm:'',
 						waiting:false,
 						last_login:Date.fromString(data.dataRows[0]['last_login']),
 					}));				
@@ -178,18 +181,23 @@ class User extends DataAccessForm
 		if(state.viewClassPath!='changePassword')
 		{
 			updateMenu('changePassword');
+			props.history.push(props.location.pathname + '/user/changePassword/' + App.user_name);
 			return setState({viewClassPath:'changePassword'});
+		}
+		else {
+			if(!(state.values['pass'].length>7 && state.values['new_pass'].length>7))
+				return setState({errors:['changePassword'=>'Die Passwörter müssen mindestens 8 Zeichen habe!']});
 		}
 			
 		if (state.values['new_pass'] != state.values['new_pass_confirm'])
 			return setState({errors:['changePassword'=>'Die Passwörter stimmen nicht überein!']});
-		if (state.values['new_pass'] == state.values['pass'])
+		if (state.values['new_pass'] == state.values['pass'] && state.values['new_pass']!='' && state.values['new_pass']!=null)
 			return setState({errors:['changePassword'=>'Das Passwort muss geändert werden!']});
 		trace(App.store.getState().appWare.user);
 		requests.push(BinaryLoader.create(
 			'${App.config.api}', 
 			{				
-				user_name:props.user_name,
+				user_name:props.user_name, 
 				jwt:props.jwt,
 				className:'auth.User',
 				action:'changePassword',
@@ -297,6 +305,7 @@ class User extends DataAccessForm
 	{
 		super(props);
 		//_instance = this;		
+		trace(props);
 		_menuItems = [
 			//{handler:edit, label:'Bearbeiten', segment:'edit'},
 			{handler:save, label:'Speichern', disabled:state.clean},

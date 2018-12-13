@@ -103,7 +103,7 @@ class AsyncUserAction
 				} else {
 					  // Otherwise reject with the status text
 					  // which will hopefully be a meaningful error
-					return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:'?'}));
+					return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:req.statusText}));
 				}
 			};
 			var spin:Dynamic = dispatch(AppAction.LoginWait);
