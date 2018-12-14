@@ -58,7 +58,7 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 		state = {hasError:false};
 		trace('location.pathname:${props.history.location.pathname} match.url: ${props.match.url}');
 		super(props);
-		if (props.match.url == '/dashboard')
+		if (App.firstLoad && props.match.url == '/dashboard')
 		{
 			props.history.push('/dashboard/settings');
 			trace('pushed2/dashboard/settings');
@@ -147,8 +147,7 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
             </div>
 			<StatusBar {...props}/>
 		</>
-			');
-			
+			');			
     }
 	
 	function internalRedirect()
@@ -156,29 +155,6 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 		props.history.push('/dashboard/settings');
 		return null;
 	}
-	
-	/*function connectChild(name:String):Void
-	{
-		this.addComponent();
-		//props.isMounted = true;
-		trace(props.isMounted);
-	}*/
-	
-	/*function routeConnect(p:Dynamic)
-	{
-		//p.component = match.url.split('/')[1]
-		p.connectChild = connectChild;
-		trace(Reflect.fields(p));
-		if (renderCount<0)
-		{
-			renderCount++;
-			trace('renderCount:$renderCount');
-			return null;
-		}
-		//return null;
-		p.component = 'RolesForm';
-		return jsx('<RouteBox {...p}/>');
-	}*/
 	
 	function TabLink(rprops)
 	{

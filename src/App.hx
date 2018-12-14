@@ -1,3 +1,5 @@
+import js.html.BodyElement;
+import js.html.svg.Document;
 import haxe.Constraints.Function;
 import js.html.TimeElement;
 import haxe.Timer;
@@ -63,10 +65,13 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	public static var jwt:String = Cookie.get('user.jwt');
 	public static var modalBox:ReactRef<DivElement> = React.createRef();
 	public static var onResizeComponents:List<Dynamic> = new List();
+	public static var firstLoad:Bool;
+
     public function new(?props:AppProps) 
 	{
 		super(props);
 		_app = this;
+		firstLoad = true;
 		//props = { waiting:true};
 		//<div className="modal is-active"><div className="modal-background"></div><button className="modal-close is-large" aria-label="close"></button></div>
 		var ti:Timer = null;
@@ -91,7 +96,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		trace('user_name:$user_name jwt:$jwt ' + (!(App.user_name == '' || App.jwt == '')?'Y':'N' ));
 		store = model.ApplicationStore.create();
 		state = store.getState();
-		//CState.init(store);		
+		CState.init(store);		
 		if (!(App.user_name == '' || App.jwt == ''))
 		{			
 			trace('clientVerify');
@@ -130,7 +135,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 
     override function componentDidMount()
 	{
-		//trace(state.appWare.history);
+		trace(state.appWare.history);
     }
 
 	override function   componentDidCatch(error, info) {
@@ -139,17 +144,37 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		// You can also log the error to an error reporting service
 		trace(error);
 	  }
+	
+	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)
+	{
+		trace(firstLoad); 
+		firstLoad = false;
+	}
 	// Use trace from props
 	public static function edump(el:Dynamic){Out.dumpObject(el); return 'OK'; };
 
     override function render() {
 		//trace(state.appWare.history.location.pathname);	store={store}		
+		trace('OK');
         return jsx('
 		<>
 			<Provider store={store}><UiView/></Provider>
 		</>			
         ');		//nn<div className="modal" ref=${App.modalBox}/>
     }
+
+	public static function 	await(delay:Int, check:Function, cb:Function):Timer
+	{
+		var ti:Timer = Timer.delay(function ()
+		{
+			if(check())
+				cb();					
+			else
+				await(delay, check, cb);
+		},delay);
+		trace(ti);
+		return ti;
+	}
 
 	public static function jsxDump(el:Dynamic):String
 	{

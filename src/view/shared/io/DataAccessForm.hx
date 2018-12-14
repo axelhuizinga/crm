@@ -370,10 +370,10 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		{
 			case Checkbox:
 			trace(fF.value);
-				jsx('<$ControlCheckbox key=${Utils.genKey(k++)} model=${model}  readOnly=${fF.readonly}/>');
+				jsx('<$ControlCheckbox key=${Utils.genKey(k++)} model=${model}  controlProps=${{readOnly:fF.readonly}}/>');
 			case Hidden:
 				fF.primary ? null:
-				jsx('<$Control key=${Utils.genKey(k++)} model=${model}  type="hidden"  readOnly=${fF.readonly}/>');
+				jsx('<$Control key=${Utils.genKey(k++)} model=${model}  controlProps=${{readOnly:fF.readonly,type:"hidden"}}/>');
 			case BaseForm.FormElement.Select:
 				jsx('
 				<$ControlSelect model=${model}  >
@@ -381,7 +381,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 				</$ControlSelect>
 				');
 			default:
-				jsx('<$Control key=${Utils.genKey(k++)} model=${model}   onChange=${fF.readonly?null:fF.handleChange} readOnly=${fF.readonly}/>');
+				jsx('<$Control key=${Utils.genKey(k++)} model=${model} controlProps=${{readOnly:fF.readonly,type:"hidden",onChange:fF.readonly?null:fF.handleChange}}/>');
 			
 		}		
 	}
@@ -438,7 +438,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	function renderModalForm(fState:FormState):ReactFragment
 	{
 		_fstate = fState;
-		trace(_fstate); 
+		//trace(_fstate); 
 		trace(App.modalBox);
 		modalFormTableBody = React.createRef();
 		App.modalBox.current.classList.toggle('is-active');
@@ -467,8 +467,8 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 						${_fstate.data.empty()? createElementsArray():renderElements()}
 					</div>
 					<footer className="modal-card-foot">
-					<ControlButton className="button is-success" model=${fState.model} type="submit">Speichern</ControlButton>
-					<ControlReset className="button" model=${fState.model}>Reset</ControlReset>
+					<ControlButton controlProps=${{className:"button is-success", type:"submit"}} model=${fState.model} >Speichern</ControlButton>
+					<ControlReset controlProps=${{className:"button"}} model=${fState.model}>Reset</ControlReset>
 					</footer>
 				</LocalForm>
 			</div>

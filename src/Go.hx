@@ -45,6 +45,7 @@ class Go
 		'), root);
 		
 		//trace(app);
+		trace('GO');
 		
 		#if (debug && react_hot)
 		trace('calling ReactHMR.autoRefresh');

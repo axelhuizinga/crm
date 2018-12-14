@@ -155,7 +155,8 @@ class AppService
 				var n:Dynamic = next();
 				trace(n);
 				n;*/
-			
+			case LoginComplete(state):
+				App.firstLoad = false;			
 			default: next();
 		}
 	}

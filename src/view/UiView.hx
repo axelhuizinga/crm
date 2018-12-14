@@ -104,10 +104,13 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
     override function componentDidMount() {
 		mounted = true;
     }
+
 	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)//,snapshot:Dynamic
 	{
 		trace(prevState);
 		trace(prevProps);
+		trace(App.firstLoad); 
+			App.firstLoad = false;
 	}
 
 	var tabList:Array<Dynamic> = [];

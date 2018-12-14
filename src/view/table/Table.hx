@@ -145,6 +145,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	var tHeadRef:ReactRef<TableRowElement>;
 	var visibleColumns:Int;
 	var headerUpdated:Bool;
+	var _timer:Timer;
 	
 	public function new(?props:TableProps)
 	{
@@ -362,6 +363,13 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	public function layOut():Void
 	{
 		trace(headerUpdated);
+		if(tHeadRef == null || tHeadRef.current == null)
+		{
+			trace('tHeadRef.current = null');
+			_timer = App.await(250,function ()return tHeadRef.current != null, layOut);
+			return;
+		}
+			
 		headerUpdated = true;			
 		var tableHeight:Float = tableRef.current.clientHeight;
 		//trace('tableHeight:$tableHeight');
@@ -443,6 +451,8 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	override public function componentWillUnmount():Void 
 	{
 		trace('leaving...');
+		if(_timer != null)
+			_timer.stop();
 		App.onResizeComponents.remove(this);
 	}
 	
