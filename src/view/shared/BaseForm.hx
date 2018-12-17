@@ -201,7 +201,7 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 		if (state.viewClassPath != viewClassPath)
 		{
 			setState({viewClassPath:viewClassPath});
-			props.history.push(props.match.url + '/' + viewClassPath);
+			//props.history.push(props.match.url + '/' + viewClassPath);
 		}
 	}
 	

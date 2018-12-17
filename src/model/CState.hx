@@ -67,6 +67,7 @@ class CState
 	public static function init(store:Store<AppState>)
 	{
 		CState.store = store;
+		return;
 		var state:AppState = store.getState();
 		var unblock = store.getState().appWare.history.block(blockTransition);
 		trace(unblock);

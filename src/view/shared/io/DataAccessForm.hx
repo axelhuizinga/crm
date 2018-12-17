@@ -438,7 +438,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	function renderModalForm(fState:FormState):ReactFragment
 	{
 		_fstate = fState;
-		//trace(_fstate); 
+		trace(_fstate); 
 		trace(App.modalBox);
 		modalFormTableBody = React.createRef();
 		App.modalBox.current.classList.toggle('is-active');

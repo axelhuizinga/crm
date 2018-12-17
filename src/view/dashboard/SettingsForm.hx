@@ -16,6 +16,7 @@ import view.shared.io.DataAccessForm.DataFormProps;
 import view.shared.RouteTabProps;
 import view.shared.BaseForm;
 import view.shared.SMenu;
+import view.shared.io.Bookmarks;
 import view.shared.io.User;
 
 /**
@@ -151,6 +152,11 @@ class SettingsForm extends BaseForm
 					<User ${...childFormProps} sideMenu=${state.sideMenu}
 					handleChange={true} handleSubmit={true} fullWidth={true}/>
 				');				
+			case "settings.Bookmarks":
+				jsx('
+					<Bookmarks ${...childFormProps} sideMenu=${state.sideMenu}
+					handleChange={true} handleSubmit={true} fullWidth={true}/>
+				');		
 			default:
 				null;					
 		}				

@@ -1,91 +1,33 @@
 package view.shared.io;
 
+import haxe.Serializer;
 import haxe.ds.StringMap;
 import model.AjaxLoader;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
+import react.ReactUtil;
+import shared.DbData;
 import view.shared.SMenu;
 import view.shared.io.DataAccessForm;
+import view.shared.io.DataAccessForm.DataFormProps;
 import view.shared.io.DataAccess.DataSource;
+import griddle.Griddle;
 
 /**
  * ...
  * @author axel@cunity.me
  */
 
-typedef UserProps =
-{
-	?contact:Int,
-	?first_name:String,
-	?last_name:String,
-	?active:Bool,
-	?loggedIn:Bool,
-	?last_login:Date,
-	?loginError:Dynamic,
-	?jwt:String,
-	?pass:String,
-	user_name:String,
-	?redirectAfterLogin:String,
-	?waiting:Bool
-}
-
 typedef BookmarksModel = DataSource;
 
-typedef UserFilter = Dynamic;
+//typedef UserFilter = Dynamic;
 
 class Bookmarks extends DataAccessForm
 {
-	public static var dataAccess:DataAccess = [
-		'edit' =>{
-			data:[
-				[
-					"users" => ["alias" => 'us',
-						"fields" => 'user_name,last_login'],
-					"user_groups" => [
-						"alias" => 'ug',
-						"fields" => 'name',
-						"jCond"=>'ug.id=us.user_group'],
-					"contacts" => [
-						"alias" => 'co',
-						"fields" => 'first_name,last_name,email',
-						"jCond"=>'contact=co.id']
-				]
-			],
-			view:[
-			]
-		}
-	];
 	
 	public var menuItems:Array<SMItem>;// = [];
 	
-
-	/*	typedef SMenuBlock =
-		{
-			?dataClassPath:String,
-			?className:String,
-			?onActivate:Function,
-			?img:String,
-			?info:String,
-			?isActive:Bool,
-			items:Array<SMItem>,
-			?label:String,	
-			?segment:String,
-		}
-
-		typedef SMItem =
-		{
-			?dataClassPath:String,
-			?className:String,
-			?component:ReactComponent,
-			?handler:Function,
-			?segment:String,
-			?img:String,
-			?info:String,
-			?label:String,	
-		}
- 
-				*/	
 	public function edit(ev:ReactEvent):Void
 	{
 		trace('hi :)');
@@ -97,7 +39,7 @@ class Bookmarks extends DataAccessForm
 				className:'auth.User',
 				action:'edit',
 				filter:'user_name|${props.user_name}',
-				dataSource:Serializer.run(view.shared.io.User.userModel)
+				dataSource:Serializer.run(null)
 			},
 			function(data:Dynamic )
 			{
@@ -113,19 +55,41 @@ class Bookmarks extends DataAccessForm
 		setState({dataClassPath:"auth.User.edit"});
 	}
 	
-	public function new(props:UserProps)
+	public function new(props:DataFormProps)
 	{
 		super(props);
-		menuItems = [{handler:edit, label:'Bearbeiten', segment:'edit'}];
-		//this.state = state;
-		//super(props, state);
-		//trace(props);
+		dataAccess = [
+			'edit' =>{
+				source:new Map(),
+				view:new Map()
+			}
+		];		
+		_menuItems = [{handler:edit, label:'Bearbeiten', segment:'edit'}];
+		var sideMenu = state.sideMenu;
+		sideMenu.menuBlocks['bookmarks'].items = function() return _menuItems;
+		trace(_menuItems);
+		state = ReactUtil.copy(state,{sideMenu:sideMenu,viewClassPath:"edit",});
 		trace(this.props);
 	}
 	
 	override function render()
 	{
-		return jsx('<div />');
+		var data = [
+			{ one: 'one', two: 'two', three: 'three' },
+			{ one: 'uno', two: 'dos', three: 'tres' },
+			{ one: 'ichi', two: 'ni', three: 'san' }
+		];
+		return jsx('
+			<div className="columns">
+				<div className="tabComponentForm"  >
+					<form className="form60">
+						<Griddle data=${data} />
+					</form>					
+				</div>
+				<SMenu className="menu" menuBlocks={state.sideMenu.menuBlocks} />					
+			</div>	
+		');
 	}
+	//
 	
 }

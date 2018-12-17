@@ -167,9 +167,9 @@ class User extends DataAccessForm
 	{
 		//trace(prevProps);
 		//trace(prevState);
-		trace(state.values);
+		//trace(state.values);
 		trace(App.store.getState().appWare.user);
-		trace(state.viewClassPath);
+		//trace(state.viewClassPath);
 		if(autoFocus!=null)
 		autoFocus.current.focus();
 	}
