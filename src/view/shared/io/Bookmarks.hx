@@ -79,11 +79,27 @@ class Bookmarks extends DataAccessForm
 			{ one: 'uno', two: 'dos', three: 'tres' },
 			{ one: 'ichi', two: 'ni', three: 'san' }
 		];
+		var styleConfig = {
+			icons: {
+				TableHeadingCell: {
+				sortDescendingIcon: '<small>(desc)</small>',
+				sortAscendingIcon: '<small>(asc)</small>',
+				},
+			},
+			classNames: {
+				Row: 'row-class',
+			},
+			styles: {
+				Filter: { fontSize: 18 },
+				Table: { border: "2px solid #555 "},
+			}
+		};
+
 		return jsx('
 			<div className="columns">
 				<div className="tabComponentForm"  >
 					<form className="form60">
-						<Griddle data=${data} />
+						<Griddle data=${data} styleConfig=${styleConfig} showSettings=${false} useExternal=${true}/>
 					</form>					
 				</div>
 				<SMenu className="menu" menuBlocks={state.sideMenu.menuBlocks} />					

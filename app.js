@@ -881,7 +881,7 @@ bulma_$components_Footer.prototype = $extend(React_Component.prototype,{
 	,__class__: bulma_$components_Footer
 });
 var bulma_$components_Tabs = require("reactbulma").Tabs;
-var griddle_Griddle = require("griddle-react").Griddle;
+var griddle_Griddle = require("griddle-react").default;
 var haxe_StackItem = $hxEnums["haxe.StackItem"] = { __ename__ : ["haxe","StackItem"], __constructs__ : ["CFunction","Module","FilePos","Method","LocalFunction"]
 	,CFunction: {_hx_index:0,__enum__:"haxe.StackItem",toString:$estr}
 	,Module: ($_=function(m) { return {_hx_index:1,m:m,__enum__:"haxe.StackItem",toString:$estr}; },$_.__params__ = ["m"],$_)
@@ -7851,7 +7851,7 @@ view_dashboard_SettingsForm.prototype = $extend(view_shared_BaseForm.prototype,{
 			return null;
 		} else {
 			switch(_g) {
-			case "settingsBookmarks":
+			case "settings.Bookmarks":
 				return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_io_Bookmarks), props : Object.assign({ },this.childFormProps,{ sideMenu : this.state.sideMenu, handleChange : true, handleSubmit : true, fullWidth : true}), key : null, ref : null};
 			case "shared.io.User":
 				return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_io_User), props : Object.assign({ },this.childFormProps,{ sideMenu : this.state.sideMenu, handleChange : true, handleSubmit : true, fullWidth : true}), key : null, ref : null};
@@ -8493,7 +8493,7 @@ var view_shared_io_Bookmarks = function(props) {
 		_g.h["edit"] = value;
 	}
 	this.dataAccess = _g;
-	this.menuItems = [{ handler : $bind(this,this.edit), label : "Bearbeiten", segment : "edit"}];
+	this._menuItems = [{ handler : $bind(this,this.edit), label : "Bearbeiten", segment : "edit"}];
 	var sideMenu = this.state.sideMenu;
 	var _this = sideMenu.menuBlocks;
 	(__map_reserved["bookmarks"] != null ? _this.getReserved("bookmarks") : _this.h["bookmarks"]).items = function() {
@@ -8531,7 +8531,7 @@ view_shared_io_Bookmarks.prototype = $extend(view_shared_io_DataAccessForm.proto
 	}
 	,render: function() {
 		var data = [{ one : "one", two : "two", three : "three"},{ one : "uno", two : "dos", three : "tres"},{ one : "ichi", two : "ni", three : "san"}];
-		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "columns", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabComponentForm", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("form"), props : { className : "form60", children : React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(griddle_Griddle),{ data : data})}, key : null, ref : null}}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_SMenu), props : { className : "menu", menuBlocks : this.state.sideMenu.menuBlocks}, key : null, ref : null}]}, key : null, ref : null};
+		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "columns", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabComponentForm", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("form"), props : { className : "form60", children : React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(griddle_Griddle),{ results : data, showSettings : false, useExternal : true})}, key : null, ref : null}}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_SMenu), props : { className : "menu", menuBlocks : this.state.sideMenu.menuBlocks}, key : null, ref : null}]}, key : null, ref : null};
 	}
 	,__class__: view_shared_io_Bookmarks
 });
