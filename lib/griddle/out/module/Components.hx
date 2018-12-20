@@ -1,4 +1,4 @@
-package griddle.module;
+package out.module.Components.hx;
 typedef RowDefinitionProps = {
 	@:optional
 	var rowKey : String;

@@ -62,6 +62,11 @@ js_Cookie.get = function(name) {
 var haxe_IMap = function() { };
 $hxClasses["haxe.IMap"] = haxe_IMap;
 haxe_IMap.__name__ = ["haxe","IMap"];
+haxe_IMap.prototype = {
+	get: null
+	,keys: null
+	,__class__: haxe_IMap
+};
 var haxe_ds_StringMap = function() {
 	this.h = { };
 };
@@ -71,6 +76,12 @@ haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
 haxe_ds_StringMap.prototype = {
 	h: null
 	,rh: null
+	,get: function(key) {
+		if(__map_reserved[key] != null) {
+			return this.getReserved(key);
+		}
+		return this.h[key];
+	}
 	,setReserved: function(key,value) {
 		if(this.rh == null) {
 			this.rh = { };
@@ -882,6 +893,7 @@ bulma_$components_Footer.prototype = $extend(React_Component.prototype,{
 });
 var bulma_$components_Tabs = require("reactbulma").Tabs;
 var griddle_Griddle = require("griddle-react").default;
+var plugins = require("griddle-react").plugins;
 var haxe_StackItem = $hxEnums["haxe.StackItem"] = { __ename__ : ["haxe","StackItem"], __constructs__ : ["CFunction","Module","FilePos","Method","LocalFunction"]
 	,CFunction: {_hx_index:0,__enum__:"haxe.StackItem",toString:$estr}
 	,Module: ($_=function(m) { return {_hx_index:1,m:m,__enum__:"haxe.StackItem",toString:$estr}; },$_.__params__ = ["m"],$_)
@@ -1875,6 +1887,9 @@ haxe_ds_IntMap.__name__ = ["haxe","ds","IntMap"];
 haxe_ds_IntMap.__interfaces__ = [haxe_IMap];
 haxe_ds_IntMap.prototype = {
 	h: null
+	,get: function(key) {
+		return this.h[key];
+	}
 	,keys: function() {
 		var a = [];
 		for( var key in this.h ) if(this.h.hasOwnProperty(key)) {
@@ -1930,6 +1945,9 @@ haxe_ds_ObjectMap.prototype = {
 		var id = key.__id__ || (key.__id__ = ++haxe_ds_ObjectMap.count);
 		this.h[id] = value;
 		this.h.__keys__[id] = key;
+	}
+	,get: function(key) {
+		return this.h[key.__id__];
 	}
 	,keys: function() {
 		var a = [];
@@ -3819,6 +3837,27 @@ hxbit_Serializer.prototype = {
 	}
 	,__class__: hxbit_Serializer
 };
+var js__$Boot_HaxeError = function(val) {
+	Error.call(this);
+	this.val = val;
+	if(Error.captureStackTrace) {
+		Error.captureStackTrace(this,js__$Boot_HaxeError);
+	}
+};
+$hxClasses["js._Boot.HaxeError"] = js__$Boot_HaxeError;
+js__$Boot_HaxeError.__name__ = ["js","_Boot","HaxeError"];
+js__$Boot_HaxeError.wrap = function(val) {
+	if((val instanceof Error)) {
+		return val;
+	} else {
+		return new js__$Boot_HaxeError(val);
+	}
+};
+js__$Boot_HaxeError.__super__ = Error;
+js__$Boot_HaxeError.prototype = $extend(Error.prototype,{
+	val: null
+	,__class__: js__$Boot_HaxeError
+});
 var hxbit_Schema = function() {
 	this.__uid = hxbit_Serializer.SEQ << 24 | ++hxbit_Serializer.UID;
 	this.fieldsNames = [];
@@ -4363,27 +4402,6 @@ hxbit_enumSer_hxbit_$PropTypeDesc.getSchema = function() {
 	s.fieldsNames.push("PStruct");
 	return s;
 };
-var js__$Boot_HaxeError = function(val) {
-	Error.call(this);
-	this.val = val;
-	if(Error.captureStackTrace) {
-		Error.captureStackTrace(this,js__$Boot_HaxeError);
-	}
-};
-$hxClasses["js._Boot.HaxeError"] = js__$Boot_HaxeError;
-js__$Boot_HaxeError.__name__ = ["js","_Boot","HaxeError"];
-js__$Boot_HaxeError.wrap = function(val) {
-	if((val instanceof Error)) {
-		return val;
-	} else {
-		return new js__$Boot_HaxeError(val);
-	}
-};
-js__$Boot_HaxeError.__super__ = Error;
-js__$Boot_HaxeError.prototype = $extend(Error.prototype,{
-	val: null
-	,__class__: js__$Boot_HaxeError
-});
 var js_Boot = function() { };
 $hxClasses["js.Boot"] = js_Boot;
 js_Boot.__name__ = ["js","Boot"];
@@ -5430,6 +5448,29 @@ react__$ReactType_ReactType_$Impl_$.fromComp = function(cls) {
 	}
 	return cls;
 };
+var react__$ReactType_ReactTypeOf_$Impl_$ = {};
+$hxClasses["react._ReactType.ReactTypeOf_Impl_"] = react__$ReactType_ReactTypeOf_$Impl_$;
+react__$ReactType_ReactTypeOf_$Impl_$.__name__ = ["react","_ReactType","ReactTypeOf_Impl_"];
+react__$ReactType_ReactTypeOf_$Impl_$._new = function(node) {
+	var this1 = node;
+	return this1;
+};
+react__$ReactType_ReactTypeOf_$Impl_$.fromFunctionWithProps = function(f) {
+	var this1 = react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(f);
+	return this1;
+};
+react__$ReactType_ReactTypeOf_$Impl_$.fromComp = function(cls) {
+	var this1 = react__$ReactType_ReactType_$Impl_$.fromComp(cls);
+	return this1;
+};
+react__$ReactType_ReactTypeOf_$Impl_$.fromFunctionWithoutProps = function(f) {
+	var this1 = react__$ReactType_ReactType_$Impl_$.fromFunction(f);
+	return this1;
+};
+react__$ReactType_ReactTypeOf_$Impl_$.fromCompWithoutProps = function(cls) {
+	var this1 = react__$ReactType_ReactType_$Impl_$.fromComp(cls);
+	return this1;
+};
 var react_ReactUtil = function() { };
 $hxClasses["react.ReactUtil"] = react_ReactUtil;
 react_ReactUtil.__name__ = ["react","ReactUtil"];
@@ -5464,53 +5505,53 @@ var react_router_ReactRouter = require("react-router");
 var react_router_Redirect = require("react-router").Redirect;
 var react_router_Route = require("react-router").Route;
 var react_router_Router = require("react-router").Router;
-var react_router_bundle_BundleLoader10 = function() { };
-$hxClasses["react.router.bundle.BundleLoader10"] = react_router_bundle_BundleLoader10;
-react_router_bundle_BundleLoader10.__name__ = ["react","router","bundle","BundleLoader10"];
-react_router_bundle_BundleLoader10.render = function(props) {
-	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Reports" */ "!haxe-loader?null/view_Reports!").then(function(exports) {
-		view_Reports = $s.view_Reports;
-		var _ = view_Reports;
-		return exports;
-	})}));
-};
-var react_router_bundle_BundleLoader2 = function() { };
-$hxClasses["react.router.bundle.BundleLoader2"] = react_router_bundle_BundleLoader2;
-react_router_bundle_BundleLoader2.__name__ = ["react","router","bundle","BundleLoader2"];
-react_router_bundle_BundleLoader2.render = function(props) {
+var react_router_bundle_BundleLoader382 = function() { };
+$hxClasses["react.router.bundle.BundleLoader382"] = react_router_bundle_BundleLoader382;
+react_router_bundle_BundleLoader382.__name__ = ["react","router","bundle","BundleLoader382"];
+react_router_bundle_BundleLoader382.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Accounting" */ "!haxe-loader?null/view_Accounting!").then(function(exports) {
 		view_Accounting = $s.view_Accounting;
 		var _ = view_Accounting;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader4 = function() { };
-$hxClasses["react.router.bundle.BundleLoader4"] = react_router_bundle_BundleLoader4;
-react_router_bundle_BundleLoader4.__name__ = ["react","router","bundle","BundleLoader4"];
-react_router_bundle_BundleLoader4.render = function(props) {
+var react_router_bundle_BundleLoader384 = function() { };
+$hxClasses["react.router.bundle.BundleLoader384"] = react_router_bundle_BundleLoader384;
+react_router_bundle_BundleLoader384.__name__ = ["react","router","bundle","BundleLoader384"];
+react_router_bundle_BundleLoader384.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Contacts" */ "!haxe-loader?null/view_Contacts!").then(function(exports) {
 		view_Contacts = $s.view_Contacts;
 		var _ = view_Contacts;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader6 = function() { };
-$hxClasses["react.router.bundle.BundleLoader6"] = react_router_bundle_BundleLoader6;
-react_router_bundle_BundleLoader6.__name__ = ["react","router","bundle","BundleLoader6"];
-react_router_bundle_BundleLoader6.render = function(props) {
+var react_router_bundle_BundleLoader386 = function() { };
+$hxClasses["react.router.bundle.BundleLoader386"] = react_router_bundle_BundleLoader386;
+react_router_bundle_BundleLoader386.__name__ = ["react","router","bundle","BundleLoader386"];
+react_router_bundle_BundleLoader386.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Contacts" */ "!haxe-loader?null/view_Contacts!").then(function(exports) {
 		view_Contacts = $s.view_Contacts;
 		var _ = view_Contacts;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader8 = function() { };
-$hxClasses["react.router.bundle.BundleLoader8"] = react_router_bundle_BundleLoader8;
-react_router_bundle_BundleLoader8.__name__ = ["react","router","bundle","BundleLoader8"];
-react_router_bundle_BundleLoader8.render = function(props) {
+var react_router_bundle_BundleLoader388 = function() { };
+$hxClasses["react.router.bundle.BundleLoader388"] = react_router_bundle_BundleLoader388;
+react_router_bundle_BundleLoader388.__name__ = ["react","router","bundle","BundleLoader388"];
+react_router_bundle_BundleLoader388.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_QC" */ "!haxe-loader?null/view_QC!").then(function(exports) {
 		view_QC = $s.view_QC;
 		var _ = view_QC;
+		return exports;
+	})}));
+};
+var react_router_bundle_BundleLoader390 = function() { };
+$hxClasses["react.router.bundle.BundleLoader390"] = react_router_bundle_BundleLoader390;
+react_router_bundle_BundleLoader390.__name__ = ["react","router","bundle","BundleLoader390"];
+react_router_bundle_BundleLoader390.render = function(props) {
+	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Reports" */ "!haxe-loader?null/view_Reports!").then(function(exports) {
+		view_Reports = $s.view_Reports;
+		var _ = view_Reports;
 		return exports;
 	})}));
 };
@@ -5778,7 +5819,7 @@ shared_DBMetaData.prototype = {
 					}
 					__ctx.out.add(b);
 				}
-				__ctx.addDynamic(__map_reserved[k] != null ? a.getReserved(k) : a.h[k]);
+				__ctx.addDynamic(a.get(k));
 			}
 		}
 		var a1 = this.dataInfo;
@@ -5813,7 +5854,7 @@ shared_DBMetaData.prototype = {
 					}
 					__ctx.out.add(b1);
 				}
-				__ctx.addDynamic(__map_reserved[k1] != null ? a1.getReserved(k1) : a1.h[k1]);
+				__ctx.addDynamic(a1.get(k1));
 			}
 		}
 		var a2 = this.dataParams;
@@ -5848,7 +5889,7 @@ shared_DBMetaData.prototype = {
 					}
 					__ctx.out.add(b2);
 				}
-				var v6 = __map_reserved[k2] != null ? a2.getReserved(k2) : a2.h[k2];
+				var v6 = a2.get(k2);
 				if(v6 == null) {
 					__ctx.out.addByte(0);
 				} else {
@@ -5899,22 +5940,22 @@ shared_DBMetaData.prototype = {
 			}
 			var _g4 = 0;
 			while(_g4 < a3.length) {
-				var v10 = a3[_g4];
+				var v11 = a3[_g4];
 				++_g4;
-				if(v10 == null) {
+				if(v11 == null) {
 					__ctx.out.addByte(0);
 				} else {
 					var keys4 = Lambda.array({ iterator : (function(_e4) {
 						return function() {
 							return _e4[0].keys();
 						};
-					})([v10])});
-					var v11 = keys4.length + 1;
-					if(v11 >= 0 && v11 < 128) {
-						__ctx.out.addByte(v11);
+					})([v11])});
+					var v10 = keys4.length + 1;
+					if(v10 >= 0 && v10 < 128) {
+						__ctx.out.addByte(v10);
 					} else {
 						__ctx.out.addByte(128);
-						__ctx.out.addInt32(v11);
+						__ctx.out.addInt32(v10);
 					}
 					var _g5 = 0;
 					while(_g5 < keys4.length) {
@@ -5933,7 +5974,7 @@ shared_DBMetaData.prototype = {
 							}
 							__ctx.out.add(b4);
 						}
-						__ctx.addDynamic(__map_reserved[k4] != null ? v10.getReserved(k4) : v10.h[k4]);
+						__ctx.addDynamic(__map_reserved[k4] != null ? v11.getReserved(k4) : v11.h[k4]);
 					}
 				}
 			}
@@ -5963,7 +6004,7 @@ shared_DBMetaData.prototype = {
 					__ctx.out.addByte(128);
 					__ctx.out.addInt32(k5);
 				}
-				var v14 = a4.h[k5];
+				var v14 = a4.get(k5);
 				if(v14 == null) {
 					__ctx.out.addByte(0);
 				} else {
@@ -7456,12 +7497,12 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 			var tmp6 = react__$ReactType_ReactType_$Impl_$.fromString("div");
 			var tmp7 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_RedirectBox), exact : true});
 			var tmp8 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/dashboard*", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_DashBoard)});
-			var tmp9 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2.render)});
-			var tmp10 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts/edit/:id", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader4.render)});
-			var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader6.render)});
-			var tmp12 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader8.render)});
+			var tmp9 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader382.render)});
+			var tmp10 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts/edit/:id", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader384.render)});
+			var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader386.render)});
+			var tmp12 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader388.render)});
 			var tmp13 = react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route);
-			return React.createElement(tmp,tmp1,React.createElement(tmp2,{ },tmp3,tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { className : "tabComponent", children : [tmp7,tmp8,tmp9,tmp10,tmp11,tmp12,React.createElement(tmp13,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader10.render)})]}, key : null, ref : null}));
+			return React.createElement(tmp,tmp1,React.createElement(tmp2,{ },tmp3,tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { className : "tabComponent", children : [tmp7,tmp8,tmp9,tmp10,tmp11,tmp12,React.createElement(tmp13,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader390.render)})]}, key : null, ref : null}));
 		}
 	}
 	,renderRedirect: function(p) {
@@ -7875,6 +7916,33 @@ view_dashboard_model_DBFormsModel.formatBool = function(v) {
 var view_dashboard_model_RolesFormModel = function() { };
 $hxClasses["view.dashboard.model.RolesFormModel"] = view_dashboard_model_RolesFormModel;
 view_dashboard_model_RolesFormModel.__name__ = ["view","dashboard","model","RolesFormModel"];
+var view_griddle_Layout = function() { };
+$hxClasses["view.griddle.Layout"] = view_griddle_Layout;
+view_griddle_Layout.__name__ = ["view","griddle","Layout"];
+view_griddle_Layout.render = function(props) {
+	var Filter = props.Filter;
+	var Pagination = props.Pagination;
+	var Table = props.Table;
+	return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "columns", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabComponentForm", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("form"), props : { className : "form60", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { children : [{ "$$typeof" : $$tre, type : Table, props : { }, key : null, ref : null},{ "$$typeof" : $$tre, type : Pagination, props : { }, key : null, ref : null}]}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null};
+};
+var view_griddle_LayoutContainer = function(props,state) {
+	React_Component.call(this,props,state);
+	haxe_Log.trace(props,{ fileName : "src/view/griddle/LayoutContainer.hx", lineNumber : 44, className : "view.griddle.LayoutContainer", methodName : "new"});
+};
+$hxClasses["view.griddle.LayoutContainer"] = view_griddle_LayoutContainer;
+view_griddle_LayoutContainer.__name__ = ["view","griddle","LayoutContainer"];
+view_griddle_LayoutContainer.__super__ = React_Component;
+view_griddle_LayoutContainer.prototype = $extend(React_Component.prototype,{
+	render: function() {
+		var Filter = this.props.Filter;
+		var Pagination = this.props.Pagination;
+		var Table = this.props.Table;
+		haxe_Log.trace(this.props,{ fileName : "src/view/griddle/LayoutContainer.hx", lineNumber : 34, className : "view.griddle.LayoutContainer", methodName : "render"});
+		haxe_Log.trace(this.state,{ fileName : "src/view/griddle/LayoutContainer.hx", lineNumber : 35, className : "view.griddle.LayoutContainer", methodName : "render"});
+		return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(griddle_Griddle),{ components : { Layout : react__$ReactType_ReactTypeOf_$Impl_$.fromFunctionWithProps(view_griddle_Layout.render)}, data : this.props.data, sortProperties : this.props.sortProperties, styleConfig : this.props.styleConfig, plugins : this.props.plugins});
+	}
+	,__class__: view_griddle_LayoutContainer
+});
 var view_shared_RouteBox = function(props) {
 	React_Component.call(this,props);
 	this.parentIsMounted = false;
@@ -8499,9 +8567,9 @@ var view_shared_io_Bookmarks = function(props) {
 	(__map_reserved["bookmarks"] != null ? _this.getReserved("bookmarks") : _this.h["bookmarks"]).items = function() {
 		return _gthis._menuItems;
 	};
-	haxe_Log.trace(this._menuItems,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 70, className : "view.shared.io.Bookmarks", methodName : "new"});
+	haxe_Log.trace(this._menuItems,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 81, className : "view.shared.io.Bookmarks", methodName : "new"});
 	this.state = react_ReactUtil.copy(this.state,{ sideMenu : sideMenu, viewClassPath : "edit"});
-	haxe_Log.trace(this.props,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 72, className : "view.shared.io.Bookmarks", methodName : "new"});
+	haxe_Log.trace(this.props,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 83, className : "view.shared.io.Bookmarks", methodName : "new"});
 };
 $hxClasses["view.shared.io.Bookmarks"] = view_shared_io_Bookmarks;
 view_shared_io_Bookmarks.__name__ = ["view","shared","io","Bookmarks"];
@@ -8510,15 +8578,15 @@ view_shared_io_Bookmarks.prototype = $extend(view_shared_io_DataAccessForm.proto
 	menuItems: null
 	,edit: function(ev) {
 		var _gthis = this;
-		haxe_Log.trace("hi :)",{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 33, className : "view.shared.io.Bookmarks", methodName : "edit"});
+		haxe_Log.trace("hi :)",{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 44, className : "view.shared.io.Bookmarks", methodName : "edit"});
 		this.requests.push(haxe_ds_Either.Left(model_AjaxLoader.load("" + Std.string(App.config.api),{ user_name : this.props.user_name, jwt : this.props.jwt, className : "auth.User", action : "edit", filter : "user_name|" + this.props.user_name, dataSource : haxe_Serializer.run(null)},function(data) {
 			if(data.rows == null) {
 				return;
 			}
-			haxe_Log.trace(data.rows.length,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 48, className : "view.shared.io.Bookmarks", methodName : "edit"});
+			haxe_Log.trace(data.rows.length,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 59, className : "view.shared.io.Bookmarks", methodName : "edit"});
 			var dataRows = data.rows;
-			haxe_Log.trace(Reflect.fields(dataRows[0]),{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 50, className : "view.shared.io.Bookmarks", methodName : "edit"});
-			haxe_Log.trace(dataRows[0].active,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 51, className : "view.shared.io.Bookmarks", methodName : "edit"});
+			haxe_Log.trace(Reflect.fields(dataRows[0]),{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 61, className : "view.shared.io.Bookmarks", methodName : "edit"});
+			haxe_Log.trace(dataRows[0].active,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 62, className : "view.shared.io.Bookmarks", methodName : "edit"});
 			var _g2 = new haxe_ds_StringMap();
 			if(__map_reserved["accountData"] != null) {
 				_g2.setReserved("accountData",dataRows);
@@ -8531,7 +8599,13 @@ view_shared_io_Bookmarks.prototype = $extend(view_shared_io_DataAccessForm.proto
 	}
 	,render: function() {
 		var data = [{ one : "one", two : "two", three : "three"},{ one : "uno", two : "dos", three : "tres"},{ one : "ichi", two : "ni", three : "san"}];
-		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "columns", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabComponentForm", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("form"), props : { className : "form60", children : React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(griddle_Griddle),{ results : data, showSettings : false, useExternal : true})}, key : null, ref : null}}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_SMenu), props : { className : "menu", menuBlocks : this.state.sideMenu.menuBlocks}, key : null, ref : null}]}, key : null, ref : null};
+		var styleConfig = { classNames : { Row : "row-class"}, styles : { Filter : { fontSize : 18}, Table : { border : "2px solid #555 "}}};
+		var sortProperties = [{ id : "one", sortAscending : true}];
+		var plugins1 = [plugins.LocalPlugin];
+		haxe_Log.trace(plugins1,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 107, className : "view.shared.io.Bookmarks", methodName : "render"});
+		haxe_Log.trace(Reflect.fields(griddle_Griddle),{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 110, className : "view.shared.io.Bookmarks", methodName : "render"});
+		haxe_Log.trace(Reflect.fields(react__$ReactType_ReactTypeOf_$Impl_$),{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 111, className : "view.shared.io.Bookmarks", methodName : "render"});
+		return { "$$typeof" : $$tre, type : view_griddle_LayoutContainer._connected, props : { data : data, plugins : plugins1, sortProperties : sortProperties, styleConfig : styleConfig}, key : null, ref : null};
 	}
 	,__class__: view_shared_io_Bookmarks
 });
@@ -9885,6 +9959,8 @@ view_dashboard_model_RolesFormModel.dataDisplay = (function($this) {
 	$r = _g1;
 	return $r;
 }(this));
+view_griddle_LayoutContainer._connected = (redux_react_ReactRedux.connect())(react__$ReactType_ReactType_$Impl_$.fromComp(view_griddle_LayoutContainer));
+view_griddle_LayoutContainer.__jsxStatic = view_griddle_LayoutContainer._connected;
 view_shared_SLink._connected = (redux_react_ReactRedux.connect(view_shared_SLink.mapStateToProps))(react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_SLink));
 view_shared_SLink.__jsxStatic = view_shared_SLink._connected;
 view_shared_io_DataAccessForm.ky = shared_Utils.genKey;

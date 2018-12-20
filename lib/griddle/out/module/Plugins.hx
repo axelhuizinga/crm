@@ -1,4 +1,4 @@
-package griddle.module.Plugins.hx;
+package out.module.Plugins.hx;
 typedef PositionSettings = {
 	@:optional
 	var tableHeight : haxe.extern.EitherType<Float, String>;

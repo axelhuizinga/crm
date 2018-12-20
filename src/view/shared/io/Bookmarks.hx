@@ -1,9 +1,18 @@
 package view.shared.io;
 
+import react.React;
+import js.html.Plugin;
+import griddle.components.Components.GriddleComponent;
+import griddle.components.Components.SettingsWrapper;
+import griddle.components.Components.Filter;
+//import griddle.components.Components.NewLayoutProps;
+import view.griddle.LayoutContainer;
+import js.Syntax;
 import haxe.Serializer;
 import haxe.ds.StringMap;
 import model.AjaxLoader;
 import react.ReactComponent;
+import react.ReactComponent.ReactFragment;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
@@ -12,7 +21,9 @@ import view.shared.SMenu;
 import view.shared.io.DataAccessForm;
 import view.shared.io.DataAccessForm.DataFormProps;
 import view.shared.io.DataAccess.DataSource;
+import griddle.components.Components.GriddleStyleConfig;
 import griddle.Griddle;
+import griddle.plugins.Plugins;
 
 /**
  * ...
@@ -79,13 +90,7 @@ class Bookmarks extends DataAccessForm
 			{ one: 'uno', two: 'dos', three: 'tres' },
 			{ one: 'ichi', two: 'ni', three: 'san' }
 		];
-		var styleConfig = {
-			icons: {
-				TableHeadingCell: {
-				sortDescendingIcon: '<small>(desc)</small>',
-				sortAscendingIcon: '<small>(asc)</small>',
-				},
-			},
+		var styleConfig:GriddleStyleConfig = {
 			classNames: {
 				Row: 'row-class',
 			},
@@ -95,15 +100,18 @@ class Bookmarks extends DataAccessForm
 			}
 		};
 
+		var sortProperties = [
+		{ id: 'one', sortAscending: true }
+		];
+var plugins=${[Plugins.LocalPlugin]}
+trace(plugins);
+//var NewLayoutInstance = React.createElement(NewLayout);
+//trace(griddle.components.NewLayout);
+trace(Reflect.fields(Griddle));
+trace(Reflect.fields(GriddleComponent));
+
 		return jsx('
-			<div className="columns">
-				<div className="tabComponentForm"  >
-					<form className="form60">
-						<Griddle data=${data} styleConfig=${styleConfig} showSettings=${false} useExternal=${true}/>
-					</form>					
-				</div>
-				<SMenu className="menu" menuBlocks={state.sideMenu.menuBlocks} />					
-			</div>	
+			<$LayoutContainer data=${data} plugins=${plugins} sortProperties=${sortProperties} styleConfig=${styleConfig}/>
 		');
 	}
 	//
