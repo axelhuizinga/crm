@@ -1,5 +1,6 @@
 package view.shared;
 
+import griddle.components.Components.Filter;
 import haxe.ds.StringMap;
 import haxe.Constraints.Function;
 import haxe.Timer;
@@ -10,6 +11,7 @@ import react.ReactComponent;
 import react.ReactComponent.ReactComponentOf;
 import react.ReactComponent.ReactFragment;
 import react.React;
+import react.ReactType;
 import react.ReactMacro.jsx;
 import bulma_components.Button;
 import react.ReactRef;
@@ -39,7 +41,7 @@ typedef SMenuBlock =
 typedef SMItem =
 {
 	?className:String,
-	?component:ReactComponent,
+	?component:Dynamic,
 	?dataClassPath:String,
 	?disabled:Bool,	
 	?handler:Function,
@@ -134,9 +136,14 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 		if (items.length == 0)
 			return null;
 		var i:Int = 1;
-		return items.map(function(item:SMItem) return jsx('
-			<Button key=${i++} onClick=${item.handler} disabled=${item.disabled}>${item.label}</Button>	
-		')).array();
+		return items.map(function(item:SMItem) 
+		{
+			return switch(item.component)
+			{
+				case Filter: jsx('<$Filter/>');
+				default:jsx('<Button key=${i++} onClick=${item.handler} disabled=${item.disabled}>${item.label}</Button>');
+			}
+		}).array();
 	}
 	
 	override public function render()

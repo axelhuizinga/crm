@@ -1,5 +1,6 @@
 package view.griddle;
 
+import griddle.components.Components.GriddlePlugin;
 import react.ReactComponent.ReactComponentOf;
 import griddle.Griddle;
 import griddle.components.Components.Table;
@@ -11,7 +12,7 @@ import react.ReactMacro.jsx;
 import redux.react.ReactRedux.connect;
 import redux.Store;
 import redux.Redux;
-//import view.griddle.NewLayout;
+//import view.griddle.EGriddle;
 import view.griddle.Layout;
 import view.shared.SMenu;
 
@@ -24,24 +25,37 @@ import view.shared.SMenu;
   @:optional varstate:view.shared.BaseForm.FormState;
 };*/
 
-@:connect
+//@:connect
 class LayoutContainer extends ReactComponentOf<NewLayoutProps, Dynamic> {
   
   override public function render() {
-    var Filter = props.Filter; // Needs an uppercase variable..
-    var Pagination = props.Pagination; // Needs an uppercase variable..
-    var Table = props.Table; // Needs an uppercase variable..
-    trace(props);
+    //var Filter = props.Filter; // Needs an uppercase variable..
+    //var Pagination = props.Pagination; // Needs an uppercase variable..
+    //var Table = props.Table; // Needs an uppercase variable..
+    trace(props.initialState);
     trace(state);
+
+    //var localPlugin:Dynamic = props.plugins[0];
+    //var comps:Dynamic = {'Layout':Layout.render,'Container':Container.plugin};
+    var comps:Dynamic = {'Layout':Layout.render};
+   /* var newPlug:Dynamic = {
+      components:{'Container':Container},
+      initialState:props.initialState,
+      reducer:null,
+      selectors:null
+    };
+    props.plugins.push(newPlug);
+    trace(props.plugins);*/
     return jsx('
-    <$Griddle components=${{"Layout":Layout.render}} data=${props.data} sortProperties=${props.sortProperties} styleConfig=${props.styleConfig} plugins=${props.plugins}/>
+     <$Griddle components=${comps} data=${props.data} sortProperties=${props.sortProperties} 
+     styleConfig=${props.styleConfig} plugins=${props.plugins} initialState=${props.initialState}/>
     ');
   }
 
   public function new(props:NewLayoutProps, state:Dynamic)
   {
     super(props,state);
-    trace(props);
+    trace(props.initialState);
     //trace(state);
   }
 }

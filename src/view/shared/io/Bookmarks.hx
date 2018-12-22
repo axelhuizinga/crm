@@ -80,7 +80,7 @@ class Bookmarks extends DataAccessForm
 		sideMenu.menuBlocks['bookmarks'].items = function() return _menuItems;
 		trace(_menuItems);
 		state = ReactUtil.copy(state,{sideMenu:sideMenu,viewClassPath:"edit",});
-		trace(this.props);
+		//trace(this.props);
 	}
 	
 	override function render()
@@ -104,16 +104,37 @@ class Bookmarks extends DataAccessForm
 		{ id: 'one', sortAscending: true }
 		];
 var plugins=${[Plugins.LocalPlugin]}
-trace(plugins);
+//trace(plugins);
+var iState:Dynamic = {istate:state, updateMenu:updateMenu};
+trace(iState);
 //var NewLayoutInstance = React.createElement(NewLayout);
 //trace(griddle.components.NewLayout);
-trace(Reflect.fields(Griddle));
-trace(Reflect.fields(GriddleComponent));
+trace(Reflect.fields(untyped Griddle.childContextTypes));
+//trace(Reflect.fields(GriddleComponent));
 
 		return jsx('
-			<$LayoutContainer data=${data} plugins=${plugins} sortProperties=${sortProperties} styleConfig=${styleConfig}/>
+			<$LayoutContainer data=${data} initialState=${iState} plugins=${plugins} sortProperties=${sortProperties} styleConfig=${styleConfig}/>
 		');
 	}
 	//
-	
+	override function updateMenu(?viewClassPath:String):SMenuProps
+	{
+		var sideMenu = state.sideMenu;
+		sideMenu.menuBlocks['user'].items = function() {
+			return switch(state.viewClassPath)
+			{
+				/*case "changePassword":		
+					[
+						{handler:changePassword, label:'Speichern', disabled:state.clean},
+						{handler:function (_)setState({viewClassPath:'edit',clean:true}), label:'Abbrechen'},
+					];*/
+				default:
+					[
+						{component: Filter, label: 'Finde'},
+					];
+			}
+		}			
+		//trace(sideMenu.menuBlocks['user'].items);	
+		return sideMenu;
+	}	
 }
