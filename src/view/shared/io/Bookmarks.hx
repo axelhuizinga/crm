@@ -2,11 +2,6 @@ package view.shared.io;
 
 import react.React;
 import js.html.Plugin;
-import griddle.components.Components.GriddleComponent;
-import griddle.components.Components.SettingsWrapper;
-import griddle.components.Components.Filter;
-//import griddle.components.Components.NewLayoutProps;
-import view.griddle.LayoutContainer;
 import js.Syntax;
 import haxe.Serializer;
 import haxe.ds.StringMap;
@@ -21,9 +16,7 @@ import view.shared.SMenu;
 import view.shared.io.DataAccessForm;
 import view.shared.io.DataAccessForm.DataFormProps;
 import view.shared.io.DataAccess.DataSource;
-import griddle.components.Components.GriddleStyleConfig;
-import griddle.Griddle;
-import griddle.plugins.Plugins;
+
 
 /**
  * ...
@@ -90,20 +83,7 @@ class Bookmarks extends DataAccessForm
 			{ one: 'uno', two: 'dos', three: 'tres' },
 			{ one: 'ichi', two: 'ni', three: 'san' }
 		];
-		var styleConfig:GriddleStyleConfig = {
-			classNames: {
-				Row: 'row-class',
-			},
-			styles: {
-				Filter: { fontSize: 18 },
-				Table: { border: "2px solid #555 "},
-			}
-		};
-
-		var sortProperties = [
-		{ id: 'one', sortAscending: true }
-		];
-var plugins=${[Plugins.LocalPlugin]}
+		
 //trace(plugins);
 var iState:Dynamic = {istate:state, updateMenu:updateMenu};
 trace(iState);
@@ -113,7 +93,7 @@ trace(Reflect.fields(untyped Griddle.childContextTypes));
 //trace(Reflect.fields(GriddleComponent));
 
 		return jsx('
-			<$LayoutContainer data=${data} initialState=${iState} plugins=${plugins} sortProperties=${sortProperties} styleConfig=${styleConfig}/>
+			
 		');
 	}
 	//
