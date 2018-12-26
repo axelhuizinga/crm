@@ -11,7 +11,6 @@
 -lib event-types
 -lib js-object
 -lib tink_hxx
--lib msgpack-haxe
 
 -cp ..\lib
 -cp lib

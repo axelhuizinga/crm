@@ -476,6 +476,31 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		'), App.modalBox.current, adjustModalFormColumns);
 	}
 
+	function renderModalScreen(content:ReactFragment):ReactFragment
+	{
+		trace(App.modalBox);
+		modalFormTableBody = React.createRef();
+		App.modalBox.current.classList.toggle('is-active');
+		var click:Function = function(_)App.modalBox.current.classList.toggle("is-active");
+
+		return ReactDOM.render( 
+			jsx('
+		<>
+		  	<div className="modal-background" onClick=${click}></div>
+		   	<div className="modal-card">
+				<header className="modal-card-head">
+				<p className="modal-card-title">dada...</p>
+				<button className="delete" aria-label="close" onClick=${click} ></button>
+				</header>
+				
+				<div className="modal-card-body"  ref=${modalFormTableBody}>					
+				<!-- Content ... -->
+					${content}
+				</div>
+			</div>
+		</> 
+		'), App.modalBox.current);
+	}
 	
 
 	function adjustModalFormColumns()

@@ -325,20 +325,20 @@ var App = function(props) {
 			while(cpi.hasNext()) cpi.next().layOut();
 		},250);
 	};
-	haxe_Log.trace(App.modalBox,{ fileName : "src/App.hx", lineNumber : 95, className : "App", methodName : "new"});
-	haxe_Log.trace("user_name:" + App.user_name + " jwt:" + App.jwt + " " + (!(App.user_name == "" || App.jwt == "") ? "Y" : "N"),{ fileName : "src/App.hx", lineNumber : 96, className : "App", methodName : "new"});
+	haxe_Log.trace(App.modalBox,{ fileName : "src/App.hx", lineNumber : 97, className : "App", methodName : "new"});
+	haxe_Log.trace("user_name:" + App.user_name + " jwt:" + App.jwt + " " + (!(App.user_name == "" || App.jwt == "") ? "Y" : "N"),{ fileName : "src/App.hx", lineNumber : 98, className : "App", methodName : "new"});
 	App.store = model_ApplicationStore.create();
 	this.state = App.store.getState();
 	model_CState.init(App.store);
 	if(!(App.user_name == "" || App.jwt == "")) {
-		haxe_Log.trace("clientVerify",{ fileName : "src/App.hx", lineNumber : 102, className : "App", methodName : "new"});
+		haxe_Log.trace("clientVerify",{ fileName : "src/App.hx", lineNumber : 104, className : "App", methodName : "new"});
 		var aj = model_AjaxLoader.loadData(App.config.api,{ jwt : App.jwt, user_name : App.user_name, className : "auth.User", action : "clientVerify"},function(verifyData) {
-			haxe_Log.trace(verifyData,{ fileName : "src/App.hx", lineNumber : 106, className : "App", methodName : "new"});
+			haxe_Log.trace(verifyData,{ fileName : "src/App.hx", lineNumber : 108, className : "App", methodName : "new"});
 			if(verifyData.error != null && verifyData.error != "") {
 				App.jwt = null;
 				App.store.dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.LoginRequired({ jwt : "", loginError : verifyData.error, user_name : App.user_name, waiting : false})));
 			} else if(verifyData.content != null && verifyData.content == "OK") {
-				haxe_Log.trace("verifyData:{verifyData.content}",{ fileName : "src/App.hx", lineNumber : 114, className : "App", methodName : "new"});
+				haxe_Log.trace("verifyData:{verifyData.content}",{ fileName : "src/App.hx", lineNumber : 116, className : "App", methodName : "new"});
 				var uState = { loggedIn : true, jwt : App.jwt, user_name : App.user_name};
 				uState.waiting = false;
 				App.store.dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.LoginComplete(uState)));
@@ -347,13 +347,13 @@ var App = function(props) {
 	} else {
 		App.store.dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.LoginRequired({ jwt : App.jwt, user_name : App.user_name, waiting : false})));
 	}
-	haxe_Log.trace(this.state.appWare.user,{ fileName : "src/App.hx", lineNumber : 130, className : "App", methodName : "new"});
-	haxe_Log.trace(Reflect.fields(this.state),{ fileName : "src/App.hx", lineNumber : 133, className : "App", methodName : "new"});
+	haxe_Log.trace(this.state.appWare.user,{ fileName : "src/App.hx", lineNumber : 132, className : "App", methodName : "new"});
+	haxe_Log.trace(Reflect.fields(this.state),{ fileName : "src/App.hx", lineNumber : 135, className : "App", methodName : "new"});
 };
 $hxClasses["App"] = App;
 App.__name__ = ["App"];
 App.edump = function(el) {
-	me_cunity_debug_Out.dumpObject(el,{ fileName : "src/App.hx", lineNumber : 154, className : "App", methodName : "edump"});
+	me_cunity_debug_Out.dumpObject(el,{ fileName : "src/App.hx", lineNumber : 156, className : "App", methodName : "edump"});
 	return "OK";
 };
 App.await = function(delay,check,cb) {
@@ -364,21 +364,21 @@ App.await = function(delay,check,cb) {
 			App.await(delay,check,cb);
 		}
 	},delay);
-	haxe_Log.trace(ti,{ fileName : "src/App.hx", lineNumber : 175, className : "App", methodName : "await"});
+	haxe_Log.trace(ti,{ fileName : "src/App.hx", lineNumber : 177, className : "App", methodName : "await"});
 	return ti;
 };
 App.jsxDump = function(el) {
-	me_cunity_debug_Out.dumpObject(el,{ fileName : "src/App.hx", lineNumber : 181, className : "App", methodName : "jsxDump"});
+	me_cunity_debug_Out.dumpObject(el,{ fileName : "src/App.hx", lineNumber : 183, className : "App", methodName : "jsxDump"});
 	return "OK";
 };
 App.logOut = function() {
 	js_Cookie.set("user.jwt","",-10,"/");
-	haxe_Log.trace(js_Cookie.get("user.jwt"),{ fileName : "src/App.hx", lineNumber : 188, className : "App", methodName : "logOut"});
-	haxe_Log.trace(js_Cookie.all(),{ fileName : "src/App.hx", lineNumber : 189, className : "App", methodName : "logOut"});
+	haxe_Log.trace(js_Cookie.get("user.jwt"),{ fileName : "src/App.hx", lineNumber : 190, className : "App", methodName : "logOut"});
+	haxe_Log.trace(js_Cookie.all(),{ fileName : "src/App.hx", lineNumber : 191, className : "App", methodName : "logOut"});
 	App.store.dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.LogOut({ user_name : App.user_name, jwt : ""})));
 };
 App.logIn = function() {
-	haxe_Log.trace(App.user_name,{ fileName : "src/App.hx", lineNumber : 196, className : "App", methodName : "logIn"});
+	haxe_Log.trace(App.user_name,{ fileName : "src/App.hx", lineNumber : 198, className : "App", methodName : "logIn"});
 };
 App.queryString2 = function(params) {
 	var query = Reflect.fields(params).map(function(k) {
@@ -392,23 +392,23 @@ App.queryString2 = function(params) {
 		var s = Reflect.field(params,k);
 		return query1 + encodeURIComponent(s);
 	}).join("&");
-	haxe_Log.trace(query,{ fileName : "src/App.hx", lineNumber : 216, className : "App", methodName : "queryString2"});
+	haxe_Log.trace(query,{ fileName : "src/App.hx", lineNumber : 218, className : "App", methodName : "queryString2"});
 	return query;
 };
 App.__super__ = React_Component;
 App.prototype = $extend(React_Component.prototype,{
 	componentDidMount: function() {
-		haxe_Log.trace(this.state.appWare.history,{ fileName : "src/App.hx", lineNumber : 138, className : "App", methodName : "componentDidMount"});
+		haxe_Log.trace(this.state.appWare.history,{ fileName : "src/App.hx", lineNumber : 140, className : "App", methodName : "componentDidMount"});
 	}
 	,componentDidCatch: function(error,info) {
-		haxe_Log.trace(error,{ fileName : "src/App.hx", lineNumber : 145, className : "App", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "src/App.hx", lineNumber : 147, className : "App", methodName : "componentDidCatch"});
 	}
 	,componentDidUpdate: function(prevProps,prevState) {
-		haxe_Log.trace(App.firstLoad,{ fileName : "src/App.hx", lineNumber : 150, className : "App", methodName : "componentDidUpdate"});
+		haxe_Log.trace(App.firstLoad,{ fileName : "src/App.hx", lineNumber : 152, className : "App", methodName : "componentDidUpdate"});
 		App.firstLoad = false;
 	}
 	,render: function() {
-		haxe_Log.trace("OK",{ fileName : "src/App.hx", lineNumber : 158, className : "App", methodName : "render"});
+		haxe_Log.trace("OK",{ fileName : "src/App.hx", lineNumber : 160, className : "App", methodName : "render"});
 		var tmp = react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment);
 		var tmp1 = $$tre;
 		var tmp2 = react__$ReactType_ReactType_$Impl_$.fromComp(redux_react_Provider);
@@ -892,8 +892,6 @@ bulma_$components_Footer.prototype = $extend(React_Component.prototype,{
 	,__class__: bulma_$components_Footer
 });
 var bulma_$components_Tabs = require("reactbulma").Tabs;
-var griddle_Griddle = require("griddle-react").default;
-var plugins = require("griddle-react").plugins;
 var haxe_StackItem = $hxEnums["haxe.StackItem"] = { __ename__ : ["haxe","StackItem"], __constructs__ : ["CFunction","Module","FilePos","Method","LocalFunction"]
 	,CFunction: {_hx_index:0,__enum__:"haxe.StackItem",toString:$estr}
 	,Module: ($_=function(m) { return {_hx_index:1,m:m,__enum__:"haxe.StackItem",toString:$estr}; },$_.__params__ = ["m"],$_)
@@ -5482,50 +5480,50 @@ var react_router_ReactRouter = require("react-router");
 var react_router_Redirect = require("react-router").Redirect;
 var react_router_Route = require("react-router").Route;
 var react_router_Router = require("react-router").Router;
-var react_router_bundle_BundleLoader1982 = function() { };
-$hxClasses["react.router.bundle.BundleLoader1982"] = react_router_bundle_BundleLoader1982;
-react_router_bundle_BundleLoader1982.__name__ = ["react","router","bundle","BundleLoader1982"];
-react_router_bundle_BundleLoader1982.render = function(props) {
+var react_router_bundle_BundleLoader922 = function() { };
+$hxClasses["react.router.bundle.BundleLoader922"] = react_router_bundle_BundleLoader922;
+react_router_bundle_BundleLoader922.__name__ = ["react","router","bundle","BundleLoader922"];
+react_router_bundle_BundleLoader922.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Accounting" */ "!haxe-loader?null/view_Accounting!").then(function(exports) {
 		view_Accounting = $s.view_Accounting;
 		var _ = view_Accounting;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader1984 = function() { };
-$hxClasses["react.router.bundle.BundleLoader1984"] = react_router_bundle_BundleLoader1984;
-react_router_bundle_BundleLoader1984.__name__ = ["react","router","bundle","BundleLoader1984"];
-react_router_bundle_BundleLoader1984.render = function(props) {
+var react_router_bundle_BundleLoader924 = function() { };
+$hxClasses["react.router.bundle.BundleLoader924"] = react_router_bundle_BundleLoader924;
+react_router_bundle_BundleLoader924.__name__ = ["react","router","bundle","BundleLoader924"];
+react_router_bundle_BundleLoader924.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Contacts" */ "!haxe-loader?null/view_Contacts!").then(function(exports) {
 		view_Contacts = $s.view_Contacts;
 		var _ = view_Contacts;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader1986 = function() { };
-$hxClasses["react.router.bundle.BundleLoader1986"] = react_router_bundle_BundleLoader1986;
-react_router_bundle_BundleLoader1986.__name__ = ["react","router","bundle","BundleLoader1986"];
-react_router_bundle_BundleLoader1986.render = function(props) {
+var react_router_bundle_BundleLoader926 = function() { };
+$hxClasses["react.router.bundle.BundleLoader926"] = react_router_bundle_BundleLoader926;
+react_router_bundle_BundleLoader926.__name__ = ["react","router","bundle","BundleLoader926"];
+react_router_bundle_BundleLoader926.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Contacts" */ "!haxe-loader?null/view_Contacts!").then(function(exports) {
 		view_Contacts = $s.view_Contacts;
 		var _ = view_Contacts;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader1988 = function() { };
-$hxClasses["react.router.bundle.BundleLoader1988"] = react_router_bundle_BundleLoader1988;
-react_router_bundle_BundleLoader1988.__name__ = ["react","router","bundle","BundleLoader1988"];
-react_router_bundle_BundleLoader1988.render = function(props) {
+var react_router_bundle_BundleLoader928 = function() { };
+$hxClasses["react.router.bundle.BundleLoader928"] = react_router_bundle_BundleLoader928;
+react_router_bundle_BundleLoader928.__name__ = ["react","router","bundle","BundleLoader928"];
+react_router_bundle_BundleLoader928.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_QC" */ "!haxe-loader?null/view_QC!").then(function(exports) {
 		view_QC = $s.view_QC;
 		var _ = view_QC;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader1990 = function() { };
-$hxClasses["react.router.bundle.BundleLoader1990"] = react_router_bundle_BundleLoader1990;
-react_router_bundle_BundleLoader1990.__name__ = ["react","router","bundle","BundleLoader1990"];
-react_router_bundle_BundleLoader1990.render = function(props) {
+var react_router_bundle_BundleLoader930 = function() { };
+$hxClasses["react.router.bundle.BundleLoader930"] = react_router_bundle_BundleLoader930;
+react_router_bundle_BundleLoader930.__name__ = ["react","router","bundle","BundleLoader930"];
+react_router_bundle_BundleLoader930.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Reports" */ "!haxe-loader?null/view_Reports!").then(function(exports) {
 		view_Reports = $s.view_Reports;
 		var _ = view_Reports;
@@ -5624,6 +5622,7 @@ react_router_bundle_BundleWrapper.prototype = $extend(React_Component.prototype,
 	}
 	,__class__: react_router_bundle_BundleWrapper
 });
+var react_table_ReactTable = require("react-table").default;
 var redux_Redux = require("redux");
 var redux__$Redux_Action_$Impl_$ = {};
 $hxClasses["redux._Redux.Action_Impl_"] = redux__$Redux_Action_$Impl_$;
@@ -7474,12 +7473,12 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 			var tmp6 = react__$ReactType_ReactType_$Impl_$.fromString("div");
 			var tmp7 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_RedirectBox), exact : true});
 			var tmp8 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/dashboard*", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_DashBoard)});
-			var tmp9 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader1982.render)});
-			var tmp10 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts/edit/:id", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader1984.render)});
-			var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader1986.render)});
-			var tmp12 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader1988.render)});
+			var tmp9 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader922.render)});
+			var tmp10 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts/edit/:id", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader924.render)});
+			var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader926.render)});
+			var tmp12 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader928.render)});
 			var tmp13 = react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route);
-			return React.createElement(tmp,tmp1,React.createElement(tmp2,{ },tmp3,tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { className : "tabComponent", children : [tmp7,tmp8,tmp9,tmp10,tmp11,tmp12,React.createElement(tmp13,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader1990.render)})]}, key : null, ref : null}));
+			return React.createElement(tmp,tmp1,React.createElement(tmp2,{ },tmp3,tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { className : "tabComponent", children : [tmp7,tmp8,tmp9,tmp10,tmp11,tmp12,React.createElement(tmp13,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader930.render)})]}, key : null, ref : null}));
 		}
 	}
 	,renderRedirect: function(p) {
@@ -7893,74 +7892,6 @@ view_dashboard_model_DBFormsModel.formatBool = function(v) {
 var view_dashboard_model_RolesFormModel = function() { };
 $hxClasses["view.dashboard.model.RolesFormModel"] = view_dashboard_model_RolesFormModel;
 view_dashboard_model_RolesFormModel.__name__ = ["view","dashboard","model","RolesFormModel"];
-var view_griddle_Container = function(props,state) {
-	React_Component.call(this,props,state);
-	haxe_Log.trace(props,{ fileName : "src/view/griddle/Container.hx", lineNumber : 31, className : "view.griddle.Container", methodName : "new"});
-};
-$hxClasses["view.griddle.Container"] = view_griddle_Container;
-view_griddle_Container.__name__ = ["view","griddle","Container"];
-view_griddle_Container.plugin = function(p) {
-	haxe_Log.trace(p,{ fileName : "src/view/griddle/Container.hx", lineNumber : 38, className : "view.griddle.Container", methodName : "plugin"});
-	return { components : null, reducer : null, selectors : null};
-};
-view_griddle_Container.__super__ = React_Component;
-view_griddle_Container.prototype = $extend(React_Component.prototype,{
-	render: function() {
-		return null;
-	}
-	,__class__: view_griddle_Container
-});
-var view_griddle_Filter = function(props,context) {
-	React_Component.call(this,props,context);
-	haxe_Log.trace(props,{ fileName : "src/view/griddle/Filter.hx", lineNumber : 19, className : "view.griddle.Filter", methodName : "new"});
-	haxe_Log.trace(context,{ fileName : "src/view/griddle/Filter.hx", lineNumber : 20, className : "view.griddle.Filter", methodName : "new"});
-};
-$hxClasses["view.griddle.Filter"] = view_griddle_Filter;
-view_griddle_Filter.__name__ = ["view","griddle","Filter"];
-view_griddle_Filter.__super__ = React_Component;
-view_griddle_Filter.prototype = $extend(React_Component.prototype,{
-	setFilter: function(e) {
-		haxe_Log.trace(e.target.value,{ fileName : "src/view/griddle/Filter.hx", lineNumber : 25, className : "view.griddle.Filter", methodName : "setFilter"});
-		haxe_Log.trace(this.props.originalFilter.setFilter,{ fileName : "src/view/griddle/Filter.hx", lineNumber : 26, className : "view.griddle.Filter", methodName : "setFilter"});
-		this.props.originalFilter.setFilter(e.target.value);
-	}
-	,render: function() {
-		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("input"), props : { type : "text", name : "filter", placeholder : this.props.placeholder, onChange : $bind(this,this.setFilter), style : this.props.style, className : this.props.className}, key : null, ref : null};
-	}
-	,__class__: view_griddle_Filter
-});
-var view_griddle_Layout = function() { };
-$hxClasses["view.griddle.Layout"] = view_griddle_Layout;
-view_griddle_Layout.__name__ = ["view","griddle","Layout"];
-view_griddle_Layout.render = function(props,c) {
-	var Filter = props.Filter;
-	var Pagination = props.Pagination;
-	var Table = props.Table;
-	haxe_Log.trace(props,{ fileName : "src/view/griddle/Layout.hx", lineNumber : 35, className : "view.griddle.Layout", methodName : "render"});
-	haxe_Log.trace(c,{ fileName : "src/view/griddle/Layout.hx", lineNumber : 36, className : "view.griddle.Layout", methodName : "render"});
-	return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "columns", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabComponentForm", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("form"), props : { className : "form60", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { children : [{ "$$typeof" : $$tre, type : Table, props : { }, key : null, ref : null},{ "$$typeof" : $$tre, type : Pagination, props : { }, key : null, ref : null}]}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null},{ "$$typeof" : $$tre, type : Filter, props : { originalFilter : props.Filter}, key : null, ref : null}]}, key : null, ref : null};
-};
-var view_griddle_LayoutContainer = function(props,state) {
-	React_Component.call(this,props,state);
-	haxe_Log.trace(props.initialState,{ fileName : "src/view/griddle/LayoutContainer.hx", lineNumber : 59, className : "view.griddle.LayoutContainer", methodName : "new"});
-};
-$hxClasses["view.griddle.LayoutContainer"] = view_griddle_LayoutContainer;
-view_griddle_LayoutContainer.__name__ = ["view","griddle","LayoutContainer"];
-view_griddle_LayoutContainer.__super__ = React_Component;
-view_griddle_LayoutContainer.prototype = $extend(React_Component.prototype,{
-	render: function() {
-		haxe_Log.trace(this.props.initialState,{ fileName : "src/view/griddle/LayoutContainer.hx", lineNumber : 36, className : "view.griddle.LayoutContainer", methodName : "render"});
-		haxe_Log.trace(this.state,{ fileName : "src/view/griddle/LayoutContainer.hx", lineNumber : 37, className : "view.griddle.LayoutContainer", methodName : "render"});
-		var comps = { "Layout" : view_griddle_Layout.render};
-		var newPlug_components_Filter = view_griddle_Filter;
-		var newPlug_initialState = this.props.initialState;
-		var newPlug_reducer = null;
-		var newPlug_selectors = null;
-		haxe_Log.trace(this.props.plugins,{ fileName : "src/view/griddle/LayoutContainer.hx", lineNumber : 49, className : "view.griddle.LayoutContainer", methodName : "render"});
-		return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(griddle_Griddle),{ components : comps, data : this.props.data, sortProperties : this.props.sortProperties, styleConfig : this.props.styleConfig, plugins : this.props.plugins, initialState : this.props.initialState});
-	}
-	,__class__: view_griddle_LayoutContainer
-});
 var view_shared_RouteBox = function(props) {
 	React_Component.call(this,props);
 	this.parentIsMounted = false;
@@ -8116,8 +8047,8 @@ var view_shared_io_DataAccessForm = function(props) {
 $hxClasses["view.shared.io.DataAccessForm"] = view_shared_io_DataAccessForm;
 view_shared_io_DataAccessForm.__name__ = ["view","shared","io","DataAccessForm"];
 view_shared_io_DataAccessForm.localDate = function(d) {
-	haxe_Log.trace(d,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 503, className : "view.shared.io.DataAccessForm", methodName : "localDate"});
-	haxe_Log.trace(Date.parse(d),{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 504, className : "view.shared.io.DataAccessForm", methodName : "localDate"});
+	haxe_Log.trace(d,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 528, className : "view.shared.io.DataAccessForm", methodName : "localDate"});
+	haxe_Log.trace(Date.parse(d),{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 529, className : "view.shared.io.DataAccessForm", methodName : "localDate"});
 	return DateTools.format(new Date(Date.parse(d)),"%d.%m.%Y %H:%M");
 };
 view_shared_io_DataAccessForm.__super__ = React_PureComponent;
@@ -8520,12 +8451,26 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 		var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlButton),{ controlProps : { className : "button is-success", type : "submit"}, model : fState.model},"Speichern");
 		return ReactDOM.render(React.createElement(tmp,{ },tmp1,{ "$$typeof" : tmp2, type : tmp3, props : { className : "modal-card", children : React.createElement(tmp4,tmp5,tmp6,tmp7,tmp8,{ "$$typeof" : tmp9, type : tmp10, props : { className : "modal-card-foot", children : [tmp11,React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlReset),{ controlProps : { className : "button"}, model : fState.model},"Reset")]}, key : null, ref : null})}, key : null, ref : null}),react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox),$bind(this,this.adjustModalFormColumns));
 	}
+	,renderModalScreen: function(content) {
+		haxe_Log.trace(App.modalBox,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 481, className : "view.shared.io.DataAccessForm", methodName : "renderModalScreen"});
+		this.modalFormTableBody = React.createRef();
+		react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox).classList.toggle("is-active");
+		var click = function(_) {
+			react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox).classList.toggle("is-active");
+		};
+		var tmp = react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment);
+		var tmp1 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "modal-background", onClick : click}, key : null, ref : null};
+		var tmp2 = $$tre;
+		var tmp3 = react__$ReactType_ReactType_$Impl_$.fromString("div");
+		var tmp4 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("header"), props : { className : "modal-card-head", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("p"), props : { className : "modal-card-title", children : "dada..."}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("button"), props : { className : "delete", 'aria-label' : "close", onClick : click}, key : null, ref : null}]}, key : null, ref : null};
+		return ReactDOM.render(React.createElement(tmp,{ },tmp1,{ "$$typeof" : tmp2, type : tmp3, props : { className : "modal-card", children : [tmp4,React.createElement(react__$ReactType_ReactType_$Impl_$.fromString("div"),{ ref : this.modalFormTableBody, className : "modal-card-body"},content)]}, key : null, ref : null}),react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox));
+	}
 	,adjustModalFormColumns: function() {
-		haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.modalFormTableHeader),{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 483, className : "view.shared.io.DataAccessForm", methodName : "adjustModalFormColumns"});
-		haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.modalFormTableBody).children,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 485, className : "view.shared.io.DataAccessForm", methodName : "adjustModalFormColumns"});
+		haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.modalFormTableHeader),{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 508, className : "view.shared.io.DataAccessForm", methodName : "adjustModalFormColumns"});
+		haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.modalFormTableBody).children,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 510, className : "view.shared.io.DataAccessForm", methodName : "adjustModalFormColumns"});
 		var bodyCols = react__$ReactRef_ReactRef_$Impl_$.get_current(this.modalFormTableBody).children;
 		var headerCols = react__$ReactRef_ReactRef_$Impl_$.get_current(this.modalFormTableHeader).children;
-		haxe_Log.trace(bodyCols,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 488, className : "view.shared.io.DataAccessForm", methodName : "adjustModalFormColumns"});
+		haxe_Log.trace(bodyCols,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 513, className : "view.shared.io.DataAccessForm", methodName : "adjustModalFormColumns"});
 		if(bodyCols == null) {
 			return;
 		}
@@ -8572,7 +8517,7 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 	}
 	,save: function(evt) {
 		evt.preventDefault();
-		haxe_Log.trace("your subclass has to override me to save anything!",{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 534, className : "view.shared.io.DataAccessForm", methodName : "save"});
+		haxe_Log.trace("your subclass has to override me to save anything!",{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 559, className : "view.shared.io.DataAccessForm", methodName : "save"});
 	}
 	,__class__: view_shared_io_DataAccessForm
 });
@@ -8593,7 +8538,7 @@ var view_shared_io_Bookmarks = function(props) {
 	(__map_reserved["bookmarks"] != null ? _this.getReserved("bookmarks") : _this.h["bookmarks"]).items = function() {
 		return _gthis._menuItems;
 	};
-	haxe_Log.trace(this._menuItems,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 81, className : "view.shared.io.Bookmarks", methodName : "new"});
+	haxe_Log.trace(this._menuItems,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 80, className : "view.shared.io.Bookmarks", methodName : "new"});
 	this.state = react_ReactUtil.copy(this.state,{ sideMenu : sideMenu, viewClassPath : "edit"});
 };
 $hxClasses["view.shared.io.Bookmarks"] = view_shared_io_Bookmarks;
@@ -8603,15 +8548,15 @@ view_shared_io_Bookmarks.prototype = $extend(view_shared_io_DataAccessForm.proto
 	menuItems: null
 	,edit: function(ev) {
 		var _gthis = this;
-		haxe_Log.trace("hi :)",{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 44, className : "view.shared.io.Bookmarks", methodName : "edit"});
+		haxe_Log.trace("hi :)",{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 43, className : "view.shared.io.Bookmarks", methodName : "edit"});
 		this.requests.push(haxe_ds_Either.Left(model_AjaxLoader.load("" + Std.string(App.config.api),{ user_name : this.props.user_name, jwt : this.props.jwt, className : "auth.User", action : "edit", filter : "user_name|" + this.props.user_name, dataSource : haxe_Serializer.run(null)},function(data) {
 			if(data.rows == null) {
 				return;
 			}
-			haxe_Log.trace(data.rows.length,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 59, className : "view.shared.io.Bookmarks", methodName : "edit"});
+			haxe_Log.trace(data.rows.length,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 58, className : "view.shared.io.Bookmarks", methodName : "edit"});
 			var dataRows = data.rows;
-			haxe_Log.trace(Reflect.fields(dataRows[0]),{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 61, className : "view.shared.io.Bookmarks", methodName : "edit"});
-			haxe_Log.trace(dataRows[0].active,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 62, className : "view.shared.io.Bookmarks", methodName : "edit"});
+			haxe_Log.trace(Reflect.fields(dataRows[0]),{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 60, className : "view.shared.io.Bookmarks", methodName : "edit"});
+			haxe_Log.trace(dataRows[0].active,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 61, className : "view.shared.io.Bookmarks", methodName : "edit"});
 			var _g2 = new haxe_ds_StringMap();
 			if(__map_reserved["accountData"] != null) {
 				_g2.setReserved("accountData",dataRows);
@@ -8623,24 +8568,26 @@ view_shared_io_Bookmarks.prototype = $extend(view_shared_io_DataAccessForm.proto
 		this.setState({ dataClassPath : "auth.User.edit"});
 	}
 	,render: function() {
-		var data = [{ one : "one", two : "two", three : "three"},{ one : "uno", two : "dos", three : "tres"},{ one : "ichi", two : "ni", three : "san"}];
-		var styleConfig = { classNames : { Row : "row-class"}, styles : { Filter : { fontSize : 18}, Table : { border : "2px solid #555 "}}};
-		var sortProperties = [{ id : "one", sortAscending : true}];
-		var plugins1 = [plugins.LocalPlugin];
+		var data = [this.getRow({ one : "one", two : "two", three : "three"}),this.getRow({ one : "uno", two : "dos", three : "tres"}),this.getRow({ one : "ichi", two : "ni", three : "san"})];
+		data = [{ name : "Roy Agasthyan", age : 26},{ name : "Sam Thomason", age : 22},{ name : "Michael Jackson", age : 36},{ name : "Samuel Roy", age : 56},{ name : "Rima Soy", age : 28},{ name : "Suzi Eliamma", age : 28}];
+		var tCR = function(cI,column) {
+			haxe_Log.trace(cI,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 115, className : "view.shared.io.Bookmarks", methodName : "render"});
+			haxe_Log.trace(column,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 116, className : "view.shared.io.Bookmarks", methodName : "render"});
+			return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("pre"), props : { children : cI.value}, key : null, ref : null}}, key : null, ref : null};
+		};
+		var columns = [{ Header : "Name", accessor : "name"},{ Header : "Age", accessor : "age"}];
 		var iState = { istate : this.state, updateMenu : $bind(this,this.updateMenu)};
-		haxe_Log.trace(iState,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 109, className : "view.shared.io.Bookmarks", methodName : "render"});
-		haxe_Log.trace(Reflect.fields(griddle_Griddle.childContextTypes),{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 112, className : "view.shared.io.Bookmarks", methodName : "render"});
-		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_griddle_LayoutContainer), props : { data : data, initialState : iState, plugins : plugins1, sortProperties : sortProperties, styleConfig : styleConfig}, key : null, ref : null};
+		haxe_Log.trace(iState,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 128, className : "view.shared.io.Bookmarks", methodName : "render"});
+		haxe_Log.trace(data,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 133, className : "view.shared.io.Bookmarks", methodName : "render"});
+		var style = { };
+		return this.renderModalScreen(React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_table_ReactTable),{ data : data, columns : columns, defaultPageSize : 20, style : style, className : "-striped -highlight"}));
 	}
 	,updateMenu: function(viewClassPath) {
-		var _gthis = this;
 		var sideMenu = this.state.sideMenu;
-		var _this = sideMenu.menuBlocks;
-		(__map_reserved["user"] != null ? _this.getReserved("user") : _this.h["user"]).items = function() {
-			var _g = _gthis.state.viewClassPath;
-			return [{ component : griddle.components.Filter, label : "Finde"}];
-		};
 		return sideMenu;
+	}
+	,getRow: function(row) {
+		return { one : row.one, two : row.two, three : row.three};
 	}
 	,__class__: view_shared_io_Bookmarks
 });
@@ -9718,6 +9665,7 @@ if(ArrayBuffer.prototype.slice == null) {
 var DataView = $global.DataView || js_html_compat_DataView;
 var Uint8Array = $global.Uint8Array || js_html_compat_Uint8Array._new;
 App.fa = require("./node_modules/font-awesome/css/font-awesome.min.css");
+App.rt = require("./node_modules/react-table/react-table.css");
 App.STYLES = require("App.scss");
 App.config = require("./bin/config.js").config;
 App.sprintf = require("sprintf-js").sprintf;
@@ -9994,8 +9942,6 @@ view_dashboard_model_RolesFormModel.dataDisplay = (function($this) {
 	$r = _g1;
 	return $r;
 }(this));
-view_griddle_Container._connected = (redux_react_ReactRedux.connect())(react__$ReactType_ReactType_$Impl_$.fromComp(view_griddle_Container));
-view_griddle_Container.__jsxStatic = view_griddle_Container._connected;
 view_shared_SLink._connected = (redux_react_ReactRedux.connect(view_shared_SLink.mapStateToProps))(react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_SLink));
 view_shared_SLink.__jsxStatic = view_shared_SLink._connected;
 view_shared_io_DataAccessForm.ky = shared_Utils.genKey;

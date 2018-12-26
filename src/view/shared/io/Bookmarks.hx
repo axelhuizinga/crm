@@ -1,5 +1,6 @@
 package view.shared.io;
 
+import react.ReactType;
 import react.React;
 import js.html.Plugin;
 import js.Syntax;
@@ -11,6 +12,11 @@ import react.ReactComponent.ReactFragment;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
+import react.table.ReactTable;
+import react.table.ReactTable.Column;
+import react.table.ReactTable.ColumnRenderProps;
+import react.table.ReactTable.TableCellRenderer;
+import react.table.ReactTable.CellInfo;
 import shared.DbData;
 import view.shared.SMenu;
 import view.shared.io.DataAccessForm;
@@ -78,43 +84,86 @@ class Bookmarks extends DataAccessForm
 	
 	override function render()
 	{
-		var data = [
-			{ one: 'one', two: 'two', three: 'three' },
-			{ one: 'uno', two: 'dos', three: 'tres' },
-			{ one: 'ichi', two: 'ni', three: 'san' }
+		var data:Array<Any> = [
+			getRow({ one: 'one', two: 'two', three: 'three' }),
+			getRow({ one: 'uno', two: 'dos', three: 'tres' }),
+			getRow({ one: 'ichi', two: 'ni', three: 'san' })
 		];
 		
+		data = [{
+			name: 'Roy Agasthyan',
+			age: 26
+			},{
+			name: 'Sam Thomason',
+			age: 22
+			},{
+			name: 'Michael Jackson',
+			age: 36
+			},{
+			name: 'Samuel Roy',
+			age: 56
+			},{
+			name: 'Rima Soy',
+			age: 28
+			},{
+			name: 'Suzi Eliamma',
+			age: 28
+			}];
 //trace(plugins);
+var tCR:TableCellRenderer = function (cI:Dynamic, column:Dynamic)
+{
+	trace(cI);
+	trace(column);
+	return jsx('<div><pre>${cI.value}</pre></div>');
+};
+var columns:Array<Column> = [{
+      Header: 'Name',
+	  //Cell:tCR,
+      accessor: 'name'
+    },{
+      Header: 'Age',
+      accessor: 'age'
+    }];
 var iState:Dynamic = {istate:state, updateMenu:updateMenu};
 trace(iState);
 //var NewLayoutInstance = React.createElement(NewLayout);
 //trace(griddle.components.NewLayout);
-trace(Reflect.fields(untyped Griddle.childContextTypes));
+//trace(Reflect.fields(untyped Griddle.childContextTypes));
 //trace(Reflect.fields(GriddleComponent));
+trace(data);
+var style:Dynamic = {
+            //height: "auto" // This will force the table body to overflow and scroll, since there is not enough room
+          };
 
-		return jsx('
-			
-		');
+		return renderModalScreen(jsx('
+			<$ReactTable
+	          	data=${data}
+    	      	columns=${columns}
+				defaultPageSize={20}
+          		style=${style}
+         	 	className="-striped -highlight" />
+		'));
+
 	}
 	//
 	override function updateMenu(?viewClassPath:String):SMenuProps
 	{
 		var sideMenu = state.sideMenu;
-		sideMenu.menuBlocks['user'].items = function() {
+		/*sideMenu.menuBlocks['user'].items = function() {
 			return switch(state.viewClassPath)
 			{
-				/*case "changePassword":		
-					[
-						{handler:changePassword, label:'Speichern', disabled:state.clean},
-						{handler:function (_)setState({viewClassPath:'edit',clean:true}), label:'Abbrechen'},
-					];*/
 				default:
 					[
 						{component: Filter, label: 'Finde'},
 					];
 			}
-		}			
+		}	*/		
 		//trace(sideMenu.menuBlocks['user'].items);	
 		return sideMenu;
 	}	
+
+	function getRow(row:Dynamic):{one: String, two: String, three: String}
+	{
+		return {one: row.one, two: row.two, three: row.three};
+	}
 }
