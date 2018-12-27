@@ -75,10 +75,10 @@ class Bookmarks extends DataAccessForm
 			}
 		];		
 		_menuItems = [{handler:edit, label:'Bearbeiten', segment:'edit'}];
-		var sideMenu = state.sideMenu;
-		sideMenu.menuBlocks['bookmarks'].items = function() return _menuItems;
-		trace(_menuItems);
-		state = ReactUtil.copy(state,{sideMenu:sideMenu,viewClassPath:"edit",});
+		var sideMenu = updateMenu('bookmarks');
+		//sideMenu.menuBlocks['bookmarks'].items = function() return _menuItems;
+		trace(sideMenu.menuBlocks['bookmarks'].items());
+		state = ReactUtil.copy(state,{sideMenu:sideMenu,viewClassPath:"edit"});
 		//trace(this.props);
 	}
 	
@@ -131,33 +131,59 @@ trace(iState);
 //trace(Reflect.fields(untyped Griddle.childContextTypes));
 //trace(Reflect.fields(GriddleComponent));
 trace(data);
+trace(state.sideMenu.menuBlocks['bookmarks'].items().slice(4));
 var style:Dynamic = {
             //height: "auto" // This will force the table body to overflow and scroll, since there is not enough room
           };
 
-		return renderModalScreen(jsx('
-			<$ReactTable
+		return jsx('
+			<div className="columns">
+				<div className="tabComponentForm"  >
+					<$ReactTable
 	          	data=${data}
     	      	columns=${columns}
 				defaultPageSize={20}
           		style=${style}
-         	 	className="-striped -highlight" />
-		'));
+         	 	className="-striped -highlight" />	
+				</div>
+				<$SMenu className="menu" menuBlocks=${state.sideMenu.menuBlocks} />					
+			</div>	
+			
+		');
 
 	}
 	//
+	function dummyH(evt:js.html.Event)
+	{
+		trace('ok');
+	}
 	override function updateMenu(?viewClassPath:String):SMenuProps
 	{
 		var sideMenu = state.sideMenu;
-		/*sideMenu.menuBlocks['user'].items = function() {
+		sideMenu.menuBlocks['bookmarks'].items = function() {
 			return switch(state.viewClassPath)
 			{
-				default:
-					[
-						{component: Filter, label: 'Finde'},
-					];
+			/*case "changePassword":		
+				[
+					{handler:changePassword, label:'Speichern', disabled:state.clean},
+					{handler:function (_)setState({viewClassPath:'edit',clean:true}), label:'Abbrechen'},
+				];*/
+			default:
+				[
+					{handler:dummyH, label:'Speichern', disabled:state.clean},
+					{handler:dummyH, label:'Passwort ändern'},
+					{handler:dummyH, label:'Something...'},
+					{handler:dummyH, label:'Something...'},
+					{handler:dummyH, label:'Something...'},
+					{handler:dummyH, label:'Something...'},
+					{handler:dummyH, label:'Something...'},
+					{handler:dummyH, label:'Something...'},
+					{handler:dummyH, label:'Something...'},
+					{handler:dummyH, label:'Something...'},
+					{handler:dummyH, label:'Something...'},
+				];
 			}
-		}	*/		
+		}	
 		//trace(sideMenu.menuBlocks['user'].items);	
 		return sideMenu;
 	}	

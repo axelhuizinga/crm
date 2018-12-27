@@ -44,7 +44,8 @@ class SettingsForm extends BaseForm
 		}		
 		state = {
 			clean:true,
-			viewClassPath:"shared.io.User",
+			//viewClassPath:"shared.io.User",
+			viewClassPath:"shared.io.Bookmarks",
 			hasError:false,
 			loading:true,
 			sideMenu:{
@@ -55,7 +56,7 @@ class SettingsForm extends BaseForm
 						isActive:true,
 						label:'UserDaten',
 						onActivate:switchContent,
-						items: null//User.menuItems
+						items: function()return null//User.menuItems
 					},
 					'bookmarks'=>{
 						dataClassPath:'settings.Bookmarks',
@@ -152,7 +153,7 @@ class SettingsForm extends BaseForm
 					<User ${...childFormProps} sideMenu=${state.sideMenu}
 					handleChange={true} handleSubmit={true} fullWidth={true}/>
 				');				
-			case "settings.Bookmarks":
+			case "shared.io.Bookmarks":
 				jsx('
 					<Bookmarks ${...childFormProps} sideMenu=${state.sideMenu}
 					handleChange={true} handleSubmit={true} fullWidth={true}/>

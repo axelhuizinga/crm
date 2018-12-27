@@ -6,7 +6,7 @@
         "panel": "shared",
         "showReuseMessage": true
     },
-    "explorer.openEditors.visible": 22,
+    "explorer.openEditors.visible": 19,
     "workbench.editor.tabSizing": "shrink",
     "zenMode.hideTabs": false
   }

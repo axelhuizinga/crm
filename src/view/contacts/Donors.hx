@@ -225,7 +225,7 @@ class Donors extends BaseForm
 	
 	function renderContent():ReactFragment
 	{
-		return switch(state.dataClassPath)
+		return switch(state.viewClassPath)
 		{
 			case "userList":
 				jsx('

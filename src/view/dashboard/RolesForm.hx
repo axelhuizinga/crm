@@ -41,7 +41,7 @@ class RolesForm extends BaseForm
 		
 		state = {
 			clean:true,
-			dataClassPath:"userList",
+			viewClassPath:"userList",
 			hasError:false,
 			loading:true,
 			sideMenu:{
@@ -254,7 +254,7 @@ class RolesForm extends BaseForm
 	
 	function renderContent():ReactFragment
 	{
-		return switch(state.dataClassPath)
+		return switch(state.viewClassPath)
 		{
 			case "userList":
 				jsx('

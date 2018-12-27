@@ -105,7 +105,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 		var header:Array<ReactFragment> = new Array();
 		var i:Int = 1;		
 		props.menuBlocks.iter(function(block:SMenuBlock) header.push( jsx('
-		<input type="radio" key=${i} id=${"sMenuPanel-"+(i++)} name="accordion-select" data-classpath=${block.dataClassPath} onChange=${block.onActivate} data-segment=${block.segment} ref=${block.isActive?initialActiveHeaderRef:null}/>
+		<input type="radio" key=${i} id=${"sMenuPanel-"+(i++)} name="accordion-select" data-classpath=${block.viewClassPath} onChange=${block.onActivate} data-segment=${block.segment} ref=${block.isActive?initialActiveHeaderRef:null}/>
 		')));
 		return header;
 	}
@@ -114,6 +114,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 	{
 		if (props.menuBlocks.empty())
 			return null;
+		trace(props.menuBlocks);
 		var i:Int = 1;
 		var panels:Array<ReactFragment> = [];
 		props.menuBlocks.iter(function(block:SMenuBlock) panels.push( jsx('	
@@ -132,8 +133,8 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 	{
 		//var items:Map<String,SMItem> = _items();
 		//var items:Array<SMItem> = _items();
-		//trace(items);
-		if (items.length == 0)
+		trace(items);
+		if (items == null || items.length == 0)
 			return null;
 		var i:Int = 1;
 		return items.map(function(item:SMItem) 
