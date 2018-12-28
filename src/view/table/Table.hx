@@ -285,9 +285,9 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		for (cD in cells)
 		{
 			if (!cD.show)
-			 continue;
+			 continue;//!=null?cD.flexGrow:null
 			rCs.push(
-			jsx('<td className=${cD.className} data-name=${cD.name} key=${"r"+cD.pos.row+"c"+cD.pos.column} data-grow=${cD.flexGrow!=null?cD.flexGrow:null}>
+			jsx('<td className=${cD.className} data-name=${cD.name} key=${"r"+cD.pos.row+"c"+cD.pos.column} data-grow=${cD.flexGrow}>
 				${cD.dataDisplay}
 			</td>'));
 		}
@@ -362,10 +362,12 @@ class Table extends ReactComponentOf<TableProps, TableState>
 
 	public function layOut():Void
 	{
-		trace(headerUpdated);
+		trace('firstCall: $headerUpdated');
 		if(tHeadRef == null || tHeadRef.current == null)
 		{
-			trace('tHeadRef.current = null');
+			trace('$tHeadRef.current = null');
+			if(_timer != null)
+				return;
 			_timer = App.await(250,function ()return tHeadRef.current != null, layOut);
 			return;
 		}
@@ -392,7 +394,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 				if (cGrow != null)
 				{
 					grow[i] = Std.parseInt(cGrow);
-					trace(grow[i]);
+					//trace(grow[i]);
 				}
 				i++;
 			}		

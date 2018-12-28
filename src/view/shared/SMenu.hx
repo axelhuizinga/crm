@@ -151,7 +151,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 	{
 		trace('...');
 		return jsx('
-		<div className="is-right is-hidden-mobile">
+		<div className="sidebar is-right is-hidden-mobile">
 			<aside className="menu">
 				${renderHeader()}
 				${renderPanels()}

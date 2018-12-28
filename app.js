@@ -5480,50 +5480,50 @@ var react_router_ReactRouter = require("react-router");
 var react_router_Redirect = require("react-router").Redirect;
 var react_router_Route = require("react-router").Route;
 var react_router_Router = require("react-router").Router;
-var react_router_bundle_BundleLoader2092 = function() { };
-$hxClasses["react.router.bundle.BundleLoader2092"] = react_router_bundle_BundleLoader2092;
-react_router_bundle_BundleLoader2092.__name__ = ["react","router","bundle","BundleLoader2092"];
-react_router_bundle_BundleLoader2092.render = function(props) {
+var react_router_bundle_BundleLoader2252 = function() { };
+$hxClasses["react.router.bundle.BundleLoader2252"] = react_router_bundle_BundleLoader2252;
+react_router_bundle_BundleLoader2252.__name__ = ["react","router","bundle","BundleLoader2252"];
+react_router_bundle_BundleLoader2252.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Accounting" */ "!haxe-loader?null/view_Accounting!").then(function(exports) {
 		view_Accounting = $s.view_Accounting;
 		var _ = view_Accounting;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader2094 = function() { };
-$hxClasses["react.router.bundle.BundleLoader2094"] = react_router_bundle_BundleLoader2094;
-react_router_bundle_BundleLoader2094.__name__ = ["react","router","bundle","BundleLoader2094"];
-react_router_bundle_BundleLoader2094.render = function(props) {
+var react_router_bundle_BundleLoader2254 = function() { };
+$hxClasses["react.router.bundle.BundleLoader2254"] = react_router_bundle_BundleLoader2254;
+react_router_bundle_BundleLoader2254.__name__ = ["react","router","bundle","BundleLoader2254"];
+react_router_bundle_BundleLoader2254.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Contacts" */ "!haxe-loader?null/view_Contacts!").then(function(exports) {
 		view_Contacts = $s.view_Contacts;
 		var _ = view_Contacts;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader2096 = function() { };
-$hxClasses["react.router.bundle.BundleLoader2096"] = react_router_bundle_BundleLoader2096;
-react_router_bundle_BundleLoader2096.__name__ = ["react","router","bundle","BundleLoader2096"];
-react_router_bundle_BundleLoader2096.render = function(props) {
+var react_router_bundle_BundleLoader2256 = function() { };
+$hxClasses["react.router.bundle.BundleLoader2256"] = react_router_bundle_BundleLoader2256;
+react_router_bundle_BundleLoader2256.__name__ = ["react","router","bundle","BundleLoader2256"];
+react_router_bundle_BundleLoader2256.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Contacts" */ "!haxe-loader?null/view_Contacts!").then(function(exports) {
 		view_Contacts = $s.view_Contacts;
 		var _ = view_Contacts;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader2098 = function() { };
-$hxClasses["react.router.bundle.BundleLoader2098"] = react_router_bundle_BundleLoader2098;
-react_router_bundle_BundleLoader2098.__name__ = ["react","router","bundle","BundleLoader2098"];
-react_router_bundle_BundleLoader2098.render = function(props) {
+var react_router_bundle_BundleLoader2258 = function() { };
+$hxClasses["react.router.bundle.BundleLoader2258"] = react_router_bundle_BundleLoader2258;
+react_router_bundle_BundleLoader2258.__name__ = ["react","router","bundle","BundleLoader2258"];
+react_router_bundle_BundleLoader2258.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_QC" */ "!haxe-loader?null/view_QC!").then(function(exports) {
 		view_QC = $s.view_QC;
 		var _ = view_QC;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader2100 = function() { };
-$hxClasses["react.router.bundle.BundleLoader2100"] = react_router_bundle_BundleLoader2100;
-react_router_bundle_BundleLoader2100.__name__ = ["react","router","bundle","BundleLoader2100"];
-react_router_bundle_BundleLoader2100.render = function(props) {
+var react_router_bundle_BundleLoader2260 = function() { };
+$hxClasses["react.router.bundle.BundleLoader2260"] = react_router_bundle_BundleLoader2260;
+react_router_bundle_BundleLoader2260.__name__ = ["react","router","bundle","BundleLoader2260"];
+react_router_bundle_BundleLoader2260.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Reports" */ "!haxe-loader?null/view_Reports!").then(function(exports) {
 		view_Reports = $s.view_Reports;
 		var _ = view_Reports;
@@ -7473,12 +7473,12 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 			var tmp6 = react__$ReactType_ReactType_$Impl_$.fromString("div");
 			var tmp7 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_RedirectBox), exact : true});
 			var tmp8 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/dashboard*", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_DashBoard)});
-			var tmp9 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2092.render)});
-			var tmp10 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts/edit/:id", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2094.render)});
-			var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2096.render)});
-			var tmp12 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2098.render)});
+			var tmp9 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2252.render)});
+			var tmp10 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts/edit/:id", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2254.render)});
+			var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2256.render)});
+			var tmp12 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2258.render)});
 			var tmp13 = react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route);
-			return React.createElement(tmp,tmp1,React.createElement(tmp2,{ },tmp3,tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { className : "tabComponent", children : [tmp7,tmp8,tmp9,tmp10,tmp11,tmp12,React.createElement(tmp13,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2100.render)})]}, key : null, ref : null}));
+			return React.createElement(tmp,tmp1,React.createElement(tmp2,{ },tmp3,tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { className : "tabComponent", children : [tmp7,tmp8,tmp9,tmp10,tmp11,tmp12,React.createElement(tmp13,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2260.render)})]}, key : null, ref : null}));
 		}
 	}
 	,renderRedirect: function(p) {
@@ -8029,7 +8029,7 @@ view_shared_SMenu.prototype = $extend(React_Component.prototype,{
 	}
 	,render: function() {
 		haxe_Log.trace("...",{ fileName : "src/view/shared/SMenu.hx", lineNumber : 152, className : "view.shared.SMenu", methodName : "render"});
-		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "is-right is-hidden-mobile", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("aside"), props : { className : "menu", children : [this.renderHeader(),this.renderPanels()]}, key : null, ref : null}}, key : null, ref : null};
+		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "sidebar is-right is-hidden-mobile", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("aside"), props : { className : "menu", children : [this.renderHeader(),this.renderPanels()]}, key : null, ref : null}}, key : null, ref : null};
 	}
 	,componentDidMount: function() {
 		this.activate();
@@ -9465,9 +9465,8 @@ view_table_Table.prototype = $extend(React_Component.prototype,{
 				continue;
 			}
 			var tmp = $$tre;
-			var tmp1 = cD1.flexGrow != null ? cD1.flexGrow : null;
-			var tmp2 = "r" + cD1.pos.row + "c";
-			rCs.push({ "$$typeof" : tmp, type : react__$ReactType_ReactType_$Impl_$.fromString("td"), props : { className : cD1.className, 'data-name' : cD1.name, 'data-grow' : tmp1, children : cD1.dataDisplay}, key : tmp2 + cD1.pos.column, ref : null});
+			var tmp1 = "r" + cD1.pos.row + "c";
+			rCs.push({ "$$typeof" : tmp, type : react__$ReactType_ReactType_$Impl_$.fromString("td"), props : { className : cD1.className, 'data-name' : cD1.name, 'data-grow' : cD1.flexGrow, children : cD1.dataDisplay}, key : tmp1 + cD1.pos.column, ref : null});
 		}
 		return rCs;
 	}
@@ -9539,9 +9538,12 @@ view_table_Table.prototype = $extend(React_Component.prototype,{
 	}
 	,layOut: function() {
 		var _gthis = this;
-		haxe_Log.trace(this.headerUpdated,{ fileName : "src/view/table/Table.hx", lineNumber : 365, className : "view.table.Table", methodName : "layOut"});
+		haxe_Log.trace("firstCall: " + Std.string(this.headerUpdated),{ fileName : "src/view/table/Table.hx", lineNumber : 365, className : "view.table.Table", methodName : "layOut"});
 		if(this.tHeadRef == null || react__$ReactRef_ReactRef_$Impl_$.get_current(this.tHeadRef) == null) {
-			haxe_Log.trace("tHeadRef.current = null",{ fileName : "src/view/table/Table.hx", lineNumber : 368, className : "view.table.Table", methodName : "layOut"});
+			haxe_Log.trace("" + Std.string(this.tHeadRef) + ".current = null",{ fileName : "src/view/table/Table.hx", lineNumber : 368, className : "view.table.Table", methodName : "layOut"});
+			if(this._timer != null) {
+				return;
+			}
 			this._timer = App.await(250,function() {
 				return react__$ReactRef_ReactRef_$Impl_$.get_current(_gthis.tHeadRef) != null;
 			},$bind(this,this.layOut));
@@ -9563,7 +9565,6 @@ view_table_Table.prototype = $extend(React_Component.prototype,{
 				var cGrow = cell.getAttribute("data-grow");
 				if(cGrow != null) {
 					grow[i] = Std.parseInt(cGrow);
-					haxe_Log.trace(grow[i],{ fileName : "src/view/table/Table.hx", lineNumber : 395, className : "view.table.Table", methodName : "layOut"});
 				}
 				++i;
 			}
@@ -9599,12 +9600,12 @@ view_table_Table.prototype = $extend(React_Component.prototype,{
 		var _gthis = this;
 		App.onResizeComponents.add(this);
 		window.requestAnimationFrame(function(t) {
-			haxe_Log.trace(t,{ fileName : "src/view/table/Table.hx", lineNumber : 432, className : "view.table.Table", methodName : "componentDidMount"});
+			haxe_Log.trace(t,{ fileName : "src/view/table/Table.hx", lineNumber : 434, className : "view.table.Table", methodName : "componentDidMount"});
 			_gthis.layOut();
 		});
 	}
 	,componentDidUpdate: function(prevProps,prevState) {
-		haxe_Log.trace(Std.string(this.headerUpdated) + ":" + Std.string(this.tHeadRef),{ fileName : "src/view/table/Table.hx", lineNumber : 439, className : "view.table.Table", methodName : "componentDidUpdate"});
+		haxe_Log.trace(Std.string(this.headerUpdated) + ":" + Std.string(this.tHeadRef),{ fileName : "src/view/table/Table.hx", lineNumber : 441, className : "view.table.Table", methodName : "componentDidUpdate"});
 		if(this.tHeadRef != null) {
 			if(this.headerUpdated) {
 				return;
@@ -9612,7 +9613,7 @@ view_table_Table.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,componentWillUnmount: function() {
-		haxe_Log.trace("leaving...",{ fileName : "src/view/table/Table.hx", lineNumber : 453, className : "view.table.Table", methodName : "componentWillUnmount"});
+		haxe_Log.trace("leaving...",{ fileName : "src/view/table/Table.hx", lineNumber : 455, className : "view.table.Table", methodName : "componentWillUnmount"});
 		if(this._timer != null) {
 			this._timer.stop();
 		}
@@ -9626,10 +9627,10 @@ view_table_Table.prototype = $extend(React_Component.prototype,{
 		while(_g < cells.length) {
 			var cell = cells[_g];
 			++_g;
-			haxe_Log.trace(cell.getBoundingClientRect().toJSON(),{ fileName : "src/view/table/Table.hx", lineNumber : 466, className : "view.table.Table", methodName : "showDims"});
+			haxe_Log.trace(cell.getBoundingClientRect().toJSON(),{ fileName : "src/view/table/Table.hx", lineNumber : 468, className : "view.table.Table", methodName : "showDims"});
 			s += cell.getBoundingClientRect().width;
 		}
-		haxe_Log.trace(" sum:" + s,{ fileName : "src/view/table/Table.hx", lineNumber : 469, className : "view.table.Table", methodName : "showDims"});
+		haxe_Log.trace(" sum:" + s,{ fileName : "src/view/table/Table.hx", lineNumber : 471, className : "view.table.Table", methodName : "showDims"});
 	}
 	,nodeDims: function(n) {
 		var i = 0;
@@ -9640,10 +9641,10 @@ view_table_Table.prototype = $extend(React_Component.prototype,{
 			var cell = cells[_g];
 			++_g;
 			var dRect = (js_Boot.__cast(cell , HTMLElement)).getBoundingClientRect().toJSON();
-			haxe_Log.trace(dRect,{ fileName : "src/view/table/Table.hx", lineNumber : 480, className : "view.table.Table", methodName : "nodeDims"});
+			haxe_Log.trace(dRect,{ fileName : "src/view/table/Table.hx", lineNumber : 482, className : "view.table.Table", methodName : "nodeDims"});
 			s += (js_Boot.__cast(cell , HTMLElement)).getBoundingClientRect().width;
 		}
-		haxe_Log.trace(" sum:" + s,{ fileName : "src/view/table/Table.hx", lineNumber : 484, className : "view.table.Table", methodName : "nodeDims"});
+		haxe_Log.trace(" sum:" + s,{ fileName : "src/view/table/Table.hx", lineNumber : 486, className : "view.table.Table", methodName : "nodeDims"});
 	}
 	,__class__: view_table_Table
 });

@@ -6,7 +6,9 @@
 	$br $br 0 0;
 }
 */
-
+$baseFont:14;
+$statusLineHeight:1.5;
+$statusBarHeight:(($baseFont+2)*$statusLineHeight)+2;
 $bgto: #ddd;
 $border-light: #dbdbdb;
 $borderCol:0.35px dotted #eee;
@@ -342,7 +344,7 @@ h1 {
 .statusbar
  {
 	 display:flex;
-	 flex-grow:1; 
+	 /*flex-grow:1; */
 	 justify-content:space-between;
  } 
 .topNav, .topNav ul{
@@ -626,6 +628,15 @@ label.panel-heading {
 .panel-block
 {
 	overflow-y: auto;
+}
+
+.sidebar
+{
+	overflow-x: hidden;
+    overflow-y: auto;
+    /*min-height: 0px;
+     height: 100%;
+    padding-bottom: #{$statusBarHeight}px; */
 }
 
 /*tables*/
