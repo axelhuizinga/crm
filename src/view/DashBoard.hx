@@ -142,7 +142,7 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 			</div>
             <div className="tabContent2" >
 				<Route path="/dashboard/roles"  {...props} component={RolesForm}/>
-				<Route path="/dashboard/settings/:section?/:action?/:id?"  {...props} component={SettingsForm}/>
+				<Route path="/dashboard/settings/:segment?/:action?/:id?"  {...props} component={SettingsForm}/>
 				<Route path="/dashboard/setup"  {...props} component={SetUpForm}/>					
             </div>
 			<StatusBar {...props}/>
@@ -150,9 +150,10 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 			');			
     }
 	
-	function internalRedirect()
+	//function internalRedirect()
+	function internalRedirect(path:String = '/dashboard/settings')
 	{
-		props.history.push('/dashboard/settings');
+		props.history.push(path);
 		return null;
 	}
 	

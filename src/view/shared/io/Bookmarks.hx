@@ -32,7 +32,7 @@ import view.shared.io.DataAccess.DataSource;
 typedef BookmarksModel = DataSource;
 
 //typedef UserFilter = Dynamic;
-
+@:connect
 class Bookmarks extends DataAccessForm
 {
 	
@@ -74,10 +74,10 @@ class Bookmarks extends DataAccessForm
 				view:new Map()
 			}
 		];		
-		_menuItems = [{handler:edit, label:'Bearbeiten', segment:'edit'}];
+		_menuItems = [{handler:edit, label:'Bearbeiten', action:'edit'}];
 		var sideMenu = updateMenu('bookmarks');
 		//sideMenu.menuBlocks['bookmarks'].items = function() return _menuItems;
-		trace(sideMenu.menuBlocks['bookmarks'].items());
+		//trace(sideMenu.menuBlocks['bookmarks'].items());
 		state = ReactUtil.copy(state,{sideMenu:sideMenu,viewClassPath:"edit"});
 		//trace(this.props);
 	}
@@ -160,15 +160,9 @@ var style:Dynamic = {
 	override function updateMenu(?viewClassPath:String):SMenuProps
 	{
 		var sideMenu = state.sideMenu;
+		sideMenu.menuBlocks['bookmarks'].isActive = true;
 		sideMenu.menuBlocks['bookmarks'].items = function() {
-			return switch(state.viewClassPath)
-			{
-			/*case "changePassword":		
-				[
-					{handler:changePassword, label:'Speichern', disabled:state.clean},
-					{handler:function (_)setState({viewClassPath:'edit',clean:true}), label:'Abbrechen'},
-				];*/
-			default:
+			return 
 				[
 					{handler:dummyH, label:'Speichern', disabled:state.clean},
 					{handler:dummyH, label:'Passwort ändern'},
@@ -182,7 +176,7 @@ var style:Dynamic = {
 					{handler:dummyH, label:'Something...'},
 					{handler:dummyH, label:'Something...'},
 				];
-			}
+			
 		}	
 		//trace(sideMenu.menuBlocks['user'].items);	
 		return sideMenu;

@@ -49,8 +49,8 @@ class DB extends DataAccessForm
 		dataDisplay = DBFormsModel.dataDisplay;
 		_instance = this;		
 		_menuItems = [
-			{handler:createFieldList, label:'Create Fields Table', segment:'createFieldList'},
-			{handler:showFieldList, label:'Table Fields', segment:'showFieldList'},
+			{handler:createFieldList, label:'Create Fields Table', action:'createFieldList'},
+			{handler:showFieldList, label:'Table Fields', action:'showFieldList'},
 			{handler:editTableFields, label:'Bearbeiten', disabled:state.selectedRows.length==0},
 			//{handler:save, label:'Speichern', disabled:state.clean},
 		];
@@ -271,8 +271,8 @@ class DB extends DataAccessForm
 		trace('${Type.getClassName(Type.getClass(this))} task');
 		var sideMenu = state.sideMenu;
 		sideMenu.menuBlocks['DbTools'].items = function() return [
-			{handler:createFieldList, label:'Create Fields Table', segment:'createFieldList'},
-			{handler:showFieldList, label:'Table Fields', segment:'showFieldList'},
+			{handler:createFieldList, label:'Create Fields Table', action:'createFieldList'},
+			{handler:showFieldList, label:'Table Fields', action:'showFieldList'},
 			{handler:editTableFields, label:'Bearbeiten', disabled:state.selectedRows.length==0},
 			//{handler:saveTableFields, label:'Speichern', disabled:state.clean},
 		];

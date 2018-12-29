@@ -5480,50 +5480,50 @@ var react_router_ReactRouter = require("react-router");
 var react_router_Redirect = require("react-router").Redirect;
 var react_router_Route = require("react-router").Route;
 var react_router_Router = require("react-router").Router;
-var react_router_bundle_BundleLoader2252 = function() { };
-$hxClasses["react.router.bundle.BundleLoader2252"] = react_router_bundle_BundleLoader2252;
-react_router_bundle_BundleLoader2252.__name__ = ["react","router","bundle","BundleLoader2252"];
-react_router_bundle_BundleLoader2252.render = function(props) {
+var react_router_bundle_BundleLoader4112 = function() { };
+$hxClasses["react.router.bundle.BundleLoader4112"] = react_router_bundle_BundleLoader4112;
+react_router_bundle_BundleLoader4112.__name__ = ["react","router","bundle","BundleLoader4112"];
+react_router_bundle_BundleLoader4112.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Accounting" */ "!haxe-loader?null/view_Accounting!").then(function(exports) {
 		view_Accounting = $s.view_Accounting;
 		var _ = view_Accounting;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader2254 = function() { };
-$hxClasses["react.router.bundle.BundleLoader2254"] = react_router_bundle_BundleLoader2254;
-react_router_bundle_BundleLoader2254.__name__ = ["react","router","bundle","BundleLoader2254"];
-react_router_bundle_BundleLoader2254.render = function(props) {
+var react_router_bundle_BundleLoader4114 = function() { };
+$hxClasses["react.router.bundle.BundleLoader4114"] = react_router_bundle_BundleLoader4114;
+react_router_bundle_BundleLoader4114.__name__ = ["react","router","bundle","BundleLoader4114"];
+react_router_bundle_BundleLoader4114.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Contacts" */ "!haxe-loader?null/view_Contacts!").then(function(exports) {
 		view_Contacts = $s.view_Contacts;
 		var _ = view_Contacts;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader2256 = function() { };
-$hxClasses["react.router.bundle.BundleLoader2256"] = react_router_bundle_BundleLoader2256;
-react_router_bundle_BundleLoader2256.__name__ = ["react","router","bundle","BundleLoader2256"];
-react_router_bundle_BundleLoader2256.render = function(props) {
+var react_router_bundle_BundleLoader4116 = function() { };
+$hxClasses["react.router.bundle.BundleLoader4116"] = react_router_bundle_BundleLoader4116;
+react_router_bundle_BundleLoader4116.__name__ = ["react","router","bundle","BundleLoader4116"];
+react_router_bundle_BundleLoader4116.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Contacts" */ "!haxe-loader?null/view_Contacts!").then(function(exports) {
 		view_Contacts = $s.view_Contacts;
 		var _ = view_Contacts;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader2258 = function() { };
-$hxClasses["react.router.bundle.BundleLoader2258"] = react_router_bundle_BundleLoader2258;
-react_router_bundle_BundleLoader2258.__name__ = ["react","router","bundle","BundleLoader2258"];
-react_router_bundle_BundleLoader2258.render = function(props) {
+var react_router_bundle_BundleLoader4118 = function() { };
+$hxClasses["react.router.bundle.BundleLoader4118"] = react_router_bundle_BundleLoader4118;
+react_router_bundle_BundleLoader4118.__name__ = ["react","router","bundle","BundleLoader4118"];
+react_router_bundle_BundleLoader4118.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_QC" */ "!haxe-loader?null/view_QC!").then(function(exports) {
 		view_QC = $s.view_QC;
 		var _ = view_QC;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader2260 = function() { };
-$hxClasses["react.router.bundle.BundleLoader2260"] = react_router_bundle_BundleLoader2260;
-react_router_bundle_BundleLoader2260.__name__ = ["react","router","bundle","BundleLoader2260"];
-react_router_bundle_BundleLoader2260.render = function(props) {
+var react_router_bundle_BundleLoader4120 = function() { };
+$hxClasses["react.router.bundle.BundleLoader4120"] = react_router_bundle_BundleLoader4120;
+react_router_bundle_BundleLoader4120.__name__ = ["react","router","bundle","BundleLoader4120"];
+react_router_bundle_BundleLoader4120.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Reports" */ "!haxe-loader?null/view_Reports!").then(function(exports) {
 		view_Reports = $s.view_Reports;
 		var _ = view_Reports;
@@ -7109,12 +7109,15 @@ view_DashBoard.prototype = $extend(React_Component.prototype,{
 		var tmp9 = react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps($bind(this,this.TabLink));
 		var tmp10 = Object.assign({ },this.props,{ to : "/dashboard/setup", children : "Setup"});
 		var tmp11 = { "$$typeof" : tmp1, type : tmp2, props : { className : "tabNav2", children : React.createElement(tmp3,{ boxed : true},{ "$$typeof" : tmp4, type : tmp5, props : { children : [tmp6,tmp7,{ "$$typeof" : tmp8, type : tmp9, props : tmp10, key : null, ref : null}]}, key : null, ref : null})}, key : null, ref : null};
-		var tmp12 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabContent2", children : [React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/dashboard/roles", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_dashboard_RolesForm)})),React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/dashboard/settings/:section?/:action?/:id?", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_dashboard_SettingsForm)})),React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/dashboard/setup", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_dashboard_SetUpForm)}))]}, key : null, ref : null};
+		var tmp12 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabContent2", children : [React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/dashboard/roles", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_dashboard_RolesForm)})),React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/dashboard/settings/:segment?/:action?/:id?", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_dashboard_SettingsForm)})),React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/dashboard/setup", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_dashboard_SetUpForm)}))]}, key : null, ref : null};
 		var tmp13 = $$tre;
 		return React.createElement(tmp,{ },tmp11,tmp12,{ "$$typeof" : tmp13, type : view_StatusBar._connected, props : this.props, key : null, ref : null});
 	}
-	,internalRedirect: function() {
-		this.props.history.push("/dashboard/settings");
+	,internalRedirect: function(path) {
+		if(path == null) {
+			path = "/dashboard/settings";
+		}
+		this.props.history.push(path);
 		return null;
 	}
 	,TabLink: function(rprops) {
@@ -7473,12 +7476,12 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 			var tmp6 = react__$ReactType_ReactType_$Impl_$.fromString("div");
 			var tmp7 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_RedirectBox), exact : true});
 			var tmp8 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/dashboard*", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_DashBoard)});
-			var tmp9 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2252.render)});
-			var tmp10 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts/edit/:id", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2254.render)});
-			var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2256.render)});
-			var tmp12 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2258.render)});
+			var tmp9 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader4112.render)});
+			var tmp10 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts/edit/:id", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader4114.render)});
+			var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader4116.render)});
+			var tmp12 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader4118.render)});
 			var tmp13 = react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route);
-			return React.createElement(tmp,tmp1,React.createElement(tmp2,{ },tmp3,tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { className : "tabComponent", children : [tmp7,tmp8,tmp9,tmp10,tmp11,tmp12,React.createElement(tmp13,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2260.render)})]}, key : null, ref : null}));
+			return React.createElement(tmp,tmp1,React.createElement(tmp2,{ },tmp3,tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { className : "tabComponent", children : [tmp7,tmp8,tmp9,tmp10,tmp11,tmp12,React.createElement(tmp13,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader4120.render)})]}, key : null, ref : null}));
 		}
 	}
 	,renderRedirect: function(p) {
@@ -7543,12 +7546,14 @@ view_shared_BaseForm.prototype = $extend(React_Component.prototype,{
 		haxe_Log.trace(newState,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 191, className : "view.shared.BaseForm", methodName : "setStateFromChild"});
 	}
 	,switchContent: function(reactEventSource) {
-		haxe_Log.trace(this.props.history,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 197, className : "view.shared.BaseForm", methodName : "switchContent"});
-		haxe_Log.trace(this.props.match,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 198, className : "view.shared.BaseForm", methodName : "switchContent"});
-		var viewClassPath = reactEventSource.target.getAttribute("data-classpath");
-		haxe_Log.trace(viewClassPath + ":" + this.state.viewClassPath,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 200, className : "view.shared.BaseForm", methodName : "switchContent"});
-		if(this.state.viewClassPath != viewClassPath) {
-			this.setState({ viewClassPath : viewClassPath});
+		haxe_Log.trace(this.props.match,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 199, className : "view.shared.BaseForm", methodName : "switchContent"});
+		var segment = reactEventSource.target.getAttribute("data-segment");
+		haxe_Log.trace("props.match.params.segment:" + this.props.match.params.segment + " segment:" + segment,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 203, className : "view.shared.BaseForm", methodName : "switchContent"});
+		if(segment != this.props.match.params.segment) {
+			var basePath = this.props.match.path.split("/:")[0];
+			haxe_Log.trace(this.props.location.pathname,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 213, className : "view.shared.BaseForm", methodName : "switchContent"});
+			this.props.history.push("" + basePath + "/" + segment);
+			haxe_Log.trace(this.props.history,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 215, className : "view.shared.BaseForm", methodName : "switchContent"});
 		}
 	}
 	,__class__: view_shared_BaseForm
@@ -7798,31 +7803,42 @@ var view_dashboard_SettingsForm = function(props) {
 		haxe_Log.trace(props.jwt,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 43, className : "view.dashboard.SettingsForm", methodName : "new"});
 	}
 	var _g = new haxe_ds_StringMap();
-	var value = { dataClassPath : "auth.User", viewClassPath : "shared.io.User", isActive : true, label : "UserDaten", onActivate : $bind(this,this.switchContent), items : function() {
+	var value = { dataClassPath : "auth.User", viewClassPath : "shared.io.User", label : "UserDaten", onActivate : $bind(this,this.switchContent), items : function() {
 		return null;
-	}};
+	}, segment : "user"};
 	if(__map_reserved["user"] != null) {
 		_g.setReserved("user",value);
 	} else {
 		_g.h["user"] = value;
 	}
 	var value1 = { dataClassPath : "settings.Bookmarks", viewClassPath : "shared.io.Bookmarks", label : "Lesezeichen", onActivate : $bind(this,this.switchContent), items : function() {
-		return [{ handler : $bind(_gthis,_gthis.createUserBookmark), label : "Neu", segment : "create"},{ handler : $bind(_gthis,_gthis.editUserBookmark), label : "Bearbeiten", segment : "edit"},{ handler : $bind(_gthis,_gthis.deleteUserBookmark), label : "Löschen", segment : "delete"}];
-	}};
+		return [{ handler : $bind(_gthis,_gthis.createUserBookmark), label : "Neu", action : "create"},{ handler : $bind(_gthis,_gthis.editUserBookmark), label : "Bearbeiten", action : "edit"},{ handler : $bind(_gthis,_gthis.deleteUserBookmark), label : "Löschen", action : "delete"}];
+	}, segment : "bookmarks"};
 	if(__map_reserved["bookmarks"] != null) {
 		_g.setReserved("bookmarks",value1);
 	} else {
 		_g.h["bookmarks"] = value1;
 	}
 	var value2 = { dataClassPath : "settings.Design", viewClassPath : "shared.io.Design", label : "Design", onActivate : $bind(this,this.switchContent), items : function() {
-		return [{ handler : $bind(_gthis,_gthis.editColors), label : "Farben", segment : "editColors"},{ handler : $bind(_gthis,_gthis.editFonts), label : "Schrift", segment : "editFont"}];
-	}};
+		return [{ handler : $bind(_gthis,_gthis.editColors), label : "Farben", action : "editColors"},{ handler : $bind(_gthis,_gthis.editFonts), label : "Schrift", action : "editFont"}];
+	}, segment : "design"};
 	if(__map_reserved["design"] != null) {
 		_g.setReserved("design",value2);
 	} else {
 		_g.h["design"] = value2;
 	}
-	this.state = { clean : true, viewClassPath : "shared.io.Bookmarks", hasError : false, loading : true, sideMenu : { menuBlocks : _g}};
+	this.state = { clean : true, viewClassPath : null, hasError : false, loading : true, sideMenu : { menuBlocks : _g}};
+	if(props.match.params.segment != null) {
+		haxe_Log.trace(props.match.params.segment,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 89, className : "view.dashboard.SettingsForm", methodName : "new"});
+		var key = props.match.params.segment;
+		var _this = this.state.sideMenu.menuBlocks;
+		var tmp = __map_reserved[key] != null ? _this.getReserved(key) : _this.h[key];
+		this.state.viewClassPath = tmp.viewClassPath;
+		var key1 = props.match.params.segment;
+		var _this1 = this.state.sideMenu.menuBlocks;
+		(__map_reserved[key1] != null ? _this1.getReserved(key1) : _this1.h[key1]).isActive = true;
+	}
+	haxe_Log.trace("" + props.match.params.segment + " " + this.state.viewClassPath,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 94, className : "view.dashboard.SettingsForm", methodName : "new"});
 	this.requests = [];
 };
 $hxClasses["view.dashboard.SettingsForm"] = view_dashboard_SettingsForm;
@@ -7830,7 +7846,7 @@ view_dashboard_SettingsForm.__name__ = ["view","dashboard","SettingsForm"];
 view_dashboard_SettingsForm.mapStateToProps = function(aState) {
 	return function(aState1) {
 		var uState = aState1.appWare.user;
-		haxe_Log.trace(uState,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 138, className : "view.dashboard.SettingsForm", methodName : "mapStateToProps"});
+		haxe_Log.trace(uState,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 146, className : "view.dashboard.SettingsForm", methodName : "mapStateToProps"});
 		return { user_name : uState.user_name, jwt : uState.jwt, first_name : uState.first_name};
 	};
 };
@@ -7839,13 +7855,13 @@ view_dashboard_SettingsForm.prototype = $extend(view_shared_BaseForm.prototype,{
 	childFormProps: null
 	,componentDidMount: function() {
 		view_shared_BaseForm.prototype.componentDidMount.call(this);
-		haxe_Log.trace(this.state.loading,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 91, className : "view.dashboard.SettingsForm", methodName : "componentDidMount"});
+		haxe_Log.trace(this.state.loading,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 101, className : "view.dashboard.SettingsForm", methodName : "componentDidMount"});
 		if(this.props.jwt == null) {
-			haxe_Log.trace(this.props,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 94, className : "view.dashboard.SettingsForm", methodName : "componentDidMount"});
+			haxe_Log.trace(this.props,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 104, className : "view.dashboard.SettingsForm", methodName : "componentDidMount"});
 			return;
 		}
-		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 98, className : "view.dashboard.SettingsForm", methodName : "componentDidMount"});
-		haxe_Log.trace(this.props.match,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 99, className : "view.dashboard.SettingsForm", methodName : "componentDidMount"});
+		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 107, className : "view.dashboard.SettingsForm", methodName : "componentDidMount"});
+		haxe_Log.trace(this.props.match,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 108, className : "view.dashboard.SettingsForm", methodName : "componentDidMount"});
 	}
 	,createUserBookmark: function(ev) {
 	}
@@ -7864,19 +7880,15 @@ view_dashboard_SettingsForm.prototype = $extend(view_shared_BaseForm.prototype,{
 		view_shared_BaseForm.prototype.switchContent.call(this,reactEventSource);
 	}
 	,render: function() {
-		haxe_Log.trace(this.state.viewClassPath,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 148, className : "view.dashboard.SettingsForm", methodName : "render"});
-		var _g = this.state.viewClassPath;
-		if(_g == null) {
-			return null;
-		} else {
-			switch(_g) {
-			case "shared.io.Bookmarks":
-				return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_io_Bookmarks), props : Object.assign({ },this.childFormProps,{ sideMenu : this.state.sideMenu, handleChange : true, handleSubmit : true, fullWidth : true}), key : null, ref : null};
-			case "shared.io.User":
-				return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_io_User), props : Object.assign({ },this.childFormProps,{ sideMenu : this.state.sideMenu, handleChange : true, handleSubmit : true, fullWidth : true}), key : null, ref : null};
-			default:
-				return null;
-			}
+		haxe_Log.trace(this.props.match.params.segment,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 156, className : "view.dashboard.SettingsForm", methodName : "render"});
+		var _g = this.props.match.params.segment;
+		switch(_g) {
+		case "bookmarks":
+			return { "$$typeof" : $$tre, type : view_shared_io_Bookmarks._connected, props : Object.assign({ },this.childFormProps,{ sideMenu : this.state.sideMenu, handleChange : true, handleSubmit : true, fullWidth : true}), key : null, ref : null};
+		case "user":
+			return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_io_User), props : Object.assign({ },this.childFormProps,{ sideMenu : this.state.sideMenu, handleChange : true, handleSubmit : true, fullWidth : true}), key : null, ref : null};
+		default:
+			return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "columns", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabComponentForm"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_SMenu), props : { className : "menu", menuBlocks : this.state.sideMenu.menuBlocks}, key : null, ref : null}]}, key : null, ref : null};
 		}
 	}
 	,__class__: view_dashboard_SettingsForm
@@ -7989,7 +8001,6 @@ view_shared_SMenu.prototype = $extend(React_Component.prototype,{
 		if(Lambda.empty(this.props.menuBlocks)) {
 			return null;
 		}
-		haxe_Log.trace(this.props.menuBlocks.toString(),{ fileName : "src/view/shared/SMenu.hx", lineNumber : 117, className : "view.shared.SMenu", methodName : "renderPanels"});
 		var i = 1;
 		var panels = [];
 		Lambda.iter(this.props.menuBlocks,function(block) {
@@ -8009,7 +8020,6 @@ view_shared_SMenu.prototype = $extend(React_Component.prototype,{
 		return panels;
 	}
 	,renderItems: function(items) {
-		haxe_Log.trace(items,{ fileName : "src/view/shared/SMenu.hx", lineNumber : 136, className : "view.shared.SMenu", methodName : "renderItems"});
 		if(items == null || items.length == 0) {
 			return null;
 		}
@@ -8028,7 +8038,7 @@ view_shared_SMenu.prototype = $extend(React_Component.prototype,{
 		}));
 	}
 	,render: function() {
-		haxe_Log.trace("...",{ fileName : "src/view/shared/SMenu.hx", lineNumber : 152, className : "view.shared.SMenu", methodName : "render"});
+		haxe_Log.trace("...",{ fileName : "src/view/shared/SMenu.hx", lineNumber : 153, className : "view.shared.SMenu", methodName : "render"});
 		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "sidebar is-right is-hidden-mobile", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("aside"), props : { className : "menu", children : [this.renderHeader(),this.renderPanels()]}, key : null, ref : null}}, key : null, ref : null};
 	}
 	,componentDidMount: function() {
@@ -8535,10 +8545,8 @@ var view_shared_io_Bookmarks = function(props) {
 		_g.h["edit"] = value;
 	}
 	this.dataAccess = _g;
-	this._menuItems = [{ handler : $bind(this,this.edit), label : "Bearbeiten", segment : "edit"}];
+	this._menuItems = [{ handler : $bind(this,this.edit), label : "Bearbeiten", action : "edit"}];
 	var sideMenu = this.updateMenu("bookmarks");
-	var _this = sideMenu.menuBlocks;
-	haxe_Log.trace((__map_reserved["bookmarks"] != null ? _this.getReserved("bookmarks") : _this.h["bookmarks"]).items(),{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 80, className : "view.shared.io.Bookmarks", methodName : "new"});
 	this.state = react_ReactUtil.copy(this.state,{ sideMenu : sideMenu, viewClassPath : "edit"});
 };
 $hxClasses["view.shared.io.Bookmarks"] = view_shared_io_Bookmarks;
@@ -8591,8 +8599,9 @@ view_shared_io_Bookmarks.prototype = $extend(view_shared_io_DataAccessForm.proto
 		var _gthis = this;
 		var sideMenu = this.state.sideMenu;
 		var _this = sideMenu.menuBlocks;
-		(__map_reserved["bookmarks"] != null ? _this.getReserved("bookmarks") : _this.h["bookmarks"]).items = function() {
-			var _g = _gthis.state.viewClassPath;
+		(__map_reserved["bookmarks"] != null ? _this.getReserved("bookmarks") : _this.h["bookmarks"]).isActive = true;
+		var _this1 = sideMenu.menuBlocks;
+		(__map_reserved["bookmarks"] != null ? _this1.getReserved("bookmarks") : _this1.h["bookmarks"]).items = function() {
 			return [{ handler : $bind(_gthis,_gthis.dummyH), label : "Speichern", disabled : _gthis.state.clean},{ handler : $bind(_gthis,_gthis.dummyH), label : "Passwort ändern"},{ handler : $bind(_gthis,_gthis.dummyH), label : "Something..."},{ handler : $bind(_gthis,_gthis.dummyH), label : "Something..."},{ handler : $bind(_gthis,_gthis.dummyH), label : "Something..."},{ handler : $bind(_gthis,_gthis.dummyH), label : "Something..."},{ handler : $bind(_gthis,_gthis.dummyH), label : "Something..."},{ handler : $bind(_gthis,_gthis.dummyH), label : "Something..."},{ handler : $bind(_gthis,_gthis.dummyH), label : "Something..."},{ handler : $bind(_gthis,_gthis.dummyH), label : "Something..."},{ handler : $bind(_gthis,_gthis.dummyH), label : "Something..."}];
 		};
 		return sideMenu;
@@ -8607,7 +8616,7 @@ var view_shared_io_DB = function(props) {
 	view_shared_io_DataAccessForm.call(this,props);
 	this.dataDisplay = view_dashboard_model_DBFormsModel.dataDisplay;
 	view_shared_io_DB._instance = this;
-	this._menuItems = [{ handler : $bind(this,this.createFieldList), label : "Create Fields Table", segment : "createFieldList"},{ handler : $bind(this,this.showFieldList), label : "Table Fields", segment : "showFieldList"},{ handler : $bind(this,this.editTableFields), label : "Bearbeiten", disabled : this.state.selectedRows.length == 0}];
+	this._menuItems = [{ handler : $bind(this,this.createFieldList), label : "Create Fields Table", action : "createFieldList"},{ handler : $bind(this,this.showFieldList), label : "Table Fields", action : "showFieldList"},{ handler : $bind(this,this.editTableFields), label : "Bearbeiten", disabled : this.state.selectedRows.length == 0}];
 	var sideMenu = this.state.sideMenu;
 	var _this = sideMenu.menuBlocks;
 	(__map_reserved["DbTools"] != null ? _this.getReserved("DbTools") : _this.h["DbTools"]).items = function() {
@@ -8832,7 +8841,7 @@ view_shared_io_DB.prototype = $extend(view_shared_io_DataAccessForm.prototype,{
 		var sideMenu = this.state.sideMenu;
 		var _this = sideMenu.menuBlocks;
 		(__map_reserved["DbTools"] != null ? _this.getReserved("DbTools") : _this.h["DbTools"]).items = function() {
-			return [{ handler : $bind(_gthis,_gthis.createFieldList), label : "Create Fields Table", segment : "createFieldList"},{ handler : $bind(_gthis,_gthis.showFieldList), label : "Table Fields", segment : "showFieldList"},{ handler : $bind(_gthis,_gthis.editTableFields), label : "Bearbeiten", disabled : _gthis.state.selectedRows.length == 0}];
+			return [{ handler : $bind(_gthis,_gthis.createFieldList), label : "Create Fields Table", action : "createFieldList"},{ handler : $bind(_gthis,_gthis.showFieldList), label : "Table Fields", action : "showFieldList"},{ handler : $bind(_gthis,_gthis.editTableFields), label : "Bearbeiten", disabled : _gthis.state.selectedRows.length == 0}];
 		};
 		return sideMenu;
 	}
@@ -9957,6 +9966,8 @@ view_dashboard_model_RolesFormModel.dataDisplay = (function($this) {
 view_shared_SLink._connected = (redux_react_ReactRedux.connect(view_shared_SLink.mapStateToProps))(react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_SLink));
 view_shared_SLink.__jsxStatic = view_shared_SLink._connected;
 view_shared_io_DataAccessForm.ky = shared_Utils.genKey;
+view_shared_io_Bookmarks._connected = (redux_react_ReactRedux.connect())(react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_io_Bookmarks));
+view_shared_io_Bookmarks.__jsxStatic = view_shared_io_Bookmarks._connected;
 view_shared_io_Loader.rqs = [];
 Go.main();
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);

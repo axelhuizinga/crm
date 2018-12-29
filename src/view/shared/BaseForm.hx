@@ -194,13 +194,25 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 	public function switchContent(reactEventSource:Dynamic)
 	{
 		//Out.dumpObject(reactEventSource);
-		trace(props.history);
+		//trace(props.history.location);
+		//trace(props.location);
 		trace(props.match);
-		var viewClassPath:String = reactEventSource.target.getAttribute('data-classpath');
-		trace(viewClassPath + ':' + state.viewClassPath);
-		if (state.viewClassPath != viewClassPath)
+		//var viewClassPath:String = reactEventSource.target.getAttribute('data-classpath');
+		var segment:String = reactEventSource.target.getAttribute('data-segment');
+		//trace( 'state.viewClassPath:${state.viewClassPath} viewClassPath:$viewClassPath');
+		trace( 'props.match.params.segment:${props.match.params.segment} segment:$segment');
+		//if (state.viewClassPath != viewClassPath)
+		if (segment != props.match.params.segment)
 		{
-			setState({viewClassPath:viewClassPath});
+			//var menuBlocks:
+			/*setState({
+				viewClassPath:viewClassPath,
+				//sideMenu.menuBlocks[props.match.params.segment].isActive:true
+			});*/
+			var basePath:String = props.match.path.split('/:')[0];
+			trace(props.location.pathname);
+			props.history.push('$basePath/$segment');
+			trace(props.history);
 			//props.history.push(props.match.url + '/' + viewClassPath);
 		}
 	}

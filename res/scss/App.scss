@@ -385,8 +385,7 @@ h1 {
 }
 .tabComponentForm
 {
-	/*align-items:stretch;
-	align-content:stretch;*/
+	min-width: 80%;
 	display:flex;	
 	flex-grow:1;
 	margin:0.8rem 0 0 0.8rem;	
@@ -427,7 +426,7 @@ h1 {
 	display:flex;
 	flex-direction:column;
 	flex: auto;
-	min-height: 0;
+	min-height: 0;	
 	padding:0px;/*.5rem 1.1rem;*/
 }
 .tabContent2 .columns

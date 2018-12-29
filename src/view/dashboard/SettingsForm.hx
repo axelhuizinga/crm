@@ -27,7 +27,7 @@ import view.shared.io.User;
 @:connect
 class SettingsForm extends BaseForm
 {
-	var childFormProps:DataFormProps;
+	var childFormProps:DataFormProps;	
 	
 	public function new(?props:FormProps) 
 	{
@@ -41,11 +41,11 @@ class SettingsForm extends BaseForm
 		}
 		else{
 			trace(props.jwt);
-		}		
+		}	
 		state = {
 			clean:true,
 			//viewClassPath:"shared.io.User",
-			viewClassPath:"shared.io.Bookmarks",
+			viewClassPath:null,
 			hasError:false,
 			loading:true,
 			sideMenu:{
@@ -53,10 +53,10 @@ class SettingsForm extends BaseForm
 					'user'=>{
 						dataClassPath:'auth.User',
 						viewClassPath:'shared.io.User',
-						isActive:true,
 						label:'UserDaten',
 						onActivate:switchContent,
-						items: function()return null//User.menuItems
+						items: function()return null,
+						segment: 'user'
 					},
 					'bookmarks'=>{
 						dataClassPath:'settings.Bookmarks',
@@ -64,10 +64,11 @@ class SettingsForm extends BaseForm
 						label:'Lesezeichen',
 						onActivate:switchContent,
 						items:function() return [
-							{handler:createUserBookmark,label:'Neu',segment:'create'},
-							{handler:editUserBookmark,label:'Bearbeiten',segment:'edit'},
-							{handler:deleteUserBookmark,label:'Löschen',segment:'delete'}
-						]
+							{handler:createUserBookmark,label:'Neu',action:'create'},
+							{handler:editUserBookmark,label:'Bearbeiten',action:'edit'},
+							{handler:deleteUserBookmark,label:'Löschen',action:'delete'}
+						],
+						segment: 'bookmarks'
 					},
 					'design'=>{
 						dataClassPath:'settings.Design',
@@ -75,13 +76,22 @@ class SettingsForm extends BaseForm
 						label:'Design',
 						onActivate:switchContent,
 						items:function() return [
-							{handler:editColors,label:'Farben',segment:'editColors'},
-							{handler:editFonts,label:'Schrift',segment:'editFont'}
-						]
+							{handler:editColors,label:'Farben',action:'editColors'},
+							{handler:editFonts,label:'Schrift',action:'editFont'}
+						],
+						segment: 'design'
 					}				
 				]
 			}
 		};
+		if(props.match.params.segment!=null)
+		{
+			trace(props.match.params.segment);
+			state.viewClassPath = state.sideMenu.menuBlocks[props.match.params.segment].viewClassPath;
+			state.sideMenu.menuBlocks[props.match.params.segment].isActive=true;
+
+		}
+		trace('${props.match.params.segment} ${state.viewClassPath}');
 		requests = [];		
 	}
 	
@@ -94,10 +104,8 @@ class SettingsForm extends BaseForm
 			trace(props);
 			return;
 		}
-		//return;
 		trace(Reflect.fields(props));
-		trace(props.match);
-				
+		trace(props.match);				
 	}
 	
 	public function createUserBookmark(ev:ReactEvent):Void
@@ -145,21 +153,28 @@ class SettingsForm extends BaseForm
 	}	
 	
 	override public function render() {
-        trace(state.viewClassPath);
-        return switch(state.viewClassPath)
+        trace(props.match.params.segment);
+        return switch(props.match.params.segment)
 		{
-			case "shared.io.User":
+			case "user":
 				jsx('
 					<User ${...childFormProps} sideMenu=${state.sideMenu}
 					handleChange={true} handleSubmit={true} fullWidth={true}/>
-				');				
-			case "shared.io.Bookmarks":
+				');	
+			case "bookmarks":
 				jsx('
 					<Bookmarks ${...childFormProps} sideMenu=${state.sideMenu}
 					handleChange={true} handleSubmit={true} fullWidth={true}/>
+				');
+			default:		
+				jsx('
+					<div className="columns">
+						<div className="tabComponentForm"  >
+							<!--EMPTY-->	
+						</div>
+						<$SMenu className="menu" menuBlocks=${state.sideMenu.menuBlocks} />					
+					</div>				
 				');		
-			default:
-				null;					
 		}				
     }	
 	/*
