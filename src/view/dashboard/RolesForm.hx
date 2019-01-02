@@ -222,7 +222,7 @@ class RolesForm extends BaseForm
 			},
 			function(dBytes:Bytes)
 			{
-				//trace(dBytes.toString());
+				trace(dBytes.toString());
 				var u:hxbit.Serializer = new hxbit.Serializer();
 				var data:DbData = u.unserialize(dBytes, DbData);
 				trace(Reflect.fields(data));
@@ -258,7 +258,7 @@ class RolesForm extends BaseForm
 		{
 			case "userList":
 				jsx('
-					<Table id="userList" data=${state.dataTable == null? null:state.dataTable}
+					<$Table id="userList" data=${state.dataTable == null? null:state.dataTable}
 					${...props} dataState = ${dataDisplay["userList"]} 
 					className = "is-striped is-hoverable" fullWidth={true}/>				
 				');				

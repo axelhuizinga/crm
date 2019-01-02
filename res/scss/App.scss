@@ -99,8 +99,8 @@ h1 {
 }
 .footer
 {
-	display:flex;
-	flex-direction:column;
+	/*display:flex;
+	flex-direction:column;*/
 	padding:0rem 0.5rem 0rem;
 	border: 1px solid $primary;
 }
@@ -348,7 +348,7 @@ h1 {
 	 justify-content:space-between;
  } 
 .topNav, .topNav ul{
-	display:flex;
+	/*display:flex;*/
 	justify-content:center;
 }
 

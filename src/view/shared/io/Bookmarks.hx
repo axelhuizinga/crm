@@ -12,11 +12,11 @@ import react.ReactComponent.ReactFragment;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
-import react.table.ReactTable;
+/*import react.table.ReactTable;
 import react.table.ReactTable.Column;
 import react.table.ReactTable.ColumnRenderProps;
 import react.table.ReactTable.TableCellRenderer;
-import react.table.ReactTable.CellInfo;
+import react.table.ReactTable.CellInfo;*/
 import shared.DbData;
 import view.shared.SMenu;
 import view.shared.io.DataAccessForm;
@@ -110,7 +110,7 @@ class Bookmarks extends DataAccessForm
 			age: 28
 			}];
 //trace(plugins);
-var tCR:TableCellRenderer = function (cI:Dynamic, column:Dynamic)
+/*var tCR:TableCellRenderer = function (cI:Dynamic, column:Dynamic)
 {
 	trace(cI);
 	trace(column);
@@ -123,7 +123,7 @@ var columns:Array<Column> = [{
     },{
       Header: 'Age',
       accessor: 'age'
-    }];
+    }];*/
 var iState:Dynamic = {istate:state, updateMenu:updateMenu};
 trace(iState);
 //var NewLayoutInstance = React.createElement(NewLayout);
@@ -139,12 +139,7 @@ var style:Dynamic = {
 		return jsx('
 			<div className="columns">
 				<div className="tabComponentForm"  >
-					<$ReactTable
-	          	data=${data}
-    	      	columns=${columns}
-				defaultPageSize={20}
-          		style=${style}
-         	 	className="-striped -highlight" />	
+					dummy	
 				</div>
 				<$SMenu className="menu" menuBlocks=${state.sideMenu.menuBlocks} />					
 			</div>	
@@ -187,3 +182,9 @@ var style:Dynamic = {
 		return {one: row.one, two: row.two, three: row.three};
 	}
 }
+/*<$ReactTable
+	          	data=${data}
+    	      	columns=${columns}
+				defaultPageSize={20}
+          		style=${style}
+         	 	className="-striped -highlight" />*/

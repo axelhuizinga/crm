@@ -133,7 +133,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 	//function renderItems(items:Void->Map<String,SMItem>):ReactFragment
 	{
 		//var items:Map<String,SMItem> = _items();
-		//var items:Array<SMItem> = _items();
+		//var items:Array<SMItem> = _items(); 
 		//trace(items);
 		if (items == null || items.length == 0)
 			return null;

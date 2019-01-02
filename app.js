@@ -5480,50 +5480,50 @@ var react_router_ReactRouter = require("react-router");
 var react_router_Redirect = require("react-router").Redirect;
 var react_router_Route = require("react-router").Route;
 var react_router_Router = require("react-router").Router;
-var react_router_bundle_BundleLoader4112 = function() { };
-$hxClasses["react.router.bundle.BundleLoader4112"] = react_router_bundle_BundleLoader4112;
-react_router_bundle_BundleLoader4112.__name__ = ["react","router","bundle","BundleLoader4112"];
-react_router_bundle_BundleLoader4112.render = function(props) {
+var react_router_bundle_BundleLoader22 = function() { };
+$hxClasses["react.router.bundle.BundleLoader22"] = react_router_bundle_BundleLoader22;
+react_router_bundle_BundleLoader22.__name__ = ["react","router","bundle","BundleLoader22"];
+react_router_bundle_BundleLoader22.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Accounting" */ "!haxe-loader?null/view_Accounting!").then(function(exports) {
 		view_Accounting = $s.view_Accounting;
 		var _ = view_Accounting;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader4114 = function() { };
-$hxClasses["react.router.bundle.BundleLoader4114"] = react_router_bundle_BundleLoader4114;
-react_router_bundle_BundleLoader4114.__name__ = ["react","router","bundle","BundleLoader4114"];
-react_router_bundle_BundleLoader4114.render = function(props) {
+var react_router_bundle_BundleLoader24 = function() { };
+$hxClasses["react.router.bundle.BundleLoader24"] = react_router_bundle_BundleLoader24;
+react_router_bundle_BundleLoader24.__name__ = ["react","router","bundle","BundleLoader24"];
+react_router_bundle_BundleLoader24.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Contacts" */ "!haxe-loader?null/view_Contacts!").then(function(exports) {
 		view_Contacts = $s.view_Contacts;
 		var _ = view_Contacts;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader4116 = function() { };
-$hxClasses["react.router.bundle.BundleLoader4116"] = react_router_bundle_BundleLoader4116;
-react_router_bundle_BundleLoader4116.__name__ = ["react","router","bundle","BundleLoader4116"];
-react_router_bundle_BundleLoader4116.render = function(props) {
+var react_router_bundle_BundleLoader26 = function() { };
+$hxClasses["react.router.bundle.BundleLoader26"] = react_router_bundle_BundleLoader26;
+react_router_bundle_BundleLoader26.__name__ = ["react","router","bundle","BundleLoader26"];
+react_router_bundle_BundleLoader26.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Contacts" */ "!haxe-loader?null/view_Contacts!").then(function(exports) {
 		view_Contacts = $s.view_Contacts;
 		var _ = view_Contacts;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader4118 = function() { };
-$hxClasses["react.router.bundle.BundleLoader4118"] = react_router_bundle_BundleLoader4118;
-react_router_bundle_BundleLoader4118.__name__ = ["react","router","bundle","BundleLoader4118"];
-react_router_bundle_BundleLoader4118.render = function(props) {
+var react_router_bundle_BundleLoader28 = function() { };
+$hxClasses["react.router.bundle.BundleLoader28"] = react_router_bundle_BundleLoader28;
+react_router_bundle_BundleLoader28.__name__ = ["react","router","bundle","BundleLoader28"];
+react_router_bundle_BundleLoader28.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_QC" */ "!haxe-loader?null/view_QC!").then(function(exports) {
 		view_QC = $s.view_QC;
 		var _ = view_QC;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader4120 = function() { };
-$hxClasses["react.router.bundle.BundleLoader4120"] = react_router_bundle_BundleLoader4120;
-react_router_bundle_BundleLoader4120.__name__ = ["react","router","bundle","BundleLoader4120"];
-react_router_bundle_BundleLoader4120.render = function(props) {
+var react_router_bundle_BundleLoader30 = function() { };
+$hxClasses["react.router.bundle.BundleLoader30"] = react_router_bundle_BundleLoader30;
+react_router_bundle_BundleLoader30.__name__ = ["react","router","bundle","BundleLoader30"];
+react_router_bundle_BundleLoader30.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Reports" */ "!haxe-loader?null/view_Reports!").then(function(exports) {
 		view_Reports = $s.view_Reports;
 		var _ = view_Reports;
@@ -7476,12 +7476,12 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 			var tmp6 = react__$ReactType_ReactType_$Impl_$.fromString("div");
 			var tmp7 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_RedirectBox), exact : true});
 			var tmp8 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/dashboard*", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_DashBoard)});
-			var tmp9 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader4112.render)});
-			var tmp10 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts/edit/:id", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader4114.render)});
-			var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader4116.render)});
-			var tmp12 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader4118.render)});
+			var tmp9 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader22.render)});
+			var tmp10 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts/edit/:id", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader24.render)});
+			var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader26.render)});
+			var tmp12 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader28.render)});
 			var tmp13 = react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route);
-			return React.createElement(tmp,tmp1,React.createElement(tmp2,{ },tmp3,tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { className : "tabComponent", children : [tmp7,tmp8,tmp9,tmp10,tmp11,tmp12,React.createElement(tmp13,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader4120.render)})]}, key : null, ref : null}));
+			return React.createElement(tmp,tmp1,React.createElement(tmp2,{ },tmp3,tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { className : "tabComponent", children : [tmp7,tmp8,tmp9,tmp10,tmp11,tmp12,React.createElement(tmp13,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader30.render)})]}, key : null, ref : null}));
 		}
 	}
 	,renderRedirect: function(p) {

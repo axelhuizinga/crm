@@ -55,7 +55,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	//public static var bulmaAccordion = require('../node_modules/bulma-extensions/bulma-accordion/dist/js/bulma-accordion.min.js');
 	static var fa = require('../node_modules/font-awesome/css/font-awesome.min.css');
 	//
-	static var rt = require('../res/react-table.css');
+	//static var rt = require('../res/react-table.css');
 	//static var rt = require('../node_modules/react-table/src/index.styl');
 
     static var STYLES = require('App.scss');
