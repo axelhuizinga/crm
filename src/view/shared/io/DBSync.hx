@@ -18,7 +18,7 @@ import react.ReactMacro.jsx;
 import react.ReactUtil;
 import shared.DbData;
 import shared.DBMetaData;
-import view.dashboard.model.DBFormsModel;
+import view.dashboard.model.DBSyncModel;
 import view.shared.BaseForm.FormField;
 import view.shared.SMenu;
 import view.shared.SMenu.SMItem;
@@ -31,10 +31,10 @@ import view.table.Table;
  * ...
  * @author axel@cunity.me
  */
-class DB extends DataAccessForm 
+class DBSync extends DataAccessForm 
 {
 
-	static var _instance:DB;
+	static var _instance:DBSync;
 
 	public static function menuItems():Array<SMItem>
 	{
@@ -46,7 +46,7 @@ class DB extends DataAccessForm
 	{
 		super(props);
 
-		dataDisplay = DBFormsModel.dataDisplay;
+		dataDisplay = DBSyncModel.dataDisplay;
 		_instance = this;		
 		_menuItems = [
 			{handler:createFieldList, label:'Create Fields Table', action:'createFieldList'},
@@ -56,7 +56,7 @@ class DB extends DataAccessForm
 		];
 		var sideMenu = state.sideMenu;
 		//trace(sideMenu);
-		sideMenu.menuBlocks['DbTools'].items = function() return _menuItems;
+		sideMenu.menuBlocks['SyncTools'].items = function() return _menuItems;
 		state = ReactUtil.copy(state, {sideMenu:sideMenu});		
 	}
 	
@@ -65,6 +65,7 @@ class DB extends DataAccessForm
 	public function createFieldList(ev:ReactEvent):Void
 	{
 		trace('hi :)');
+		return;
 		requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
@@ -92,24 +93,7 @@ class DB extends DataAccessForm
 	public function editTableFields(ev:ReactEvent):Void
 	{
 		trace(state.selectedRows.length);
-		var data = selectedRowsMap();
-		var view:Map<String,FormField> = dataAccess['editTableFields'].view.copy();
-		trace(dataAccess['editTableFields'].view['table_name']);
-		trace(data[0]['id']+'<');
-		renderModalForm({
-			data:new Map(),
-			dataTable:data,
-			handleSubmit: saveTableFields,
-			isConnected:true,
-			initialState: initStateFromDataTable(data),
-			model:'tableFields',
-			viewClassPath:'shared.io.DB.editTableFields',			
-			fields:view,
-			valuesArray:createStateValuesArray(data, dataAccess['editTableFields'].view), 
-			loading:false,
-			title:'Tabellenfelder Eigenschaften'
-		});	
-		
+				
 	}
 
 	function initStateFromDataTable(dt:Array<Map<String,String>>):Dynamic
@@ -121,7 +105,7 @@ class DB extends DataAccessForm
 			for(k in dR.keys())
 			{
 				trace(k);
-				if(dataDisplay['fieldsList'].columns[k].cellFormat == DBFormsModel.formatBool)
+				if(dataDisplay['fieldsList'].columns[k].cellFormat == DBSyncModel.formatBool)
 				{
 					Reflect.setField(rS,k, dR[k] == 'Y');
 				}
@@ -171,31 +155,21 @@ class DB extends DataAccessForm
 				user_name:props.user_name,
 				jwt:props.jwt,
 				fields:'id,table_name,field_name,readonly,element,required,use_as_index',
-				className:'tools.DB',
-				action:'createFieldList'
+				className:'admin.SyncExternal',
+				action:'syncUserDetails'
 			},
 			function(dBytes:Bytes)
 			{
 				var u:hxbit.Serializer = new hxbit.Serializer();
 				var data:DbData = u.unserialize(dBytes, DbData);
-				if (data.dataRows.length==0)
-				{
-					var error:Map<String,Dynamic> = data.dataErrors;
-					var eK:Iterator<String> = error.keys();
-					var hasError:Bool = false;
-					while (eK.hasNext())
-					{
-						hasError = true;
-						trace(Std.string(error.get(eK.next())));
-					}
-					if(!hasError){
-						trace('Keine Daten!');
-					}
-					return;
-				}		
-				trace(data.dataRows);
-				trace(data.dataRows[29]['id'] + '<<<');
-				setState({dataTable:data.dataRows, viewClassPath:'shared.io.DB.showFieldList'});
+				trace(data);
+				return;
+				var aj:haxe.http.HttpJs = model.AjaxLoader.loadData(data.dataInfo['syncApi'],
+				{user:data.dataInfo['admin'], pass:data.dataInfo['pass'], action:'clientVerify'}, 
+				function(verifyData:Dynamic){
+					trace(verifyData);
+				});
+				//setState({data:data.dataInfo, viewClassPath:'showFieldList'});
 			}
 		));
 		//setState({viewClassPath:'shared.io.DB.showFieldList'});
@@ -234,7 +208,11 @@ class DB extends DataAccessForm
 		if (state.data != null)
 		return switch(state.viewClassPath)
 		{
-			case 'shared.io.DB.showFieldList':
+			case 'showFieldList':
+			jsx('
+				<div><pre>${state.data.toString()}</pre></div>
+				');
+			case 'showFieldList2':
 				trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');
 				jsx('
@@ -261,7 +239,7 @@ class DB extends DataAccessForm
 			<form className="tabComponentForm"  >
 				${renderResults()}
 			</form>
-			<SMenu className="menu" menuBlocks={state.sideMenu.menuBlocks} />					
+			<SMenu className="menu" menuBlocks=${state.sideMenu.menuBlocks} />					
 		</div>	
 		');		
 	}

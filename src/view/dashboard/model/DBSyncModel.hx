@@ -15,11 +15,11 @@ import view.shared.io.DataAccessForm;
 import view.table.Table.DataColumn;
 import view.table.Table.DataState;
 
-class DBFormsModel 
+class DBSyncModel 
 {
 	public static var formatBool = function(v:Dynamic) {return (v?'Y':'N'); }
 	public static var formatElementSelection = function(v:Dynamic) {return (v?'Y':'N'); }
-	public static var fieldsListColumns:Map<String,DataColumn> =  [
+	public static var userListColumns:Map<String,DataColumn> =  [
 		'table_name'=>{label:'Tabelle',editable:false},
 		'field_name'=>{label:'Feldname',editable:false, flexGrow:1},
 		'format_display'=>{label:'Anzeige', title:'Anzeigeformat'},
@@ -37,37 +37,7 @@ class DBFormsModel
 	//public static function dataDisplay(?parentForm:DataAccessForm):StringMap<DataState> 
 	public static var dataDisplay:Map<String,DataState> =
 		[
-			'fieldsList' => {altGroupPos:0,columns:fieldsListColumns}
+			'userList' => {altGroupPos:0,columns:userListColumns}
 		];
 	
-	public static function dbMetaToState(dbMeta:Array<Map<String,Dynamic>>):Array<Map<String,Dynamic>>
-	{
-		var sData:Array<Map<String,Dynamic>> = new Array();
-		for(row in dbMeta)
-		{
-			var rM:Map<String,Dynamic> = new Map();
-			for(k in row.keys())
-			{
-				if(row[k].format_display != null)
-					rM[k] = App.sprintf(row[k].format_display, row[k]);
-				else 
-					rM[k] = row[k];
-			}
-			sData.push(rM)			;
-		}
-		return sData;
-	}
 }
-/*	id:Int,
-	mandator:Int,
-	element:FormElement,
-	table_name:String,
-	field_name:String,
-	field_type:String,
-	format_display:String,
-	format_store:String,
-	admin_only:Bool,
-	required:Bool,
-	readonly:Bool,
-	use_as_index:Bool,
-	primary:Bool*/

@@ -362,26 +362,20 @@ class Table extends ReactComponentOf<TableProps, TableState>
 
 	public function layOut():Void
 	{
-		trace('firstCall: $headerUpdated');
+		trace('firstCall: $headerUpdated $tHeadRef: ${tHeadRef != null && tHeadRef.current != null}');
 		if(tHeadRef == null || tHeadRef.current == null)
 		{
-			trace('$tHeadRef.current = null');
+			trace('$tHeadRef: ${tHeadRef != null && tHeadRef.current != null}');
 			if(_timer != null)
 				return;
-			_timer = App.await(250,function ()return tHeadRef.current != null, layOut);
+			_timer = App.await(250,function() return tHeadRef != null && tHeadRef.current != null, layOut);
 			return;
 		}
 			
 		headerUpdated = true;			
-		var tableHeight:Float = tableRef.current.clientHeight;
-		//trace('tableHeight:$tableHeight');
-		//fixedHeader.current.parentElement.setAttribute('style', 'margin-top:-${tableHeight}px;');
+		//var tableHeight:Float = tableRef.current.clientHeight;
 		var scrollBarWidth:Float = App.config.getScrollbarWidth();
 		var freeWidth:Float = tableRef.current.parentElement.offsetWidth - tableRef.current.offsetWidth - scrollBarWidth;
-		//trace('$scrollBarWidth freeWidth:$freeWidth ${tableRef.current.parentElement.offsetWidth} ${tableRef.current.offsetWidth}');
-		//trace(tHeadRef);// .current.cells[0].getBoundingClientRect().width);
-		//trace(fixedHeader.current.children.length);
-		//trace(fixedHeader.current);// .firstElementChild.children.length);
 		tHeadRef.current.style.visibility = "collapse";						
 		//trace(tHeadRef.current.nodeName + ':' + tHeadRef.current.style.visibility);						
 		var i:Int = 0;

@@ -20,6 +20,7 @@ import view.shared.BaseForm;
 import view.shared.BaseForm.FormProps;
 import view.shared.SMenu;
 import view.shared.io.DB;
+import view.shared.io.DBSync;
 import view.table.Table;
 
 /**
@@ -43,14 +44,22 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 					'DbTools'=>{
 						dataClassPath:'model.tools.DB',
 						viewClassPath:'shared.io.DB',
-						isActive:true,
+						isActive:false,
 						label:'DB Design',
 						onActivate:switchContent,
 						items:function() return []
-					}				
+					},
+					'SyncTools'=>{
+						dataClassPath:'model.admin.SyncExternal',
+						viewClassPath:'shared.io.DBSync',
+						isActive:true,
+						label:'DB Sync',
+						onActivate:switchContent,
+						items:function() return []
+					}
 				]
 			},
-			viewClassPath:"shared.io.DB",
+			viewClassPath:"shared.io.DBSync",
 			loading:true
 		});
 		//trace(state);
@@ -114,6 +123,11 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 		//trace(state.sideMenu);
 		return switch(state.viewClassPath)
 		{
+			case "shared.io.DBSync":
+				jsx('
+					<$DBSync ${...props} sideMenu=${state.sideMenu}
+					handleChange={false} handleSubmit={false} fullWidth={true}/>
+				');					
 			case "shared.io.DB":
 				jsx('
 					<DB ${...props} sideMenu=${state.sideMenu}

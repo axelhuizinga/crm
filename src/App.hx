@@ -172,7 +172,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		var ti:Timer = Timer.delay(function ()
 		{
 			if(check())
-				cb();					
+				cb();		
 			else
 				await(delay, check, cb);
 		},delay);
