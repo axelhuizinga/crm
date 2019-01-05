@@ -50,7 +50,7 @@ class BinaryLoader {
 	}
 
 	public function load() {
-				xhr.open('POST', url, true);
+		xhr.open('POST', url, true);
 		xhr.responseType = js.html.XMLHttpRequestResponseType.ARRAYBUFFER;
 		xhr.onerror = function(e) onError(xhr.statusText);
 		
