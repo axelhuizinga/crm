@@ -19,19 +19,15 @@ class DBSyncModel
 {
 	public static var formatBool = function(v:Dynamic) {return (v?'Y':'N'); }
 	public static var formatElementSelection = function(v:Dynamic) {return (v?'Y':'N'); }
+    static var formatPhone = function(p:Dynamic){trace(p);return (p?p.login:'');};
 	public static var userListColumns:Map<String,DataColumn> =  [
-		'table_name'=>{label:'Tabelle',editable:false},
-		'field_name'=>{label:'Feldname',editable:false, flexGrow:1},
-		'format_display'=>{label:'Anzeige', title:'Anzeigeformat'},
-		'format_store'=>{label:'DB', title:'Speicherformat'},
-		'element'=>{label:'Form', title:'Eingabefeld'},
-		'admin_only'=>{label:'AO', title:'Admin',cellFormat:formatBool},
-		'readonly'=>{label:'RO', title:'Nur Lesen', cellFormat:formatBool},
-		'required'=>{label:'RQ', title:'Pflichtfeld', cellFormat:formatBool},
-		//'primary'=>{label:'PID', title: 'Is Primary ID',cellFormat:formatBool},
-		'use_as_index'=>{label:'ID', cellFormat:formatBool},
+		'user_id'=>{label: 'ID', show:true},
+		'user'=>{label:'User',editable:false},
+		'full_name'=>{label:'Name',editable:true, flexGrow:1},
+		//'phone_data'=>{label:'Nebenstelle', editable: true, cellFormat:formatPhone, className: 'tRight'},
+		'phone_login'=>{label:'Nebenstelle', editable: true, className: 'tRight'},
+        'user_group'=>{label:'Gruppe', editable: true}
 		//'any'=>{label:'Eigenschaften', flexGrow:1},
-		'id'=>{label: 'ID', show:false}
 	];
 	
 	//public static function dataDisplay(?parentForm:DataAccessForm):StringMap<DataState> 

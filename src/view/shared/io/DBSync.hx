@@ -50,7 +50,7 @@ class DBSync extends DataAccessForm
 		_instance = this;		
 		_menuItems = [
 			{handler:createFieldList, label:'Create Fields Table', action:'createFieldList'},
-			{handler:showFieldList, label:'Table Fields', action:'showFieldList'},
+			{handler:showUserList, label:'BenutzerDaten Abgleich', action:'showUserList'},
 			{handler:editTableFields, label:'Bearbeiten', disabled:state.selectedRows.length==0},
 			//{handler:save, label:'Speichern', disabled:state.clean},
 		];
@@ -83,7 +83,7 @@ class DBSync extends DataAccessForm
 					trace(data['error']);
 					return;
 				}				 
-				setState({data:data, viewClassPath:'shared.io.DB.showFieldList'});
+				setState({data:data, viewClassPath:'shared.io.DB.showUserList'});
 		}));
 		trace(props.history);
 		trace(props.match);
@@ -146,9 +146,10 @@ class DBSync extends DataAccessForm
 		));
 	}
 	
-	public function showFieldList(_):Void
+	public function showUserList(_):Void
 	{
-		selectAllRows(true);
+		//selectAllRows(true);
+		setState({viewClassPath:'showUserList'});
 		requests.push( BinaryLoader.create(
 			'${App.config.api}', 
 			{
@@ -162,17 +163,18 @@ class DBSync extends DataAccessForm
 			{
 				var u:hxbit.Serializer = new hxbit.Serializer();
 				var data:DbData = u.unserialize(dBytes, DbData);
-				trace(data);
+				trace(data.dataRows[data.dataRows.length-2]['phone_data']);
+				setState({dataTable:data.dataRows});
 				return;
 				var aj:haxe.http.HttpJs = model.AjaxLoader.loadData(data.dataInfo['syncApi'],
 				{user:data.dataInfo['admin'], pass:data.dataInfo['pass'], action:'clientVerify'}, 
 				function(verifyData:Dynamic){
 					trace(verifyData);
 				});
-				//setState({data:data.dataInfo, viewClassPath:'showFieldList'});
+				//setState({data:data.dataInfo, viewClassPath:'showUserList'});
 			}
 		));
-		//setState({viewClassPath:'shared.io.DB.showFieldList'});
+		//setState({viewClassPath:'shared.io.DB.showUserList'});
 	}
 	
 	override public function componentDidMount():Void 
@@ -205,12 +207,16 @@ class DBSync extends DataAccessForm
 	
 	function renderResults():ReactFragment
 	{
-		if (state.data != null)
+		trace(state.viewClassPath + ':' + Std.string(state.dataTable != null));
+		//trace(dataDisplay["userList"]);
+		if (state.dataTable != null)
 		return switch(state.viewClassPath)
 		{
-			case 'showFieldList':
-			jsx('
-				<div><pre>${state.data.toString()}</pre></div>
+			case 'showUserList':
+				jsx('
+					<Table id="fieldsList" data=${state.dataTable}
+					${...props} dataState = ${dataDisplay["userList"]} parentForm=${this} 
+					className = "is-striped is-hoverable" fullWidth=${true}/>
 				');
 			case 'showFieldList2':
 				trace(dataDisplay["fieldsList"]);
@@ -230,9 +236,9 @@ class DBSync extends DataAccessForm
 	
 	override function render():ReactFragment
 	{
-		if(state.values != null)
-			trace(state.values);
-		trace(props.match.params.segment);
+		if(state.dataTable != null)
+			trace(state.dataTable[0]);
+		trace(props.match.params.segment);		
 		//return null;<form className="form60"></form>	
 		return jsx('
 		<div className="columns xAuto">
@@ -250,7 +256,7 @@ class DBSync extends DataAccessForm
 		var sideMenu = state.sideMenu;
 		sideMenu.menuBlocks['DbTools'].items = function() return [
 			{handler:createFieldList, label:'Create Fields Table', action:'createFieldList'},
-			{handler:showFieldList, label:'Table Fields', action:'showFieldList'},
+			{handler:showUserList, label:'Table Fields', action:'showUserList'},
 			{handler:editTableFields, label:'Bearbeiten', disabled:state.selectedRows.length==0},
 			//{handler:saveTableFields, label:'Speichern', disabled:state.clean},
 		];
