@@ -409,7 +409,12 @@ App.prototype = $extend(React_Component.prototype,{
 	}
 	,render: function() {
 		haxe_Log.trace("OK",{ fileName : "src/App.hx", lineNumber : 162, className : "App", methodName : "render"});
-		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment), props : { children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(redux_react_Provider), props : { store : App.store, children : { "$$typeof" : $$tre, type : view_UiView._connected, props : { }, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null};
+		var tmp = react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment);
+		var tmp1 = $$tre;
+		var tmp2 = react__$ReactType_ReactType_$Impl_$.fromComp(redux_react_Provider);
+		var tmp3 = App.store;
+		var tmp4 = $$tre;
+		return React.createElement(tmp,{ },{ "$$typeof" : tmp1, type : tmp2, props : { store : tmp3, children : { "$$typeof" : tmp4, type : view_UiView._connected, props : { }, key : null, ref : null}}, key : null, ref : null});
 	}
 	,__class__: App
 });
@@ -5365,10 +5370,20 @@ $hxClasses["model.ApplicationStore"] = model_ApplicationStore;
 model_ApplicationStore.__name__ = ["model","ApplicationStore"];
 model_ApplicationStore.create = function() {
 	var appWare = new model_AppService();
+	var locationService = new model_LocationService();
 	var statusBarService = new model_StatusBarService();
-	var rootReducer = redux_Redux.combineReducers({ appWare : redux_StoreBuilder.mapReducer(action_AppAction,appWare), statusBar : redux_StoreBuilder.mapReducer(action_StatusAction,statusBarService)});
+	var rootReducer = redux_Redux.combineReducers({ appWare : redux_StoreBuilder.mapReducer(action_AppAction,appWare), locationService : redux_StoreBuilder.mapReducer(action_LocationAction,locationService), statusBar : redux_StoreBuilder.mapReducer(action_StatusAction,statusBarService)});
 	var middleware = redux_Redux.applyMiddleware(redux_StoreBuilder.mapMiddleware(redux_thunk_Thunk,new redux_thunk_ThunkMiddleware()),redux_StoreBuilder.mapMiddleware(action_AppAction,appWare));
 	return redux_StoreBuilder.createStore(rootReducer,null,middleware);
+};
+model_ApplicationStore.startHistoryListener = function(store,history) {
+	haxe_Log.trace(store,{ fileName : "src/model/ApplicationStore.hx", lineNumber : 59, className : "model.ApplicationStore", methodName : "startHistoryListener"});
+	store.dispatch(redux__$Redux_Action_$Impl_$.map(action_LocationAction.InitHistory(history)));
+	return history.listen(function(location,action1) {
+		haxe_Log.trace(action1,{ fileName : "src/model/ApplicationStore.hx", lineNumber : 63, className : "model.ApplicationStore", methodName : "startHistoryListener"});
+		haxe_Log.trace(location,{ fileName : "src/model/ApplicationStore.hx", lineNumber : 64, className : "model.ApplicationStore", methodName : "startHistoryListener"});
+		store.dispatch(redux__$Redux_Action_$Impl_$.map(action_LocationAction.LocationChange({ pathname : location.pathname, search : location.search, hash : location.hash, key : null, state : null})));
+	});
 };
 var model_CState = function() { };
 $hxClasses["model.CState"] = model_CState;
@@ -5384,6 +5399,36 @@ model_CState.confirmTransition = function(message,callback) {
 model_CState.init = function(store) {
 	model_CState.store = store;
 	return;
+};
+var model_LocationService = function() {
+	this.initState = { history : null};
+	haxe_Log.trace("ok",{ fileName : "src/model/LocationService.hx", lineNumber : 41, className : "model.LocationService", methodName : "new"});
+};
+$hxClasses["model.LocationService"] = model_LocationService;
+model_LocationService.__name__ = ["model","LocationService"];
+model_LocationService.__interfaces__ = [redux_IMiddleware,redux_IReducer];
+model_LocationService.prototype = {
+	initState: null
+	,store: null
+	,reduce: function(state,action) {
+		haxe_Log.trace(state,{ fileName : "src/model/LocationService.hx", lineNumber : 46, className : "model.LocationService", methodName : "reduce"});
+		switch(action._hx_index) {
+		case 5:
+			var history = action.history;
+			return react_ReactUtil.copy(state,history);
+		case 6:
+			var location = action.location;
+			haxe_Log.trace(location,{ fileName : "src/model/LocationService.hx", lineNumber : 53, className : "model.LocationService", methodName : "reduce"});
+			return state;
+		default:
+			return state;
+		}
+	}
+	,middleware: function(action,next) {
+		haxe_Log.trace(action,{ fileName : "src/model/LocationService.hx", lineNumber : 63, className : "model.LocationService", methodName : "middleware"});
+		return next();
+	}
+	,__class__: model_LocationService
 };
 var model_StatusBarService = function() {
 	this.initState = { pathname : window.location.pathname, date : new Date()};
@@ -5475,50 +5520,50 @@ var react_router_ReactRouter = require("react-router");
 var react_router_Redirect = require("react-router").Redirect;
 var react_router_Route = require("react-router").Route;
 var react_router_Router = require("react-router").Router;
-var react_router_bundle_BundleLoader802 = function() { };
-$hxClasses["react.router.bundle.BundleLoader802"] = react_router_bundle_BundleLoader802;
-react_router_bundle_BundleLoader802.__name__ = ["react","router","bundle","BundleLoader802"];
-react_router_bundle_BundleLoader802.render = function(props) {
+var react_router_bundle_BundleLoader3572 = function() { };
+$hxClasses["react.router.bundle.BundleLoader3572"] = react_router_bundle_BundleLoader3572;
+react_router_bundle_BundleLoader3572.__name__ = ["react","router","bundle","BundleLoader3572"];
+react_router_bundle_BundleLoader3572.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Accounting" */ "!haxe-loader?null/view_Accounting!").then(function(exports) {
 		view_Accounting = $s.view_Accounting;
 		var _ = view_Accounting;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader804 = function() { };
-$hxClasses["react.router.bundle.BundleLoader804"] = react_router_bundle_BundleLoader804;
-react_router_bundle_BundleLoader804.__name__ = ["react","router","bundle","BundleLoader804"];
-react_router_bundle_BundleLoader804.render = function(props) {
+var react_router_bundle_BundleLoader3574 = function() { };
+$hxClasses["react.router.bundle.BundleLoader3574"] = react_router_bundle_BundleLoader3574;
+react_router_bundle_BundleLoader3574.__name__ = ["react","router","bundle","BundleLoader3574"];
+react_router_bundle_BundleLoader3574.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Contacts" */ "!haxe-loader?null/view_Contacts!").then(function(exports) {
 		view_Contacts = $s.view_Contacts;
 		var _ = view_Contacts;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader806 = function() { };
-$hxClasses["react.router.bundle.BundleLoader806"] = react_router_bundle_BundleLoader806;
-react_router_bundle_BundleLoader806.__name__ = ["react","router","bundle","BundleLoader806"];
-react_router_bundle_BundleLoader806.render = function(props) {
+var react_router_bundle_BundleLoader3576 = function() { };
+$hxClasses["react.router.bundle.BundleLoader3576"] = react_router_bundle_BundleLoader3576;
+react_router_bundle_BundleLoader3576.__name__ = ["react","router","bundle","BundleLoader3576"];
+react_router_bundle_BundleLoader3576.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Contacts" */ "!haxe-loader?null/view_Contacts!").then(function(exports) {
 		view_Contacts = $s.view_Contacts;
 		var _ = view_Contacts;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader808 = function() { };
-$hxClasses["react.router.bundle.BundleLoader808"] = react_router_bundle_BundleLoader808;
-react_router_bundle_BundleLoader808.__name__ = ["react","router","bundle","BundleLoader808"];
-react_router_bundle_BundleLoader808.render = function(props) {
+var react_router_bundle_BundleLoader3578 = function() { };
+$hxClasses["react.router.bundle.BundleLoader3578"] = react_router_bundle_BundleLoader3578;
+react_router_bundle_BundleLoader3578.__name__ = ["react","router","bundle","BundleLoader3578"];
+react_router_bundle_BundleLoader3578.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_QC" */ "!haxe-loader?null/view_QC!").then(function(exports) {
 		view_QC = $s.view_QC;
 		var _ = view_QC;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader810 = function() { };
-$hxClasses["react.router.bundle.BundleLoader810"] = react_router_bundle_BundleLoader810;
-react_router_bundle_BundleLoader810.__name__ = ["react","router","bundle","BundleLoader810"];
-react_router_bundle_BundleLoader810.render = function(props) {
+var react_router_bundle_BundleLoader3580 = function() { };
+$hxClasses["react.router.bundle.BundleLoader3580"] = react_router_bundle_BundleLoader3580;
+react_router_bundle_BundleLoader3580.__name__ = ["react","router","bundle","BundleLoader3580"];
+react_router_bundle_BundleLoader3580.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Reports" */ "!haxe-loader?null/view_Reports!").then(function(exports) {
 		view_Reports = $s.view_Reports;
 		var _ = view_Reports;
@@ -6994,7 +7039,10 @@ view_Accounting.prototype = $extend(React_Component.prototype,{
 		if(this.props.waiting || this.props.user_name == "" || this.props.jwt == null || this.props.jwt == "") {
 			return { "$$typeof" : $$tre, type : view_LoginForm._connected, props : this.props, key : null, ref : null};
 		} else {
-			return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabContent2", children : "..."}, key : null, ref : null},{ "$$typeof" : $$tre, type : view_StatusBar._connected, props : this.props, key : null, ref : null}]}, key : null, ref : null};
+			var tmp = react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment);
+			var tmp1 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabContent2", children : "..."}, key : null, ref : null};
+			var tmp2 = $$tre;
+			return React.createElement(tmp,{ },tmp1,{ "$$typeof" : tmp2, type : view_StatusBar._connected, props : this.props, key : null, ref : null});
 		}
 	}
 	,__class__: view_Accounting
@@ -7029,7 +7077,10 @@ view_Contacts.prototype = $extend(React_Component.prototype,{
 		if(this.props.waiting || this.props.user_name == null || this.props.jwt == null || this.props.jwt == "") {
 			return { "$$typeof" : $$tre, type : view_LoginForm._connected, props : this.props, key : null, ref : null};
 		} else {
-			return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabComponent", children : "..."}, key : null, ref : null},{ "$$typeof" : $$tre, type : view_StatusBar._connected, props : this.props, key : null, ref : null}]}, key : null, ref : null};
+			var tmp = react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment);
+			var tmp1 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabComponent", children : "..."}, key : null, ref : null};
+			var tmp2 = $$tre;
+			return React.createElement(tmp,{ },tmp1,{ "$$typeof" : tmp2, type : view_StatusBar._connected, props : this.props, key : null, ref : null});
 		}
 	}
 	,__class__: view_Contacts
@@ -7081,11 +7132,24 @@ view_DashBoard.prototype = $extend(React_Component.prototype,{
 	}
 	,render: function() {
 		haxe_Log.trace(this.props.history.location.pathname,{ fileName : "src/view/DashBoard.hx", lineNumber : 127, className : "view.DashBoard", methodName : "render"});
-		haxe_Log.trace(this.props.jwt,{ fileName : "src/view/DashBoard.hx", lineNumber : 128, className : "view.DashBoard", methodName : "render"});
 		if(this.state.hasError) {
 			return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("h1"), props : { children : ["Fehler in ",Type.getClassName(js_Boot.getClass(this)),"."]}, key : null, ref : null};
 		}
-		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabNav2", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(bulma_$components_Tabs), props : { boxed : true, children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("ul"), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps($bind(this,this.TabLink)), props : Object.assign({ },this.props,{ to : "/dashboard/roles", children : "Benutzer"}), key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps($bind(this,this.TabLink)), props : Object.assign({ },this.props,{ to : "/dashboard/settings", children : "Einstellungen"}), key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps($bind(this,this.TabLink)), props : Object.assign({ },this.props,{ to : "/dashboard/setup", children : "Setup"}), key : null, ref : null}]}, key : null, ref : null}}, key : null, ref : null}}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabContent2", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route), props : Object.assign({ },this.props,{ path : "/dashboard/roles", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_dashboard_RolesForm)}), key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route), props : Object.assign({ },this.props,{ path : "/dashboard/settings/:segment?/:action?/:id?", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_dashboard_SettingsForm)}), key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route), props : Object.assign({ },this.props,{ path : "/dashboard/setup", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_dashboard_SetUpForm)}), key : null, ref : null}]}, key : null, ref : null},{ "$$typeof" : $$tre, type : view_StatusBar._connected, props : this.props, key : null, ref : null}]}, key : null, ref : null};
+		var tmp = react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment);
+		var tmp1 = $$tre;
+		var tmp2 = react__$ReactType_ReactType_$Impl_$.fromString("div");
+		var tmp3 = react__$ReactType_ReactType_$Impl_$.fromComp(bulma_$components_Tabs);
+		var tmp4 = $$tre;
+		var tmp5 = react__$ReactType_ReactType_$Impl_$.fromString("ul");
+		var tmp6 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps($bind(this,this.TabLink)), props : Object.assign({ },this.props,{ to : "/dashboard/roles", children : "Benutzer"}), key : null, ref : null};
+		var tmp7 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps($bind(this,this.TabLink)), props : Object.assign({ },this.props,{ to : "/dashboard/settings", children : "Einstellungen"}), key : null, ref : null};
+		var tmp8 = $$tre;
+		var tmp9 = react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps($bind(this,this.TabLink));
+		var tmp10 = Object.assign({ },this.props,{ to : "/dashboard/setup", children : "Setup"});
+		var tmp11 = { "$$typeof" : tmp1, type : tmp2, props : { className : "tabNav2", children : React.createElement(tmp3,{ boxed : true},{ "$$typeof" : tmp4, type : tmp5, props : { children : [tmp6,tmp7,{ "$$typeof" : tmp8, type : tmp9, props : tmp10, key : null, ref : null}]}, key : null, ref : null})}, key : null, ref : null};
+		var tmp12 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabContent2", children : [React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/dashboard/roles", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_dashboard_RolesForm)})),React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/dashboard/settings/:section?/:action?/:id?", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_dashboard_SettingsForm)})),React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/dashboard/setup/:section?/:action?", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_dashboard_SetUpForm)}))]}, key : null, ref : null};
+		var tmp13 = $$tre;
+		return React.createElement(tmp,{ },tmp11,tmp12,{ "$$typeof" : tmp13, type : view_StatusBar._connected, props : this.props, key : null, ref : null});
 	}
 	,internalRedirect: function(path) {
 		if(path == null) {
@@ -7095,7 +7159,7 @@ view_DashBoard.prototype = $extend(React_Component.prototype,{
 		return null;
 	}
 	,TabLink: function(rprops) {
-		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("li"), props : { className : rprops.location.pathname.indexOf(rprops.to) == 0 ? "is-active" : "", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_router_NavLink), props : { to : rprops.to, children : rprops.children}, key : null, ref : null}}, key : null, ref : null};
+		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("li"), props : { className : rprops.location.pathname.indexOf(rprops.to) == 0 ? "is-active" : "", children : React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_NavLink),{ to : rprops.to},rprops.children)}, key : null, ref : null};
 	}
 	,__class__: view_DashBoard
 });
@@ -7231,17 +7295,20 @@ view_NavTabs.__name__ = ["view","NavTabs"];
 view_NavTabs.__super__ = React_Component;
 view_NavTabs.prototype = $extend(React_Component.prototype,{
 	render: function() {
-		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(bulma_$components_Tabs), props : { centered : true, boxed : false, children : this.buildNav()}, key : null, ref : null};
+		return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(bulma_$components_Tabs),{ centered : true, boxed : false},this.buildNav());
 	}
 	,TabLink: function(rprops) {
-		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("li"), props : { className : rprops.location.pathname.indexOf(rprops.to) == 0 ? "is-active" : "", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_router_NavLink), props : { to : rprops.to, children : rprops.children}, key : null, ref : null}}, key : null, ref : null};
+		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("li"), props : { className : rprops.location.pathname.indexOf(rprops.to) == 0 ? "is-active" : "", children : React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_NavLink),{ to : rprops.to},rprops.children)}, key : null, ref : null};
 	}
 	,buildNav: function() {
 		var state = App.store.getState().appWare.user;
 		if(state.waiting || state.user_name == "" || state.jwt == null || state.jwt == "") {
 			return null;
 		} else {
-			return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("ul"), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps($bind(this,this.TabLink)), props : Object.assign({ },this.props,{ to : "/dashboard", children : "DashBoard"}), key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps($bind(this,this.TabLink)), props : Object.assign({ },this.props,{ to : "/contacts", children : "Kontakte"}), key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps($bind(this,this.TabLink)), props : Object.assign({ },this.props,{ to : "/qc", children : "QC"}), key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps($bind(this,this.TabLink)), props : Object.assign({ },this.props,{ to : "/accounting", children : "Buchhaltung"}), key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps($bind(this,this.TabLink)), props : Object.assign({ },this.props,{ to : "/reports", children : "Berichte"}), key : null, ref : null}]}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("i"), props : { className : "icon is-pulled-right fa fa-sign-out", title : "Abmelden", onClick : App.logOut, style : { margin : ".8rem .5rem", fontSize : "1.7rem", cursor : "pointer", color : "#801111"}}, key : null, ref : null}]}, key : null, ref : null};
+			var tmp = react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment);
+			var tmp1 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("ul"), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps($bind(this,this.TabLink)), props : Object.assign({ },this.props,{ to : "/dashboard", children : "DashBoard"}), key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps($bind(this,this.TabLink)), props : Object.assign({ },this.props,{ to : "/contacts", children : "Kontakte"}), key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps($bind(this,this.TabLink)), props : Object.assign({ },this.props,{ to : "/qc", children : "QC"}), key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps($bind(this,this.TabLink)), props : Object.assign({ },this.props,{ to : "/accounting", children : "Buchhaltung"}), key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps($bind(this,this.TabLink)), props : Object.assign({ },this.props,{ to : "/reports", children : "Berichte"}), key : null, ref : null}]}, key : null, ref : null};
+			var tmp2 = $$tre;
+			return React.createElement(tmp,{ },tmp1,{ "$$typeof" : tmp2, type : react__$ReactType_ReactType_$Impl_$.fromString("i"), props : { className : "icon is-pulled-right fa fa-sign-out", title : "Abmelden", onClick : App.logOut, style : { margin : ".8rem .5rem", fontSize : "1.7rem", cursor : "pointer", color : "#801111"}}, key : null, ref : null});
 		}
 	}
 	,__class__: view_NavTabs
@@ -7273,7 +7340,10 @@ view_QC.prototype = $extend(React_Component.prototype,{
 		if(this.props.waiting || this.props.user_name == "" || this.props.jwt == null || this.props.jwt == "") {
 			return { "$$typeof" : $$tre, type : view_LoginForm._connected, props : this.props, key : null, ref : null};
 		} else {
-			return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabComponent", children : "..."}, key : null, ref : null},{ "$$typeof" : $$tre, type : view_StatusBar._connected, props : this.props, key : null, ref : null}]}, key : null, ref : null};
+			var tmp = react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment);
+			var tmp1 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabComponent", children : "..."}, key : null, ref : null};
+			var tmp2 = $$tre;
+			return React.createElement(tmp,{ },tmp1,{ "$$typeof" : tmp2, type : view_StatusBar._connected, props : this.props, key : null, ref : null});
 		}
 	}
 	,__class__: view_QC
@@ -7318,7 +7388,10 @@ view_Reports.prototype = $extend(React_Component.prototype,{
 		if(this.props.waiting || this.props.user_name == "" || this.props.jwt == null || this.props.jwt == "") {
 			return { "$$typeof" : $$tre, type : view_LoginForm._connected, props : this.props, key : null, ref : null};
 		} else {
-			return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabComponent", children : "..."}, key : null, ref : null},{ "$$typeof" : $$tre, type : view_StatusBar._connected, props : this.props, key : null, ref : null}]}, key : null, ref : null};
+			var tmp = react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment);
+			var tmp1 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabComponent", children : "..."}, key : null, ref : null};
+			var tmp2 = $$tre;
+			return React.createElement(tmp,{ },tmp1,{ "$$typeof" : tmp2, type : view_StatusBar._connected, props : this.props, key : null, ref : null});
 		}
 	}
 	,__class__: view_Reports
@@ -7380,20 +7453,21 @@ view_StatusBar.prototype = $extend(React_Component.prototype,{
 });
 var view_UiView = function(props) {
 	this.tabList = [];
-	haxe_Log.trace(Reflect.fields(props),{ fileName : "src/view/UiView.hx", lineNumber : 83, className : "view.UiView", methodName : "new"});
-	haxe_Log.trace(props.store == App.store,{ fileName : "src/view/UiView.hx", lineNumber : 84, className : "view.UiView", methodName : "new"});
+	haxe_Log.trace(Reflect.fields(props),{ fileName : "src/view/UiView.hx", lineNumber : 84, className : "view.UiView", methodName : "new"});
+	haxe_Log.trace(props.store == App.store,{ fileName : "src/view/UiView.hx", lineNumber : 85, className : "view.UiView", methodName : "new"});
 	React_Component.call(this,props);
 	this.state = { hasError : false};
 	this.browserHistory = App.store.getState().appWare.history;
+	model_ApplicationStore.startHistoryListener(App.store,this.browserHistory);
 	this.mounted = false;
 	App.modalBox = React.createRef();
 };
 $hxClasses["view.UiView"] = view_UiView;
 view_UiView.__name__ = ["view","UiView"];
 view_UiView.mapStateToProps = function(aState) {
-	haxe_Log.trace(aState.appWare.user,{ fileName : "src/view/UiView.hx", lineNumber : 72, className : "view.UiView", methodName : "mapStateToProps"});
+	haxe_Log.trace(aState.appWare.user,{ fileName : "src/view/UiView.hx", lineNumber : 73, className : "view.UiView", methodName : "mapStateToProps"});
 	var p = { user : aState.appWare.user};
-	haxe_Log.trace(p,{ fileName : "src/view/UiView.hx", lineNumber : 76, className : "view.UiView", methodName : "mapStateToProps"});
+	haxe_Log.trace(p,{ fileName : "src/view/UiView.hx", lineNumber : 77, className : "view.UiView", methodName : "mapStateToProps"});
 	return { user : aState.appWare.user};
 };
 view_UiView.__super__ = React_Component;
@@ -7405,34 +7479,48 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 		if(this.mounted) {
 			this.setState({ hasError : true});
 		}
-		haxe_Log.trace(error,{ fileName : "src/view/UiView.hx", lineNumber : 101, className : "view.UiView", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "src/view/UiView.hx", lineNumber : 102, className : "view.UiView", methodName : "componentDidCatch"});
 	}
 	,componentDidMount: function() {
 		this.mounted = true;
 	}
 	,componentDidUpdate: function(prevProps,prevState) {
-		haxe_Log.trace(prevState,{ fileName : "src/view/UiView.hx", lineNumber : 110, className : "view.UiView", methodName : "componentDidUpdate"});
-		haxe_Log.trace(prevProps,{ fileName : "src/view/UiView.hx", lineNumber : 111, className : "view.UiView", methodName : "componentDidUpdate"});
-		haxe_Log.trace(App.firstLoad,{ fileName : "src/view/UiView.hx", lineNumber : 112, className : "view.UiView", methodName : "componentDidUpdate"});
+		haxe_Log.trace(prevState,{ fileName : "src/view/UiView.hx", lineNumber : 111, className : "view.UiView", methodName : "componentDidUpdate"});
+		haxe_Log.trace(prevProps,{ fileName : "src/view/UiView.hx", lineNumber : 112, className : "view.UiView", methodName : "componentDidUpdate"});
+		haxe_Log.trace(App.firstLoad,{ fileName : "src/view/UiView.hx", lineNumber : 113, className : "view.UiView", methodName : "componentDidUpdate"});
 		App.firstLoad = false;
 	}
 	,tabList: null
 	,createRoutes: function() {
 		var routes = this.tabList.map(function(el) {
-			return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route), props : { path : el.url, component : el.component}, key : null, ref : null};
+			return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : el.url, component : el.component});
 		});
 		return routes;
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.user,{ fileName : "src/view/UiView.hx", lineNumber : 137, className : "view.UiView", methodName : "render"});
+		haxe_Log.trace(this.props.user,{ fileName : "src/view/UiView.hx", lineNumber : 138, className : "view.UiView", methodName : "render"});
 		if(this.state.hasError) {
 			return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("h1"), props : { children : "Something went wrong."}, key : null, ref : null};
 		}
 		if(this.props.user.jwt == null || this.props.user.jwt == "") {
 			return { "$$typeof" : $$tre, type : view_LoginForm._connected, props : this.props.user, key : null, ref : null};
 		} else {
-			haxe_Log.trace("render Router :)" + Std.string(this.props.store),{ fileName : "src/view/UiView.hx", lineNumber : 160, className : "view.UiView", methodName : "render"});
-			return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Router), props : { history : this.browserHistory, children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment), props : { children : [React.createElement(react__$ReactType_ReactType_$Impl_$.fromString("div"),{ ref : App.modalBox, className : "modal"}),{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "topNav", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route), props : Object.assign({ },this.props,{ path : "/dashboard", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_NavTabs)}), key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route), props : Object.assign({ },this.props,{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_NavTabs)}), key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route), props : Object.assign({ },this.props,{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_NavTabs)}), key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route), props : Object.assign({ },this.props,{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_NavTabs)}), key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route), props : Object.assign({ },this.props,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_NavTabs)}), key : null, ref : null}]}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabComponent", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route), props : { path : "/", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_RedirectBox), exact : true}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route), props : { path : "/dashboard*", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_DashBoard)}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route), props : { path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader802.render)}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route), props : { path : "/contacts/edit/:id", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader804.render)}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route), props : { path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader806.render)}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route), props : { path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader808.render)}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route), props : { path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader810.render)}, key : null, ref : null}]}, key : null, ref : null}]}, key : null, ref : null}}, key : null, ref : null};
+			haxe_Log.trace("render Router :)" + Std.string(this.props.store),{ fileName : "src/view/UiView.hx", lineNumber : 161, className : "view.UiView", methodName : "render"});
+			var tmp = react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Router);
+			var tmp1 = { history : this.browserHistory};
+			var tmp2 = react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment);
+			var tmp3 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromString("div"),{ ref : App.modalBox, className : "modal"});
+			var tmp4 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "topNav", children : [React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/dashboard", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_NavTabs)})),React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_NavTabs)})),React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_NavTabs)})),React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_NavTabs)})),React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),Object.assign({ },this.props,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_NavTabs)}))]}, key : null, ref : null};
+			var tmp5 = $$tre;
+			var tmp6 = react__$ReactType_ReactType_$Impl_$.fromString("div");
+			var tmp7 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_RedirectBox), exact : true});
+			var tmp8 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/dashboard*", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_DashBoard)});
+			var tmp9 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader3572.render)});
+			var tmp10 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts/edit/:id", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader3574.render)});
+			var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader3576.render)});
+			var tmp12 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader3578.render)});
+			var tmp13 = react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route);
+			return React.createElement(tmp,tmp1,React.createElement(tmp2,{ },tmp3,tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { className : "tabComponent", children : [tmp7,tmp8,tmp9,tmp10,tmp11,tmp12,React.createElement(tmp13,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader3580.render)})]}, key : null, ref : null}));
 		}
 	}
 	,renderRedirect: function(p) {
@@ -7467,7 +7555,7 @@ view_shared_BaseForm.prototype = $extend(React_Component.prototype,{
 	}
 	,componentDidMount: function() {
 		this.mounted = true;
-		haxe_Log.trace(this.mounted,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 165, className : "view.shared.BaseForm", methodName : "componentDidMount"});
+		haxe_Log.trace(this.mounted,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 168, className : "view.shared.BaseForm", methodName : "componentDidMount"});
 	}
 	,componentWillUnmount: function() {
 		this.mounted = false;
@@ -7488,23 +7576,33 @@ view_shared_BaseForm.prototype = $extend(React_Component.prototype,{
 			}
 		}
 	}
+	,getRouterMatch: function() {
+		var rmp = this.props.match;
+		haxe_Log.trace(rmp,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 189, className : "view.shared.BaseForm", methodName : "getRouterMatch"});
+		haxe_Log.trace(this.props.history.location.pathname,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 190, className : "view.shared.BaseForm", methodName : "getRouterMatch"});
+		return react_router_ReactRouter.matchPath(this.props.history.location.pathname,rmp);
+	}
 	,render: function() {
-		haxe_Log.trace("You should override me :)",{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 184, className : "view.shared.BaseForm", methodName : "render"});
+		haxe_Log.trace("You should override me :)",{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 195, className : "view.shared.BaseForm", methodName : "render"});
 		return null;
 	}
 	,setStateFromChild: function(newState) {
 		this.setState(newState);
-		haxe_Log.trace(newState,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 191, className : "view.shared.BaseForm", methodName : "setStateFromChild"});
+		haxe_Log.trace(newState,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 202, className : "view.shared.BaseForm", methodName : "setStateFromChild"});
 	}
 	,switchContent: function(reactEventSource) {
-		haxe_Log.trace(this.props.match,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 199, className : "view.shared.BaseForm", methodName : "switchContent"});
-		var segment = reactEventSource.target.getAttribute("data-segment");
-		haxe_Log.trace("props.match.params.segment:" + this.props.match.params.segment + " segment:" + segment,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 203, className : "view.shared.BaseForm", methodName : "switchContent"});
-		if(segment != this.props.match.params.segment) {
+		haxe_Log.trace(this.props.match,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 210, className : "view.shared.BaseForm", methodName : "switchContent"});
+		haxe_Log.trace(this.getRouterMatch(),{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 211, className : "view.shared.BaseForm", methodName : "switchContent"});
+		var section = reactEventSource.target.getAttribute("data-section");
+		haxe_Log.trace("props.match.params.section:" + this.props.match.params.section + " section:" + section,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 215, className : "view.shared.BaseForm", methodName : "switchContent"});
+		if(section != this.props.match.params.section) {
+			var sM = this.state.sideMenu;
+			sM.section = section;
+			this.setState({ sideMenu : sM});
 			var basePath = this.props.match.path.split("/:")[0];
-			haxe_Log.trace(this.props.location.pathname,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 213, className : "view.shared.BaseForm", methodName : "switchContent"});
-			this.props.history.push("" + basePath + "/" + segment);
-			haxe_Log.trace(this.props.history,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 215, className : "view.shared.BaseForm", methodName : "switchContent"});
+			haxe_Log.trace(this.props.location.pathname,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 227, className : "view.shared.BaseForm", methodName : "switchContent"});
+			this.props.history.push("" + basePath + "/" + section);
+			haxe_Log.trace(this.props.history,{ fileName : "src/view/shared/BaseForm.hx", lineNumber : 229, className : "view.shared.BaseForm", methodName : "switchContent"});
 		}
 	}
 	,__class__: view_shared_BaseForm
@@ -7681,26 +7779,28 @@ view_dashboard_RolesForm.prototype = $extend(view_shared_BaseForm.prototype,{
 });
 var view_dashboard_SetUpForm = function(props) {
 	view_shared_BaseForm.call(this,props);
-	haxe_Log.trace("ok",{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 39, className : "view.dashboard.SetUpForm", methodName : "new"});
+	haxe_Log.trace("ok",{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 38, className : "view.dashboard.SetUpForm", methodName : "new"});
+	haxe_Log.trace(props.match,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 39, className : "view.dashboard.SetUpForm", methodName : "new"});
+	haxe_Log.trace(this.getRouterMatch(),{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 40, className : "view.dashboard.SetUpForm", methodName : "new"});
 	var tmp = this.state;
 	var _g = new haxe_ds_StringMap();
 	var value = { dataClassPath : "model.tools.DB", viewClassPath : "shared.io.DB", isActive : false, label : "DB Design", onActivate : $bind(this,this.switchContent), items : function() {
 		return [];
-	}};
-	if(__map_reserved["DbTools"] != null) {
-		_g.setReserved("DbTools",value);
+	}, section : "dbtools"};
+	if(__map_reserved["dbtools"] != null) {
+		_g.setReserved("dbtools",value);
 	} else {
-		_g.h["DbTools"] = value;
+		_g.h["dbtools"] = value;
 	}
 	var value1 = { dataClassPath : "model.admin.SyncExternal", viewClassPath : "shared.io.DBSync", isActive : true, label : "DB Sync", onActivate : $bind(this,this.switchContent), items : function() {
 		return [];
-	}};
-	if(__map_reserved["SyncTools"] != null) {
-		_g.setReserved("SyncTools",value1);
+	}, section : "synctools"};
+	if(__map_reserved["synctools"] != null) {
+		_g.setReserved("synctools",value1);
 	} else {
-		_g.h["SyncTools"] = value1;
+		_g.h["synctools"] = value1;
 	}
-	this.state = react_ReactUtil.copy(tmp,{ sideMenu : { menuBlocks : _g}, viewClassPath : "shared.io.DBSync", loading : true});
+	this.state = react_ReactUtil.copy(tmp,{ sideMenu : { menuBlocks : _g, section : "synctools"}, viewClassPath : "shared.io.DBSync", loading : true});
 	this.requests = [];
 };
 $hxClasses["view.dashboard.SetUpForm"] = view_dashboard_SetUpForm;
@@ -7708,7 +7808,7 @@ view_dashboard_SetUpForm.__name__ = ["view","dashboard","SetUpForm"];
 view_dashboard_SetUpForm.mapStateToProps = function() {
 	return function(aState) {
 		var uState = aState.appWare.user;
-		haxe_Log.trace(uState,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 80, className : "view.dashboard.SetUpForm", methodName : "mapStateToProps"});
+		haxe_Log.trace(uState,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 83, className : "view.dashboard.SetUpForm", methodName : "mapStateToProps"});
 		return { user_name : uState.user_name, jwt : uState.jwt, first_name : uState.first_name};
 	};
 };
@@ -7718,43 +7818,26 @@ view_dashboard_SetUpForm.prototype = $extend(view_shared_BaseForm.prototype,{
 		if(this.mounted) {
 			this.setState({ hasError : true});
 		}
-		haxe_Log.trace(info,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 94, className : "view.dashboard.SetUpForm", methodName : "componentDidCatch"});
+		haxe_Log.trace(info,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 97, className : "view.dashboard.SetUpForm", methodName : "componentDidCatch"});
 	}
 	,componentDidMount: function() {
 		var _gthis = this;
 		view_shared_BaseForm.prototype.componentDidMount.call(this);
-		haxe_Log.trace("ok",{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 100, className : "view.dashboard.SetUpForm", methodName : "componentDidMount"});
+		haxe_Log.trace("ok",{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 103, className : "view.dashboard.SetUpForm", methodName : "componentDidMount"});
 		return;
 	}
 	,render: function() {
-		var _g = this.state.viewClassPath;
-		if(_g == null) {
-			return null;
-		} else {
-			switch(_g) {
-			case "shared.io.DB":
-				return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_io_DB), props : Object.assign({ },this.props,{ sideMenu : this.state.sideMenu, handleChange : false, handleSubmit : false, fullWidth : true}), key : null, ref : null};
-			case "shared.io.DBSync":
-				return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_io_DBSync), props : Object.assign({ },this.props,{ sideMenu : this.state.sideMenu, handleChange : false, handleSubmit : false, fullWidth : true}), key : null, ref : null};
-			default:
-				return null;
-			}
-		}
-	}
-	,renderContent: function(content) {
-		if(content == null || content.length == 0) {
+		var match = this.getRouterMatch();
+		haxe_Log.trace(match,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 128, className : "view.dashboard.SetUpForm", methodName : "render"});
+		var _g = match.params.section;
+		switch(_g) {
+		case "dbtools":
+			return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_io_DB), props : Object.assign({ },this.props,{ sideMenu : this.state.sideMenu, handleChange : false, handleSubmit : false, fullWidth : true}), key : null, ref : null};
+		case "synctools":
+			return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_io_DBSync), props : Object.assign({ },this.props,{ sideMenu : this.state.sideMenu, handleChange : false, handleSubmit : false, fullWidth : true}), key : null, ref : null};
+		default:
 			return null;
 		}
-		haxe_Log.trace(content.length,{ fileName : "src/view/dashboard/SetUpForm.hx", lineNumber : 145, className : "view.dashboard.SetUpForm", methodName : "renderContent"});
-		var rC = [];
-		var k = 1;
-		var _g = 0;
-		while(_g < content.length) {
-			var c = content[_g];
-			++_g;
-			rC.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { children : c}, key : k++, ref : null});
-		}
-		return rC;
 	}
 	,__class__: view_dashboard_SetUpForm
 });
@@ -7770,7 +7853,7 @@ var view_dashboard_SettingsForm = function(props) {
 	var _g = new haxe_ds_StringMap();
 	var value = { dataClassPath : "auth.User", viewClassPath : "shared.io.User", label : "UserDaten", onActivate : $bind(this,this.switchContent), items : function() {
 		return null;
-	}, segment : "user"};
+	}, section : "user"};
 	if(__map_reserved["user"] != null) {
 		_g.setReserved("user",value);
 	} else {
@@ -7778,7 +7861,7 @@ var view_dashboard_SettingsForm = function(props) {
 	}
 	var value1 = { dataClassPath : "settings.Bookmarks", viewClassPath : "shared.io.Bookmarks", label : "Lesezeichen", onActivate : $bind(this,this.switchContent), items : function() {
 		return [{ handler : $bind(_gthis,_gthis.createUserBookmark), label : "Neu", action : "create"},{ handler : $bind(_gthis,_gthis.editUserBookmark), label : "Bearbeiten", action : "edit"},{ handler : $bind(_gthis,_gthis.deleteUserBookmark), label : "Löschen", action : "delete"}];
-	}, segment : "bookmarks"};
+	}, section : "bookmarks"};
 	if(__map_reserved["bookmarks"] != null) {
 		_g.setReserved("bookmarks",value1);
 	} else {
@@ -7786,24 +7869,24 @@ var view_dashboard_SettingsForm = function(props) {
 	}
 	var value2 = { dataClassPath : "settings.Design", viewClassPath : "shared.io.Design", label : "Design", onActivate : $bind(this,this.switchContent), items : function() {
 		return [{ handler : $bind(_gthis,_gthis.editColors), label : "Farben", action : "editColors"},{ handler : $bind(_gthis,_gthis.editFonts), label : "Schrift", action : "editFont"}];
-	}, segment : "design"};
+	}, section : "design"};
 	if(__map_reserved["design"] != null) {
 		_g.setReserved("design",value2);
 	} else {
 		_g.h["design"] = value2;
 	}
 	this.state = { clean : true, viewClassPath : null, hasError : false, loading : true, sideMenu : { menuBlocks : _g}};
-	if(props.match.params.segment != null) {
-		haxe_Log.trace(props.match.params.segment,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 89, className : "view.dashboard.SettingsForm", methodName : "new"});
-		var key = props.match.params.segment;
+	if(props.match.params.section != null) {
+		haxe_Log.trace(props.match.params.section,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 89, className : "view.dashboard.SettingsForm", methodName : "new"});
+		var key = props.match.params.section;
 		var _this = this.state.sideMenu.menuBlocks;
 		var tmp = __map_reserved[key] != null ? _this.getReserved(key) : _this.h[key];
 		this.state.viewClassPath = tmp.viewClassPath;
-		var key1 = props.match.params.segment;
+		var key1 = props.match.params.section;
 		var _this1 = this.state.sideMenu.menuBlocks;
 		(__map_reserved[key1] != null ? _this1.getReserved(key1) : _this1.h[key1]).isActive = true;
 	}
-	haxe_Log.trace("" + props.match.params.segment + " " + this.state.viewClassPath,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 94, className : "view.dashboard.SettingsForm", methodName : "new"});
+	haxe_Log.trace("" + props.match.params.section + " " + this.state.viewClassPath,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 94, className : "view.dashboard.SettingsForm", methodName : "new"});
 	this.requests = [];
 };
 $hxClasses["view.dashboard.SettingsForm"] = view_dashboard_SettingsForm;
@@ -7845,8 +7928,8 @@ view_dashboard_SettingsForm.prototype = $extend(view_shared_BaseForm.prototype,{
 		view_shared_BaseForm.prototype.switchContent.call(this,reactEventSource);
 	}
 	,render: function() {
-		haxe_Log.trace(this.props.match.params.segment,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 156, className : "view.dashboard.SettingsForm", methodName : "render"});
-		var _g = this.props.match.params.segment;
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "src/view/dashboard/SettingsForm.hx", lineNumber : 156, className : "view.dashboard.SettingsForm", methodName : "render"});
+		var _g = this.props.match.params.section;
 		switch(_g) {
 		case "bookmarks":
 			return { "$$typeof" : $$tre, type : view_shared_io_Bookmarks._connected, props : Object.assign({ },this.childFormProps,{ sideMenu : this.state.sideMenu, handleChange : true, handleSubmit : true, fullWidth : true}), key : null, ref : null};
@@ -7963,10 +8046,14 @@ view_shared_SMenu.prototype = $extend(React_Component.prototype,{
 		var header = [];
 		var i = 1;
 		Lambda.iter(this.props.menuBlocks,function(block) {
+			var check = _gthis.props.section == block.section;
+			if(_gthis.props.section == null && i == 1) {
+				check = true;
+			}
 			var tmp = react__$ReactType_ReactType_$Impl_$.fromString("input");
 			var i1 = i;
 			i += 1;
-			var tmp1 = React.createElement(tmp,{ key : i1, ref : block.isActive ? _gthis.initialActiveHeaderRef : null, type : "radio", id : "sMenuPanel-" + (i - 1), name : "accordion-select", 'data-classpath' : block.viewClassPath, onChange : block.onActivate, 'data-segment' : block.segment});
+			var tmp1 = React.createElement(tmp,{ key : i1, ref : block.isActive ? _gthis.initialActiveHeaderRef : null, type : "radio", id : "sMenuPanel-" + (i - 1), name : "accordion-select", checked : check, 'data-classpath' : block.viewClassPath, onChange : block.onActivate, 'data-section' : block.section});
 			header.push(tmp1);
 		});
 		return header;
@@ -8013,11 +8100,10 @@ view_shared_SMenu.prototype = $extend(React_Component.prototype,{
 		}));
 	}
 	,render: function() {
-		haxe_Log.trace("...",{ fileName : "src/view/shared/SMenu.hx", lineNumber : 153, className : "view.shared.SMenu", methodName : "render"});
+		haxe_Log.trace("...",{ fileName : "src/view/shared/SMenu.hx", lineNumber : 161, className : "view.shared.SMenu", methodName : "render"});
 		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "sidebar is-right is-hidden-mobile", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("aside"), props : { className : "menu", children : [this.renderHeader(),this.renderPanels()]}, key : null, ref : null}}, key : null, ref : null};
 	}
 	,componentDidMount: function() {
-		this.activate();
 	}
 	,componentDidUpdate: function(prevProps,prevState) {
 	}
@@ -8028,9 +8114,8 @@ var view_shared_io_DataAccessForm = function(props) {
 	this.mounted = false;
 	this.requests = [];
 	if(props != null) {
-		haxe_Log.trace(props.match,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 83, className : "view.shared.io.DataAccessForm", methodName : "new"});
+		this.state = { data : new haxe_ds_StringMap(), clean : true, errors : new haxe_ds_StringMap(), hasError : false, handleChange : this.setChangeHandler(), handleSubmit : this.setSubmitHandler(), sideMenu : props.sideMenu, selectedRows : []};
 	}
-	this.state = { data : new haxe_ds_StringMap(), clean : true, errors : new haxe_ds_StringMap(), hasError : false, handleChange : this.setChangeHandler(), handleSubmit : this.setSubmitHandler(), sideMenu : props.sideMenu, selectedRows : []};
 	this.dbData = new shared_DbData();
 };
 $hxClasses["view.shared.io.DataAccessForm"] = view_shared_io_DataAccessForm;
@@ -8348,23 +8433,23 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 		var model = "." + fF.primaryId + "." + fF.name;
 		var _g = fF.type;
 		if(_g == null) {
-			return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_Control), props : { model : model, controlProps : { readOnly : fF.readonly, type : "hidden", onChange : fF.readonly ? null : fF.handleChange}}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 384, className : "view.shared.io.DataAccessForm", methodName : "renderRowCell"}), ref : null};
+			return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_Control),{ key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 384, className : "view.shared.io.DataAccessForm", methodName : "renderRowCell"}), model : model, controlProps : { readOnly : fF.readonly, type : "hidden", onChange : fF.readonly ? null : fF.handleChange}});
 		} else {
 			switch(_g) {
 			case "Checkbox":
 				haxe_Log.trace(fF.value,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 372, className : "view.shared.io.DataAccessForm", methodName : "renderRowCell"});
-				return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlCheckbox), props : { model : model, controlProps : { readOnly : fF.readonly}}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 373, className : "view.shared.io.DataAccessForm", methodName : "renderRowCell"}), ref : null};
+				return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlCheckbox),{ key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 373, className : "view.shared.io.DataAccessForm", methodName : "renderRowCell"}), model : model, controlProps : { readOnly : fF.readonly}});
 			case "Hidden":
 				if(fF.primary) {
 					return null;
 				} else {
-					return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_Control), props : { model : model, controlProps : { readOnly : fF.readonly, type : "hidden"}}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 376, className : "view.shared.io.DataAccessForm", methodName : "renderRowCell"}), ref : null};
+					return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_Control),{ key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 376, className : "view.shared.io.DataAccessForm", methodName : "renderRowCell"}), model : model, controlProps : { readOnly : fF.readonly, type : "hidden"}});
 				}
 				break;
 			case "Select":
-				return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlSelect), props : { model : model, children : this.renderSelectOptions(fF.value)}, key : null, ref : null};
+				return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlSelect),{ model : model},this.renderSelectOptions(fF.value));
 			default:
-				return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_Control), props : { model : model, controlProps : { readOnly : fF.readonly, type : "hidden", onChange : fF.readonly ? null : fF.handleChange}}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 384, className : "view.shared.io.DataAccessForm", methodName : "renderRowCell"}), ref : null};
+				return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_Control),{ key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 384, className : "view.shared.io.DataAccessForm", methodName : "renderRowCell"}), model : model, controlProps : { readOnly : fF.readonly, type : "hidden", onChange : fF.readonly ? null : fF.handleChange}});
 			}
 		}
 	}
@@ -8426,7 +8511,19 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 				_gthis._fstate.handleSubmit(tfd);
 			}
 		};
-		return ReactDOM.render({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "modal-background", onClick : click}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "modal-card", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_LocalForm), props : { onSubmit : submit, model : fState.model, initialState : fState.initialState, children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("header"), props : { className : "modal-card-head", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("p"), props : { className : "modal-card-title", children : this._fstate.title}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("button"), props : { className : "delete", 'aria-label' : "close", onClick : click}, key : null, ref : null}]}, key : null, ref : null},this.renderModalFormBodyHeader(),React.createElement(react__$ReactType_ReactType_$Impl_$.fromString("div"),{ ref : this.modalFormTableBody, className : "modal-card-body"},Lambda.empty(this._fstate.data) ? this.createElementsArray() : this.renderElements()),{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("footer"), props : { className : "modal-card-foot", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlButton), props : { controlProps : { className : "button is-success", type : "submit"}, model : fState.model, children : "Speichern"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlReset), props : { controlProps : { className : "button"}, model : fState.model, children : "Reset"}, key : null, ref : null}]}, key : null, ref : null}]}, key : null, ref : null}}, key : null, ref : null}]}, key : null, ref : null},react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox),$bind(this,this.adjustModalFormColumns));
+		var tmp = react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment);
+		var tmp1 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "modal-background", onClick : click}, key : null, ref : null};
+		var tmp2 = $$tre;
+		var tmp3 = react__$ReactType_ReactType_$Impl_$.fromString("div");
+		var tmp4 = react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_LocalForm);
+		var tmp5 = { onSubmit : submit, model : fState.model, initialState : fState.initialState};
+		var tmp6 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("header"), props : { className : "modal-card-head", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("p"), props : { className : "modal-card-title", children : this._fstate.title}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("button"), props : { className : "delete", 'aria-label' : "close", onClick : click}, key : null, ref : null}]}, key : null, ref : null};
+		var tmp7 = this.renderModalFormBodyHeader();
+		var tmp8 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromString("div"),{ ref : this.modalFormTableBody, className : "modal-card-body"},Lambda.empty(this._fstate.data) ? this.createElementsArray() : this.renderElements());
+		var tmp9 = $$tre;
+		var tmp10 = react__$ReactType_ReactType_$Impl_$.fromString("footer");
+		var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlButton),{ controlProps : { className : "button is-success", type : "submit"}, model : fState.model},"Speichern");
+		return ReactDOM.render(React.createElement(tmp,{ },tmp1,{ "$$typeof" : tmp2, type : tmp3, props : { className : "modal-card", children : React.createElement(tmp4,tmp5,tmp6,tmp7,tmp8,{ "$$typeof" : tmp9, type : tmp10, props : { className : "modal-card-foot", children : [tmp11,React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlReset),{ controlProps : { className : "button"}, model : fState.model},"Reset")]}, key : null, ref : null})}, key : null, ref : null}),react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox),$bind(this,this.adjustModalFormColumns));
 	}
 	,renderModalScreen: function(content) {
 		haxe_Log.trace(App.modalBox,{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 481, className : "view.shared.io.DataAccessForm", methodName : "renderModalScreen"});
@@ -8435,7 +8532,12 @@ view_shared_io_DataAccessForm.prototype = $extend(React_PureComponent.prototype,
 		var click = function(_) {
 			react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox).classList.toggle("is-active");
 		};
-		return ReactDOM.render({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment), props : { children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "modal-background", onClick : click}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "modal-card", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("header"), props : { className : "modal-card-head", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("p"), props : { className : "modal-card-title", children : "dada..."}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("button"), props : { className : "delete", 'aria-label' : "close", onClick : click}, key : null, ref : null}]}, key : null, ref : null},React.createElement(react__$ReactType_ReactType_$Impl_$.fromString("div"),{ ref : this.modalFormTableBody, className : "modal-card-body"},content)]}, key : null, ref : null}]}, key : null, ref : null},react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox));
+		var tmp = react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment);
+		var tmp1 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "modal-background", onClick : click}, key : null, ref : null};
+		var tmp2 = $$tre;
+		var tmp3 = react__$ReactType_ReactType_$Impl_$.fromString("div");
+		var tmp4 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("header"), props : { className : "modal-card-head", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("p"), props : { className : "modal-card-title", children : "dada..."}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("button"), props : { className : "delete", 'aria-label' : "close", onClick : click}, key : null, ref : null}]}, key : null, ref : null};
+		return ReactDOM.render(React.createElement(tmp,{ },tmp1,{ "$$typeof" : tmp2, type : tmp3, props : { className : "modal-card", children : [tmp4,React.createElement(react__$ReactType_ReactType_$Impl_$.fromString("div"),{ ref : this.modalFormTableBody, className : "modal-card-body"},content)]}, key : null, ref : null}),react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox));
 	}
 	,adjustModalFormColumns: function() {
 		haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.modalFormTableHeader),{ fileName : "src/view/shared/io/DataAccessForm.hx", lineNumber : 508, className : "view.shared.io.DataAccessForm", methodName : "adjustModalFormColumns"});
@@ -8571,7 +8673,7 @@ var view_shared_io_DB = function(props) {
 	this._menuItems = [{ handler : $bind(this,this.createFieldList), label : "Create Fields Table", action : "createFieldList"},{ handler : $bind(this,this.showFieldList), label : "Table Fields", action : "showFieldList"},{ handler : $bind(this,this.editTableFields), label : "Bearbeiten", disabled : this.state.selectedRows.length == 0}];
 	var sideMenu = this.state.sideMenu;
 	var _this = sideMenu.menuBlocks;
-	(__map_reserved["DbTools"] != null ? _this.getReserved("DbTools") : _this.h["DbTools"]).items = function() {
+	(__map_reserved["dbtools"] != null ? _this.getReserved("dbtools") : _this.h["dbtools"]).items = function() {
 		return _gthis._menuItems;
 	};
 	this.state = react_ReactUtil.copy(this.state,{ sideMenu : sideMenu});
@@ -8784,7 +8886,7 @@ view_shared_io_DB.prototype = $extend(view_shared_io_DataAccessForm.prototype,{
 		if(this.state.values != null) {
 			haxe_Log.trace(this.state.values.toString(),{ fileName : "src/view/shared/io/DB.hx", lineNumber : 256, className : "view.shared.io.DB", methodName : "render"});
 		}
-		haxe_Log.trace(this.props.match.params.segment,{ fileName : "src/view/shared/io/DB.hx", lineNumber : 257, className : "view.shared.io.DB", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "src/view/shared/io/DB.hx", lineNumber : 257, className : "view.shared.io.DB", methodName : "render"});
 		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "columns xAuto", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("form"), props : { className : "tabComponentForm", children : this.renderResults()}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_SMenu), props : { className : "menu", menuBlocks : this.state.sideMenu.menuBlocks}, key : null, ref : null}]}, key : null, ref : null};
 	}
 	,updateMenu: function(viewClassPath) {
@@ -8792,7 +8894,7 @@ view_shared_io_DB.prototype = $extend(view_shared_io_DataAccessForm.prototype,{
 		haxe_Log.trace("" + Type.getClassName(js_Boot.getClass(this)) + " task",{ fileName : "src/view/shared/io/DB.hx", lineNumber : 271, className : "view.shared.io.DB", methodName : "updateMenu"});
 		var sideMenu = this.state.sideMenu;
 		var _this = sideMenu.menuBlocks;
-		(__map_reserved["DbTools"] != null ? _this.getReserved("DbTools") : _this.h["DbTools"]).items = function() {
+		(__map_reserved["dbtools"] != null ? _this.getReserved("dbtools") : _this.h["dbtools"]).items = function() {
 			return [{ handler : $bind(_gthis,_gthis.createFieldList), label : "Create Fields Table", action : "createFieldList"},{ handler : $bind(_gthis,_gthis.showFieldList), label : "Table Fields", action : "showFieldList"},{ handler : $bind(_gthis,_gthis.editTableFields), label : "Bearbeiten", disabled : _gthis.state.selectedRows.length == 0}];
 		};
 		return sideMenu;
@@ -8807,7 +8909,7 @@ var view_shared_io_DBSync = function(props) {
 	this._menuItems = [{ handler : $bind(this,this.createFieldList), label : "Create Fields Table", action : "createFieldList"},{ handler : $bind(this,this.showUserList), label : "BenutzerDaten Abgleich", action : "showUserList"},{ handler : $bind(this,this.editTableFields), label : "Bearbeiten", disabled : this.state.selectedRows.length == 0}];
 	var sideMenu = this.state.sideMenu;
 	var _this = sideMenu.menuBlocks;
-	(__map_reserved["SyncTools"] != null ? _this.getReserved("SyncTools") : _this.h["SyncTools"]).items = function() {
+	(__map_reserved["synctools"] != null ? _this.getReserved("synctools") : _this.h["synctools"]).items = function() {
 		return _gthis._menuItems;
 	};
 	this.state = react_ReactUtil.copy(this.state,{ sideMenu : sideMenu});
@@ -8994,7 +9096,7 @@ view_shared_io_DBSync.prototype = $extend(view_shared_io_DataAccessForm.prototyp
 		if(this.state.dataTable != null) {
 			haxe_Log.trace(this.state.dataTable[0].toString(),{ fileName : "src/view/shared/io/DBSync.hx", lineNumber : 240, className : "view.shared.io.DBSync", methodName : "render"});
 		}
-		haxe_Log.trace(this.props.match.params.segment,{ fileName : "src/view/shared/io/DBSync.hx", lineNumber : 241, className : "view.shared.io.DBSync", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "src/view/shared/io/DBSync.hx", lineNumber : 241, className : "view.shared.io.DBSync", methodName : "render"});
 		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "columns xAuto", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("form"), props : { className : "tabComponentForm", children : this.renderResults()}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_SMenu), props : { className : "menu", menuBlocks : this.state.sideMenu.menuBlocks}, key : null, ref : null}]}, key : null, ref : null};
 	}
 	,updateMenu: function(viewClassPath) {
@@ -9502,7 +9604,15 @@ view_shared_io_User.prototype = $extend(view_shared_io_DataAccessForm.prototype,
 		} else {
 			switch(_g) {
 			case "changePassword":
-				return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment), props : { children : [this.renderErrors("changePassword"),{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "formField", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("label"), props : { className : "required", children : "Aktuelles Passwort"}, key : null, ref : null},React.createElement(react__$ReactType_ReactType_$Impl_$.fromString("input"),{ ref : this.autoFocus, name : "pass", type : "password", onChange : this.state.handleChange, autoFocus : "true"})]}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "formField", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("label"), props : { className : "required", children : "Neues Passwort"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("input"), props : { name : "new_pass", type : "password", onChange : this.state.handleChange}, key : null, ref : null}]}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "formField", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("label"), props : { className : "required", children : "Neues Passwort bestätigen"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("input"), props : { name : "new_pass_confirm", type : "password", onChange : this.state.handleChange}, key : null, ref : null}]}, key : null, ref : null}]}, key : null, ref : null};
+				var tmp = react__$ReactType_ReactType_$Impl_$.fromComp(React.Fragment);
+				var tmp1 = this.renderErrors("changePassword");
+				var tmp2 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "formField", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("label"), props : { className : "required", children : "Aktuelles Passwort"}, key : null, ref : null},React.createElement(react__$ReactType_ReactType_$Impl_$.fromString("input"),{ ref : this.autoFocus, name : "pass", type : "password", onChange : this.state.handleChange, autoFocus : "true"})]}, key : null, ref : null};
+				var tmp3 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "formField", children : [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("label"), props : { className : "required", children : "Neues Passwort"}, key : null, ref : null},{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("input"), props : { name : "new_pass", type : "password", onChange : this.state.handleChange}, key : null, ref : null}]}, key : null, ref : null};
+				var tmp4 = $$tre;
+				var tmp5 = react__$ReactType_ReactType_$Impl_$.fromString("div");
+				var tmp6 = { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("label"), props : { className : "required", children : "Neues Passwort bestätigen"}, key : null, ref : null};
+				var tmp7 = $$tre;
+				return React.createElement(tmp,{ },tmp1,tmp2,tmp3,{ "$$typeof" : tmp4, type : tmp5, props : { className : "formField", children : [tmp6,{ "$$typeof" : tmp7, type : react__$ReactType_ReactType_$Impl_$.fromString("input"), props : { name : "new_pass_confirm", type : "password", onChange : this.state.handleChange}, key : null, ref : null}]}, key : null, ref : null});
 			case "edit":
 				return this.renderElements();
 			default:

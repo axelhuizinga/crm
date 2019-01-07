@@ -35,7 +35,7 @@ typedef SMenuBlock =
 	?isActive:Bool,
 	items:Void->Array<SMItem>,
 	?label:String,	
-	?segment:String,
+	?section:String,
 }
 
 typedef SMItem =
@@ -57,7 +57,7 @@ typedef SMenuProps =
 	?basePath:String,
 	?hidden:Bool,
 	?menuBlocks:Map<String,SMenuBlock>,
-	//?items:Map<String,SMItem>,
+	?section:String,
 	?items:Array<SMItem>,
 	?right:Bool		
 }
@@ -104,10 +104,18 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 			return null;
 		var header:Array<ReactFragment> = new Array();
 		var i:Int = 1;		
-		props.menuBlocks.iter(function(block:SMenuBlock) header.push( jsx('
-		<input type="radio" key=${i} id=${"sMenuPanel-"+(i++)} name="accordion-select" data-classpath=${block.viewClassPath} 
-			onChange=${block.onActivate} data-segment=${block.segment} ref=${block.isActive?initialActiveHeaderRef:null}/>
-		')));
+
+		props.menuBlocks.iter(function(block:SMenuBlock) {
+			var check:Bool = props.section==block.section;
+			if(props.section==null && i==1)
+			{
+				check=true;
+			}
+			header.push( jsx('
+		<input type="radio" key=${i} id=${"sMenuPanel-"+(i++)} name="accordion-select" checked=${check} data-classpath=${block.viewClassPath} 
+			onChange=${block.onActivate} data-section=${block.section} ref=${block.isActive?initialActiveHeaderRef:null}/>
+		'));
+		});
 		return header;
 	}
 
@@ -171,7 +179,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 				trace(accordions);
 			}		*/
 		//}, 1000);
-		activate();
+		//activate();
 	}
 	
 	override public function componentDidUpdate(prevProps:SMenuProps, prevState:SMenuState):Void 

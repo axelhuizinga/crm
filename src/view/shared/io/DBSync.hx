@@ -56,7 +56,7 @@ class DBSync extends DataAccessForm
 		];
 		var sideMenu = state.sideMenu;
 		//trace(sideMenu);
-		sideMenu.menuBlocks['SyncTools'].items = function() return _menuItems;
+		sideMenu.menuBlocks['synctools'].items = function() return _menuItems;
 		state = ReactUtil.copy(state, {sideMenu:sideMenu});		
 	}
 	
@@ -238,7 +238,7 @@ class DBSync extends DataAccessForm
 	{
 		if(state.dataTable != null)
 			trace(state.dataTable[0]);
-		trace(props.match.params.segment);		
+		trace(props.match.params.section);		
 		//return null;<form className="form60"></form>	
 		return jsx('
 		<div className="columns xAuto">

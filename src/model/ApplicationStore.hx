@@ -1,5 +1,6 @@
 package model;
 
+import react.router.ReactRouter;
 import action.AppAction;
 import action.LocationAction;
 import history.Action;
@@ -23,7 +24,7 @@ class ApplicationStore
 	{
 		// store model, implementing reducer and middleware logic
 		var appWare = new AppService();
-		//var locationService = new LocationService();
+		var locationService = new LocationService();
 		var statusBarService = new StatusBarService();
 		//var userService = new UserService();
 		
@@ -32,7 +33,7 @@ class ApplicationStore
 		var rootReducer = Redux.combineReducers(
 			{
 				appWare: mapReducer(AppAction, appWare),
-				//locationService: mapReducer(LocationAction, locationService),
+				locationService: mapReducer(LocationAction, locationService),
 				statusBar: mapReducer(StatusAction, statusBarService)
 				//userService: mapReducer(UserAction, userService)
 			}
@@ -61,6 +62,7 @@ class ApplicationStore
 		return history.listen( function(location:Location, action:history.Action){
 			trace(action);
 			trace(location);
+			
 			store.dispatch(LocationChange({
 				pathname:location.pathname,
 				search: location.search,

@@ -24,6 +24,7 @@ typedef GlobalAppState =
 	?hasError:Bool,
 	history:History,
 	?locale:String,
+	?path:String,
 	?redirectAfterLogin:String,
 	?routeHistory:Array<Location>,
 	?themeColor:String,

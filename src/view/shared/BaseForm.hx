@@ -1,5 +1,8 @@
 package view.shared;
 
+import react.router.ReactRouter;
+import react.router.Route.RouteMatchProps;
+import react.router.RouterMatch;
 import haxe.Constraints.Function;
 import haxe.ds.Either;
 import haxe.ds.Map;
@@ -180,6 +183,14 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 		}
 	}	
 	
+	function getRouterMatch():RouterMatch
+	{
+		var rmp:RouteMatchProps = cast props.match;
+		trace(rmp);
+		trace(props.history.location.pathname);
+		return ReactRouter.matchPath(props.history.location.pathname, rmp);		
+	}
+
     override function render() {
 		trace('You should override me :)');
         return null;
@@ -197,21 +208,24 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 		//trace(props.history.location);
 		//trace(props.location);
 		trace(props.match);
+		trace(getRouterMatch());
 		//var viewClassPath:String = reactEventSource.target.getAttribute('data-classpath');
-		var segment:String = reactEventSource.target.getAttribute('data-segment');
+		var section:String = reactEventSource.target.getAttribute('data-section');
 		//trace( 'state.viewClassPath:${state.viewClassPath} viewClassPath:$viewClassPath');
-		trace( 'props.match.params.segment:${props.match.params.segment} segment:$segment');
+		trace( 'props.match.params.section:${props.match.params.section} section:$section');
 		//if (state.viewClassPath != viewClassPath)
-		if (segment != props.match.params.segment)
+		if (section != props.match.params.section)
 		{
 			//var menuBlocks:
-			/*setState({
-				viewClassPath:viewClassPath,
-				//sideMenu.menuBlocks[props.match.params.segment].isActive:true
-			});*/
+			var sM:SMenuProps = state.sideMenu;
+			sM.section = section;
+			setState({
+				//viewClassPath:viewClassPath,
+				sideMenu: sM
+			});
 			var basePath:String = props.match.path.split('/:')[0];
 			trace(props.location.pathname);
-			props.history.push('$basePath/$segment');
+			props.history.push('$basePath/$section');
 			trace(props.history);
 			//props.history.push(props.match.url + '/' + viewClassPath);
 		}

@@ -56,7 +56,7 @@ class DB extends DataAccessForm
 		];
 		var sideMenu = state.sideMenu;
 		//trace(sideMenu);
-		sideMenu.menuBlocks['DbTools'].items = function() return _menuItems;
+		sideMenu.menuBlocks['dbtools'].items = function() return _menuItems;
 		state = ReactUtil.copy(state, {sideMenu:sideMenu});		
 	}
 	
@@ -254,7 +254,7 @@ class DB extends DataAccessForm
 	{
 		if(state.values != null)
 			trace(state.values);
-		trace(props.match.params.segment);
+		trace(props.match.params.section);
 		//return null;<form className="form60"></form>	
 		return jsx('
 		<div className="columns xAuto">
@@ -270,7 +270,7 @@ class DB extends DataAccessForm
 	{
 		trace('${Type.getClassName(Type.getClass(this))} task');
 		var sideMenu = state.sideMenu;
-		sideMenu.menuBlocks['DbTools'].items = function() return [
+		sideMenu.menuBlocks['dbtools'].items = function() return [
 			{handler:createFieldList, label:'Create Fields Table', action:'createFieldList'},
 			{handler:showFieldList, label:'Table Fields', action:'showFieldList'},
 			{handler:editTableFields, label:'Bearbeiten', disabled:state.selectedRows.length==0},

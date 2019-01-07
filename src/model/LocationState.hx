@@ -1,4 +1,5 @@
 package model;
+import react.router.RouterMatch;
 import history.History;
 
 /**
@@ -7,7 +8,5 @@ import history.History;
  */
 typedef LocationState =
 {
-
 	history:History
-	
 }

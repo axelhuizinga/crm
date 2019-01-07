@@ -80,7 +80,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		mounted = false;
 		requests = [];
 		if(props != null)
-		trace(props.match);
+		//trace(props.match);
 		state = {
 			data:new StringMap(),
 			clean:true,

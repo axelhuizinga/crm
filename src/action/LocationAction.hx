@@ -1,4 +1,5 @@
 package action;
+import react.router.RouterMatch;
 import haxe.extern.EitherType;
 import history.History;
 import history.Location;

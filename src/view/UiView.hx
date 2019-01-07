@@ -35,6 +35,7 @@ import react.router.bundle.Bundle;
 import bulma_components.Tabs;
 
 import action.AppAction;
+import model.ApplicationStore;
 //import view.ContactsBox;
 //import view.DashBoardBox;
 //import view.AccountingBox;
@@ -85,7 +86,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
         super(props);
 		state = {hasError:false};
 		browserHistory = App.store.getState().appWare.history;// BrowserHistory.create({basename:"/"});
-		//ApplicationStore.startHistoryListener(App.store, browserHistory);
+		ApplicationStore.startHistoryListener(App.store, browserHistory);
 		//trace(this.props.appWare.user.state.last_name);
 		mounted = false;
 		//_me = this;

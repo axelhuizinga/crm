@@ -1,5 +1,8 @@
 package view.dashboard;
 
+import react.router.RouterMatch;
+import react.router.Route.RouteMatchProps;
+import react.router.ReactRouter;
 import comments.StringTransform;
 import haxe.Serializer;
 import haxe.ds.StringMap;
@@ -8,13 +11,9 @@ import js.html.XMLHttpRequest;
 import me.cunity.debug.Out;
 import model.AppState;
 import react.Fragment;
-import react.React;
-import react.ReactComponent.ReactComponentOf;
 import react.ReactComponent.ReactFragment;
-import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
-import redux.Redux.Dispatch;
 import model.AjaxLoader;
 import view.shared.BaseForm;
 import view.shared.BaseForm.FormProps;
@@ -37,27 +36,31 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 	{
 		super(props);	
 		trace('ok');
-		//trace(state);
+		trace(props.match);
+		trace(getRouterMatch());
 		state = ReactUtil.copy(state, {
 			sideMenu:{
 				menuBlocks:[
-					'DbTools'=>{
+					'dbtools'=>{
 						dataClassPath:'model.tools.DB',
 						viewClassPath:'shared.io.DB',
 						isActive:false,
 						label:'DB Design',
 						onActivate:switchContent,
-						items:function() return []
+						items:function() return [],
+						section: 'dbtools'
 					},
-					'SyncTools'=>{
+					'synctools'=>{
 						dataClassPath:'model.admin.SyncExternal',
 						viewClassPath:'shared.io.DBSync',
 						isActive:true,
 						label:'DB Sync',
 						onActivate:switchContent,
-						items:function() return []
+						items:function() return [],
+						section:'synctools'
 					}
-				]
+				],
+				section:'synctools'
 			},
 			viewClassPath:"shared.io.DBSync",
 			loading:true
@@ -121,14 +124,16 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
     override public function render() 
 	{
 		//trace(state.sideMenu);
-		return switch(state.viewClassPath)
+		var match:RouterMatch = getRouterMatch();
+		trace(match);
+		return switch(match.params.section)
 		{
-			case "shared.io.DBSync":
+			case "synctools":
 				jsx('
 					<$DBSync ${...props} sideMenu=${state.sideMenu}
 					handleChange={false} handleSubmit={false} fullWidth={true}/>
 				');					
-			case "shared.io.DB":
+			case "dbtools":
 				jsx('
 					<DB ${...props} sideMenu=${state.sideMenu}
 					handleChange={false} handleSubmit={false} fullWidth={true}/>
@@ -136,20 +141,6 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 			default:
 				null;					
 		}
-	}
-
-	function renderContent(content:Array<String>):ReactFragment
-	{
-		if (content == null || content.length == 0)
-			return null;
-		trace(content.length);
-		var rC:Array<ReactFragment> = new Array();
-		var k:Int = 1;
-		for (c in content)
-		{
-			rC.push(jsx('<div key=${k++}>$c</div>'));
-		}
-		return rC;
 	}
 	
 }

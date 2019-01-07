@@ -125,7 +125,7 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 		//var s:ApplicationState = untyped App.store.getState().appWare;
 		//trace(this.state);
 		trace(props.history.location.pathname);
-		trace(props.jwt);
+		//trace(props.jwt);
 		if (state.hasError)
 			return jsx('<h1>Fehler in ${Type.getClassName(Type.getClass(this))}.</h1>');
 
@@ -142,8 +142,8 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 			</div>
             <div className="tabContent2" >
 				<Route path="/dashboard/roles"  {...props} component={RolesForm}/>
-				<Route path="/dashboard/settings/:segment?/:action?/:id?"  {...props} component={SettingsForm}/>
-				<Route path="/dashboard/setup"  {...props} component={SetUpForm}/>					
+				<Route path="/dashboard/settings/:section?/:action?/:id?"  {...props} component={SettingsForm}/>
+				<Route path="/dashboard/setup/:section?/:action?"  {...props} component={SetUpForm}/>					
             </div>
 			<StatusBar {...props}/>
 		</>

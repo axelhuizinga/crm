@@ -72,7 +72,7 @@ class User extends DataAccessForm
 			?isActive:Bool,
 			items:Array<SMItem>,
 			?label:String,	
-			?segment:String,
+			?section:String,
 		}
 
 		typedef SMItem =
@@ -81,7 +81,7 @@ class User extends DataAccessForm
 			?className:String,
 			?component:ReactComponent,
 			?handler:Function,
-			?segment:String,
+			?section:String,
 			?img:String,
 			?info:String,
 			?label:String,	
@@ -118,7 +118,7 @@ class User extends DataAccessForm
 	public function new(props:UserProps)
 	{
 		super(props);
-		menuItems = [{handler:edit, label:'Bearbeiten', segment:'edit'}];
+		menuItems = [{handler:edit, label:'Bearbeiten', section:'edit'}];
 		//this.state = state;
 		//super(props, state);
 		//trace(props);

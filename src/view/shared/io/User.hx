@@ -307,7 +307,7 @@ class User extends DataAccessForm
 		//_instance = this;		
 		trace(props);
 		_menuItems = [
-			//{handler:edit, label:'Bearbeiten', segment:'edit'},
+			//{handler:edit, label:'Bearbeiten', section:'edit'},
 			{handler:save, label:'Speichern', disabled:state.clean},
 			{handler:changePassword, label:'Passwort ändern'},
 		];

@@ -29,13 +29,6 @@ class LocationService implements IReducer<LocationAction, LocationState>
 	public var initState:LocationState = {
 		history:null
 	}
-	/*public var initState:Location = {
-		pathname: Browser.location.pathname,
-		search: Browser.location.search,
-		hash: Browser.location.hash,
-		key: 'init_1',
-		state: null
-	};*/
 	
 	public var store:StoreMethods<model.AppState>;
 
@@ -57,6 +50,7 @@ class LocationService implements IReducer<LocationAction, LocationState>
 				copy(state, history);
 				
 			case LocationChange(location):
+				trace(location);
 				state;
 				//copy(state, location);
 			default:

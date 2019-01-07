@@ -56,7 +56,7 @@ class SettingsForm extends BaseForm
 						label:'UserDaten',
 						onActivate:switchContent,
 						items: function()return null,
-						segment: 'user'
+						section: 'user'
 					},
 					'bookmarks'=>{
 						dataClassPath:'settings.Bookmarks',
@@ -68,7 +68,7 @@ class SettingsForm extends BaseForm
 							{handler:editUserBookmark,label:'Bearbeiten',action:'edit'},
 							{handler:deleteUserBookmark,label:'Löschen',action:'delete'}
 						],
-						segment: 'bookmarks'
+						section: 'bookmarks'
 					},
 					'design'=>{
 						dataClassPath:'settings.Design',
@@ -79,19 +79,19 @@ class SettingsForm extends BaseForm
 							{handler:editColors,label:'Farben',action:'editColors'},
 							{handler:editFonts,label:'Schrift',action:'editFont'}
 						],
-						segment: 'design'
+						section: 'design'
 					}				
 				]
 			}
 		};
-		if(props.match.params.segment!=null)
+		if(props.match.params.section!=null)
 		{
-			trace(props.match.params.segment);
-			state.viewClassPath = state.sideMenu.menuBlocks[props.match.params.segment].viewClassPath;
-			state.sideMenu.menuBlocks[props.match.params.segment].isActive=true;
+			trace(props.match.params.section);
+			state.viewClassPath = state.sideMenu.menuBlocks[props.match.params.section].viewClassPath;
+			state.sideMenu.menuBlocks[props.match.params.section].isActive=true;
 
 		}
-		trace('${props.match.params.segment} ${state.viewClassPath}');
+		trace('${props.match.params.section} ${state.viewClassPath}');
 		requests = [];		
 	}
 	
@@ -153,8 +153,8 @@ class SettingsForm extends BaseForm
 	}	
 	
 	override public function render() {
-        trace(props.match.params.segment);
-        return switch(props.match.params.segment)
+        trace(props.match.params.section);
+        return switch(props.match.params.section)
 		{
 			case "user":
 				jsx('
