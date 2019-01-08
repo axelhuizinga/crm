@@ -43,14 +43,14 @@ class LocationService implements IReducer<LocationAction, LocationState>
 	
 	public function reduce(state:LocationState, action:LocationAction):LocationState
 	{
-		trace(state);
+		//trace(state);
 		return switch(action)
 		{
 			case InitHistory(history):
 				copy(state, history);
 				
 			case LocationChange(location):
-				trace(location);
+				trace(location.pathname);
 				state;
 				//copy(state, location);
 			default:

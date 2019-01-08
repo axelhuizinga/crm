@@ -602,8 +602,10 @@ form{
 }
 
 input[name="accordion-select"], .panel-block {
-  display: none;
+  display:none;
 }
+
+
 label.panel-heading {
   cursor: pointer;
   display: block;
@@ -616,9 +618,10 @@ label.panel-heading {
 #sMenuPanel-4:checked ~ .panel > .body-4,
 #sMenuPanel-5:checked ~ .panel > .body-5,
 {
-  display: block;
-  flex-direction:column;
+	display: block;
+	flex-direction:column;
 }
+
 .panel-heading 
 {
 	font-size:1.15rem;

@@ -139,7 +139,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 
     override function componentDidMount()
 	{
-		trace(state.appWare.history);
+		//trace(state.appWare.history);
     }
 
 	override function   componentDidCatch(error, info) {

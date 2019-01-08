@@ -261,7 +261,7 @@ class DB extends DataAccessForm
 			<form className="tabComponentForm"  >
 				${renderResults()}
 			</form>
-			<SMenu className="menu" menuBlocks={state.sideMenu.menuBlocks} />					
+			<SMenu className="menu" section=${props.match.params.section} menuBlocks={state.sideMenu.menuBlocks} />					
 		</div>	
 		');		
 	}

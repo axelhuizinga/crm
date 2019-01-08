@@ -1,5 +1,6 @@
 package view.dashboard;
 
+import react.router.RouterMatch;
 import haxe.Json;
 import haxe.Serializer;
 import me.cunity.debug.Out;
@@ -40,7 +41,7 @@ class SettingsForm extends BaseForm
 			trace(props);
 		}
 		else{
-			trace(props.jwt);
+			//trace(props.jwt);
 		}	
 		state = {
 			clean:true,
@@ -55,7 +56,10 @@ class SettingsForm extends BaseForm
 						viewClassPath:'shared.io.User',
 						label:'UserDaten',
 						onActivate:switchContent,
-						items: function()return null,
+						items: function()return [
+							{handler:null, label:'Speichern', disabled:state.clean},
+							{handler:null, label:'Passwort ändern'},
+						],
 						section: 'user'
 					},
 					'bookmarks'=>{
@@ -81,7 +85,9 @@ class SettingsForm extends BaseForm
 						],
 						section: 'design'
 					}				
-				]
+				],
+				section: 'bookmarks',
+				sameWidth: true
 			}
 		};
 		if(props.match.params.section!=null)
@@ -143,7 +149,7 @@ class SettingsForm extends BaseForm
 		return function(aState:model.AppState) 
 		{
 			var uState = aState.appWare.user;
-			trace(uState);		
+			//trace(uState);		
 			return {
 				user_name:uState.user_name,
 				jwt:uState.jwt,
@@ -153,28 +159,22 @@ class SettingsForm extends BaseForm
 	}	
 	
 	override public function render() {
-        trace(props.match.params.section);
-        return switch(props.match.params.section)
+		var match:RouterMatch = getRouterMatch();
+		trace(match.params);
+		return switch(match.params.section)
 		{
 			case "user":
 				jsx('
 					<User ${...childFormProps} sideMenu=${state.sideMenu}
 					handleChange={true} handleSubmit={true} fullWidth={true}/>
 				');	
-			case "bookmarks":
+			case "bookmarks"|null:
 				jsx('
 					<Bookmarks ${...childFormProps} sideMenu=${state.sideMenu}
 					handleChange={true} handleSubmit={true} fullWidth={true}/>
 				');
 			default:		
-				jsx('
-					<div className="columns">
-						<div className="tabComponentForm"  >
-							<!--EMPTY-->	
-						</div>
-						<$SMenu className="menu" menuBlocks=${state.sideMenu.menuBlocks} />					
-					</div>				
-				');		
+				null;		
 		}				
     }	
 	/*

@@ -186,8 +186,6 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 	function getRouterMatch():RouterMatch
 	{
 		var rmp:RouteMatchProps = cast props.match;
-		trace(rmp);
-		trace(props.history.location.pathname);
 		return ReactRouter.matchPath(props.history.location.pathname, rmp);		
 	}
 
@@ -207,8 +205,8 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 		//Out.dumpObject(reactEventSource);
 		//trace(props.history.location);
 		//trace(props.location);
-		trace(props.match);
-		trace(getRouterMatch());
+		trace(props.match.params);
+		trace(getRouterMatch().params);
 		//var viewClassPath:String = reactEventSource.target.getAttribute('data-classpath');
 		var section:String = reactEventSource.target.getAttribute('data-section');
 		//trace( 'state.viewClassPath:${state.viewClassPath} viewClassPath:$viewClassPath');
@@ -226,7 +224,7 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 			var basePath:String = props.match.path.split('/:')[0];
 			trace(props.location.pathname);
 			props.history.push('$basePath/$section');
-			trace(props.history);
+			trace(props.history.location.pathname);
 			//props.history.push(props.match.url + '/' + viewClassPath);
 		}
 	}

@@ -60,8 +60,8 @@ class ApplicationStore
 		store.dispatch(InitHistory(history));
 	
 		return history.listen( function(location:Location, action:history.Action){
-			trace(action);
-			trace(location);
+			//trace(action);
+			trace(location.pathname);
 			
 			store.dispatch(LocationChange({
 				pathname:location.pathname,

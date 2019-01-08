@@ -1,7 +1,5 @@
 package view.shared;
 
-import js.Browser;
-import js.html.DivElement;
 import griddle.components.Components.Filter;
 import haxe.ds.StringMap;
 import haxe.Constraints.Function;
@@ -61,15 +59,13 @@ typedef SMenuProps =
 	?menuBlocks:Map<String,SMenuBlock>,
 	?section:String,
 	?items:Array<SMItem>,
-	?right:Bool,
-	?sameWidth:Bool
+	?right:Bool		
 }
 
 typedef SMenuState =
 {
 	?hidden:Bool,
 	?disabled:Bool,
-	?sameWidth:Int,
 	?interactionStates:Map<String,InteractionState>
 }
 
@@ -82,8 +78,7 @@ typedef  InteractionState =
 class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 
 {
-	var menuRef:ReactRef<DivElement>;
-	var aW:Int;
+	var initialActiveHeaderRef:ReactRef<InputElement>;
 	public function new(props:SMenuProps) 
 	{
 		super(props);
@@ -91,9 +86,21 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 			hidden:props.hidden||false
 		}
 	}
+	
+	/*function activate()
+	{
+		trace(initialActiveHeaderRef.current);
+		if (initialActiveHeaderRef.current != null)
+		{
+			trace(initialActiveHeaderRef.current.checked);
+			initialActiveHeaderRef.current.checked = true;
+			trace(initialActiveHeaderRef.current.checked);
+		}ref=${check?initialActiveHeaderRef:null}
+	}*/
 
 	function renderHeader():ReactFragment
 	{
+		//initialActiveHeaderRef = React.createRef();
 		if (props.menuBlocks.empty())
 			return null;
 		var header:Array<ReactFragment> = new Array();
@@ -131,36 +138,32 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 		return panels;
 	}		
 	
+	// <button className="toggle" aria-label="toggle"></button>
+	
 	function renderItems(items:Array<SMItem>):ReactFragment
+	//function renderItems(items:Void->Map<String,SMItem>):ReactFragment
 	{
+		//var items:Map<String,SMItem> = _items();
+		//var items:Array<SMItem> = _items(); 
 		if (items == null || items.length == 0)
 			return null;
 		var i:Int = 1;
-		var style:Dynamic = (props.sameWidth && state.sameWidth>0 ? {width:'${state.sameWidth}px'}:null);
-
 		return items.map(function(item:SMItem) 
 		{
 			return switch(item.component)
 			{
-				case Filter: jsx('<$Filter  style=${style} key=${i++}/>');
-				default:jsx('<Button key=${i++} style=${style} onClick=${item.handler} disabled=${item.disabled}>${item.label}</Button>');
+				case Filter: jsx('<$Filter key=${i++}/>');
+				default:jsx('<Button key=${i++} onClick=${item.handler} disabled=${item.disabled}>${item.label}</Button>');
 			}
 		}).array();
 	}
 	
 	override public function render()
 	{
-		menuRef = React.createRef();
-		var style:Dynamic = null;
-		if(props.sameWidth && state.sameWidth == null)//sameWidth
-		{
-			style = {
-				visibility: 'hidden'
-			};
-		}
+		trace('...');
 		return jsx('
-		<div className="sidebar is-right">
-			<aside style=${style} className="menu" ref=${menuRef}>
+		<div className="sidebar is-right is-hidden-mobile">
+			<aside className="menu">
 				${renderHeader()}
 				${renderPanels()}
 			</aside>
@@ -170,44 +173,15 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 	
 	override public function componentDidMount():Void 
 	{
-		//return;
-		if(props.sameWidth && state.sameWidth == null)
-		{
-			aW = menuRef.current.offsetWidth;
-			var i:Int = 0;
-			var skip:Int = null;
-			while (menuRef.current.childNodes.item(i).localName=='input')
+		//Timer.delay(function(){
+			/*if (App.bulmaAccordion != null)
 			{
-				var inp:InputElement = cast(menuRef.current.childNodes.item(i), InputElement);
-				trace(inp.checked);
-				if(inp.checked)
-				{
-					skip=i;
-					i=0;
-					break;
-				}
-				i++;
-			}
-			while (menuRef.current.childNodes.item(i).localName=='input')
-			{
-				if(i==skip)
-				{
-					i++;
-					continue;
-				}
-				var inp:InputElement = cast(menuRef.current.childNodes.item(i++), InputElement);
-				inp.checked = true;
-				trace(menuRef.current.offsetWidth);
-				if(menuRef.current.offsetWidth>aW)
-					aW = menuRef.current.offsetWidth;
-			}	
-			trace(aW);//
-			if(state.sameWidth==null)
-			setState({sameWidth:aW},function (){
-				Browser.window.confirm("what's up?");
-			});
-			/*forceUpdate();*/
-		}
+				trace(App.bulmaAccordion);
+				var accordions = App.bulmaAccordion.attach();
+				trace(accordions);
+			}		*/
+		//}, 1000);
+		//activate();
 	}
 	
 	override public function componentDidUpdate(prevProps:SMenuProps, prevState:SMenuState):Void 

@@ -1,5 +1,6 @@
 package view.shared.io;
 
+import react.router.RouterMatch;
 import react.ReactType;
 import react.React;
 import js.html.Plugin;
@@ -84,64 +85,27 @@ class Bookmarks extends DataAccessForm
 	
 	override function render()
 	{
-		var data:Array<Any> = [
-			getRow({ one: 'one', two: 'two', three: 'three' }),
-			getRow({ one: 'uno', two: 'dos', three: 'tres' }),
-			getRow({ one: 'ichi', two: 'ni', three: 'san' })
-		];
-		
-		data = [{
-			name: 'Roy Agasthyan',
-			age: 26
-			},{
-			name: 'Sam Thomason',
-			age: 22
-			},{
-			name: 'Michael Jackson',
-			age: 36
-			},{
-			name: 'Samuel Roy',
-			age: 56
-			},{
-			name: 'Rima Soy',
-			age: 28
-			},{
-			name: 'Suzi Eliamma',
-			age: 28
-			}];
-//trace(plugins);
-/*var tCR:TableCellRenderer = function (cI:Dynamic, column:Dynamic)
-{
-	trace(cI);
-	trace(column);
-	return jsx('<div><pre>${cI.value}</pre></div>');
-};
-var columns:Array<Column> = [{
-      Header: 'Name',
-	  //Cell:tCR,
-      accessor: 'name'
-    },{
-      Header: 'Age',
-      accessor: 'age'
-    }];*/
-var iState:Dynamic = {istate:state, updateMenu:updateMenu};
-trace(iState);
-//var NewLayoutInstance = React.createElement(NewLayout);
-//trace(griddle.components.NewLayout);
-//trace(Reflect.fields(untyped Griddle.childContextTypes));
-//trace(Reflect.fields(GriddleComponent));
-trace(data);
-trace(state.sideMenu.menuBlocks['bookmarks'].items().slice(4));
-var style:Dynamic = {
+
+		var iState:Dynamic = {istate:state, updateMenu:updateMenu};
+		//trace(iState);
+		//var NewLayoutInstance = React.createElement(NewLayout);
+		//trace(griddle.components.NewLayout);
+		//trace(Reflect.fields(untyped Griddle.childContextTypes));
+		//trace(Reflect.fields(GriddleComponent));
+		//trace(data);
+		trace(props.match.params.section);
+		var match:RouterMatch = getRouterMatch();
+		trace(match.params);
+		var section:String = (match.params.section == null?state.sideMenu.section:match.params.section);
+		var style:Dynamic = {
             //height: "auto" // This will force the table body to overflow and scroll, since there is not enough room
           };
-
 		return jsx('
 			<div className="columns">
 				<div className="tabComponentForm"  >
 					dummy	
 				</div>
-				<$SMenu className="menu" menuBlocks=${state.sideMenu.menuBlocks} />					
+				<$SMenu className="menu" sameWidth=${state.sideMenu.sameWidth} section=${section} menuBlocks=${state.sideMenu.menuBlocks} />					
 			</div>	
 			
 		');

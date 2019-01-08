@@ -35,9 +35,9 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 	public function new(?props:FormProps) 
 	{
 		super(props);	
-		trace('ok');
-		trace(props.match);
-		trace(getRouterMatch());
+		//trace('ok');
+		trace(props.match.params);
+		trace(getRouterMatch().params);
 		state = ReactUtil.copy(state, {
 			sideMenu:{
 				menuBlocks:[
@@ -80,7 +80,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 		return function(aState:model.AppState) 
 		{
 			var uState = aState.appWare.user;
-			trace(uState);		
+			//trace(uState);		
 			return {
 				//appConfig:aState.appWare.config,
 				user_name:uState.user_name,
@@ -125,7 +125,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 	{
 		//trace(state.sideMenu);
 		var match:RouterMatch = getRouterMatch();
-		trace(match);
+		trace(match.params);
 		return switch(match.params.section)
 		{
 			case "synctools":
@@ -133,7 +133,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 					<$DBSync ${...props} sideMenu=${state.sideMenu}
 					handleChange={false} handleSubmit={false} fullWidth={true}/>
 				');					
-			case "dbtools":
+			case "dbtools"|null:
 				jsx('
 					<DB ${...props} sideMenu=${state.sideMenu}
 					handleChange={false} handleSubmit={false} fullWidth={true}/>

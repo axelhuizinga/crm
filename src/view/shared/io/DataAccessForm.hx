@@ -1,5 +1,8 @@
 package view.shared.io;
 
+import react.router.ReactRouter;
+import react.router.Route.RouteMatchProps;
+import react.router.RouterMatch;
 import shared.Utils;
 import js.Syntax;
 import shared.DbData;
@@ -179,7 +182,13 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 			}			
 		}
 	}
-	
+
+	function getRouterMatch():RouterMatch
+	{
+		var rmp:RouteMatchProps = cast props.match;
+		return ReactRouter.matchPath(props.history.location.pathname, rmp);		
+	}
+
 	function handleChange(e:InputEvent)
 	{
 		var t:InputElement = cast e.target;
