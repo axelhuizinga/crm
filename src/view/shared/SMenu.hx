@@ -118,13 +118,13 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 	{
 		if (props.menuBlocks.empty())
 			return null;
-		//trace(props.menuBlocks);
+		var className:String = (props.sameWidth && state.sameWidth>0 ? 'panel-block':'');
 		var i:Int = 1;
 		var panels:Array<ReactFragment> = [];
 		props.menuBlocks.iter(function(block:SMenuBlock) panels.push( jsx('	
 			<div className="panel" key=${i}>
 			  <label className="panel-heading" htmlFor=${"sMenuPanel-"+i}>${block.label}</label>
-			  <div className=${"panel-block body-"+(i++)} children=${renderItems(block.items())}/>
+			  <div id=${"pblock" + i} className=${className + " body-"+(i++)} children=${renderItems(block.items())}/>
 			</div>		
 		')));
 		trace(panels.length);
@@ -167,46 +167,56 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 		</div>	
 		');
 	}
+
+	function layout()
+	{
+		var i:Int = 0;
+		var activePanel:Int = null;
+		while (menuRef.current.childNodes.item(i).localName=='input')
+		{
+			var inp:InputElement = cast(menuRef.current.childNodes.item(i), InputElement);
+			trace(inp.checked);
+			if(inp.checked)
+			{
+				activePanel=i;
+				i=0;
+				break;
+			}
+			i++;
+		}
+		trace(activePanel);
+		trace(Browser.document.getElementById('pblock${activePanel}').children.item(0).innerHTML);
+		aW = Browser.document.getElementById('pblock${activePanel}').children.item(0).clientWidth;
+		//aW = menuRef.current.childNodes.item(activePanel)
+		trace(aW);
+		while (menuRef.current.childNodes.item(i).localName=='input')
+		{
+			if(i==activePanel)
+			{
+				i++;
+				continue;
+			}
+			var iW = null;//Browser.document.getElementById('pblock${i}').children.item(0).offsetWidth;
+			var inp:InputElement = cast(menuRef.current.childNodes.item(i++), InputElement);
+			inp.checked = true;
+			trace(iW);
+			if(iW>aW)
+				aW = iW;
+		}	
+		trace(aW);//
+		if(state.sameWidth==null)
+		setState({sameWidth:aW},function (){
+			trace("what's up?");
+		});
+	}
 	
 	override public function componentDidMount():Void 
 	{
 		//return;
 		if(props.sameWidth && state.sameWidth == null)
 		{
-			aW = menuRef.current.offsetWidth;
-			var i:Int = 0;
-			var skip:Int = null;
-			while (menuRef.current.childNodes.item(i).localName=='input')
-			{
-				var inp:InputElement = cast(menuRef.current.childNodes.item(i), InputElement);
-				trace(inp.checked);
-				if(inp.checked)
-				{
-					skip=i;
-					i=0;
-					break;
-				}
-				i++;
-			}
-			while (menuRef.current.childNodes.item(i).localName=='input')
-			{
-				if(i==skip)
-				{
-					i++;
-					continue;
-				}
-				var inp:InputElement = cast(menuRef.current.childNodes.item(i++), InputElement);
-				inp.checked = true;
-				trace(menuRef.current.offsetWidth);
-				if(menuRef.current.offsetWidth>aW)
-					aW = menuRef.current.offsetWidth;
-			}	
-			trace(aW);//
-			if(state.sameWidth==null)
-			setState({sameWidth:aW},function (){
-				Browser.window.confirm("what's up?");
-			});
-			/*forceUpdate();*/
+			//Timer.delay(layout,800);
+			trace(menuRef.current.offsetWidth);
 		}
 	}
 	

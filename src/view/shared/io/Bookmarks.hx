@@ -125,15 +125,15 @@ class Bookmarks extends DataAccessForm
 				[
 					{handler:dummyH, label:'Speichern', disabled:state.clean},
 					{handler:dummyH, label:'Passwort ändern'},
-					{handler:dummyH, label:'Something...'},
-					{handler:dummyH, label:'Something...'},
-					{handler:dummyH, label:'Something...'},
-					{handler:dummyH, label:'Something...'},
-					{handler:dummyH, label:'Something...'},
-					{handler:dummyH, label:'Something...'},
-					{handler:dummyH, label:'Something...'},
-					{handler:dummyH, label:'Something...'},
-					{handler:dummyH, label:'Something...'},
+					{handler:dummyH, label:'Something'},
+					{handler:dummyH, label:'Something very much more longer...'},
+					{handler:dummyH, label:'Something'},
+					{handler:dummyH, label:'Something'},
+					{handler:dummyH, label:'Something'},
+					{handler:dummyH, label:'Something'},
+					{handler:dummyH, label:'Something'},
+					{handler:dummyH, label:'Something'},
+					{handler:dummyH, label:'Something'},
 				];
 			
 		}	

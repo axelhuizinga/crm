@@ -86,7 +86,7 @@ class SettingsForm extends BaseForm
 						section: 'design'
 					}				
 				],
-				section: 'bookmarks',
+				section: 'user',
 				sameWidth: true
 			}
 		};
@@ -111,7 +111,7 @@ class SettingsForm extends BaseForm
 			return;
 		}
 		trace(Reflect.fields(props));
-		trace(props.match);				
+		trace(props.match.params);				
 	}
 	
 	public function createUserBookmark(ev:ReactEvent):Void

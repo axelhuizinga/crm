@@ -62,11 +62,6 @@ js_Cookie.get = function(name) {
 var haxe_IMap = function() { };
 $hxClasses["haxe.IMap"] = haxe_IMap;
 haxe_IMap.__name__ = ["haxe","IMap"];
-haxe_IMap.prototype = {
-	get: null
-	,keys: null
-	,__class__: haxe_IMap
-};
 var haxe_ds_StringMap = function() {
 	this.h = { };
 };
@@ -76,12 +71,6 @@ haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
 haxe_ds_StringMap.prototype = {
 	h: null
 	,rh: null
-	,get: function(key) {
-		if(__map_reserved[key] != null) {
-			return this.getReserved(key);
-		}
-		return this.h[key];
-	}
 	,setReserved: function(key,value) {
 		if(this.rh == null) {
 			this.rh = { };
@@ -1884,9 +1873,6 @@ haxe_ds_IntMap.__name__ = ["haxe","ds","IntMap"];
 haxe_ds_IntMap.__interfaces__ = [haxe_IMap];
 haxe_ds_IntMap.prototype = {
 	h: null
-	,get: function(key) {
-		return this.h[key];
-	}
 	,keys: function() {
 		var a = [];
 		for( var key in this.h ) if(this.h.hasOwnProperty(key)) {
@@ -1942,9 +1928,6 @@ haxe_ds_ObjectMap.prototype = {
 		var id = key.__id__ || (key.__id__ = ++haxe_ds_ObjectMap.count);
 		this.h[id] = value;
 		this.h.__keys__[id] = key;
-	}
-	,get: function(key) {
-		return this.h[key.__id__];
 	}
 	,keys: function() {
 		var a = [];
@@ -2570,14 +2553,10 @@ hxbit_Convert.sameType = function(a,b) {
 };
 hxbit_Convert.getDefault = function(t) {
 	switch(t._hx_index) {
-	case 0:case 16:
-		return 0;
 	case 1:
 		return 0.;
 	case 2:
 		return false;
-	case 3:case 4:case 5:case 6:case 9:case 12:case 13:case 14:case 17:
-		return null;
 	case 7:
 		var k = t.k;
 		switch(k._hx_index) {
@@ -2597,9 +2576,13 @@ hxbit_Convert.getDefault = function(t) {
 	case 11:
 		var this1 = new Array(0);
 		return this1;
+	case 3:case 4:case 5:case 6:case 9:case 12:case 13:case 14:case 17:
+		return null;
 	case 15:
 		var this2 = new haxe__$Int64__$_$_$Int64(0,0);
 		return this2;
+	case 0:case 16:
+		return 0;
 	}
 };
 hxbit_Convert.prototype = {
@@ -3834,27 +3817,6 @@ hxbit_Serializer.prototype = {
 	}
 	,__class__: hxbit_Serializer
 };
-var js__$Boot_HaxeError = function(val) {
-	Error.call(this);
-	this.val = val;
-	if(Error.captureStackTrace) {
-		Error.captureStackTrace(this,js__$Boot_HaxeError);
-	}
-};
-$hxClasses["js._Boot.HaxeError"] = js__$Boot_HaxeError;
-js__$Boot_HaxeError.__name__ = ["js","_Boot","HaxeError"];
-js__$Boot_HaxeError.wrap = function(val) {
-	if((val instanceof Error)) {
-		return val;
-	} else {
-		return new js__$Boot_HaxeError(val);
-	}
-};
-js__$Boot_HaxeError.__super__ = Error;
-js__$Boot_HaxeError.prototype = $extend(Error.prototype,{
-	val: null
-	,__class__: js__$Boot_HaxeError
-});
 var hxbit_Schema = function() {
 	this.__uid = hxbit_Serializer.SEQ << 24 | ++hxbit_Serializer.UID;
 	this.fieldsNames = [];
@@ -4399,6 +4361,27 @@ hxbit_enumSer_hxbit_$PropTypeDesc.getSchema = function() {
 	s.fieldsNames.push("PStruct");
 	return s;
 };
+var js__$Boot_HaxeError = function(val) {
+	Error.call(this);
+	this.val = val;
+	if(Error.captureStackTrace) {
+		Error.captureStackTrace(this,js__$Boot_HaxeError);
+	}
+};
+$hxClasses["js._Boot.HaxeError"] = js__$Boot_HaxeError;
+js__$Boot_HaxeError.__name__ = ["js","_Boot","HaxeError"];
+js__$Boot_HaxeError.wrap = function(val) {
+	if((val instanceof Error)) {
+		return val;
+	} else {
+		return new js__$Boot_HaxeError(val);
+	}
+};
+js__$Boot_HaxeError.__super__ = Error;
+js__$Boot_HaxeError.prototype = $extend(Error.prototype,{
+	val: null
+	,__class__: js__$Boot_HaxeError
+});
 var js_Boot = function() { };
 $hxClasses["js.Boot"] = js_Boot;
 js_Boot.__name__ = ["js","Boot"];
@@ -5517,50 +5500,50 @@ var react_router_ReactRouter = require("react-router");
 var react_router_Redirect = require("react-router").Redirect;
 var react_router_Route = require("react-router").Route;
 var react_router_Router = require("react-router").Router;
-var react_router_bundle_BundleLoader442 = function() { };
-$hxClasses["react.router.bundle.BundleLoader442"] = react_router_bundle_BundleLoader442;
-react_router_bundle_BundleLoader442.__name__ = ["react","router","bundle","BundleLoader442"];
-react_router_bundle_BundleLoader442.render = function(props) {
+var react_router_bundle_BundleLoader542 = function() { };
+$hxClasses["react.router.bundle.BundleLoader542"] = react_router_bundle_BundleLoader542;
+react_router_bundle_BundleLoader542.__name__ = ["react","router","bundle","BundleLoader542"];
+react_router_bundle_BundleLoader542.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Accounting" */ "!haxe-loader?null/view_Accounting!").then(function(exports) {
 		view_Accounting = $s.view_Accounting;
 		var _ = view_Accounting;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader444 = function() { };
-$hxClasses["react.router.bundle.BundleLoader444"] = react_router_bundle_BundleLoader444;
-react_router_bundle_BundleLoader444.__name__ = ["react","router","bundle","BundleLoader444"];
-react_router_bundle_BundleLoader444.render = function(props) {
+var react_router_bundle_BundleLoader544 = function() { };
+$hxClasses["react.router.bundle.BundleLoader544"] = react_router_bundle_BundleLoader544;
+react_router_bundle_BundleLoader544.__name__ = ["react","router","bundle","BundleLoader544"];
+react_router_bundle_BundleLoader544.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Contacts" */ "!haxe-loader?null/view_Contacts!").then(function(exports) {
 		view_Contacts = $s.view_Contacts;
 		var _ = view_Contacts;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader446 = function() { };
-$hxClasses["react.router.bundle.BundleLoader446"] = react_router_bundle_BundleLoader446;
-react_router_bundle_BundleLoader446.__name__ = ["react","router","bundle","BundleLoader446"];
-react_router_bundle_BundleLoader446.render = function(props) {
+var react_router_bundle_BundleLoader546 = function() { };
+$hxClasses["react.router.bundle.BundleLoader546"] = react_router_bundle_BundleLoader546;
+react_router_bundle_BundleLoader546.__name__ = ["react","router","bundle","BundleLoader546"];
+react_router_bundle_BundleLoader546.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Contacts" */ "!haxe-loader?null/view_Contacts!").then(function(exports) {
 		view_Contacts = $s.view_Contacts;
 		var _ = view_Contacts;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader448 = function() { };
-$hxClasses["react.router.bundle.BundleLoader448"] = react_router_bundle_BundleLoader448;
-react_router_bundle_BundleLoader448.__name__ = ["react","router","bundle","BundleLoader448"];
-react_router_bundle_BundleLoader448.render = function(props) {
+var react_router_bundle_BundleLoader548 = function() { };
+$hxClasses["react.router.bundle.BundleLoader548"] = react_router_bundle_BundleLoader548;
+react_router_bundle_BundleLoader548.__name__ = ["react","router","bundle","BundleLoader548"];
+react_router_bundle_BundleLoader548.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_QC" */ "!haxe-loader?null/view_QC!").then(function(exports) {
 		view_QC = $s.view_QC;
 		var _ = view_QC;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader450 = function() { };
-$hxClasses["react.router.bundle.BundleLoader450"] = react_router_bundle_BundleLoader450;
-react_router_bundle_BundleLoader450.__name__ = ["react","router","bundle","BundleLoader450"];
-react_router_bundle_BundleLoader450.render = function(props) {
+var react_router_bundle_BundleLoader550 = function() { };
+$hxClasses["react.router.bundle.BundleLoader550"] = react_router_bundle_BundleLoader550;
+react_router_bundle_BundleLoader550.__name__ = ["react","router","bundle","BundleLoader550"];
+react_router_bundle_BundleLoader550.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Reports" */ "!haxe-loader?null/view_Reports!").then(function(exports) {
 		view_Reports = $s.view_Reports;
 		var _ = view_Reports;
@@ -5831,7 +5814,7 @@ shared_DBMetaData.prototype = {
 					}
 					__ctx.out.add(b);
 				}
-				__ctx.addDynamic(a.get(k));
+				__ctx.addDynamic(__map_reserved[k] != null ? a.getReserved(k) : a.h[k]);
 			}
 		}
 		var a1 = this.dataInfo;
@@ -5866,7 +5849,7 @@ shared_DBMetaData.prototype = {
 					}
 					__ctx.out.add(b1);
 				}
-				__ctx.addDynamic(a1.get(k1));
+				__ctx.addDynamic(__map_reserved[k1] != null ? a1.getReserved(k1) : a1.h[k1]);
 			}
 		}
 		var a2 = this.dataParams;
@@ -5901,7 +5884,7 @@ shared_DBMetaData.prototype = {
 					}
 					__ctx.out.add(b2);
 				}
-				var v6 = a2.get(k2);
+				var v6 = __map_reserved[k2] != null ? a2.getReserved(k2) : a2.h[k2];
 				if(v6 == null) {
 					__ctx.out.addByte(0);
 				} else {
@@ -5952,22 +5935,22 @@ shared_DBMetaData.prototype = {
 			}
 			var _g4 = 0;
 			while(_g4 < a3.length) {
-				var v11 = a3[_g4];
+				var v10 = a3[_g4];
 				++_g4;
-				if(v11 == null) {
+				if(v10 == null) {
 					__ctx.out.addByte(0);
 				} else {
 					var keys4 = Lambda.array({ iterator : (function(_e4) {
 						return function() {
 							return _e4[0].keys();
 						};
-					})([v11])});
-					var v10 = keys4.length + 1;
-					if(v10 >= 0 && v10 < 128) {
-						__ctx.out.addByte(v10);
+					})([v10])});
+					var v11 = keys4.length + 1;
+					if(v11 >= 0 && v11 < 128) {
+						__ctx.out.addByte(v11);
 					} else {
 						__ctx.out.addByte(128);
-						__ctx.out.addInt32(v10);
+						__ctx.out.addInt32(v11);
 					}
 					var _g5 = 0;
 					while(_g5 < keys4.length) {
@@ -5986,7 +5969,7 @@ shared_DBMetaData.prototype = {
 							}
 							__ctx.out.add(b4);
 						}
-						__ctx.addDynamic(__map_reserved[k4] != null ? v11.getReserved(k4) : v11.h[k4]);
+						__ctx.addDynamic(__map_reserved[k4] != null ? v10.getReserved(k4) : v10.h[k4]);
 					}
 				}
 			}
@@ -6016,7 +5999,7 @@ shared_DBMetaData.prototype = {
 					__ctx.out.addByte(128);
 					__ctx.out.addInt32(k5);
 				}
-				var v14 = a4.get(k5);
+				var v14 = a4.h[k5];
 				if(v14 == null) {
 					__ctx.out.addByte(0);
 				} else {
@@ -7509,12 +7492,12 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 			var tmp6 = react__$ReactType_ReactType_$Impl_$.fromString("div");
 			var tmp7 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_RedirectBox), exact : true});
 			var tmp8 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/dashboard*", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_DashBoard)});
-			var tmp9 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader442.render)});
-			var tmp10 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts/edit/:id", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader444.render)});
-			var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader446.render)});
-			var tmp12 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader448.render)});
+			var tmp9 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader542.render)});
+			var tmp10 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts/edit/:id", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader544.render)});
+			var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader546.render)});
+			var tmp12 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader548.render)});
 			var tmp13 = react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route);
-			return React.createElement(tmp,tmp1,React.createElement(tmp2,{ },tmp3,tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { className : "tabComponent", children : [tmp7,tmp8,tmp9,tmp10,tmp11,tmp12,React.createElement(tmp13,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader450.render)})]}, key : null, ref : null}));
+			return React.createElement(tmp,tmp1,React.createElement(tmp2,{ },tmp3,tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { className : "tabComponent", children : [tmp7,tmp8,tmp9,tmp10,tmp11,tmp12,React.createElement(tmp13,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader550.render)})]}, key : null, ref : null}));
 		}
 	}
 	,renderRedirect: function(p) {
@@ -8026,6 +8009,7 @@ view_shared_SMenu.__name__ = ["view","shared","SMenu"];
 view_shared_SMenu.__super__ = React_Component;
 view_shared_SMenu.prototype = $extend(React_Component.prototype,{
 	menuRef: null
+	,aW: null
 	,renderHeader: function() {
 		var _gthis = this;
 		if(Lambda.empty(this.props.menuBlocks)) {
@@ -8038,7 +8022,7 @@ view_shared_SMenu.prototype = $extend(React_Component.prototype,{
 			if(_gthis.props.section == null && i == 1) {
 				check = true;
 			}
-			haxe_Log.trace(_gthis.props.section + "::" + block.section + ":" + (check == null ? "null" : "" + check),{ fileName : "src/view/shared/SMenu.hx", lineNumber : 107, className : "view.shared.SMenu", methodName : "renderHeader"});
+			haxe_Log.trace(_gthis.props.section + "::" + block.section + ":" + (check == null ? "null" : "" + check),{ fileName : "src/view/shared/SMenu.hx", lineNumber : 108, className : "view.shared.SMenu", methodName : "renderHeader"});
 			var tmp = $$tre;
 			var tmp1 = react__$ReactType_ReactType_$Impl_$.fromString("input");
 			i += 1;
@@ -8061,13 +8045,14 @@ view_shared_SMenu.prototype = $extend(React_Component.prototype,{
 			var tmp4 = { "$$typeof" : tmp2, type : react__$ReactType_ReactType_$Impl_$.fromString("label"), props : { className : "panel-heading", htmlFor : tmp3, children : block.label}, key : null, ref : null};
 			var tmp5 = $$tre;
 			var tmp6 = react__$ReactType_ReactType_$Impl_$.fromString("div");
+			var tmp7 = "pblock" + i;
 			i += 1;
-			var tmp7 = "panel-block body-" + (i - 1);
-			var tmp8 = block.items();
-			var tmp9 = _gthis.renderItems(tmp8);
-			panels.push({ "$$typeof" : tmp, type : tmp1, props : { className : "panel", children : [tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { className : tmp7, children : tmp9}, key : null, ref : null}]}, key : i, ref : null});
+			var tmp8 = "panel-block body-" + (i - 1);
+			var tmp9 = block.items();
+			var tmp10 = _gthis.renderItems(tmp9);
+			panels.push({ "$$typeof" : tmp, type : tmp1, props : { className : "panel", children : [tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { id : tmp7, className : tmp8, children : tmp10}, key : null, ref : null}]}, key : i, ref : null});
 		});
-		haxe_Log.trace(panels.length,{ fileName : "src/view/shared/SMenu.hx", lineNumber : 129, className : "view.shared.SMenu", methodName : "renderPanels"});
+		haxe_Log.trace(panels.length,{ fileName : "src/view/shared/SMenu.hx", lineNumber : 130, className : "view.shared.SMenu", methodName : "renderPanels"});
 		return panels;
 	}
 	,renderItems: function(items) {
@@ -8100,31 +8085,41 @@ view_shared_SMenu.prototype = $extend(React_Component.prototype,{
 	}
 	,componentDidMount: function() {
 		if(this.props.sameWidth && this.state.sameWidth == null) {
-			var aW = react__$ReactRef_ReactRef_$Impl_$.get_current(this.menuRef).offsetWidth;
 			var i = 0;
-			var skip = null;
+			var activePanel = null;
 			while(react__$ReactRef_ReactRef_$Impl_$.get_current(this.menuRef).childNodes.item(i).localName == "input") {
 				var inp = js_Boot.__cast(react__$ReactRef_ReactRef_$Impl_$.get_current(this.menuRef).childNodes.item(i) , HTMLInputElement);
-				haxe_Log.trace(inp.checked,{ fileName : "src/view/shared/SMenu.hx", lineNumber : 180, className : "view.shared.SMenu", methodName : "componentDidMount"});
+				haxe_Log.trace(inp.checked,{ fileName : "src/view/shared/SMenu.hx", lineNumber : 182, className : "view.shared.SMenu", methodName : "componentDidMount"});
 				if(inp.checked) {
-					skip = i;
+					activePanel = i;
 					i = 0;
 					break;
 				}
 				++i;
 			}
+			haxe_Log.trace(activePanel,{ fileName : "src/view/shared/SMenu.hx", lineNumber : 191, className : "view.shared.SMenu", methodName : "componentDidMount"});
+			haxe_Log.trace(window.document.getElementById("pblock" + i),{ fileName : "src/view/shared/SMenu.hx", lineNumber : 192, className : "view.shared.SMenu", methodName : "componentDidMount"});
+			this.aW = window.document.getElementById("pblock" + i).children.item(0).offsetWidth;
+			haxe_Log.trace(this.aW,{ fileName : "src/view/shared/SMenu.hx", lineNumber : 195, className : "view.shared.SMenu", methodName : "componentDidMount"});
 			while(react__$ReactRef_ReactRef_$Impl_$.get_current(this.menuRef).childNodes.item(i).localName == "input") {
-				if(i == skip) {
+				if(i == activePanel) {
+					++i;
 					continue;
 				}
+				var iW = window.document.getElementById("pblock" + i).children.item(0).offsetWidth;
 				var inp1 = js_Boot.__cast(react__$ReactRef_ReactRef_$Impl_$.get_current(this.menuRef).childNodes.item(i++) , HTMLInputElement);
 				inp1.checked = true;
-				haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.menuRef).offsetWidth,{ fileName : "src/view/shared/SMenu.hx", lineNumber : 195, className : "view.shared.SMenu", methodName : "componentDidMount"});
-				if(react__$ReactRef_ReactRef_$Impl_$.get_current(this.menuRef).offsetWidth > aW) {
-					aW = react__$ReactRef_ReactRef_$Impl_$.get_current(this.menuRef).offsetWidth;
+				haxe_Log.trace(iW,{ fileName : "src/view/shared/SMenu.hx", lineNumber : 206, className : "view.shared.SMenu", methodName : "componentDidMount"});
+				if(iW > this.aW) {
+					this.aW = iW;
 				}
 			}
-			haxe_Log.trace(aW,{ fileName : "src/view/shared/SMenu.hx", lineNumber : 199, className : "view.shared.SMenu", methodName : "componentDidMount"});
+			haxe_Log.trace(this.aW,{ fileName : "src/view/shared/SMenu.hx", lineNumber : 210, className : "view.shared.SMenu", methodName : "componentDidMount"});
+			if(this.state.sameWidth == null) {
+				this.setState({ sameWidth : this.aW},function() {
+					haxe_Log.trace("what's up?",{ fileName : "src/view/shared/SMenu.hx", lineNumber : 213, className : "view.shared.SMenu", methodName : "componentDidMount"});
+				});
+			}
 		}
 	}
 	,componentDidUpdate: function(prevProps,prevState) {
