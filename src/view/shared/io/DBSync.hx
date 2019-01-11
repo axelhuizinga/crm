@@ -6,6 +6,7 @@ import haxe.Unserializer;
 import haxe.ds.Map;
 import haxe.io.Bytes;
 import hxbit.Serializer;
+import js.html.Event;
 import js.html.FormData;
 import js.html.FormDataIterator;
 import js.html.HTMLCollection;
@@ -36,11 +37,12 @@ class DBSync extends DataAccessForm
 
 	static var _instance:DBSync;
 
-	public static function menuItems():Array<SMItem>
-	{
-		return _instance == null? [] : _instance._menuItems;
-	}
-	
+	public static var menuItems:Array<SMItem> = [
+		{label:'Neu',action:'create'},
+		{label:'Bearbeiten',action:'edit'},
+		{label:'Speichern', action:'save'},
+		{label:'Löschen',action:'delete'}
+	];
 	
 	public function new(?props) 
 	{
@@ -48,15 +50,30 @@ class DBSync extends DataAccessForm
 
 		dataDisplay = DBSyncModel.dataDisplay;
 		_instance = this;		
-		_menuItems = [
-			{handler:createFieldList, label:'Create Fields Table', action:'createFieldList'},
+		_menuItems = menuItems.map(function (mI:SMItem){
+			var h:Event->Void = Reflect.field(this, mI.action);
+			trace(h);
+			mI.handler = h;
+			switch(mI.action)
+			{
+				case 'editTableFields':
+					mI.disabled = state.selectedRows.length==0;
+				case 'save':
+					mI.disabled = state.clean;
+				default:
+
+			}
+			return mI;
+
+		});
+		/*	{handler:createFieldList, label:'Create Fields Table', action:'createFieldList'},
 			{handler:showUserList, label:'BenutzerDaten Abgleich', action:'showUserList'},
 			{handler:editTableFields, label:'Bearbeiten', disabled:state.selectedRows.length==0},
 			//{handler:save, label:'Speichern', disabled:state.clean},
-		];
+		];*/
 		var sideMenu = state.sideMenu;
 		//trace(sideMenu);
-		sideMenu.menuBlocks['synctools'].items = function() return _menuItems;
+		sideMenu.menuBlocks['synctools'].items = _menuItems;
 		state = ReactUtil.copy(state, {sideMenu:sideMenu});		
 	}
 	
@@ -252,14 +269,19 @@ class DBSync extends DataAccessForm
 	
 	override function updateMenu(?viewClassPath:String):SMenuProps
 	{
-		trace('${Type.getClassName(Type.getClass(this))} task');
 		var sideMenu = state.sideMenu;
-		sideMenu.menuBlocks['DbTools'].items = function() return [
-			{handler:createFieldList, label:'Create Fields Table', action:'createFieldList'},
-			{handler:showUserList, label:'Table Fields', action:'showUserList'},
-			{handler:editTableFields, label:'Bearbeiten', disabled:state.selectedRows.length==0},
-			//{handler:saveTableFields, label:'Speichern', disabled:state.clean},
-		];
+		for(mI in sideMenu.menuBlocks['users'].items)
+		{
+			switch(mI.action)
+			{
+				case 'editTableFields':
+					mI.disabled = state.selectedRows.length==0;
+				case 'save':
+					mI.disabled = state.clean;
+				default:
+
+			}			
+		}
 		return sideMenu;
 	}
 }

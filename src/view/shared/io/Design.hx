@@ -1,5 +1,6 @@
 package view.shared.io;
 
+import js.html.Event;
 import haxe.ds.StringMap;
 import model.AjaxLoader;
 import react.ReactComponent;
@@ -14,80 +15,18 @@ import view.shared.io.DataAccess.DataSource;
  * @author axel@cunity.me
  */
 
-typedef UserProps =
+
+
+class Design extends DataAccessForm
 {
-	?contact:Int,
-	?first_name:String,
-	?last_name:String,
-	?active:Bool,
-	?loggedIn:Bool,
-	?last_login:Date,
-	?loginError:Dynamic,
-	?jwt:String,
-	?pass:String,
-	user_name:String,
-	?redirectAfterLogin:String,
-	?waiting:Bool
-}
-
-typedef UserModel = DataSource;
-
-typedef UserFilter = Dynamic;
-
-class User extends DataAccessForm
-{
-	public static var dataAccess:DataAccess = [
-		'edit' =>{
-			data:[
-				[
-					"users" => ["alias" => 'us',
-						"fields" => 'user_name,last_login'],
-					"user_groups" => [
-						"alias" => 'ug',
-						"fields" => 'name',
-						"jCond"=>'ug.id=us.user_group'],
-					"contacts" => [
-						"alias" => 'co',
-						"fields" => 'first_name,last_name,email',
-						"jCond"=>'contact=co.id']
-				]
-			],
-			view:[
-			]
-		}
+	
+	public static var menuItems:Array<SMItem> = [
+		{label:'Neu',action:'create'},
+		{label:'Bearbeiten',action:'edit'},
+		{label:'Speichern', action:'save'},
+		{label:'Löschen',action:'delete'}
 	];
 	
-	public var menuItems:Array<SMItem>;// = [];
-	
-
-	/*public static var userModel:UserModel = ;
-
-		typedef SMenuBlock =
-		{
-			?dataClassPath:String,
-			?className:String,
-			?onActivate:Function,
-			?img:String,
-			?info:String,
-			?isActive:Bool,
-			items:Array<SMItem>,
-			?label:String,	
-			?section:String,
-		}
-
-		typedef SMItem =
-		{
-			?dataClassPath:String,
-			?className:String,
-			?component:ReactComponent,
-			?handler:Function,
-			?section:String,
-			?img:String,
-			?info:String,
-			?label:String,	
-		}
- 
-				*/	
 	public function edit(ev:ReactEvent):Void
 	{
 		trace('hi :)');
@@ -99,7 +38,7 @@ class User extends DataAccessForm
 				className:'auth.User',
 				action:'edit',
 				filter:'user_name|${props.user_name}',
-				dataSource:Serializer.run(view.shared.io.User.userModel)
+				//dataSource:Serializer.run(view.shared.io.User.userModel)
 			},
 			function(data:Dynamic )
 			{
@@ -115,10 +54,26 @@ class User extends DataAccessForm
 		setState({dataClassPath:"auth.User.edit"});
 	}
 	
-	public function new(props:UserProps)
+	public function new(props:DataFormProps)
 	{
 		super(props);
-		menuItems = [{handler:edit, label:'Bearbeiten', section:'edit'}];
+		//menuItems = [{handler:edit, label:'Bearbeiten', section:'edit'}];
+		_menuItems = menuItems.map(function (mI:SMItem){
+			var h:Event->Void = Reflect.field(this, mI.action);
+			trace(h);
+			mI.handler = h;
+			switch(mI.action)
+			{
+				case 'editTableFields':
+					mI.disabled = state.selectedRows.length==0;
+				case 'save':
+					mI.disabled = state.clean;
+				default:
+
+			}
+			return mI;
+
+		});
 		//this.state = state;
 		//super(props, state);
 		//trace(props);

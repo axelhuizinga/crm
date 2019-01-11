@@ -1,5 +1,6 @@
 package view.shared.io;
 
+import js.html.Event;
 import react.router.RouterMatch;
 import react.ReactType;
 import react.React;
@@ -37,9 +38,19 @@ typedef BookmarksModel = DataSource;
 class Bookmarks extends DataAccessForm
 {
 	
-	public var menuItems:Array<SMItem>;// = [];
+	//public var menuItems:Array<SMItem>;// = [];
 	
-	public function edit(ev:ReactEvent):Void
+	public function add(ev:Event):Void
+	{
+
+	}
+
+	public function delete(ev:Event):Void
+	{
+		
+	}
+
+	public function edit(ev:Event):Void
 	{
 		trace('hi :)');
 		requests.push(AjaxLoader.load(	
@@ -66,6 +77,16 @@ class Bookmarks extends DataAccessForm
 		setState({dataClassPath:"auth.User.edit"});
 	}
 	
+	public function save(ev:Event):Void
+	{
+
+	}
+
+	public function no(ev:Event):Void
+	{
+
+	}
+
 	public function new(props:DataFormProps)
 	{
 		super(props);
@@ -99,7 +120,13 @@ class Bookmarks extends DataAccessForm
 		var section:String = (match.params.section == null?state.sideMenu.section:match.params.section);
 		var style:Dynamic = {
             //height: "auto" // This will force the table body to overflow and scroll, since there is not enough room
-          };
+    	};		  
+		return jsx('
+			<div className="tabComponentForm"  >
+				dummy	
+			</div>		
+		');
+		/*
 		return jsx('
 			<div className="columns">
 				<div className="tabComponentForm"  >
@@ -108,35 +135,42 @@ class Bookmarks extends DataAccessForm
 				<$SMenu className="menu" sameWidth=${state.sideMenu.sameWidth} section=${section} menuBlocks=${state.sideMenu.menuBlocks} />					
 			</div>	
 			
-		');
+		');*/
 
 	}
-	//
-	function dummyH(evt:js.html.Event)
-	{
-		trace('ok');
-	}
+
+	public static var menuItems:Array<SMItem> = [
+		{label:'Neu',action:'create'},
+		{label:'Bearbeiten',action:'edit'},
+		{label:'Speichern', action:'save'},
+		{label:'Löschen',action:'delete'},
+		{action:'no',label:'Something very much more longer...'},
+		{action:'no',label:'Something'},
+		{action:'no',label:'Something'},
+		{action:'no',label:'Something'},
+		{action:'no',label:'Something'},
+		{action:'no',label:'Something'},
+		{action:'no',label:'Something'},
+		{action:'no',label:'Something'}
+	];
+
 	override function updateMenu(?viewClassPath:String):SMenuProps
 	{
 		var sideMenu = state.sideMenu;
 		sideMenu.menuBlocks['bookmarks'].isActive = true;
-		sideMenu.menuBlocks['bookmarks'].items = function() {
-			return 
-				[
-					{handler:dummyH, label:'Speichern', disabled:state.clean},
-					{handler:dummyH, label:'Passwort ändern'},
-					{handler:dummyH, label:'Something'},
-					{handler:dummyH, label:'Something very much more longer...'},
-					{handler:dummyH, label:'Something'},
-					{handler:dummyH, label:'Something'},
-					{handler:dummyH, label:'Something'},
-					{handler:dummyH, label:'Something'},
-					{handler:dummyH, label:'Something'},
-					{handler:dummyH, label:'Something'},
-					{handler:dummyH, label:'Something'},
-				];
-			
-		}	
+		sideMenu.menuBlocks['bookmarks'].label='Lesezeichen';
+		for(mI in sideMenu.menuBlocks['bookmarks'].items)
+		{
+			switch(mI.action)
+			{		
+				case 'edit':
+					mI.disabled = state.selectedRows.length==0;
+				case 'save':
+					mI.disabled = state.clean;
+				default:
+
+			}			
+		}		
 		//trace(sideMenu.menuBlocks['user'].items);	
 		return sideMenu;
 	}	

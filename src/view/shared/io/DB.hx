@@ -35,12 +35,6 @@ class DB extends DataAccessForm
 {
 
 	static var _instance:DB;
-
-	public static function menuItems():Array<SMItem>
-	{
-		return _instance == null? [] : _instance._menuItems;
-	}
-	
 	
 	public function new(?props) 
 	{
@@ -56,11 +50,16 @@ class DB extends DataAccessForm
 		];
 		var sideMenu = state.sideMenu;
 		//trace(sideMenu);
-		sideMenu.menuBlocks['dbtools'].items = function() return _menuItems;
+		sideMenu.menuBlocks['dbtools'].items =  _menuItems;
 		state = ReactUtil.copy(state, {sideMenu:sideMenu});		
 	}
 	
-	//override public function save(ev:ReactEvent):Void{}
+	public static var menuItems:Array<SMItem> = [
+		{label:'Neu',action:'create'},
+		{label:'Bearbeiten',action:'edit'},
+		{label:'Speichern', action:'save'},
+		{label:'Löschen',action:'delete'}
+	];
 	
 	public function createFieldList(ev:ReactEvent):Void
 	{
@@ -270,12 +269,18 @@ class DB extends DataAccessForm
 	{
 		trace('${Type.getClassName(Type.getClass(this))} task');
 		var sideMenu = state.sideMenu;
-		sideMenu.menuBlocks['dbtools'].items = function() return [
-			{handler:createFieldList, label:'Create Fields Table', action:'createFieldList'},
-			{handler:showFieldList, label:'Table Fields', action:'showFieldList'},
-			{handler:editTableFields, label:'Bearbeiten', disabled:state.selectedRows.length==0},
-			//{handler:saveTableFields, label:'Speichern', disabled:state.clean},
-		];
+		for(mI in sideMenu.menuBlocks['dbtools'].items)
+		{
+			switch(mI.action)
+			{		
+				case 'editTableFields':
+					mI.disabled = state.selectedRows.length==0;
+				case 'save':
+					mI.disabled = state.clean;
+				default:
+
+			}			
+		}
 		return sideMenu;
 	}
 }

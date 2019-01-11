@@ -47,7 +47,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 						isActive:false,
 						label:'DB Design',
 						onActivate:switchContent,
-						items:function() return [],
+						items:[],
 						section: 'dbtools'
 					},
 					'synctools'=>{
@@ -56,7 +56,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 						isActive:true,
 						label:'DB Sync',
 						onActivate:switchContent,
-						items:function() return [],
+						items:[],
 						section:'synctools'
 					}
 				],

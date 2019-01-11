@@ -14,7 +14,7 @@ import react.ReactComponent.ReactFragment;
 import react.ReactUtil;
 import view.dashboard.model.SettingsFormModel;
 import view.shared.io.DataAccessForm.DataFormProps;
-import view.shared.RouteTabProps;
+import view.shared.io.Design;
 import view.shared.BaseForm;
 import view.shared.SMenu;
 import view.shared.io.Bookmarks;
@@ -45,50 +45,33 @@ class SettingsForm extends BaseForm
 		}	
 		state = {
 			clean:true,
-			//viewClassPath:"shared.io.User",
-			viewClassPath:null,
 			hasError:false,
 			loading:true,
-			sideMenu:{
-				menuBlocks:[
-					'user'=>{
+			sideMenu:initSideMenu(
+				[
+					{
 						dataClassPath:'auth.User',
-						viewClassPath:'shared.io.User',
 						label:'UserDaten',
-						onActivate:switchContent,
-						items: function()return [
-							{handler:null, label:'Speichern', disabled:state.clean},
-							{handler:null, label:'Passwort ändern'},
-						],
-						section: 'user'
+						section: 'user',
+						items: User.menuItems
 					},
-					'bookmarks'=>{
+					{
 						dataClassPath:'settings.Bookmarks',
-						viewClassPath:'shared.io.Bookmarks',
 						label:'Lesezeichen',
-						onActivate:switchContent,
-						items:function() return [
-							{handler:createUserBookmark,label:'Neu',action:'create'},
-							{handler:editUserBookmark,label:'Bearbeiten',action:'edit'},
-							{handler:deleteUserBookmark,label:'Löschen',action:'delete'}
-						],
-						section: 'bookmarks'
+						section: 'bookmarks',
+						items: Bookmarks.menuItems
 					},
-					'design'=>{
+					{
 						dataClassPath:'settings.Design',
-						viewClassPath:'shared.io.Design',
 						label:'Design',
-						onActivate:switchContent,
-						items:function() return [
-							{handler:editColors,label:'Farben',action:'editColors'},
-							{handler:editFonts,label:'Schrift',action:'editFont'}
-						],
-						section: 'design'
-					}				
+						section: 'design',
+						items: Design.menuItems
+					},										
 				],
-				section: 'user',
-				sameWidth: true
-			}
+				{section: 'bookmarks',	sameWidth: true}
+			)
+	
+
 		};
 		if(props.match.params.section!=null)
 		{
@@ -159,6 +142,15 @@ class SettingsForm extends BaseForm
 	}	
 	
 	override public function render() {
+		return jsx('
+		<div className="columns">
+			${renderContent()}
+			<$SMenu className="menu" sameWidth=${state.sideMenu.sameWidth} section=${state.sideMenu.section} menuBlocks=${state.sideMenu.menuBlocks} />
+		</div>
+		');
+	}
+
+	public function renderContent() {
 		var match:RouterMatch = getRouterMatch();
 		trace(match.params);
 		return switch(match.params.section)

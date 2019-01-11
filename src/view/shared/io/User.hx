@@ -42,6 +42,8 @@ typedef UserProps =
 	?loginError:Dynamic,
 	?jwt:String,
 	?pass:String,
+	?phone:String,
+	?phone_pass:String,
 	?new_pass:String,
 	?new_pass_confirm:String,
 	user_name:String,
@@ -168,7 +170,7 @@ class User extends DataAccessForm
 		//trace(prevProps);
 		//trace(prevState);
 		//trace(state.values);
-		trace(App.store.getState().appWare.user);
+		trace(App.store.getState().appWare.user.first_name);
 		//trace(state.viewClassPath);
 		if(autoFocus!=null)
 		autoFocus.current.focus();
@@ -265,7 +267,7 @@ class User extends DataAccessForm
 		//setState({viewClassPath:"auth.User.edit"});
 	}
 	
-	override public function save(evt:Event)
+	public function save(evt:Event)
 	{
 		evt.preventDefault();
 		trace(state.data);
@@ -305,51 +307,41 @@ class User extends DataAccessForm
 	{
 		super(props);
 		//_instance = this;		
-		trace(props);
+		//trace(props);
 		_menuItems = [
 			//{handler:edit, label:'Bearbeiten', section:'edit'},
 			{handler:save, label:'Speichern', disabled:state.clean},
 			{handler:changePassword, label:'Passwort ändern'},
 		];
 		var sideMenu = state.sideMenu;
-		sideMenu.menuBlocks['user'].items = function() return _menuItems;
+		sideMenu.menuBlocks['user'].items = _menuItems;
 		trace(_menuItems);
 		state = ReactUtil.copy(state,{sideMenu:sideMenu,viewClassPath:"edit",});
-		trace(state.viewClassPath);
-
 	}
 
-	/*override function handleChange(e:InputEvent)
-	{
-		var t:InputElement = cast e.target;
-		var vs = state.values;
-		vs[t.name] = t.value;
-		trace(vs.toString());
-
-		setState({clean:false, sideMenu:updateMenu(),values:vs});
-		//props.setStateFromChild({clean:false});
-		//trace(this.state);
-	}*/
+	public static var menuItems:Array<SMItem> = [
+		{label:'Neu',action:'create'},
+		{label:'Bearbeiten',action:'edit'},
+		{label:'Speichern', action:'save'},
+		{label:'Löschen',action:'delete'}
+	];
 	
 	override function updateMenu(?viewClassPath:String):SMenuProps
 	{
 		var sideMenu = state.sideMenu;
-		sideMenu.menuBlocks['user'].items = function() {
-			return switch(state.viewClassPath)
+		sideMenu.menuBlocks['users'].isActive = true;
+		for(mI in sideMenu.menuBlocks['users'].items)
+		{
+			switch(mI.action)
 			{
-				case "changePassword":		
-					[
-						{handler:changePassword, label:'Speichern', disabled:state.clean},
-						{handler:function (_)setState({viewClassPath:'edit',clean:true}), label:'Abbrechen'},
-					];
+				case 'editTableFields':
+					mI.disabled = state.selectedRows.length==0;
+				case 'save':
+					mI.disabled = state.clean;
 				default:
-					[
-						{handler:save, label:'Speichern', disabled:state.clean},
-						{handler:changePassword, label:'Passwort ändern'},
-					];
-			}
-		}			
-		//trace(sideMenu.menuBlocks['user'].items);	
+
+			}			
+		}		
 		return sideMenu;
 	}
 	
@@ -400,14 +392,11 @@ class User extends DataAccessForm
 		if(state.values != null)
 		trace(state.values);
 		return jsx('
-			<div className="columns">
-				<div className="tabComponentForm"  >
-					<form className="form60">
-						${renderContent()}
-					</form>					
-				</div>
-				<SMenu className="menu" menuBlocks={state.sideMenu.menuBlocks} />					
-			</div>	
+			<div className="tabComponentForm"  >
+				<form className="form60">
+					${renderContent()}
+				</form>					
+			</div>
 		');
 	}
 	

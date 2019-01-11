@@ -21,12 +21,12 @@ import react.router.Route.RouteRenderProps;
 import redux.Redux.Dispatch;
 import redux.Store;
 import view.dashboard.model.RolesFormModel;
-import view.shared.io.DataAccess;
+import view.shared.io.DataAccessForm;
 
 import view.table.Table.DataState;
 import view.shared.RouteTabProps;
 import view.shared.SMenu.InteractionState;
-import view.shared.SMenu.SMItem;
+import view.shared.SMenu.SMenuBlock;
 import view.shared.SMenu.SMenuProps;
 
 @:enum
@@ -89,6 +89,7 @@ typedef FormState =
 	?dataClassPath:String,
 	?viewClassPath:String,
 	?data:Map<String,Dynamic>,
+	?dataForm:DataAccessForm,
 	?dataTable:Array<Map<String,Dynamic>>,
 	?clean:Bool,
 	?selectedRows:Array<TableRowElement>,
@@ -141,13 +142,14 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 		requests = [];		
 		state = {
 			data:new Map(),
+			//loading:true,
 			viewClassPath:'',
 			//content:new Array(),
 			clean:true,
 			errors:new Map(),
 			//values:new StringMap(),
 			//fields:new StringMap(),
-			sideMenu: {menuBlocks:null},
+			sideMenu:null,
 			submitted:false,
 			hasError:false		
 		};
@@ -229,37 +231,20 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 		}
 	}
 	
-	/*public static function addInteractionState(name:String, iS:InteractionState):Void
+	function initSideMenu(sMa:Array<SMenuBlock>, sM:SMenuProps):SMenuProps
 	{
-		trace(name + ':' + iS);
-		interactionStates.set(name, iS);
-	}
-	
-	function displayDebug(fieldName:String):ReactFragment
-	{
-		//trace (state.values.get(fieldName));
-		if (state.values.exists(fieldName))
+		var sma:SMenuBlock = {};
+		for (smi in 0...sMa.length)
 		{
-			return jsx('
-					<pre className="debug">${renderDataTable(state.values.get(fieldName))}</pre>
-			');
+			sMa[smi].onActivate = switchContent;
+			trace(sMa[smi].label);
 		}
-		
-		return null;
+
+		sM.menuBlocks = [
+			for (sma in sMa)
+			sma.section => sma
+		];
+		return sM;
 	}
-	
-	function renderDataTable(content:Array<Dynamic>):ReactFragment
-	{
-		//trace(content);
-		if (content == null || content.length == 0)
-			return null;
-		var rC:Array<ReactFragment> = new Array();
-		var k:Int = 1;
-		for (c in content)
-		{
-			rC.push(jsx('<div key=${k++}>${c.user_group}</div>'));
-		}
-		return rC;
-	}*/
 	
 }

@@ -24,6 +24,7 @@ import redux.Redux.Dispatch;
 import view.dashboard.model.RolesFormModel;
 import view.shared.BaseForm.FormProps;
 import view.shared.SMenu;
+import view.shared.io.Users;
 using Lambda;
 /**
  * ...
@@ -44,39 +45,29 @@ class RolesForm extends BaseForm
 			viewClassPath:"userList",
 			hasError:false,
 			loading:true,
-			sideMenu:{
-				menuBlocks:[
-					'users'=>{
-						isActive:true,
+			sideMenu:initSideMenu(
+				[
+					{
+						dataClassPath:'roles.User',
 						label:'Benutzer',
-						onActivate:switchContent,
-						items:function() return [
-							{handler:createUsers, label:'Neu'},
-							{handler:editUsers,label:'Bearbeiten'},
-							{handler:deleteUsers,label:'Löschen'}
-						]
+						section: 'users',
+						items: Users.menuItems
 					},
-					'userGroups'=>{
+					{
+						dataClassPath:'settings.Bookmarks',
 						label:'Benutzergruppen',
-						onActivate:switchContent,
-						items:function() return [
-							{handler:createUserGroups,label:'Neu'},
-							{handler:editUserGroups,label:'Bearbeiten'},
-							{handler:deleteUserGroups,label:'Löschen'}
-						]				
+						section: 'userGroups',
+						items: []//Bookmarks.menuItems
 					},
-					'permissions'=>{
+					{
+						dataClassPath:'roles.Permissions',
 						label:'Rechte',
-						onActivate:switchContent,
-						items:function() return [
-							{handler:createRoles,label:'Neu'},
-							{handler:editRoles,label:'Bearbeiten'},
-							{handler:deleteRoles,label:'Löschen'}
-						]				
-					}
-					
-				]
-			}
+						section: 'permissions',
+						items: []//Design.menuItems
+					},										
+				],
+				{section: 'users',	sameWidth: true}
+			)
 		};
 		requests = [];
 		trace(Reflect.fields(props));
@@ -156,49 +147,7 @@ class RolesForm extends BaseForm
 	{
 		super.componentDidMount();
 		trace(state.loading);
-		//trace(App.config);
-		/*requests.push(AjaxLoader.load(
-			'${App.config.api}', 
-			{
-				user_name:props.user_name,
-				jwt:props.jwt,
-				first_name:props.first_name,
-				className:'admin.CreateUsers',
-				action:'getViciDialUsers'
-			},
-			function(data){
-				trace('loaded:${!state.loading}'); 
-				if (data.length > 0)
-				{
-					var dataRows:Array<Dynamic> = Json.parse(data).rows;
-					//trace(displayRows[0]);
-					
-					setState({data:['userList'=>dataRows], loading:false});				
-					//setState(ReactUtil.copy(state, {data:sData}));				
-				}
-			}
-		));
-		requests.push(AjaxLoader.load(
-			'${App.config.api}', 
-			{
-				user_name:props.user_name,
-				jwt:props.jwt,
-				first_name:props.first_name,
-				className:'admin.CreateUsers',
-				action:'getViciDialUsers'
-			},
-			function(data){
-				trace('loaded:${!state.loading}'); 
-				if (data.length > 0)
-				{
-					var dataRows:Array<Dynamic> = Json.parse(data).rows;
-					//trace(displayRows[0]);
-					
-					setState({data:['userList'=>dataRows], loading:false});				
-					//setState(ReactUtil.copy(state, {data:sData}));				
-				}
-			}
-		));*/
+		
 		requests.push(BinaryLoader.create(
 			'${App.config.api}', 
 			{

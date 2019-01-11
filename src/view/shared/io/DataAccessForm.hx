@@ -1,5 +1,6 @@
 package view.shared.io;
 
+import react.ReactEvent;
 import react.router.ReactRouter;
 import react.router.Route.RouteMatchProps;
 import react.router.RouterMatch;
@@ -75,6 +76,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	var modalFormTableBody:ReactRef<DivElement>;
 	var autoFocus:ReactRef<InputElement>;
 	var initialState:Dynamic;
+	var section:String;
 
 	
 	public function new(?props:DataFormProps) 
@@ -560,12 +562,6 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 			r.set(k, m.get(k));
 		}
 		return r;
-	}
-	
-	public function save(evt:Event)
-	{
-		evt.preventDefault();
-		trace('your subclass has to override me to save anything!');
 	}
 
 	static var ky:Dynamic->haxe.PosInfos->String = Utils.genKey;

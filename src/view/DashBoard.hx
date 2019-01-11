@@ -135,7 +135,7 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 				<Tabs  boxed={true} >
 					<ul>
 						<TabLink to="/dashboard/roles" ${...props}>Benutzer</TabLink>
-						<TabLink to="/dashboard/settings" ${...props}>Einstellungen</TabLink>
+						<TabLink to="/dashboard/settings" ${...props}>Meine Einstellungen</TabLink>
 						<TabLink to="/dashboard/setup" ${...props}>Setup</TabLink>
 					</ul>
 				</Tabs>
