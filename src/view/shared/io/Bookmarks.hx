@@ -96,7 +96,7 @@ class Bookmarks extends DataAccessForm
 				view:new Map()
 			}
 		];		
-		_menuItems = [{handler:edit, label:'Bearbeiten', action:'edit'}];
+		//_menuItems = [];//{handler:edit, label:'Bearbeiten', action:'edit'}];
 		var sideMenu = updateMenu('bookmarks');
 		//sideMenu.menuBlocks['bookmarks'].items = function() return _menuItems;
 		//trace(sideMenu.menuBlocks['bookmarks'].items());
@@ -126,17 +126,6 @@ class Bookmarks extends DataAccessForm
 				dummy	
 			</div>		
 		');
-		/*
-		return jsx('
-			<div className="columns">
-				<div className="tabComponentForm"  >
-					dummy	
-				</div>
-				<$SMenu className="menu" sameWidth=${state.sideMenu.sameWidth} section=${section} menuBlocks=${state.sideMenu.menuBlocks} />					
-			</div>	
-			
-		');*/
-
 	}
 
 	public static var menuItems:Array<SMItem> = [
@@ -144,14 +133,6 @@ class Bookmarks extends DataAccessForm
 		{label:'Bearbeiten',action:'edit'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'},
-		{action:'no',label:'Something very much more longer...'},
-		{action:'no',label:'Something'},
-		{action:'no',label:'Something'},
-		{action:'no',label:'Something'},
-		{action:'no',label:'Something'},
-		{action:'no',label:'Something'},
-		{action:'no',label:'Something'},
-		{action:'no',label:'Something'}
 	];
 
 	override function updateMenu(?viewClassPath:String):SMenuProps

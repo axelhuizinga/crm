@@ -70,13 +70,11 @@ class SettingsForm extends BaseForm
 				],
 				{section: 'bookmarks',	sameWidth: true}
 			)
-	
-
 		};
 		if(props.match.params.section!=null)
 		{
 			trace(props.match.params.section);
-			state.viewClassPath = state.sideMenu.menuBlocks[props.match.params.section].viewClassPath;
+			//state.viewClassPath = state.sideMenu.menuBlocks[props.match.params.section].viewClassPath;
 			state.sideMenu.menuBlocks[props.match.params.section].isActive=true;
 
 		}
@@ -97,35 +95,10 @@ class SettingsForm extends BaseForm
 		trace(props.match.params);				
 	}
 	
-	public function createUserBookmark(ev:ReactEvent):Void
-	{
-		
-	}
-	public function deleteUserBookmark(ev:ReactEvent):Void
-	{
-		
-	}
-	public function editColors(ev:ReactEvent):Void
-	{
-		
-	}	
-	public function editFonts(ev:ReactEvent):Void
-	{
-		
-	}
-	public function editUserBookmark(ev:ReactEvent):Void
-	{
-		
-	}
-	
-	public function menuBlockItems():Array<SMItem>
-	{
-		return [];
-	}
-	override public function switchContent(reactEventSource:Dynamic)
+	/*override public function switchContent(reactEventSource:Dynamic)
 	{
 		super.switchContent(reactEventSource);
-	}
+	}*/
 
 		
 	static function mapStateToProps(aState:AppState) {
@@ -142,15 +115,10 @@ class SettingsForm extends BaseForm
 	}	
 	
 	override public function render() {
-		return jsx('
-		<div className="columns">
-			${renderContent()}
-			<$SMenu className="menu" sameWidth=${state.sideMenu.sameWidth} section=${state.sideMenu.section} menuBlocks=${state.sideMenu.menuBlocks} />
-		</div>
-		');
+		return super.render();
 	}
 
-	public function renderContent() {
+	override public function renderContent() {
 		var match:RouterMatch = getRouterMatch();
 		trace(match.params);
 		return switch(match.params.section)

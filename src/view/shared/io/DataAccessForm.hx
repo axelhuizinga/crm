@@ -86,6 +86,7 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		requests = [];
 		if(props != null)
 		//trace(props.match);
+		trace(Type.getClassName(Type.getClass(this)));
 		state = {
 			data:new StringMap(),
 			clean:true,

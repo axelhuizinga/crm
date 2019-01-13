@@ -191,10 +191,42 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 		return ReactRouter.matchPath(props.history.location.pathname, rmp);		
 	}
 
-    override function render() {
+    /*override function render() {
 		trace('You should override me :)');
         return null;
-    }	 
+    }*/
+	
+	public function renderContent() {
+		trace('You should override me :)');
+        return null;
+    }
+
+	override public function render() {
+		if(props.match.params.section != null)
+		{
+			trace(props.match.params.section);
+			
+		}
+		trace(props.match.params.section);
+		return jsx('
+		<div className="columns">
+			${renderContent()}
+			${renderMenu()}
+		</div>
+		');
+	}
+
+	function renderMenu()
+	{
+		//trace('....');
+		//trace(state.sideMenu.menuBlocks.keys().next());
+		//trace(state.sideMenu.menuBlocks['dbtools'].handlerInstance);
+		//return null;
+		return jsx('
+			<$SMenu className="menu" sameWidth=${state.sideMenu.sameWidth} section=${state.sideMenu.section} 
+			menuBlocks=${state.sideMenu.menuBlocks} />
+		');
+	}
 	
 	public function setStateFromChild(newState:FormState)
 	{

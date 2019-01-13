@@ -42,21 +42,22 @@ class DB extends DataAccessForm
 
 		dataDisplay = DBFormsModel.dataDisplay;
 		_instance = this;		
-		_menuItems = [
+		/*_menuItems = [];
 			{handler:createFieldList, label:'Create Fields Table', action:'createFieldList'},
 			{handler:showFieldList, label:'Table Fields', action:'showFieldList'},
 			{handler:editTableFields, label:'Bearbeiten', disabled:state.selectedRows.length==0},
 			//{handler:save, label:'Speichern', disabled:state.clean},
-		];
-		var sideMenu = state.sideMenu;
+		];*/
+		var sideMenu = updateMenu('dbtools'); //state.sideMenu;
 		//trace(sideMenu);
-		sideMenu.menuBlocks['dbtools'].items =  _menuItems;
+		//sideMenu.menuBlocks['dbtools'].items =  _menuItems;
 		state = ReactUtil.copy(state, {sideMenu:sideMenu});		
 	}
 	
 	public static var menuItems:Array<SMItem> = [
-		{label:'Neu',action:'create'},
-		{label:'Bearbeiten',action:'edit'},
+		{label:'Create Fields Table',action:'createFieldList'},
+		{label:'Table Fields',action:'showFieldList'},
+		{label:'Bearbeiten',action:'editTableFields'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'}
 	];
@@ -256,12 +257,9 @@ class DB extends DataAccessForm
 		trace(props.match.params.section);
 		//return null;<form className="form60"></form>	
 		return jsx('
-		<div className="columns xAuto">
 			<form className="tabComponentForm"  >
 				${renderResults()}
 			</form>
-			<SMenu className="menu" section=${props.match.params.section} menuBlocks={state.sideMenu.menuBlocks} />					
-		</div>	
 		');		
 	}
 	
@@ -269,6 +267,7 @@ class DB extends DataAccessForm
 	{
 		trace('${Type.getClassName(Type.getClass(this))} task');
 		var sideMenu = state.sideMenu;
+		//sideMenu.menuBlocks['dbtools'].handlerInstance = this;
 		for(mI in sideMenu.menuBlocks['dbtools'].items)
 		{
 			switch(mI.action)

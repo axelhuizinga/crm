@@ -1,5 +1,10 @@
 package view.shared;
 
+import js.html.ButtonElement;
+import js.html.Event;
+import haxe.CallStack;
+import me.cunity.debug.Out;
+import view.shared.io.DataAccessForm;
 import js.Browser;
 import js.html.DivElement;
 import griddle.components.Components.Filter;
@@ -29,15 +34,16 @@ typedef SMenuBlock =
 {
 	?dataClassPath:String,
 	?disabled:Bool,
-	?viewClassPath:String,
+	//?viewClassPath:String,
 	?className:String,
+	//?handlerInstance:DataAccessForm,
 	?onActivate:Function,
 	?img:String,
 	?info:String,
 	?isActive:Bool,
 	?items:Array<SMItem>,
 	?label:String,	
-	?section:String,
+	?section:String
 }
 
 typedef SMItem =
@@ -55,6 +61,7 @@ typedef SMItem =
  
 typedef SMenuProps =
 {
+	?activeInstance:Dynamic,
 	?className:String,
 	?basePath:String,
 	?hidden:Bool,
@@ -89,7 +96,9 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 		super(props);
 		state = {
 			hidden:props.hidden||false
-		}
+		};
+		//Out.dumpStack(CallStack.callStack());
+		//trace('OK');
 	}
 
 	function renderHeader():ReactFragment
@@ -105,10 +114,10 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 			{
 				check=true;
 			}
-			trace(block.label + '::' + block.onActivate + ':' +check);
-			//trace(props.section + '::' + block.section + ':' +check);
+			//trace(block.label + '::' + block.onActivate + ':' +check);
+			//trace(props.section + '::' + block.section + ':' +check);//data-classpath=${block.viewClassPath}
 			header.push( jsx('
-		<input type="radio" key=${i} id=${"sMenuPanel-"+(i++)} name="accordion-select" checked=${check} data-classpath=${block.viewClassPath} 
+		<input type="radio" key=${i} id=${"sMenuPanel-"+(i++)} name="accordion-select" checked=${check}  
 			onChange=${block.onActivate} data-section=${block.section} />
 		'));
 		});
@@ -123,20 +132,41 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 		//var className = ''; 'panel-block';
 		if(props.sameWidth && state.sameWidth>0) {
 			style = {width:'${state.sameWidth}px'};
-			//className = 'panel-block';
 		}
 		var i:Int = 1;
 		//style = null;
 		var panels:Array<ReactFragment> = [];
-		props.menuBlocks.iter(function(block:SMenuBlock) panels.push( jsx('	
-			<div className="panel" key=${i} style=${style}>
-			  <label className="panel-heading" htmlFor=${"sMenuPanel-"+i}>${block.label}</label>
-			  <div id=${"pblock" + i} className=${"panel-block body-"+(i++)} children=${renderItems(block.items)}/>
-			</div>		
-		')));
+		//var panels:Array<ReactFragment> = props.menuBlocks.mapi(renderPanel).array();
+		//trace(props.menuBlocks);		
+		props.menuBlocks.iter(function(block:SMenuBlock)
+		{
+			//trace(block.handlerInstance);
+			panels.push( jsx('	
+				<div className="panel" key=${i} style=${style}>
+				<label className="panel-heading" htmlFor=${"sMenuPanel-"+i}>${block.label}</label>
+				<div id=${"pblock" + i} className=${"panel-block body-"+(i++)} children=${renderItems(block.items)}/>
+				</div>		
+			'));
+		} );
 		trace(panels.length);
 		return panels;
-	}		
+	}	
+
+	function renderPanel(_i:Int,block:SMenuBlock):ReactFragment
+	{
+		var i:Int = _i+1;
+		var style:Dynamic =(props.sameWidth && state.sameWidth>0 ? 
+			{width:'${state.sameWidth}px'} : null
+		);
+		//trace(block.handlerInstance);
+		trace(block);
+		return jsx('	
+			<div className="panel" key=${i} style=${style}>
+			<label className="panel-heading" htmlFor=${"sMenuPanel-"+i}>${block.label}</label>
+			<div id=${"pblock" + i} className=${"panel-block body-"+(i++)} children=${renderItems(block.items)}/>
+			</div>		
+		');
+	}
 	
 	function renderItems(items:Array<SMItem>):ReactFragment
 	{
@@ -145,12 +175,20 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 		var i:Int = 1;
 		return items.map(function(item:SMItem) 
 		{
+		item.handler = itemHandler;
 			return switch(item.component)
 			{
 				case Filter: jsx('<$Filter  key=${i++}/>');
-				default:jsx('<Button key=${i++} onClick=${item.handler} disabled=${item.disabled}>${item.label}</Button>');
+				default:jsx('<Button key=${i++} onClick=${item.handler} data-action=${item.action}
+				disabled=${item.disabled}>${item.label}</Button>');
 			}
 		}).array();
+	}
+
+	function itemHandler(e:Event)
+	{
+		trace(cast(e.target, ButtonElement).getAttribute('data-action'));
+		trace(props.menuBlocks.toString());
 	}
 	
 	override public function render()
@@ -177,43 +215,8 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 	{
 		var i:Int = 0;
 		var activePanel:Int = null;
-		/*while (menuRef.current.childNodes.item(i).localName=='input')
-		{
-			var inp:InputElement = cast(menuRef.current.childNodes.item(i), InputElement);
-			trace(inp.checked);
-			if(inp.checked)
-			{
-				activePanel=i;
-				i=0;
-				break;
-			}
-			i++;
-		}
-		trace(activePanel);
-		trace(Browser.document.getElementById('pblock${activePanel}').children.item(0).innerHTML);
-		aW = Browser.document.getElementById('pblock${activePanel}').children.item(0).clientWidth;
-		//aW = menuRef.current.childNodes.item(activePanel)
-		trace(aW);
-		while (menuRef.current.childNodes.item(i).localName=='input')
-		{
-			if(i==activePanel)
-			{
-				i++;
-				continue;
-			}
-			var iW = null;//Browser.document.getElementById('pblock${i}').children.item(0).offsetWidth;
-			var inp:InputElement = cast(menuRef.current.childNodes.item(i++), InputElement);
-			inp.checked = true;
-			trace(iW);
-			if(iW>aW)
-				aW = iW;
-		}	*/
 		aW = menuRef.current.getElementsByClassName('panel').item(0).offsetWidth;
 		trace(aW);//
-		/*for(panel in menuRef.current.getElementsByClassName('panel'))
-		{
-			panel.style.width = '${aW}px';
-		}*/
 		if(state.sameWidth==null)
 		setState({sameWidth:aW},function (){
 			trace("what's up?");
@@ -222,7 +225,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 	
 	override public function componentDidMount():Void 
 	{
-		//return;
+		return;
 		if(props.sameWidth && state.sameWidth == null)
 		{
 			//Timer.delay(layout,800);

@@ -187,7 +187,7 @@ class RolesForm extends BaseForm
 	{
 		for (r in requests)
 			r.cancel();
-	}*/	
+	}
 	//columnSizerProps = {{}}defaultSort = ${{column:"full_name", direction: SortDirection.ASC}}
     override function render() {
 		trace(Reflect.fields(props));
@@ -199,9 +199,13 @@ class RolesForm extends BaseForm
 					<SMenu className="menu" menuBlocks={state.sideMenu.menuBlocks}/>					
 				</div>		
         ');
-    }	
+    }	*/	
 	
-	function renderContent():ReactFragment
+	override public function render() {
+		return super.render();
+	}
+
+	override function renderContent():ReactFragment
 	{
 		return switch(state.viewClassPath)
 		{

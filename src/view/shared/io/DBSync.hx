@@ -38,8 +38,8 @@ class DBSync extends DataAccessForm
 	static var _instance:DBSync;
 
 	public static var menuItems:Array<SMItem> = [
-		{label:'Neu',action:'create'},
-		{label:'Bearbeiten',action:'edit'},
+		{label:'Create Fields Table',action:'createFieldList'},
+		{label:'BenutzerDaten Abgleich',action:'showUserList'},
 		{label:'Speichern', action:'save'},
 		{label:'Löschen',action:'delete'}
 	];
@@ -50,7 +50,7 @@ class DBSync extends DataAccessForm
 
 		dataDisplay = DBSyncModel.dataDisplay;
 		_instance = this;		
-		_menuItems = menuItems.map(function (mI:SMItem){
+		/*_menuItems = [];menuItems.map(function (mI:SMItem){
 			var h:Event->Void = Reflect.field(this, mI.action);
 			trace(h);
 			mI.handler = h;
@@ -65,15 +65,11 @@ class DBSync extends DataAccessForm
 			}
 			return mI;
 
-		});
-		/*	{handler:createFieldList, label:'Create Fields Table', action:'createFieldList'},
-			{handler:showUserList, label:'BenutzerDaten Abgleich', action:'showUserList'},
-			{handler:editTableFields, label:'Bearbeiten', disabled:state.selectedRows.length==0},
-			//{handler:save, label:'Speichern', disabled:state.clean},
-		];*/
-		var sideMenu = state.sideMenu;
+		});*/
+
+		var sideMenu =  updateMenu('synctools');//state.sideMenu;
 		//trace(sideMenu);
-		sideMenu.menuBlocks['synctools'].items = _menuItems;
+		//sideMenu.menuBlocks['synctools'].items = _menuItems;
 		state = ReactUtil.copy(state, {sideMenu:sideMenu});		
 	}
 	
@@ -166,7 +162,7 @@ class DBSync extends DataAccessForm
 	public function showUserList(_):Void
 	{
 		//selectAllRows(true);
-		setState({viewClassPath:'showUserList'});
+		//setState({viewClassPath:'showUserList'});
 		requests.push( BinaryLoader.create(
 			'${App.config.api}', 
 			{
@@ -258,19 +254,17 @@ class DBSync extends DataAccessForm
 		trace(props.match.params.section);		
 		//return null;<form className="form60"></form>	
 		return jsx('
-		<div className="columns xAuto">
 			<form className="tabComponentForm"  >
 				${renderResults()}
 			</form>
-			<SMenu className="menu" section=${props.match.params.section} menuBlocks=${state.sideMenu.menuBlocks} />					
-		</div>	
 		');		
 	}
 	
 	override function updateMenu(?viewClassPath:String):SMenuProps
 	{
 		var sideMenu = state.sideMenu;
-		for(mI in sideMenu.menuBlocks['users'].items)
+		//sideMenu.menuBlocks['synctools'].handlerInstance = this;
+		for(mI in sideMenu.menuBlocks['synctools'].items)
 		{
 			switch(mI.action)
 			{

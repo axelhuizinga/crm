@@ -39,40 +39,27 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 		trace(props.match.params);
 		trace(getRouterMatch().params);
 		state = ReactUtil.copy(state, {
-			sideMenu:{
-				menuBlocks:[
-					'dbtools'=>{
+			sideMenu:initSideMenu(
+				[
+					{
 						dataClassPath:'model.tools.DB',
-						viewClassPath:'shared.io.DB',
-						isActive:false,
 						label:'DB Design',
-						onActivate:switchContent,
-						items:[],
-						section: 'dbtools'
+						section: 'dbtools',
+						items: DB.menuItems
 					},
-					'synctools'=>{
+					{
 						dataClassPath:'model.admin.SyncExternal',
-						viewClassPath:'shared.io.DBSync',
-						isActive:true,
-						label:'DB Sync',
-						onActivate:switchContent,
-						items:[],
-						section:'synctools'
+						label:'DB Abgleich',
+						section: 'synctools',
+						items: DBSync.menuItems
 					}
-				],
-				section:'synctools'
-			},
-			viewClassPath:"shared.io.DBSync",
+				],{section: 'synctools', sameWidth: true}					
+
+			),
 			loading:true
 		});
 		//trace(state);
 		requests = [];			
-		/*sideMenu = 	null; {
-			menuBlocks:[
-			//{handler:null, label:'Create History Trigger'},//TODO: ADD HANDLER - REMOVE AUTORUN ON MOUNT
-			//	{handler:this.importExternalUsers,label:'Importiere Externe Benutzer'}
-			]
-		};*/
 	}
 	
 	static function mapStateToProps() {
@@ -121,11 +108,16 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 			});			
 	}
 	
-    override public function render() 
+	override public function render() {
+		return super.render();
+	}
+
+	override public function renderContent()
 	{
 		//trace(state.sideMenu);
 		var match:RouterMatch = getRouterMatch();
 		trace(match.params);
+//			sM.menuBlocks[]
 		return switch(match.params.section)
 		{
 			case "synctools":
@@ -135,7 +127,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 				');					
 			case "dbtools"|null:
 				jsx('
-					<DB ${...props} sideMenu=${state.sideMenu}
+					<$DB ${...props} sideMenu=${state.sideMenu}
 					handleChange={false} handleSubmit={false} fullWidth={true}/>
 				');				
 			default:

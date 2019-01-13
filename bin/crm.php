@@ -8,6 +8,6 @@
 		<base href="/" />
 		<meta charset="UTF-8">
 		<title>Xpress CRM</title>
-	<link href="/app.1b2b7144c2a3b23e4b0a.css" rel="stylesheet"></head>
+	<link href="/app.5abef1a83e56fd9d4607.css" rel="stylesheet"></head>
 	<body><script type="text/javascript" src="/app.js"></script></body>
 </html>
