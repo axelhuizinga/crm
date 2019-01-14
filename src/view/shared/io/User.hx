@@ -33,6 +33,7 @@ typedef UserProps =
 {
 	?change_pass_required:Bool,
 	?contact:Int,
+	?externalData:Dynamic,
 	?first_name:String,
 	?last_name:String,
 	?email:String,
@@ -70,42 +71,7 @@ class User extends DataAccessForm
 	
 	override public function componentDidMount():Void 
 	{
-		dataAccess = [
-			'changePassword' =>
-			{
-				source:[
-					"users" => [
-						"fields" => 'user_name,change_pass_required,password']
-				],
-				view:[
-					'user_name' => {type:Hidden},
-					'pass' => {type:Password},
-					'new_pass' => {type:Password}
-				]
-			},
-			'edit' =>{
-				source:[
-					"users" => ["alias" => 'us',
-						"fields" => 'user_name,last_login,change_pass_required,password'],
-					"contacts" => [
-						"alias" => 'co',
-						"fields" => 'first_name,last_name,email',
-						"jCond"=>'contact=co.id']
-				],
-				view:[
-					'user_name'=>{label:'UserID',readonly:true, type:Hidden},
-					'pass'=>{label:'Passwort', type:Hidden},
-					'first_name'=>{label:'Vorname'},
-					'last_name'=>{label:'Name'},
-					'email' => {label:'Email'},
-					'last_login'=>{label:'Letze Anmeldung',readonly:true, displayFormat:DataAccessForm.localDate}
-				]
-			},
-			'save' => {
-				source:null,
-				view:null
-			}
-		];	
+			
 
 		super.componentDidMount();
 			
@@ -306,6 +272,42 @@ class User extends DataAccessForm
 	public function new(?props:DataFormProps)
 	{
 		super(props);
+		dataAccess = [
+			'changePassword' =>
+			{
+				source:[
+					"users" => [
+						"fields" => 'user_name,change_pass_required,password']
+				],
+				view:[
+					'user_name' => {type:Hidden},
+					'pass' => {type:Password},
+					'new_pass' => {type:Password}
+				]
+			},
+			'edit' =>{
+				source:[
+					"users" => ["alias" => 'us',
+						"fields" => 'user_name,last_login,change_pass_required,password'],
+					"contacts" => [
+						"alias" => 'co',
+						"fields" => 'first_name,last_name,email',
+						"jCond"=>'contact=co.id']
+				],
+				view:[
+					'user_name'=>{label:'UserID',readonly:true, type:Hidden},
+					'pass'=>{label:'Passwort', type:Hidden},
+					'first_name'=>{label:'Vorname'},
+					'last_name'=>{label:'Name'},
+					'email' => {label:'Email'},
+					'last_login'=>{label:'Letze Anmeldung',readonly:true, displayFormat:DataAccessForm.localDate}
+				]
+			},
+			'save' => {
+				source:null,
+				view:null
+			}
+		];
 		//_instance = this;		
 		//trace(props);
 		_menuItems = [

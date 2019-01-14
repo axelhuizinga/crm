@@ -161,8 +161,6 @@ class DBSync extends DataAccessForm
 	
 	public function showUserList(_):Void
 	{
-		//selectAllRows(true);
-		//setState({viewClassPath:'showUserList'});
 		requests.push( BinaryLoader.create(
 			'${App.config.api}', 
 			{
@@ -178,16 +176,8 @@ class DBSync extends DataAccessForm
 				var data:DbData = u.unserialize(dBytes, DbData);
 				trace(data.dataRows[data.dataRows.length-2]['phone_data']);
 				setState({dataTable:data.dataRows});
-				return;
-				var aj:haxe.http.HttpJs = model.AjaxLoader.loadData(data.dataInfo['syncApi'],
-				{user:data.dataInfo['admin'], pass:data.dataInfo['pass'], action:'clientVerify'}, 
-				function(verifyData:Dynamic){
-					trace(verifyData);
-				});
-				//setState({data:data.dataInfo, viewClassPath:'showUserList'});
 			}
 		));
-		//setState({viewClassPath:'shared.io.DB.showUserList'});
 	}
 	
 	override public function componentDidMount():Void 
@@ -223,7 +213,7 @@ class DBSync extends DataAccessForm
 		trace(state.viewClassPath + ':' + Std.string(state.dataTable != null));
 		//trace(dataDisplay["userList"]);
 		if (state.dataTable != null)
-		return switch(state.viewClassPath)
+		return switch(props.match.params.action)
 		{
 			case 'showUserList':
 				jsx('

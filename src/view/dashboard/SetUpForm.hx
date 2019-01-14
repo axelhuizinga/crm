@@ -36,8 +36,8 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 	{
 		super(props);	
 		//trace('ok');
-		trace(props.match.params);
-		trace(getRouterMatch().params);
+		trace(props.match.params.section);
+		//trace(getRouterMatch().params);
 		state = ReactUtil.copy(state, {
 			sideMenu:initSideMenu(
 				[
@@ -87,6 +87,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 	override public function componentDidMount():Void 
 	{
 		super.componentDidMount();
+
 		trace('ok');
 		return;
 		AjaxLoader.loadData('${App.config.api}', 
@@ -116,7 +117,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 	{
 		//trace(state.sideMenu);
 		var match:RouterMatch = getRouterMatch();
-		trace(match.params);
+		//trace(match.params);
 //			sM.menuBlocks[]
 		return switch(match.params.section)
 		{

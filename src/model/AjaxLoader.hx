@@ -3,7 +3,7 @@ import haxe.ds.StringMap;
 import haxe.http.HttpJs;
 import haxe.Json;
 import react.ReactComponent;
-
+import me.cunity.debug.Out;
 /**
  * ...
  * @author axel@cunity.me
@@ -116,7 +116,7 @@ typedef AsyncDataLoader =
 		var loader:AjaxLoader = new AjaxLoader(cB, params, req);
 		loader.url = url;
 		req.onData = loader._onQueueData;
-		req.onError = function(err:String) trace(err);
+		req.onError = function(err:String) {trace(err);Out.dumpObject(req);}
 		trace('POST? ' + params != null);
 		req.withCredentials = true;
 		//req.request(params != null);

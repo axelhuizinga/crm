@@ -68,6 +68,7 @@ typedef SMenuProps =
 	?menuBlocks:Map<String,SMenuBlock>,
 	?section:String,
 	?items:Array<SMItem>,
+	?itemHandler:Event->Void,
 	?right:Bool,
 	?sameWidth:Bool
 }
@@ -117,9 +118,9 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 			//trace(block.label + '::' + block.onActivate + ':' +check);
 			//trace(props.section + '::' + block.section + ':' +check);//data-classpath=${block.viewClassPath}
 			header.push( jsx('
-		<input type="radio" key=${i} id=${"sMenuPanel-"+(i++)} name="accordion-select" checked=${check}  
-			onChange=${block.onActivate} data-section=${block.section} />
-		'));
+			<input type="radio" key=${i} id=${"sMenuPanel-"+(i++)} name="accordion-select" checked=${check}  
+				onChange=${block.onActivate} data-section=${block.section} />
+			'));
 		});
 		return header;
 	}
@@ -148,7 +149,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 				</div>		
 			'));
 		} );
-		trace(panels.length);
+		//trace(panels.length);
 		return panels;
 	}	
 
@@ -159,7 +160,6 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 			{width:'${state.sameWidth}px'} : null
 		);
 		//trace(block.handlerInstance);
-		trace(block);
 		return jsx('	
 			<div className="panel" key=${i} style=${style}>
 			<label className="panel-heading" htmlFor=${"sMenuPanel-"+i}>${block.label}</label>
@@ -175,20 +175,13 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 		var i:Int = 1;
 		return items.map(function(item:SMItem) 
 		{
-		item.handler = itemHandler;
 			return switch(item.component)
 			{
 				case Filter: jsx('<$Filter  key=${i++}/>');
-				default:jsx('<Button key=${i++} onClick=${item.handler} data-action=${item.action}
+				default:jsx('<Button key=${i++} onClick=${props.itemHandler} data-action=${item.action}
 				disabled=${item.disabled}>${item.label}</Button>');
 			}
 		}).array();
-	}
-
-	function itemHandler(e:Event)
-	{
-		trace(cast(e.target, ButtonElement).getAttribute('data-action'));
-		trace(props.menuBlocks.toString());
 	}
 	
 	override public function render()
@@ -225,7 +218,6 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 	
 	override public function componentDidMount():Void 
 	{
-		return;
 		if(props.sameWidth && state.sameWidth == null)
 		{
 			//Timer.delay(layout,800);

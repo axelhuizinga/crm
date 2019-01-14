@@ -265,7 +265,7 @@ class DB extends DataAccessForm
 	
 	override function updateMenu(?viewClassPath:String):SMenuProps
 	{
-		trace('${Type.getClassName(Type.getClass(this))} task');
+		//trace('${Type.getClassName(Type.getClass(this))} task');
 		var sideMenu = state.sideMenu;
 		//sideMenu.menuBlocks['dbtools'].handlerInstance = this;
 		for(mI in sideMenu.menuBlocks['dbtools'].items)

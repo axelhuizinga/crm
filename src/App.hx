@@ -1,3 +1,4 @@
+import haxe.Serializer;
 import js.html.BodyElement;
 import js.html.svg.Document;
 import haxe.Constraints.Function;
@@ -16,6 +17,7 @@ import view.shared.io.User;
 
 //import haxe.http.HttpJs;
 import haxe.Json;
+import haxe.io.Bytes;
 import history.BrowserHistory;
 import history.History;
 import history.Location;
@@ -23,7 +25,7 @@ import js.Browser;
 import js.Cookie;
 import js.Error;
 import js.Promise;
-//import js.html.XMLHttpRequest;
+import js.html.XMLHttpRequest;
 import me.cunity.debug.Out;
 import model.ApplicationStore;
 import model.CState;
@@ -36,9 +38,12 @@ import redux.StoreMethods;
 import react.React;
 import react.ReactRef;
 import redux.react.Provider;
+import shared.DbData;
+import shared.DBMetaData;
 import Webpack.*;
-import model.AjaxLoader;
+//import model.AjaxLoader;
 import model.AppState;
+import view.shared.io.BinaryLoader;
 import action.AppAction;
 
 import view.UiView;
@@ -104,7 +109,41 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		if (!(App.user_name == '' || App.jwt == ''))
 		{			
 			trace('clientVerify');
-			var aj:HttpJs = AjaxLoader.loadData(App.config.api,
+			var bL:XMLHttpRequest = BinaryLoader.create(
+			'${App.config.api}', 
+			{				
+				user_name:App.user_name,
+				jwt:App.jwt,
+				className:'auth.User',
+				action:'clientVerify',
+				filter:'user_name|${App.user_name}',
+				dataSource:Serializer.run([
+					"users" => ["alias" => 'us',
+						"fields" => 'user_name,last_login'],
+					"contacts" => [
+						"alias" => 'co',
+						"fields" => 'first_name,last_name,email',
+						"jCond"=>'contact=co.id']
+				])
+			},
+			function(dBytes:Bytes)
+			{
+				//trace(dBytes.toString());
+				var u:hxbit.Serializer = new hxbit.Serializer();
+				var data:DbData = u.unserialize(dBytes, DbData);
+				trace(data.dataInfo);
+				if (data.dataErrors.keys().hasNext())
+				{
+					trace(data.dataErrors);
+					return store.dispatch(AppAction.LoginError(
+						{user_name:App.user_name, loginError:data.dataErrors.iterator().next()}));
+				}	
+				var uState:UserProps = data.dataInfo['user_data'];
+				uState.waiting = false;
+				return store.dispatch(AppAction.LoginComplete(uState));			
+			});
+			
+			/*var aj:HttpJs = AjaxLoader.loadData(App.config.api,
 			{jwt:App.jwt, user_name:App.user_name, className:'auth.User', action:'clientVerify'}, 
 			function(verifyData:Dynamic){
 				trace(verifyData);
@@ -116,16 +155,15 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 				else if (verifyData.content != null && verifyData.content == 'OK')
 				{
 					trace('verifyData:{verifyData.content}');
-					var uState:UserProps = {loggedIn: true, jwt:App.jwt, user_name:App.user_name};
-					uState.waiting = false;
+					var uState:UserProps = {loggedIn: true, jwt:App.jwt, user_name:App.user_name, waiting: false};
 					store.dispatch(AppAction.LoginComplete(uState));
 					//setState({appware:{user:uState}});
 					//_app.props = { waiting:false}; 
 				}		
-			});
+			});*/
 		}
 		else
-		{// WE HAVE EITHER NO JWT OR user_name
+		{// WE HAVE EITHER NO VALID JWT OR user_name
 			store.dispatch(AppAction.LoginRequired({jwt:App.jwt,user_name:App.user_name,waiting:false}));
 			//props = { waiting:false};
 		}

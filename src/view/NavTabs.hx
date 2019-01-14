@@ -28,7 +28,6 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 	{
 		trace(Reflect.fields(props));
 		//trace(context);
-		trace(Reflect.fields(props));
 		super(props);		
 	}
 	

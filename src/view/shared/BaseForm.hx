@@ -167,6 +167,12 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 	override public function componentDidMount():Void 
 	{
 		mounted = true;
+		trace(state.sideMenu !=null ? state.sideMenu.section + ':' +props.match.params.section :'No sideMenu');
+		if(state.sideMenu !=null && state.sideMenu.section!=props.match.params.section)
+		{
+			var basePath:String = props.match.path.split('/:')[0];
+			props.history.push('$basePath/${state.sideMenu.section}');
+		}
 		trace(mounted);
 	}
 	
@@ -207,26 +213,22 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 			trace(props.match.params.section);
 			
 		}
-		trace(props.match.params.section);
+		var section:String = (props.match.params.section == null?state.sideMenu.section:props.match.params.section);
+		trace(props.match.params.section + ':' + section);
 		return jsx('
 		<div className="columns">
 			${renderContent()}
-			${renderMenu()}
-		</div>
-		');
-	}
-
-	function renderMenu()
-	{
-		//trace('....');
-		//trace(state.sideMenu.menuBlocks.keys().next());
-		//trace(state.sideMenu.menuBlocks['dbtools'].handlerInstance);
-		//return null;
-		return jsx('
-			<$SMenu className="menu" sameWidth=${state.sideMenu.sameWidth} section=${state.sideMenu.section} 
+			<$SMenu className="menu" sameWidth=${state.sideMenu.sameWidth} section=${section} itemHandler=${state.sideMenu.itemHandler}
 			menuBlocks=${state.sideMenu.menuBlocks} />
+		</div>			
 		');
 	}
+	/*
+	<$SMenu className="menu" sameWidth=${state.sideMenu.sameWidth} section=${section} 
+			menuBlocks=${state.sideMenu.menuBlocks} />
+
+	*/
+
 	
 	public function setStateFromChild(newState:FormState)
 	{
@@ -269,7 +271,7 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 		for (smi in 0...sMa.length)
 		{
 			sMa[smi].onActivate = switchContent;
-			trace(sMa[smi].label);
+			//trace(sMa[smi].label);
 		}
 
 		sM.menuBlocks = [

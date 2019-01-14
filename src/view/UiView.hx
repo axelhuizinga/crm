@@ -108,10 +108,10 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 
 	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)//,snapshot:Dynamic
 	{
-		trace(prevState);
-		trace(prevProps);
+		//trace(prevState);
+		//trace(prevProps);
 		trace(App.firstLoad); 
-			App.firstLoad = false;
+		App.firstLoad = false;
 	}
 
 	var tabList:Array<Dynamic> = [];
@@ -135,7 +135,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 
 	override function render()
 	{
-		//trace(props.user);
+		//trace(props.user.jwt);
 		if (state.hasError) {
 		  return jsx('<h1>Something went wrong.</h1>');
 		}
@@ -158,7 +158,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 		}
 		else
 		{			
-			trace('render Router :)' + props.store);
+			trace('render Router :)' + browserHistory.location.pathname);
 			return jsx('
 			<$Router history={browserHistory} >
 			<>
@@ -182,7 +182,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 				</div>
 			</>
 			</$Router>
-			');//<div className="modal" ref=${App.modalBox}/><$Route path="/dashboard" exact={true} component=${DashBoard}/>
+			');
 		}
 		
 	}

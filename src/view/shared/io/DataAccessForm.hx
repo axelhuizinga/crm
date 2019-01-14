@@ -86,7 +86,10 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		requests = [];
 		if(props != null)
 		//trace(props.match);
-		trace(Type.getClassName(Type.getClass(this)));
+		section = Type.getClassName(Type.getClass(this)).split('.').pop();
+		trace(section);
+		props.sideMenu.itemHandler = itemHandler;
+		trace(props.sideMenu.itemHandler);
 		state = {
 			data:new StringMap(),
 			clean:true,
@@ -98,6 +101,10 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 			selectedRows:new Array()
 		};
 		dbData = new DbData();
+		if(props.match.params != null)
+		{
+			Reflect.callMethod(this, Reflect.field(this, props.match.params.action),null);
+		}
 	}
 
 	function createStateValuesArray(data:Array<Map<String,String>>, view:DataView):Array<Map<String,Dynamic>>
@@ -165,6 +172,16 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		//trace(newState);
 	}
 	
+	function itemHandler(e:Event)
+	{
+		trace(cast(e.target, ButtonElement).getAttribute('data-action'));
+		var but:ButtonElement = cast(e.target, ButtonElement);
+		trace('${props.match.params.section}/${but.getAttribute("data-action")}');
+		var basePath:String = props.match.path.split('/:')[0];
+		props.history.push('$basePath/${props.match.params.section}/${but.getAttribute("data-action")}');
+		//trace(props.menuBlocks.toString());
+	}
+
 	override public function componentDidMount():Void 
 	{
 		mounted = true;

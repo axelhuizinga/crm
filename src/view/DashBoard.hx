@@ -2,7 +2,7 @@ package view;
 import view.shared.io.User;
 
 import action.AppAction;
-import bulma_components.*;
+import bulma_components.Tabs;
 import model.LocationState;
 import view.shared.io.User.UserProps;
 import react.Partial;
@@ -124,8 +124,9 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 	{	
 		//var s:ApplicationState = untyped App.store.getState().appWare;
 		//trace(this.state);
-		trace(props.history.location.pathname);
-		//trace(props.jwt);
+		
+		//trace(props.history.location.pathname);
+		//trace(props.match);
 		if (state.hasError)
 			return jsx('<h1>Fehler in ${Type.getClassName(Type.getClass(this))}.</h1>');
 

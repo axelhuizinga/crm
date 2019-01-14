@@ -97,7 +97,7 @@ class AppService
 				copy(state, {waiting:true});
 				
 			case LoginComplete(uState):
-				trace(uState);
+				//trace(uState);
 				uState.loginError = null;
 				copy(state, //uState.change_pass_required?:
 				{
@@ -145,9 +145,9 @@ class AppService
 	public function middleware(action:AppAction, next:Void -> Dynamic)
 	{
 		trace(action);
-		var n = next();
+		/*var n = next();
 		trace(n);
-		return n;
+		return n;*/
 		return switch(action)
 		{			
 			/*case LoginReq(uState):
@@ -156,7 +156,8 @@ class AppService
 				trace(n);
 				n;*/
 			case LoginComplete(state):
-				App.firstLoad = false;			
+				App.firstLoad = false;	
+				next();		
 			default: next();
 		}
 	}
