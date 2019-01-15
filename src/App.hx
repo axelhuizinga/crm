@@ -1,3 +1,4 @@
+import react.addon.intl.ReactIntlLocaleData;
 import haxe.Serializer;
 import js.html.BodyElement;
 import js.html.svg.Document;
@@ -41,7 +42,9 @@ import redux.react.Provider;
 import shared.DbData;
 import shared.DBMetaData;
 import Webpack.*;
-//import model.AjaxLoader;
+import react.addon.ReactIntl;
+import react.addon.intl.IntlProvider;
+import react.addon.intl.ReactIntlLocaleData.de;
 import model.AppState;
 import view.shared.io.BinaryLoader;
 import action.AppAction;
@@ -79,6 +82,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	{
 		super(props);
 		//trace(rt);
+		ReactIntl.addLocaleData(['de']);
 		_app = this;
 		firstLoad = true;
 		//props = { waiting:true};
@@ -200,7 +204,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		trace('OK');
         return jsx('
 		<>
-			<Provider store={store}><UiView/></Provider>
+			<Provider store={store}><IntlProvider locale="de-DE"><UiView/></IntlProvider></Provider>
 		</>			
         ');		//nn<div className="modal" ref=${App.modalBox}/>
     }

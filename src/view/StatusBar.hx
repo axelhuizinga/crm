@@ -1,6 +1,7 @@
 package view;
 
 
+import react.ReactComponent.ReactFragment;
 import haxe.Timer;
 import bulma_components.*;
 import react.Partial;
@@ -17,6 +18,7 @@ import action.AppAction;
 import model.AppState;
 import view.shared.io.User.UserProps;
 
+import react.addon.intl.FormattedDate;
 /**
  * ...
  * @author axel@cunity.me
@@ -115,11 +117,17 @@ class StatusBar extends ReactComponentOf<StatusBarProps,Dynamic>
 				<span className="column icon is-one-third">
 				<i className={userIcon}></i> ${user_name}
 				</span>
-				<ReactDateTimeClock value={state.date}  className="flex-end" />
+				<$FormattedDate  value={state.date}  className="column flex-end" 
+					year="numeric" month="numeric" day="numeric" hour="numeric" minute="numeric"  />
 			</div>
 		</Footer>
 		');
 	}
-	
+	//<ReactDateTimeClock value={state.date}  className="flex-end" />
+
+	function DateTimeClock():ReactFragment
+	{
+		return null;
+	}
 	
 }

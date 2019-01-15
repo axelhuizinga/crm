@@ -269,7 +269,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		var column:Int = 0;
 		var cells:Array<DataCell> = fieldNames.map(function(fN:String){
 			var columnDataState:DataColumn = props.dataState.columns.get(fN);
-			trace(columnDataState.cellFormat != null ? fN:'');
+			//trace(columnDataState.cellFormat != null ? fN:'');
 			var cD:DataCell = {
 				cellFormat:columnDataState.cellFormat,
 				className:columnDataState.className,
@@ -364,6 +364,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 	public function layOut():Void
 	{
 		trace('firstCall: $headerUpdated $tHeadRef: ${tHeadRef != null && tHeadRef.current != null}');
+		//return;
 		if(tHeadRef == null || tHeadRef.current == null)
 		{
 			trace('$tHeadRef: ${tHeadRef != null && tHeadRef.current != null}');
@@ -377,7 +378,10 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		//var tableHeight:Float = tableRef.current.clientHeight;
 		var scrollBarWidth:Float = App.config.getScrollbarWidth();
 		var freeWidth:Float = tableRef.current.parentElement.offsetWidth - tableRef.current.offsetWidth - scrollBarWidth;
-		tHeadRef.current.style.visibility = "collapse";						
+		tableRef.current.setAttribute('style','margin-top:${tHeadRef.current.offsetHeight*-1}px');
+		trace(tableRef.current.offsetHeight);
+		//tHeadRef.current.style.visibility = "collapse";						
+		trace(tableRef.current.offsetHeight);
 		//trace(tHeadRef.current.nodeName + ':' + tHeadRef.current.style.visibility);						
 		var i:Int = 0;
 		var grow:Array<Int> = [];
@@ -395,15 +399,17 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			}		
 			var growSum:Int = 0;
 			grow.iter(function(el) growSum += (el==null?0:el));
-			//trace (grow +':' + growSum );
+			trace (grow +':' + growSum );
 			if (growSum > 0)
 			{
 				var growUnit:Float = freeWidth / growSum;
 				//trace(growSum);		
 				for (i in 0...grow.length)
 				{
-					if (grow[i] != 0)
+					if (grow[i] != null && grow[i] !=0)
 					{
+						//trace(grow[i] * growUnit + rowRef.current.children.item(i).offsetWidth);
+						trace('$i ${grow[i]} * $growUnit + ${rowRef.current.children.item(i).offsetWidth}');
 						rowRef.current.children.item(i).setAttribute(
 							'width', Std.string(grow[i] * growUnit + rowRef.current.children.item(i).offsetWidth) + 'px'
 						);
@@ -414,7 +420,8 @@ class Table extends ReactComponentOf<TableProps, TableState>
 		i = 0;
 		for (cell in tHeadRef.current.children)
 		{
-			var w:Float = cell.getBoundingClientRect().width;
+			var w:Int = cell.offsetWidth;
+			trace(w +':' + cell.clientWidth);
 			var fixedHeaderCell = cast(fixedHeader.current.childNodes[i],Element);
 			fixedHeaderCell.setAttribute('style', 'width:${w}px');
 			i++;

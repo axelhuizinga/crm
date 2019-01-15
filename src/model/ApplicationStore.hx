@@ -42,7 +42,7 @@ class ApplicationStore
 		// create middleware normally, excepted you must use 
 		// 'StoreBuilder.mapMiddleware' to wrap the Enum-based middleware
 		var middleware = Redux.applyMiddleware(
-			//mapMiddleware(Thunk, new ThunkMiddleware()),
+			mapMiddleware(Thunk, new ThunkMiddleware())
 			//mapMiddleware(StatusAction, statusBarService)
 			//mapMiddleware(AppAction, appWare)
 			//mapMiddleware(LocationAction, locationService)

@@ -6,6 +6,7 @@ import js.html.XMLHttpRequest;
 import model.AppState;
 import react.ReactComponent.ReactComponentOf;
 import react.ReactMacro.jsx;
+import react.ReactUtil;
 import redux.Redux;
 import action.async.AsyncUserAction;
 import view.shared.RouteTabProps;
@@ -39,6 +40,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 	
 	public function new(?props:LoginProps)
 	{
+		super(props);
 		trace(Reflect.fields(props));
 		if (props.match != null)
 		{
@@ -46,7 +48,6 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 		}
 		trace(props);
 		state = {api:props.api,user_name:'',pass:''};
-		super(props);
 	}
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
@@ -55,6 +56,13 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 			submitLogin: function(lState:LoginState) return dispatch(AsyncUserAction.loginReq(lState))
 		};
 	}
+
+	/*static function mergeProps(stateProps:LoginState, dispatchProps:Dynamic, ownProps:LoginProps)
+	{
+		trace(stateProps);
+		trace(ownProps);
+		return ReactUtil.copy( ReactUtil.copy(ownProps, stateProps), dispatchProps);
+	}*/
 	
 	static function mapStateToProps() {
 
@@ -88,6 +96,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 		trace(t.value);
 		//t.className = 'input';
 		Reflect.setField(s, t.name, t.value);
+		trace(props.dispatch + '==' + App.store.dispatch);
 		trace(props.dispatch == App.store.dispatch);
 		//App.store.dispatch(AppAction.LoginChange(s));
 		this.setState(s);
@@ -97,7 +106,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 	dynamic function handleSubmit(e:InputEvent)
 	{
 		e.preventDefault();
-		trace(props.dispatch); //return;
+		trace(props.submitLogin); //return;
 		//this.setState({waiting:true});
 		//props.dispatch(AppAction.Login("{user_name:state.user_name,pass:state.pass}"));
 		//trace(props.dispatch);
@@ -139,16 +148,16 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 				<div className="form2">
 				  <form name="form" onSubmit={handleSubmit}  >
 					<div className="formField">
-						<label className="userIcon" forhtml="login-user_name">
+						<label className="userIcon" forhtml="login_user_name">
 							<span className="hidden">User ID</span></label>
-						<input id = "login-user_name"  name = "user_name" 
+						<input id = "login_user_name"  name = "user_name" 
 							className=${errorStyle("user_name") + "form-input"}  
 							placeholder="User ID" value={state.user_name} onChange={handleChange} />
 					</div>
 					<div className="formField">
-						<label className="lockIcon" forhtml="login-pass">
+						<label className="lockIcon" forhtml="login_pass">
 							<span className="hidden">Password</span></label>
-						<input id="login-pass" className=${errorStyle("pass") + "form-input"}  
+						<input id="login_pass" className=${errorStyle("pass") + "form-input"}  
 							name="pass" type="password" placeholder="Password"  value={state.pass} onChange={handleChange} />					
 					</div>
 					<div className="formField">

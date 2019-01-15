@@ -6,12 +6,13 @@
 	$br $br 0 0;
 }
 */
-$baseFont:14;
+$baseFont:16;
+$borderSmallWidth:0.35px;
 $statusLineHeight:1.5;
 $statusBarHeight:(($baseFont+2)*$statusLineHeight)+2;
 $bgto: #ddd;
 $border-light: #dbdbdb;
-$borderCol:0.35px dotted #eee;
+$borderCol:$borderSmallWidth dotted #eee;
 $buttonSun:#ffdd57;
 $cell-border: 1px solid grey;
 $cellPadding: 0px 0.75rem;
@@ -31,7 +32,7 @@ $lightSun: hsl(49, 95%, 99%);
 $modal-background-background-color: hsl(270, 10%, 80%);
 $modal-content-width: auto;
 $sun: rgb(251, 220, 80);
-$borderHeadCol:0.6px dotted $lightGreen;
+$borderHeadCol:$borderSmallWidth solid $lightGreen;
 $tabs-boxed-link-radius: 0.3rem;//@include tabsradius(5);
 $tableHeader-radius: 0.3rem;
 $tableHeaderHeight: 2rem;
@@ -50,15 +51,15 @@ $darkGradient:linear-gradient($lightBlue 0%, $paleBlue 32%);
  
 html,body { 
     /*font-family:Arial;*/
-	font-size:14px;
+	font-size:16px;
 	margin: 0;
 	overflow:hidden!important;
 	height:100%;
+	line-height:1;
 } 
 
 .rootBox
-{
-	
+{	
 	height:100%;
 	display:flex;
 	flex: auto;
@@ -96,13 +97,14 @@ h1 {
 .flex-end
 { 
 	align-self:flex-end;
+	flex-grow: 0;
 }
 .footer
 {
 	/*display:flex;
 	flex-direction:column;*/
 	padding:0rem 0.5rem 0rem;
-	border: 1px solid $primary;
+	border: $borderSmallWidth solid grey;
 }
 .footer .col
 {
@@ -114,7 +116,7 @@ h1 {
 	margin:0.35rem 0.5rem 0rem;
 }*/
 .footer .column{
-	padding:0rem;
+	padding: 0.2rem;
 }
 .pBlock
 {
@@ -148,7 +150,6 @@ h1 {
 {
 	padding: $cellPadding;
 	/*border-left:0.6px dotted transparent;*/
-	
 }
 .grid.head
 {
@@ -157,16 +158,12 @@ h1 {
 	padding-bottom:2px;
 }
 
-.grid.body>div
-{
-	/*border-left:0.6px dotted white;*/
-}
-
 .fixed-grid-container 
 {
   display:flex;
   flex-direction:column;
   flex-grow:1;
+  margin: 0.8rem 0rem 0.5rem 0.8rem
    /* position: relative;could be absolute or relative */
 }
 
@@ -528,18 +525,6 @@ form.modal-card-body{
 	color:$darkGreen!important;
 	border-bottom-color:$darkSun!important;
 }
-.table tr{
-	/*display:flex;*/
-}
-.table td, .table th{
-	border: none;
-	border-left: $borderCol;
-}
-.table thead th{
-	color: $lightSun;
-	border-left:$borderHeadCol!important;
-	white-space:nowrap;
-}
 
 /*FORMS * ELEMENTS*/
 form{
@@ -643,10 +628,20 @@ label.panel-heading {
 }
 
 /*tables*/
+.table{
+	border-spacing: 1px;
+    border:none;
+}
+
+.table *{
+	border:none;
+}
+
 .table.head
 {
 	background-color:transparent!important;
 	text-shadow: 0.2rem 0.2rem 1.1rem #333;
+	border:none;
 }
 .trHeader
 {
@@ -654,6 +649,25 @@ label.panel-heading {
 	border-radius: $tableHeader-radius $tableHeader-radius 0px 0px;
 	color:#fff;
 	
+}
+/*.table tr{
+	display:flex;
+}*/
+.th-box
+{
+	margin:0.5rem 0.75rem;
+}
+.table td, .table th{
+	border: none;
+	border-left: $borderCol;
+	white-space: nowrap;
+}
+
+.table thead th{
+	color: $lightSun;
+	padding:0px;
+	border-left:$borderHeadCol;
+	white-space:nowrap;
 }
 
 .table tr.is-selected

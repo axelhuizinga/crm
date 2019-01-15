@@ -101,7 +101,8 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 			selectedRows:new Array()
 		};
 		dbData = new DbData();
-		if(props.match.params != null)
+		trace('>>>${props.match.params.action}<<<');
+		if(props.match.params.action != null)
 		{
 			Reflect.callMethod(this, Reflect.field(this, props.match.params.action),null);
 		}
