@@ -1,4 +1,4 @@
-import react.addon.intl.ReactIntlLocaleData;
+import react.intl.DateTimeFormatOptions.NumericFormat;
 import haxe.Serializer;
 import js.html.BodyElement;
 import js.html.svg.Document;
@@ -42,9 +42,13 @@ import redux.react.Provider;
 import shared.DbData;
 import shared.DBMetaData;
 import Webpack.*;
-import react.addon.ReactIntl;
+/*import react.addon.ReactIntl;
 import react.addon.intl.IntlProvider;
 import react.addon.intl.ReactIntlLocaleData.de;
+import react.addon.intl.IntlShape;*/
+import react.intl.DateTimeFormatOptions.NumericFormat.Numeric;
+import react.intl.ReactIntl;
+import react.intl.comp.IntlProvider;
 import model.AppState;
 import view.shared.io.BinaryLoader;
 import action.AppAction;
@@ -82,7 +86,14 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	{
 		super(props);
 		//trace(rt);
-		ReactIntl.addLocaleData(['de']);
+		ReactIntl.addLocaleData({locale:'de'});
+		//var iS:IntlShape = untyped new IntlShape();
+		/*trace(ReactIntl.formatDate(
+			Date.now(),	{
+			hour: Numeric,
+			minute: Numeric
+		}));*/
+			//Date.now(),	{year:'numeric', month:"numeric", day:"numeric", hour:"numeric", minute:"numeric"}));
 		_app = this;
 		firstLoad = true;
 		//props = { waiting:true};
@@ -204,7 +215,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		trace('OK');
         return jsx('
 		<>
-			<Provider store={store}><IntlProvider locale="de-DE"><UiView/></IntlProvider></Provider>
+			<Provider store={store}><IntlProvider locale="de"><UiView/></IntlProvider></Provider>
 		</>			
         ');		//nn<div className="modal" ref=${App.modalBox}/>
     }

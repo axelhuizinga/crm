@@ -98,6 +98,7 @@ h1 {
 { 
 	align-self:flex-end;
 	flex-grow: 0;
+	vertical-align: t
 }
 .footer
 {
@@ -116,7 +117,8 @@ h1 {
 	margin:0.35rem 0.5rem 0rem;
 }*/
 .footer .column{
-	padding: 0.2rem;
+	padding: 0.0rem;
+	white-space: nowrap;
 }
 .pBlock
 {
@@ -343,6 +345,8 @@ h1 {
 	 display:flex;
 	 /*flex-grow:1; */
 	 justify-content:space-between;
+	 padding: 0.1rem;
+	 margin-bottom: 2px;
  } 
 .topNav, .topNav ul{
 	/*display:flex;*/
@@ -413,7 +417,7 @@ h1 {
 }
 .tabNav2 .tabs
 {
-	/*background:solid $background;*/
+	line-height: 1.15;
 	background:solid transparent;
 	min-height: 0;
 }

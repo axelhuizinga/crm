@@ -177,7 +177,8 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 	{
 		trace(cast(e.target, ButtonElement).getAttribute('data-action'));
 		var but:ButtonElement = cast(e.target, ButtonElement);
-		trace('${props.match.params.section}/${but.getAttribute("data-action")}');
+		trace('${section}/${but.getAttribute("data-action")}');
+		trace(props.history.location.pathname);
 		var basePath:String = props.match.path.split('/:')[0];
 		props.history.push('$basePath/${props.match.params.section}/${but.getAttribute("data-action")}');
 		//trace(props.menuBlocks.toString());

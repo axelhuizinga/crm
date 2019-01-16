@@ -17,8 +17,13 @@ import redux.StoreMethods;
 import action.AppAction;
 import model.AppState;
 import view.shared.io.User.UserProps;
+import view.shared.DateTime;
 
-import react.addon.intl.FormattedDate;
+import react.intl.ReactIntl;
+import react.intl.comp.FormattedDate;
+import react.intl.DateTimeFormatOptions.NumericFormat.Numeric;
+import react.intl.DateTimeFormatOptions.NumericFormat.TwoDigit;
+//import react.addon.intl.FormattedDate;
 /**
  * ...
  * @author axel@cunity.me
@@ -41,13 +46,19 @@ class StatusBar extends ReactComponentOf<StatusBarProps,Dynamic>
 	var mounted:Bool = false;
 	var timer:Timer;
 	
-	public function new(?props:Dynamic)
+	public function new(?props:StatusBarProps,? context:Dynamic)
 	{
 		state = {date:Date.now()};
 		//trace(props);
+		//trace(context);
 		trace('ok');
 		super(props);
 		//trace(this);
+		/*trace(ReactIntl.formatDate(
+			Date.now(),	{
+			hour: Numeric,
+			minute: Numeric
+		}));*/
 	}
 	
 	override public function componentDidMount():Void 
@@ -113,20 +124,29 @@ class StatusBar extends ReactComponentOf<StatusBarProps,Dynamic>
 		return jsx('
 		<Footer>
 			<div className="statusbar">
-				<span className="column is-one-third" > Pfad: ${props.pathname}</span>				
-				<span className="column icon is-one-third">
-				<i className={userIcon}></i> ${user_name}
-				</span>
-				<$FormattedDate  value={state.date}  className="column flex-end" 
-					year="numeric" month="numeric" day="numeric" hour="numeric" minute="numeric"  />
+				<span className="column" > Pfad: ${props.pathname}</span>				
+				<span className="column">
+				<i className=${userIcon}></i> $user_name</span>
+				<$DateTime />			
 			</div>
 		</Footer>
 		');
 	}
-	//<ReactDateTimeClock value={state.date}  className="flex-end" />
 
-	function DateTimeClock():ReactFragment
+			/*<$FormattedDate  value={state.date}  className="column flex-end" is-one-third
+					year=${Numeric} month=${Numeric} day=${Numeric} hour=${Numeric} minute=${Numeric}  />
+					ReactIntl.formatDate(
+			Date.now(),	{
+			hour: Numeric,
+			minute: Numeric
+		})
+		${ReactIntl.injectIntl('${DateTimeClock}')}		
+			*/	
+	//<ReactDateTimeClock value={state.date}  className="flex-end" /><span  className="column flex-end" > </span>
+
+	function DateTimeClock(p:Dynamic):ReactFragment
 	{
+		trace(p);
 		return null;
 	}
 	
