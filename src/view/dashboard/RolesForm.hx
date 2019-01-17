@@ -42,7 +42,7 @@ class RolesForm extends BaseForm
 		
 		state = {
 			clean:true,
-			viewClassPath:"userList",
+			//viewClassPath:"userList",
 			hasError:false,
 			loading:true,
 			sideMenu:initSideMenu(
@@ -207,7 +207,8 @@ class RolesForm extends BaseForm
 
 	override function renderContent():ReactFragment
 	{
-		return switch(state.viewClassPath)
+		//return switch(state.viewClassPath)
+		return switch(props.match.params.action)
 		{
 			case "userList":
 				jsx('

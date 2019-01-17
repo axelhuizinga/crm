@@ -48,9 +48,9 @@ class DB extends DataAccessForm
 			{handler:editTableFields, label:'Bearbeiten', disabled:state.selectedRows.length==0},
 			//{handler:save, label:'Speichern', disabled:state.clean},
 		];*/
-		var sideMenu = updateMenu('dbtools'); //state.sideMenu;
+		var sideMenu = updateMenu('DB'); //state.sideMenu;
 		//trace(sideMenu);
-		//sideMenu.menuBlocks['dbtools'].items =  _menuItems;
+		//sideMenu.menuBlocks['DB'].items =  _menuItems;
 		state = ReactUtil.copy(state, {sideMenu:sideMenu});		
 	}
 	
@@ -82,7 +82,8 @@ class DB extends DataAccessForm
 					trace(data['error']);
 					return;
 				}				 
-				setState({data:data, viewClassPath:'shared.io.DB.showFieldList'});
+				//setState({data:data, viewClassPath:'shared.io.DB.showFieldList'});
+				setState({data:data});
 		}));
 		trace(props.history);
 		trace(props.match);
@@ -103,7 +104,7 @@ class DB extends DataAccessForm
 			isConnected:true,
 			initialState: initStateFromDataTable(data),
 			model:'tableFields',
-			viewClassPath:'shared.io.DB.editTableFields',			
+			//viewClassPath:'shared.io.DB.editTableFields',			
 			fields:view,
 			valuesArray:createStateValuesArray(data, dataAccess['editTableFields'].view), 
 			loading:false,
@@ -195,7 +196,8 @@ class DB extends DataAccessForm
 				}		
 				trace(data.dataRows);
 				trace(data.dataRows[29]['id'] + '<<<');
-				setState({dataTable:data.dataRows, viewClassPath:'shared.io.DB.showFieldList'});
+				//setState({dataTable:data.dataRows, viewClassPath:'shared.io.DB.showFieldList'});
+				setState({dataTable:data.dataRows});
 			}
 		));
 		//setState({viewClassPath:'shared.io.DB.showFieldList'});
@@ -232,9 +234,9 @@ class DB extends DataAccessForm
 	function renderResults():ReactFragment
 	{
 		if (state.data != null)
-		return switch(state.viewClassPath)
+		return switch(props.match.params.action)
 		{
-			case 'shared.io.DB.showFieldList':
+			case 'showFieldList':
 				trace(dataDisplay["fieldsList"]);
 				trace(state.dataTable[29]['id']+'<<<');
 				jsx('
@@ -242,7 +244,7 @@ class DB extends DataAccessForm
 					${...props} dataState = ${dataDisplay["fieldsList"]} parentForm=${this} 
 					className = "is-striped is-hoverable" fullWidth=${true}/>				
 				');	
-			case 'shared.io.DB.editTableFields':
+			case 'editTableFields':
 				null;
 			default:
 				null;
@@ -267,8 +269,8 @@ class DB extends DataAccessForm
 	{
 		//trace('${Type.getClassName(Type.getClass(this))} task');
 		var sideMenu = state.sideMenu;
-		//sideMenu.menuBlocks['dbtools'].handlerInstance = this;
-		for(mI in sideMenu.menuBlocks['dbtools'].items)
+		//sideMenu.menuBlocks['DB'].handlerInstance = this;
+		for(mI in sideMenu.menuBlocks['DB'].items)
 		{
 			switch(mI.action)
 			{		

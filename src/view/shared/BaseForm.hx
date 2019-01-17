@@ -86,8 +86,9 @@ typedef FormField =
 
 typedef FormState =
 {
+	?action:String,
 	?dataClassPath:String,
-	?viewClassPath:String,
+	//?viewClassPath:String,
 	?data:Map<String,Dynamic>,
 	?dataForm:DataAccessForm,
 	?dataTable:Array<Map<String,Dynamic>>,
@@ -103,6 +104,7 @@ typedef FormState =
 	?fields:Map<String,FormField>,//VIEW FORMFIELDS
 	?valuesArray:Array<Map<String,Dynamic>>,//FORMATTED DISPLAY VALUES
 	?values:Map<String,Dynamic>,//FORMATTED DISPLAY VALUES
+	?section:String,
 	?sideMenu:SMenuProps,
 	?submitted:Bool,
 	?errors:Map<String,String>,
@@ -143,13 +145,14 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 		state = {
 			data:new Map(),
 			//loading:true,
-			viewClassPath:'',
+			//viewClassPath:'',
 			//content:new Array(),
 			clean:true,
 			errors:new Map(),
 			//values:new StringMap(),
 			//fields:new StringMap(),
-			sideMenu:null,
+			section: props.match.params.section,
+			sideMenu:{},
 			submitted:false,
 			hasError:false		
 		};
@@ -167,13 +170,17 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 	override public function componentDidMount():Void 
 	{
 		mounted = true;
-		trace(state.sideMenu !=null ? state.sideMenu.section + ':' +props.match.params.section :'No sideMenu');
-		if(state.sideMenu !=null && state.sideMenu.section!=props.match.params.section)
+		if(state.sideMenu !=null && state.section == null) 
+			state.section = state.sideMenu.section;
+		else
+			state.sideMenu.section = state.section;
+		trace(state.section);
+		if(state.section != props.match.params.section)
 		{
 			var basePath:String = props.match.path.split('/:')[0];
-			props.history.push('$basePath/${state.sideMenu.section}');
+			props.history.push('$basePath/${state.section}');
 		}
-		trace(mounted);
+		//trace(mounted);
 	}
 	
 	override public function componentWillUnmount()
@@ -207,14 +214,10 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
         return null;
     }
 
-	override public function render() {
-		if(props.match.params.section != null)
-		{
-			trace(props.match.params.section);
-			
-		}
-		var section:String = (props.match.params.section == null?state.sideMenu.section:props.match.params.section);
-		trace(props.match.params.section + ':' + section);
+	override public function render() 
+	{
+		var section:String = (state.section == null?state.sideMenu.section:state.section);
+		trace(state.section + ':' + section +':' + state.sideMenu.section);
 		return jsx('
 		<div className="columns">
 			${renderContent()}
@@ -223,12 +226,6 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 		</div>			
 		');
 	}
-	/*
-	<$SMenu className="menu" sameWidth=${state.sideMenu.sameWidth} section=${section} 
-			menuBlocks=${state.sideMenu.menuBlocks} />
-
-	*/
-
 	
 	public function setStateFromChild(newState:FormState)
 	{
@@ -246,9 +243,9 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 		//var viewClassPath:String = reactEventSource.target.getAttribute('data-classpath');
 		var section:String = reactEventSource.target.getAttribute('data-section');
 		//trace( 'state.viewClassPath:${state.viewClassPath} viewClassPath:$viewClassPath');
-		trace( 'props.match.params.section:${props.match.params.section} section:$section');
+		trace( 'state.section:${state.section} section:$section');
 		//if (state.viewClassPath != viewClassPath)
-		if (section != props.match.params.section)
+		if (section != state.sideMenu.section)
 		{
 			//var menuBlocks:
 			var sM:SMenuProps = state.sideMenu;

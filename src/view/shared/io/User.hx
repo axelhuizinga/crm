@@ -95,7 +95,7 @@ class User extends DataAccessForm
 				trace(Reflect.fields(data.dataRows[0]));
 				if (data.dataRows[0]['change_pass_required'] == '1')
 				{
-					setState({data:data.dataRows[0], viewClassPath:'changePassword',
+					setState({data:data.dataRows[0], action:'changePassword',
 					fields:dataAccess['changePassword'].view,
 					values:createStateValues(data.dataRows[0], 
 					dataAccess['changePassword'].view), loading:false});	
@@ -112,7 +112,7 @@ class User extends DataAccessForm
 					}));				
 				}
 				else{
-					setState({data:data.dataRows[0], viewClassPath:'edit',
+					setState({data:data.dataRows[0], action:'edit',
 					fields:dataAccess['edit'].view,
 					values:createStateValues(data.dataRows[0], 
 					dataAccess['edit'].view), loading:false});	
@@ -137,7 +137,7 @@ class User extends DataAccessForm
 		//trace(prevState);
 		//trace(state.values);
 		trace(App.store.getState().appWare.user.first_name);
-		//trace(state.viewClassPath);
+		//trace(props.match.params.action);
 		if(autoFocus!=null)
 		autoFocus.current.focus();
 	}
@@ -145,12 +145,12 @@ class User extends DataAccessForm
 	public function changePassword(ev:ReactEvent):Void
 	{
 		trace(state.values);
-		trace(state.viewClassPath);
-		if(state.viewClassPath!='changePassword')
+		trace(props.match.params.action);
+		if(props.match.params.action!='changePassword')
 		{
 			updateMenu('changePassword');
 			props.history.push(props.location.pathname + '/user/changePassword/' + App.user_name);
-			return setState({viewClassPath:'changePassword'});
+			return setState({action:'changePassword'});
 		}
 		else {
 			if(!(state.values['pass'].length>7 && state.values['new_pass'].length>7))
@@ -187,7 +187,7 @@ class User extends DataAccessForm
 				{
 					trace(App.store.getState().appWare.user.dynaMap());
 					setState({
-						viewClassPath:'edit',
+						//viewClassPath:'edit',
 						fields:dataAccess['edit'].view,
 						values:createStateValues(App.store.getState().appWare.user.dynaMap(), dataAccess['edit'].view),
 					 	loading:false});
@@ -349,8 +349,8 @@ class User extends DataAccessForm
 	
 	function renderContent():ReactFragment
 	{
-		trace(state.viewClassPath);
-		return switch(state.viewClassPath)
+		trace(props.match.params.action);
+		return switch(props.match.params.action)
 		{
 			case "edit":		
 				renderElements();

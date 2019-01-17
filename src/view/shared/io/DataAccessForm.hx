@@ -1,5 +1,6 @@
 package view.shared.io;
 
+import haxe.macro.Type.Ref;
 import react.ReactEvent;
 import react.router.ReactRouter;
 import react.router.Route.RouteMatchProps;
@@ -33,6 +34,7 @@ import view.shared.SMenu.SMItem;
 import view.shared.io.DataAccess.DataView;
 import view.table.Table.DataState;
 import react.PureComponent.PureComponentOf;
+import react.ReactComponent;
 import react.ReactComponent.ReactFragment;
 import react.ReactMacro.jsx;
 import react.React;
@@ -61,7 +63,7 @@ typedef DataFormProps =
 	model:String
 }
 
-class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
+class DataAccessForm extends ReactComponentOf<DataFormProps,FormState>
 {
 	var mounted:Bool;
 	var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;	
@@ -89,8 +91,9 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		section = Type.getClassName(Type.getClass(this)).split('.').pop();
 		trace(section);
 		props.sideMenu.itemHandler = itemHandler;
-		trace(props.sideMenu.itemHandler);
+		//trace(props.sideMenu.itemHandler);
 		state = {
+			action:props.match.params.action,
 			data:new StringMap(),
 			clean:true,
 			errors:new StringMap(),
@@ -101,8 +104,8 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 			selectedRows:new Array()
 		};
 		dbData = new DbData();
-		trace('>>>${props.match.params.action}<<<');
-		if(props.match.params.action != null)
+		//trace('>>>${props.match.params.action}<<<');
+		if(false && props.match.params.action != null)
 		{
 			Reflect.callMethod(this, Reflect.field(this, props.match.params.action),null);
 		}
@@ -178,16 +181,46 @@ class DataAccessForm extends PureComponentOf<DataFormProps,FormState>
 		trace(cast(e.target, ButtonElement).getAttribute('data-action'));
 		var but:ButtonElement = cast(e.target, ButtonElement);
 		trace('${section}/${but.getAttribute("data-action")}');
-		trace(props.history.location.pathname);
+		trace(props.history.location.pathname +':' + props.match.params.section);
 		var basePath:String = props.match.path.split('/:')[0];
-		props.history.push('$basePath/${props.match.params.section}/${but.getAttribute("data-action")}');
+		props.history.push('$basePath/$section/${but.getAttribute("data-action")}');
 		//trace(props.menuBlocks.toString());
+	}
+
+	function callMethod(method:String):Bool
+	{
+		var fun:Function = Reflect.field(this,method);
+		if(Reflect.isFunction(fun))
+		{
+			Reflect.callMethod(this,fun,null);
+			return true;
+		}
+		return false;
+	}
+
+	override public function shouldComponentUpdate(nextProps:DataFormProps,nextState:FormState)
+	{
+		trace(props.match.params.action + ':' +nextProps.match.params.action + ':' + state.action);
+		if(props.match.params.action!=nextProps.match.params.action)
+		{
+			callMethod(nextProps.match.params.action);
+			return false;
+		}
+		return true;
 	}
 
 	override public function componentDidMount():Void 
 	{
+		if(state.action != null)
+		{
+			var fun:Function = Reflect.field(this,state.action);
+			if(fun != null)
+			{
+				Reflect.callMethod(this, fun, null);
+			}
+		}
 		mounted = true;
-		trace(mounted);
+		//trace(mounted);
 	}
 	
 	override public function componentWillUnmount()

@@ -97,7 +97,7 @@ class AppService
 				copy(state, {waiting:true});
 				
 			case LoginComplete(uState):
-				//trace(uState);
+				trace(uState);
 				uState.loginError = null;
 				copy(state, //uState.change_pass_required?:
 				{

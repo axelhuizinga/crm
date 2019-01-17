@@ -44,16 +44,16 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 					{
 						dataClassPath:'model.tools.DB',
 						label:'DB Design',
-						section: 'dbtools',
+						section: 'DB',
 						items: DB.menuItems
 					},
 					{
 						dataClassPath:'model.admin.SyncExternal',
 						label:'DB Abgleich',
-						section: 'synctools',
+						section: 'DBSync',
 						items: DBSync.menuItems
 					}
-				],{section: 'synctools', sameWidth: true}					
+				],{section: 'DBSync', sameWidth: true}					
 
 			),
 			loading:true
@@ -121,12 +121,12 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 //			sM.menuBlocks[]
 		return switch(match.params.section)
 		{
-			case "synctools":
+			case "DBSync":
 				jsx('
 					<$DBSync ${...props} sideMenu=${state.sideMenu}
 					handleChange={false} handleSubmit={false} fullWidth={true}/>
 				');					
-			case "dbtools"|null:
+			case "DB"|null:
 				jsx('
 					<$DB ${...props} sideMenu=${state.sideMenu}
 					handleChange={false} handleSubmit={false} fullWidth={true}/>

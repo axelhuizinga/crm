@@ -38,9 +38,12 @@ class DBMetaData implements Serializable
 	}
 
 	public function stateToDataParams(dT:Dynamic):IntMap<DataField>
+	//public function stateToDataParams(dT:Dynamic):Map<String,Dynamic>
    	{
 		var dM:IntMap<DataField> = new IntMap();
+		//var dM:Map<String,Dynamic> = new Map();
         for(f in Reflect.fields(dT))
+            //dM.set(f, dynToDataField(Reflect.field(dT, f)));
             dM.set(Std.parseInt(f), dynToDataField(Reflect.field(dT, f)));
 		return dM;
    	}

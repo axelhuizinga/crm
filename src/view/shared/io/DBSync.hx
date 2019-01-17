@@ -67,9 +67,9 @@ class DBSync extends DataAccessForm
 
 		});*/
 
-		var sideMenu =  updateMenu('synctools');//state.sideMenu;
+		var sideMenu =  updateMenu('DBSync');//state.sideMenu;
 		//trace(sideMenu);
-		//sideMenu.menuBlocks['synctools'].items = _menuItems;
+		//sideMenu.menuBlocks['DBSync'].items = _menuItems;
 		state = ReactUtil.copy(state, {sideMenu:sideMenu});		
 	}
 	
@@ -96,7 +96,7 @@ class DBSync extends DataAccessForm
 					trace(data['error']);
 					return;
 				}				 
-				setState({data:data, viewClassPath:'shared.io.DB.showUserList'});
+				setState({data:data});
 		}));
 		trace(props.history);
 		trace(props.match);
@@ -210,7 +210,7 @@ class DBSync extends DataAccessForm
 	
 	function renderResults():ReactFragment
 	{
-		trace(state.viewClassPath + ':' + Std.string(state.dataTable != null));
+		trace(props.match.params.section + ':' + Std.string(state.dataTable != null));
 		//trace(dataDisplay["userList"]);
 		if (state.dataTable != null)
 		return switch(props.match.params.action)
@@ -253,8 +253,8 @@ class DBSync extends DataAccessForm
 	override function updateMenu(?viewClassPath:String):SMenuProps
 	{
 		var sideMenu = state.sideMenu;
-		//sideMenu.menuBlocks['synctools'].handlerInstance = this;
-		for(mI in sideMenu.menuBlocks['synctools'].items)
+		//sideMenu.menuBlocks['DBSync'].handlerInstance = this;
+		for(mI in sideMenu.menuBlocks['DBSync'].items)
 		{
 			switch(mI.action)
 			{

@@ -3,6 +3,7 @@ package action.async;
 //import buddy.internal.sys.Js;
 
 import haxe.Json;
+import haxe.Serializer;
 import haxe.http.HttpJs;
 import haxe.io.Bytes;
 import js.Cookie;
@@ -20,6 +21,7 @@ import view.LoginForm.LoginState;
 import view.shared.BaseForm.FormState;
 import view.shared.BaseForm.OneOf;
 import view.shared.io.BinaryLoader;
+import view.shared.io.User.UserProps;
 /**
  * ...
  * @author axel@cunity.me
@@ -43,6 +45,15 @@ class AsyncUserAction
 				jwt:props.jwt,
 				className:'auth.User',
 				action:'login',
+				filter:'user_name|${App.user_name}',
+				dataSource:Serializer.run([
+					"users" => ["alias" => 'us',
+						"fields" => 'user_name,last_login'],
+					"contacts" => [
+						"alias" => 'co',
+						"fields" => 'first_name,last_name,email',
+						"jCond"=>'contact=co.id']
+				]),
 				pass:props.pass
 			},
 			function(dBytes:Bytes)
@@ -54,11 +65,14 @@ class AsyncUserAction
 				{
 					return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:data.dataErrors.iterator().next()}));
 				}
+				var uState:UserProps = data.dataInfo['user_data'];
 				Cookie.set('user.user_name', props.user_name, null, '/');
-				Cookie.set('user.jwt', data.dataInfo['jwt'], null, '/');
+				Cookie.set('user.jwt',uState.jwt, null, '/');
 				trace(Cookie.get('user.jwt'));
-				return dispatch(AppAction.LoginComplete(
-					{change_pass_required: data.dataInfo['change_pass_required']==true, user_name:props.user_name, jwt:data.dataInfo['jwt'], waiting:false}));				
+				uState.waiting = false;
+				return dispatch(AppAction.LoginComplete(uState));
+				//return dispatch(AppAction.LoginComplete(
+				//	{change_pass_required: data.dataInfo['change_pass_required']==true, user_name:props.user_name, jwt:data.dataInfo['jwt'], waiting:false}));				
 			});
 			if (requests != null)
 			{

@@ -78,7 +78,7 @@ class SettingsForm extends BaseForm
 			state.sideMenu.menuBlocks[props.match.params.section].isActive=true;
 
 		}
-		trace('${props.match.params.section} ${state.viewClassPath}');
+		trace('${props.match.params.section} ${props.match.params.action}');
 		requests = [];		
 	}
 	
