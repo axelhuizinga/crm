@@ -1,4 +1,4 @@
-package model;
+package reduce;
 import action.AppAction;
 import action.LocationAction;
 import haxe.Http;
@@ -15,6 +15,7 @@ import react.ReactUtil.copy;
 import redux.IMiddleware;
 import redux.IReducer;
 import redux.StoreMethods;
+import model.AppState;
 import model.LocationState;
 
 
@@ -24,13 +25,13 @@ import model.LocationState;
  */
 
 class LocationService implements IReducer<LocationAction, LocationState>
-	implements IMiddleware<LocationAction, model.AppState>
+	implements IMiddleware<LocationAction, AppState>
 {
 	public var initState:LocationState = {
 		history:null
 	}
 	
-	public var store:StoreMethods<model.AppState>;
+	public var store:StoreMethods<AppState>;
 
 	var ID = 0;
 	var loadPending:Promise<Bool>;
@@ -51,8 +52,9 @@ class LocationService implements IReducer<LocationAction, LocationState>
 				
 			case LocationChange(location):
 				trace(location.pathname);
-				state;
-				//copy(state, location);
+				//var sloc:Location = st
+				//state;
+				copy(state, location);
 			default:
 				state;
 		}

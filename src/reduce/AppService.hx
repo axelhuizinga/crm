@@ -1,4 +1,4 @@
-package model;
+package reduce;
 import react.ReactSharedInternals.Update;
 import App;
 import action.AppAction;
@@ -67,7 +67,7 @@ class AppService
 	
 	public function reduce(state:GlobalAppState, action:AppAction):GlobalAppState
 	{
-		trace(action);
+		//trace(action);
 		//trace(state.compState.get('dashboard'));
 		return switch(action)
 		{
@@ -128,11 +128,6 @@ class AppService
 
 			case User(uState):
 			trace(state.user);
-			var cs:GlobalAppState = copy(state, {
-					user:copy(state.user,{first_name:uState.first_name, last_name:uState.last_name, email:uState.email, 
-					last_login:uState.last_login, pass:uState.pass, waiting:uState.waiting})
-				});	
-			trace(cs.user);
 				copy(state, {
 					user:copy(state.user,{first_name:uState.first_name, last_name:uState.last_name, email:uState.email, 
 					last_login:uState.last_login, pass:uState.pass, new_pass:uState.new_pass, new_pass_confirm:uState.new_pass_confirm, waiting:uState.waiting})

@@ -42,10 +42,7 @@ import redux.react.Provider;
 import shared.DbData;
 import shared.DBMetaData;
 import Webpack.*;
-/*import react.addon.ReactIntl;
-import react.addon.intl.IntlProvider;
-import react.addon.intl.ReactIntlLocaleData.de;
-import react.addon.intl.IntlShape;*/
+
 import react.intl.DateTimeFormatOptions.NumericFormat.Numeric;
 import react.intl.ReactIntl;
 import react.intl.comp.IntlProvider;
@@ -87,17 +84,8 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		super(props);
 		//trace(rt);
 		ReactIntl.addLocaleData({locale:'de'});
-		//var iS:IntlShape = untyped new IntlShape();
-		/*trace(ReactIntl.formatDate(
-			Date.now(),	{
-			hour: Numeric,
-			minute: Numeric
-		}));*/
-			//Date.now(),	{year:'numeric', month:"numeric", day:"numeric", hour:"numeric", minute:"numeric"}));
 		_app = this;
 		firstLoad = true;
-		//props = { waiting:true};
-		//<div className="modal is-active"><div className="modal-background"></div><button className="modal-close is-large" aria-label="close"></button></div>
 		var ti:Timer = null;
 		Browser.window.onresize = function ()
 		{
@@ -110,8 +98,6 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 				var cpi:Iterator<Dynamic>=onResizeComponents.iterator();
 				while (cpi.hasNext())
 				{
-					//var com:Dynamic = cpi.next();
-					//trace(com);
 					cpi.next().layOut();
 				}
 			},250);
@@ -222,15 +208,19 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 
 	public static function 	await(delay:Int, check:Function, cb:Function):Timer
 	{
+		var max:Int = 15;  
 		var ti:Timer = Timer.delay(function ()
-		{
+		{			
+			trace(max);
+			if(max--<0)
+				return;
 			if(check())
 				cb();		
 			else
 				await(delay, check, cb);
 		},delay);
-		trace(ti);
-		return ti;
+		trace(max);
+		return  ti;
 	}
 
 	public static function jsxDump(el:Dynamic):String

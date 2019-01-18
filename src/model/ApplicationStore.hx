@@ -7,10 +7,10 @@ import history.Action;
 import history.History;
 import history.Location;
 import history.TransitionManager;
-import model.AppService;
-import model.LocationService;
-import model.StatusBarService;
-import model.UserService;
+import reduce.AppService;
+import reduce.LocationService;
+import reduce.StatusBarService;
+//import reduce.UserService;
 import redux.Redux;
 import redux.Store;
 import redux.StoreBuilder.*;
@@ -20,7 +20,7 @@ import model.AppState;
 
 class ApplicationStore
 {
-	static public function create():Store<model.AppState>
+	static public function create():Store<AppState>
 	{
 		// store model, implementing reducer and middleware logic
 		var appWare = new AppService();

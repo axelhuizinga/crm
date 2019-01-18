@@ -1,4 +1,4 @@
-package model;
+package reduce;
 
 import react.ReactUtil.copy;
 import redux.IReducer;

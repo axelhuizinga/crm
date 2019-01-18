@@ -133,17 +133,6 @@ class StatusBar extends ReactComponentOf<StatusBarProps,Dynamic>
 		');
 	}
 
-			/*<$FormattedDate  value={state.date}  className="column flex-end" is-one-third
-					year=${Numeric} month=${Numeric} day=${Numeric} hour=${Numeric} minute=${Numeric}  />
-					ReactIntl.formatDate(
-			Date.now(),	{
-			hour: Numeric,
-			minute: Numeric
-		})
-		${ReactIntl.injectIntl('${DateTimeClock}')}		
-			*/	
-	//<ReactDateTimeClock value={state.date}  className="flex-end" /><span  className="column flex-end" > </span>
-
 	function DateTimeClock(p:Dynamic):ReactFragment
 	{
 		trace(p);

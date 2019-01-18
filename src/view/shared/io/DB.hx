@@ -195,7 +195,7 @@ class DB extends DataAccessForm
 					return;
 				}		
 				trace(data.dataRows);
-				trace(data.dataRows[29]['id'] + '<<<');
+				//trace(data.dataRows[29]['id'] + '<<<');
 				//setState({dataTable:data.dataRows, viewClassPath:'shared.io.DB.showFieldList'});
 				setState({dataTable:data.dataRows});
 			}
@@ -237,8 +237,8 @@ class DB extends DataAccessForm
 		return switch(props.match.params.action)
 		{
 			case 'showFieldList':
-				trace(dataDisplay["fieldsList"]);
-				trace(state.dataTable[29]['id']+'<<<');
+				//trace(dataDisplay["fieldsList"]);
+				//trace(state.dataTable[29]['id']+'<<<');
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["fieldsList"]} parentForm=${this} 

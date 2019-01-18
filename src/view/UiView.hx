@@ -26,7 +26,7 @@ import react.router.NavLink;
 import react.router.Redirect;
 import react.router.Route;
 //import react.addon.router.Route;
-import react.router.Switch;
+//import react.router.Switch;
 import react.router.Router;
 //import react.addon.router.BrowserRouter;
 //import react.router.Route.RouteComponentProps;
@@ -139,7 +139,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 		if (state.hasError) {
 		  return jsx('<h1>Something went wrong.</h1>');
 		}
-		if (false && props.user.waiting)
+		if (props.user.waiting)
 		{
 			return jsx('
 			<section className="hero is-alt is-fullheight">

@@ -87,6 +87,7 @@ typedef  InteractionState =
 	var enables:Array<String>;
 }
 
+@:connect
 class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 
 {

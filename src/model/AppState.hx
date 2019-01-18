@@ -4,7 +4,8 @@ package model;
 import model.GlobalAppState;
 //import model.LocationState;
 //import view.shared.io.User.UserProps;
-import model.StatusBarService.StatusBarState;
+import reduce.StatusBarService;
+//import reduce.StatusBarService.StatusBarState;
 
 typedef AppState =
 {

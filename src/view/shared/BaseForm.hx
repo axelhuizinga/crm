@@ -129,6 +129,7 @@ abstract OneOf<A, B>(Either<A, B>) from Either<A, B> to Either<A, B> {
   }
 }
 
+//@:connect
 class BaseForm extends ReactComponentOf<FormProps, FormState> 
 {
 	var mounted:Bool;
@@ -238,8 +239,8 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 		//Out.dumpObject(reactEventSource);
 		//trace(props.history.location);
 		//trace(props.location);
-		trace(props.match.params);
-		trace(getRouterMatch().params);
+		//trace(props.match.params);
+		trace(props.history == App.store.getState().appWare.history);
 		//var viewClassPath:String = reactEventSource.target.getAttribute('data-classpath');
 		var section:String = reactEventSource.target.getAttribute('data-section');
 		//trace( 'state.viewClassPath:${state.viewClassPath} viewClassPath:$viewClassPath');

@@ -1,4 +1,4 @@
-package model;
+package reduce;
 import action.AppAction;
 import haxe.Http;
 import haxe.Json;
