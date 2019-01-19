@@ -1,18 +1,20 @@
 package view.shared.io;
 
+import shared.DbData;
 /**
  * ...
  * @author axel@cunity.me
  */
 
 import haxe.io.Bytes;
+import hxbit.Serializer;
 import js.html.FormData;
 import js.html.XMLHttpRequest;
 
 
 class BinaryLoader {
 
-	public static function create(url:String, p:Dynamic, onLoaded:Bytes->Void):XMLHttpRequest
+	public static function create(url:String, p:Dynamic, onLoaded:DbData->Void):XMLHttpRequest
 	{
 		var bl:BinaryLoader = new BinaryLoader(url);
 		bl.cB = onLoaded;
@@ -24,7 +26,7 @@ class BinaryLoader {
 		bl.load();
 		return bl.xhr;
 	}
-	var cB:Bytes->Void;
+	var cB:DbData->Void;
 	var param:FormData;
 	public var xhr:XMLHttpRequest;
 	
@@ -39,7 +41,9 @@ class BinaryLoader {
 	}
 
 	public dynamic function onLoaded( bytes : haxe.io.Bytes ) {
-		cB(bytes);
+		var u:Serializer = new Serializer();
+		var data:DbData = u.unserialize(bytes, DbData);
+		cB(data);
 	}
 
 	public dynamic function onProgress( cur : Int, max : Int ) {

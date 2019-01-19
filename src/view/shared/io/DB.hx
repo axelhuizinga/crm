@@ -155,9 +155,8 @@ class DB extends DataAccessForm
 				action:'saveTableFields',
 				dbData:s.serialize(dbData)
 			},
-			function(dBytes:Bytes)
+			function(data:DbData)
 			{				
-				var data:DbData = s.unserialize(dBytes, DbData);
 				trace(data);
 			}
 		));
@@ -175,10 +174,8 @@ class DB extends DataAccessForm
 				className:'tools.DB',
 				action:'createFieldList'
 			},
-			function(dBytes:Bytes)
+			function(data:DbData)
 			{
-				var u:hxbit.Serializer = new hxbit.Serializer();
-				var data:DbData = u.unserialize(dBytes, DbData);
 				if (data.dataRows.length==0)
 				{
 					var error:Map<String,Dynamic> = data.dataErrors;

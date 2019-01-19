@@ -287,7 +287,7 @@ class DataAccessForm extends ReactComponentOf<DataFormProps,FormState>
 		//trace(props.dispatch);
 		//props.submit({user_name:state.user_name, pass:state.pass,api:props.api});
 		//trace(_dispatch == App.store.dispatch);
-		//trace(App.store.dispatch(AsyncUserAction.loginReq(state)));
+		//trace(App.store.dispatch(UserAction.loginReq(state)));
 		//trace(props.dispatch(AppAction.LoginReq(state)));
 	}	
 

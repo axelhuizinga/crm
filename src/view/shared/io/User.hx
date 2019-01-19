@@ -66,11 +66,8 @@ class User extends DataAccessForm
 				filter:'user_name|${props.user_name}',
 				dataSource:Serializer.run(dataAccess['edit'].source)			
 			},
-			function(dBytes:Bytes)
+			function(data:DbData)
 			{
-				trace(dBytes.toString());
-				var u:hxbit.Serializer = new hxbit.Serializer();
-				var data:DbData = u.unserialize(dBytes, DbData);
 				trace(Reflect.fields(data));
 				trace(data);
 				trace(Reflect.fields(data.dataRows[0]));
@@ -153,11 +150,8 @@ class User extends DataAccessForm
 				new_pass:state.values['new_pass'],
 				pass:state.values['pass']
 			},
-			function(dBytes:Bytes)
+			function(data:DbData)
 			{
-				trace(dBytes.toString());
-				var u:hxbit.Serializer = new hxbit.Serializer();
-				var data:DbData = u.unserialize(dBytes, DbData);
 				trace(Reflect.fields(data));
 				trace(data);
 				if (data.dataErrors.keys().hasNext())

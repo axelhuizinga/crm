@@ -26,13 +26,12 @@ import Webpack.*;
  * @author axel@cunity.me
  */
 
-class AppService 
+class AppStore 
 	implements IReducer<AppAction, GlobalAppState>
 	implements IMiddleware<AppAction, AppState>
 {
 
 	public var initState:GlobalAppState = {
-		//compState: new StringMap(),
 		config:App.config,
 		history:BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}),
 		themeColor: 'green',
@@ -53,9 +52,6 @@ class AppService
 	};
 		
 	public var store:StoreMethods<model.AppState>;
-
-	var ID = 0;
-	var loadPending:Promise<Bool>;
 	
 	public function new() 
 	{
@@ -146,7 +142,7 @@ class AppService
 		return switch(action)
 		{			
 			/*case LoginReq(uState):
-				//store.getState().userService.
+				//store.getState().userStore.
 				var n:Dynamic = next();
 				trace(n);
 				n;*/

@@ -8,7 +8,7 @@ import react.ReactComponent.ReactComponentOf;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
 import redux.Redux;
-import action.async.AsyncUserAction;
+import action.async.UserAction;
 import view.shared.RouteTabProps;
 
 typedef LoginState = 
@@ -53,7 +53,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 	static function mapDispatchToProps(dispatch:Dispatch) {
 		trace(dispatch);
 		return {
-			submitLogin: function(lState:LoginState) return dispatch(AsyncUserAction.loginReq(lState))
+			submitLogin: function(lState:LoginState) return dispatch(UserAction.loginReq(lState))
 		};
 	}
 
@@ -112,7 +112,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 		//trace(props.dispatch);
 		props.submitLogin({user_name:state.user_name, pass:state.pass,api:props.api, jwt:''});
 		//trace(_dispatch == App.store.dispatch);
-		//trace(App.store.dispatch(AsyncUserAction.loginReq(state)));
+		//trace(App.store.dispatch(UserAction.loginReq(state)));
 		//trace(props.dispatch(AppAction.LoginReq(state)));
 	}	
 

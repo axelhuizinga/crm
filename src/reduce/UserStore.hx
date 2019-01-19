@@ -20,7 +20,7 @@ enum UserAction
 	LogOut(state:UserProps);	
 }
 
-class UserService implements IReducer<UserAction, UserProps>
+class UserStore implements IReducer<UserAction, UserProps>
 	implements IMiddleware<UserAction, model.AppState>
 {
 	public var initState:UserProps = {

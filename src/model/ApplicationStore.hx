@@ -7,10 +7,10 @@ import history.Action;
 import history.History;
 import history.Location;
 import history.TransitionManager;
-import reduce.AppService;
-import reduce.LocationService;
-import reduce.StatusBarService;
-//import reduce.UserService;
+import reduce.AppStore;
+import reduce.LocationStore;
+import reduce.StatusBarStore;
+//import reduce.UserStore;
 import redux.Redux;
 import redux.Store;
 import redux.StoreBuilder.*;
@@ -23,19 +23,19 @@ class ApplicationStore
 	static public function create():Store<AppState>
 	{
 		// store model, implementing reducer and middleware logic
-		var appWare = new AppService();
-		var locationService = new LocationService();
-		var statusBarService = new StatusBarService();
-		//var userService = new UserService();
+		var appWare = new AppStore();
+		var locationStore = new LocationStore();
+		var statusBarStore = new StatusBarStore();
+		//var userStore = new UserStore();
 		
 		// create root reducer normally, excepted you must use 
 		// 'StoreBuilder.mapReducer' to wrap the Enum-based reducer
 		var rootReducer = Redux.combineReducers(
 			{
 				appWare: mapReducer(AppAction, appWare),
-				locationService: mapReducer(LocationAction, locationService),
-				statusBar: mapReducer(StatusAction, statusBarService)
-				//userService: mapReducer(UserAction, userService)
+				locationStore: mapReducer(LocationAction, locationStore),
+				statusBar: mapReducer(StatusAction, statusBarStore)
+				//userStore: mapReducer(UserAction, userStore)
 			}
 		);
 		
@@ -43,9 +43,9 @@ class ApplicationStore
 		// 'StoreBuilder.mapMiddleware' to wrap the Enum-based middleware
 		var middleware = Redux.applyMiddleware(
 			mapMiddleware(Thunk, new ThunkMiddleware())
-			//mapMiddleware(StatusAction, statusBarService)
+			//mapMiddleware(StatusAction, statusBarStore)
 			//mapMiddleware(AppAction, appWare)
-			//mapMiddleware(LocationAction, locationService)
+			//mapMiddleware(LocationAction, locationStore)
 		);
 		
 		// use 'StoreBuilder.createStore' helper to automatically wire

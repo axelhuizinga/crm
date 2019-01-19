@@ -169,11 +169,8 @@ class RolesForm extends BaseForm
 						"jCond"=>'contact=co.id']
 				])
 			},
-			function(dBytes:Bytes)
+			function(data:DbData)
 			{
-				//trace(dBytes.toString());
-				var u:hxbit.Serializer = new hxbit.Serializer();
-				var data:DbData = u.unserialize(dBytes, DbData);
 				trace(Reflect.fields(data));
 				//trace(data);
 				trace(data.dataRows[0]);

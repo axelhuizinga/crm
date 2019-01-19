@@ -4,12 +4,12 @@ package model;
 import model.GlobalAppState;
 //import model.LocationState;
 //import view.shared.io.User.UserProps;
-import reduce.StatusBarService;
-//import reduce.StatusBarService.StatusBarState;
+import reduce.StatusBarStore;
+//import reduce.StatusBarStore.StatusBarState;
 
 typedef AppState =
 {
 	appWare:GlobalAppState,
-	//locationHistory:LocationState,
+	locationHistory:LocationState,
 	statusBar:StatusBarState
 }

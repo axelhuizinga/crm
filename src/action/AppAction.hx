@@ -2,7 +2,7 @@ package action;
 
 import view.shared.io.User;
 
-import view.shared.io.User.UserProps;
+import model.UserState;
 
 /**
  * @author axel@cunity.me
@@ -14,21 +14,21 @@ enum AppAction
 	//AddComponent(path:String, cState:CompState);
 	Load;
 	// LOGIN TODO: MOVE TO USERACTIONS
-	//LoginReq(state:UserProps);
-	LoginChange(state:UserProps);
-	LoginComplete(state:UserProps);
+	//LoginReq(state:UserState);
+	LoginChange(state:UserState);
+	LoginComplete(state:UserState);
 	LoginWait;
 
-	LoginError(state:UserProps);
-	LogOut(state:UserProps);	
-	LoginRequired(state:UserProps);	
+	LoginError(state:UserState);
+	LogOut(state:UserState);	
+	LoginRequired(state:UserState);	
 	// LOGINEND
 	
 	//AddContact(id:Int);
 	SetLocale(locale:String);
 	SetTheme(color:String);
 
-	User(state:UserProps);
+	User(state:UserState);
 	//Users(filter:UserFilter);
 	//SetEntries(entries:Array<DataCell>);
 }

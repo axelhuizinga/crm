@@ -24,7 +24,7 @@ typedef StatusBarState =
  * @author axel@cunity.me
  */
 
-class StatusBarService implements IReducer<StatusAction, StatusBarState>
+class StatusBarStore implements IReducer<StatusAction, StatusBarState>
 //	implements IMiddleware<StatusAction, AppState>
 {
 	public var initState:StatusBarState = {
@@ -47,6 +47,7 @@ class StatusBarService implements IReducer<StatusAction, StatusBarState>
 		return switch(action)
 		{
 			case Tick(date):
+			trace(date);
 				copy(state, {
 					date:date
 				});

@@ -1,6 +1,7 @@
 package model;
 import react.router.RouterMatch;
 import history.History;
+import history.Location;
 
 /**
  * ...
@@ -8,5 +9,7 @@ import history.History;
  */
 typedef LocationState =
 {
-	history:History
+	history:History,
+	location:Location,
+	?date:Date
 }

@@ -24,7 +24,7 @@ typedef StatusBarState =
  * @author axel@cunity.me
  */
 
-class StatusBarService implements IReducer<StatusAction, StatusBarState>
+class StatusBarStore implements IReducer<StatusAction, StatusBarState>
 //	implements IMiddleware<StatusAction, AppState>
 {
 	public var initState:StatusBarState = {

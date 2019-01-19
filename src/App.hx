@@ -113,8 +113,8 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 			var bL:XMLHttpRequest = BinaryLoader.create(
 			'${App.config.api}', 
 			{				
-				user_name:App.user_name,
-				jwt:App.jwt,
+				user_name:user_name,
+				jwt:jwt,
 				className:'auth.User',
 				action:'clientVerify',
 				filter:'user_name|${App.user_name}',
@@ -127,11 +127,11 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 						"jCond"=>'contact=co.id']
 				])
 			},
-			function(dBytes:Bytes)
+			//function(dBytes:Bytes)
+			function(data:DbData)
 			{
 				//trace(dBytes.toString());
-				var u:hxbit.Serializer = new hxbit.Serializer();
-				var data:DbData = u.unserialize(dBytes, DbData);
+
 				trace(data.dataInfo);
 				if (data.dataErrors.keys().hasNext())
 				{

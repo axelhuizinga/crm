@@ -24,18 +24,15 @@ import model.LocationState;
  * @author axel@cunity.me
  */
 
-class LocationService implements IReducer<LocationAction, LocationState>
+class LocationStore implements IReducer<LocationAction, LocationState>
 	implements IMiddleware<LocationAction, AppState>
 {
 	public var initState:LocationState = {
-		history:null
+		history:null,
+		location:null
 	}
 	
 	public var store:StoreMethods<AppState>;
-
-	var ID = 0;
-	var loadPending:Promise<Bool>;
-	var history: History;
 	
 	public function new() 
 	{ 

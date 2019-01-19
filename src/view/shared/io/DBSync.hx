@@ -151,9 +151,8 @@ class DBSync extends DataAccessForm
 				action:'saveTableFields',
 				dbData:s.serialize(dbData)
 			},
-			function(dBytes:Bytes)
+			function(data:DbData)
 			{				
-				var data:DbData = s.unserialize(dBytes, DbData);
 				trace(data);
 			}
 		));
@@ -170,10 +169,8 @@ class DBSync extends DataAccessForm
 				className:'admin.SyncExternal',
 				action:'syncUserDetails'
 			},
-			function(dBytes:Bytes)
+			function(data:DbData)
 			{
-				var u:hxbit.Serializer = new hxbit.Serializer();
-				var data:DbData = u.unserialize(dBytes, DbData);
 				trace(data.dataRows[data.dataRows.length-2]['phone_data']);
 				setState({dataTable:data.dataRows});
 			}

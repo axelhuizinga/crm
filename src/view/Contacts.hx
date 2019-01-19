@@ -42,7 +42,7 @@ class Contacts extends ReactComponentOfProps<RouteTabProps>
 		// Display fallback UI
 		//this.setState({ hasError: true });
 		// You can also log the error to an error reporting service
-		//logErrorToMyService(error, info);
+		//logErrorToMyStore(error, info);
 		trace(error);
 	}	
 	
@@ -52,7 +52,7 @@ class Contacts extends ReactComponentOfProps<RouteTabProps>
 		{
 			var uState = aState.appWare.user;
 
-			//trace(aState.userService);
+			//trace(aState.userStore);
 			
 			return {
 				appConfig:aState.appWare.config,

@@ -380,9 +380,7 @@ var App = function(props) {
 		} else {
 			_g2.h["contacts"] = value1;
 		}
-		var bL4 = view_shared_io_BinaryLoader.create(bL,{ user_name : bL1, jwt : bL2, className : "auth.User", action : "clientVerify", filter : bL3, dataSource : haxe_Serializer.run(_g2)},function(dBytes) {
-			var u = new hxbit_Serializer();
-			var data = u.unserialize(dBytes,shared_DbData);
+		var bL4 = view_shared_io_BinaryLoader.create(bL,{ user_name : bL1, jwt : bL2, className : "auth.User", action : "clientVerify", filter : bL3, dataSource : haxe_Serializer.run(_g2)},function(data) {
 			haxe_Log.trace(data.dataInfo.toString(),{ fileName : "src/App.hx", lineNumber : 135, className : "App", methodName : "new"});
 			if(data.dataErrors.keys().hasNext()) {
 				haxe_Log.trace(data.dataErrors.toString(),{ fileName : "src/App.hx", lineNumber : 138, className : "App", methodName : "new"});
@@ -898,17 +896,17 @@ var action_LocationAction = $hxEnums["action.LocationAction"] = { __ename__ : ["
 	,InitHistory: ($_=function(history) { return {_hx_index:5,history:history,__enum__:"action.LocationAction",toString:$estr}; },$_.__params__ = ["history"],$_)
 	,LocationChange: ($_=function(location) { return {_hx_index:6,location:location,__enum__:"action.LocationAction",toString:$estr}; },$_.__params__ = ["location"],$_)
 };
-var action_async_AsyncUserAction = function() { };
-$hxClasses["action.async.AsyncUserAction"] = action_async_AsyncUserAction;
-action_async_AsyncUserAction.__name__ = ["action","async","AsyncUserAction"];
-action_async_AsyncUserAction.loginReq = function(props,requests) {
+var action_async_UserAction = function() { };
+$hxClasses["action.async.UserAction"] = action_async_UserAction;
+action_async_UserAction.__name__ = ["action","async","UserAction"];
+action_async_UserAction.loginReq = function(props,requests) {
 	return redux_thunk_Thunk.Action(function(dispatch,getState) {
-		haxe_Log.trace(props,{ fileName : "src/action/async/AsyncUserAction.hx", lineNumber : 35, className : "action.async.AsyncUserAction", methodName : "loginReq"});
+		haxe_Log.trace(props,{ fileName : "src/action/async/UserAction.hx", lineNumber : 35, className : "action.async.UserAction", methodName : "loginReq"});
 		if(props.pass == "" || props.user_name == "") {
 			return dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.LoginError({ user_name : props.user_name, loginError : "Passwort und user_name eintragen!"})));
 		}
 		var spin = dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.LoginWait));
-		haxe_Log.trace(spin,{ fileName : "src/action/async/AsyncUserAction.hx", lineNumber : 40, className : "action.async.AsyncUserAction", methodName : "loginReq"});
+		haxe_Log.trace(spin,{ fileName : "src/action/async/UserAction.hx", lineNumber : 40, className : "action.async.UserAction", methodName : "loginReq"});
 		var bL = "" + Std.string(App.config.api);
 		var props1 = props.user_name;
 		var props2 = props.jwt;
@@ -953,9 +951,7 @@ action_async_AsyncUserAction.loginReq = function(props,requests) {
 		} else {
 			_g2.h["contacts"] = value1;
 		}
-		var bL2 = view_shared_io_BinaryLoader.create(bL,{ user_name : props1, jwt : props2, className : "auth.User", action : "login", filter : bL1, dataSource : haxe_Serializer.run(_g2), pass : props.pass},function(dBytes) {
-			var u = new hxbit_Serializer();
-			var data = u.unserialize(dBytes,shared_DbData);
+		var bL2 = view_shared_io_BinaryLoader.create(bL,{ user_name : props1, jwt : props2, className : "auth.User", action : "login", filter : bL1, dataSource : haxe_Serializer.run(_g2), pass : props.pass},function(data) {
 			if(data.dataErrors.keys().hasNext()) {
 				var _this = data.dataErrors;
 				var bL3 = action_AppAction.LoginError({ user_name : props.user_name, loginError : new haxe_ds__$StringMap_StringMapIterator(_this,_this.arrayKeys()).next()});
@@ -965,7 +961,7 @@ action_async_AsyncUserAction.loginReq = function(props,requests) {
 			var uState = __map_reserved["user_data"] != null ? _this1.getReserved("user_data") : _this1.h["user_data"];
 			js_Cookie.set("user.user_name",props.user_name,null,"/");
 			js_Cookie.set("user.jwt",uState.jwt,null,"/");
-			haxe_Log.trace(js_Cookie.get("user.jwt"),{ fileName : "src/action/async/AsyncUserAction.hx", lineNumber : 71, className : "action.async.AsyncUserAction", methodName : "loginReq"});
+			haxe_Log.trace(js_Cookie.get("user.jwt"),{ fileName : "src/action/async/UserAction.hx", lineNumber : 68, className : "action.async.UserAction", methodName : "loginReq"});
 			uState.waiting = false;
 			return dispatch(redux__$Redux_Action_$Impl_$.map(action_AppAction.LoginComplete(uState)));
 		});
@@ -2360,9 +2356,6 @@ haxe_io_Bytes.prototype = {
 		}
 		return s;
 	}
-	,toString: function() {
-		return this.getString(0,this.length);
-	}
 	,__class__: haxe_io_Bytes
 };
 var haxe_io_BytesBuffer = function() {
@@ -2694,8 +2687,8 @@ hxbit_Convert.getDefault = function(t) {
 		var this1 = new Array(0);
 		return this1;
 	case 15:
-		var this2 = new haxe__$Int64__$_$_$Int64(0,0);
-		return this2;
+		var this11 = new haxe__$Int64__$_$_$Int64(0,0);
+		return this11;
 	case 0:case 16:
 		return 0;
 	}
@@ -5335,10 +5328,10 @@ var model_ApplicationStore = function() { };
 $hxClasses["model.ApplicationStore"] = model_ApplicationStore;
 model_ApplicationStore.__name__ = ["model","ApplicationStore"];
 model_ApplicationStore.create = function() {
-	var appWare = new reduce_AppService();
-	var locationService = new reduce_LocationService();
-	var statusBarService = new reduce_StatusBarService();
-	var rootReducer = redux_Redux.combineReducers({ appWare : redux_StoreBuilder.mapReducer(action_AppAction,appWare), locationService : redux_StoreBuilder.mapReducer(action_LocationAction,locationService), statusBar : redux_StoreBuilder.mapReducer(action_StatusAction,statusBarService)});
+	var appWare = new reduce_AppStore();
+	var locationStore = new reduce_LocationStore();
+	var statusBarStore = new reduce_StatusBarStore();
+	var rootReducer = redux_Redux.combineReducers({ appWare : redux_StoreBuilder.mapReducer(action_AppAction,appWare), locationStore : redux_StoreBuilder.mapReducer(action_LocationAction,locationStore), statusBar : redux_StoreBuilder.mapReducer(action_StatusAction,statusBarStore)});
 	var middleware = redux_Redux.applyMiddleware(redux_StoreBuilder.mapMiddleware(redux_thunk_Thunk,new redux_thunk_ThunkMiddleware()));
 	return redux_StoreBuilder.createStore(rootReducer,null,middleware);
 };
@@ -5440,50 +5433,50 @@ var react_router_ReactRouter = require("react-router");
 var react_router_Redirect = require("react-router").Redirect;
 var react_router_Route = require("react-router").Route;
 var react_router_Router = require("react-router").Router;
-var react_router_bundle_BundleLoader2522 = function() { };
-$hxClasses["react.router.bundle.BundleLoader2522"] = react_router_bundle_BundleLoader2522;
-react_router_bundle_BundleLoader2522.__name__ = ["react","router","bundle","BundleLoader2522"];
-react_router_bundle_BundleLoader2522.render = function(props) {
+var react_router_bundle_BundleLoader4082 = function() { };
+$hxClasses["react.router.bundle.BundleLoader4082"] = react_router_bundle_BundleLoader4082;
+react_router_bundle_BundleLoader4082.__name__ = ["react","router","bundle","BundleLoader4082"];
+react_router_bundle_BundleLoader4082.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Accounting" */ "!haxe-loader?null/view_Accounting!").then(function(exports) {
 		view_Accounting = $s.view_Accounting;
 		var _ = view_Accounting;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader2524 = function() { };
-$hxClasses["react.router.bundle.BundleLoader2524"] = react_router_bundle_BundleLoader2524;
-react_router_bundle_BundleLoader2524.__name__ = ["react","router","bundle","BundleLoader2524"];
-react_router_bundle_BundleLoader2524.render = function(props) {
+var react_router_bundle_BundleLoader4084 = function() { };
+$hxClasses["react.router.bundle.BundleLoader4084"] = react_router_bundle_BundleLoader4084;
+react_router_bundle_BundleLoader4084.__name__ = ["react","router","bundle","BundleLoader4084"];
+react_router_bundle_BundleLoader4084.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Contacts" */ "!haxe-loader?null/view_Contacts!").then(function(exports) {
 		view_Contacts = $s.view_Contacts;
 		var _ = view_Contacts;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader2526 = function() { };
-$hxClasses["react.router.bundle.BundleLoader2526"] = react_router_bundle_BundleLoader2526;
-react_router_bundle_BundleLoader2526.__name__ = ["react","router","bundle","BundleLoader2526"];
-react_router_bundle_BundleLoader2526.render = function(props) {
+var react_router_bundle_BundleLoader4086 = function() { };
+$hxClasses["react.router.bundle.BundleLoader4086"] = react_router_bundle_BundleLoader4086;
+react_router_bundle_BundleLoader4086.__name__ = ["react","router","bundle","BundleLoader4086"];
+react_router_bundle_BundleLoader4086.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Contacts" */ "!haxe-loader?null/view_Contacts!").then(function(exports) {
 		view_Contacts = $s.view_Contacts;
 		var _ = view_Contacts;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader2528 = function() { };
-$hxClasses["react.router.bundle.BundleLoader2528"] = react_router_bundle_BundleLoader2528;
-react_router_bundle_BundleLoader2528.__name__ = ["react","router","bundle","BundleLoader2528"];
-react_router_bundle_BundleLoader2528.render = function(props) {
+var react_router_bundle_BundleLoader4088 = function() { };
+$hxClasses["react.router.bundle.BundleLoader4088"] = react_router_bundle_BundleLoader4088;
+react_router_bundle_BundleLoader4088.__name__ = ["react","router","bundle","BundleLoader4088"];
+react_router_bundle_BundleLoader4088.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_QC" */ "!haxe-loader?null/view_QC!").then(function(exports) {
 		view_QC = $s.view_QC;
 		var _ = view_QC;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader2530 = function() { };
-$hxClasses["react.router.bundle.BundleLoader2530"] = react_router_bundle_BundleLoader2530;
-react_router_bundle_BundleLoader2530.__name__ = ["react","router","bundle","BundleLoader2530"];
-react_router_bundle_BundleLoader2530.render = function(props) {
+var react_router_bundle_BundleLoader4090 = function() { };
+$hxClasses["react.router.bundle.BundleLoader4090"] = react_router_bundle_BundleLoader4090;
+react_router_bundle_BundleLoader4090.__name__ = ["react","router","bundle","BundleLoader4090"];
+react_router_bundle_BundleLoader4090.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Reports" */ "!haxe-loader?null/view_Reports!").then(function(exports) {
 		view_Reports = $s.view_Reports;
 		var _ = view_Reports;
@@ -5598,13 +5591,13 @@ redux_IReducer.prototype = {
 	,reduce: null
 	,__class__: redux_IReducer
 };
-var reduce_AppService = function() {
+var reduce_AppStore = function() {
 	this.initState = { config : App.config, history : history_BrowserHistory.createBrowserHistory({ basename : "/", getUserConfirmation : model_CState.confirmTransition}), themeColor : "green", locale : "de", redirectAfterLogin : window.location.pathname, routeHistory : [], userList : [], user : { first_name : "", last_name : "", user_name : App.user_name, email : "", pass : "", waiting : true, last_login : null, jwt : App.jwt}};
 };
-$hxClasses["reduce.AppService"] = reduce_AppService;
-reduce_AppService.__name__ = ["reduce","AppService"];
-reduce_AppService.__interfaces__ = [redux_IMiddleware,redux_IReducer];
-reduce_AppService.prototype = {
+$hxClasses["reduce.AppStore"] = reduce_AppStore;
+reduce_AppStore.__name__ = ["reduce","AppStore"];
+reduce_AppStore.__interfaces__ = [redux_IMiddleware,redux_IReducer];
+reduce_AppStore.prototype = {
 	initState: null
 	,store: null
 	,reduce: function(state,action) {
@@ -5616,22 +5609,22 @@ reduce_AppService.prototype = {
 			return react_ReactUtil.copy(state,{ user : { user_name : uState.user_name, pass : uState.pass}});
 		case 2:
 			var uState1 = action.state;
-			haxe_Log.trace(uState1,{ fileName : "src/reduce/AppService.hx", lineNumber : 100, className : "reduce.AppService", methodName : "reduce"});
+			haxe_Log.trace(uState1,{ fileName : "src/reduce/AppStore.hx", lineNumber : 96, className : "reduce.AppStore", methodName : "reduce"});
 			uState1.loginError = null;
 			return react_ReactUtil.copy(state,{ user : react_ReactUtil.copy(state.user,uState1)});
 		case 3:
 			return react_ReactUtil.copy(state,{ waiting : true});
 		case 4:
 			var err = action.state;
-			haxe_Log.trace(err,{ fileName : "src/reduce/AppService.hx", lineNumber : 90, className : "reduce.AppService", methodName : "reduce"});
+			haxe_Log.trace(err,{ fileName : "src/reduce/AppStore.hx", lineNumber : 86, className : "reduce.AppStore", methodName : "reduce"});
 			return react_ReactUtil.copy(state,{ user : { loginError : err.loginError}});
 		case 5:
 			var uState2 = action.state;
-			haxe_Log.trace(uState2,{ fileName : "src/reduce/AppService.hx", lineNumber : 108, className : "reduce.AppService", methodName : "reduce"});
+			haxe_Log.trace(uState2,{ fileName : "src/reduce/AppStore.hx", lineNumber : 104, className : "reduce.AppStore", methodName : "reduce"});
 			return react_ReactUtil.copy(state,{ user : uState2});
 		case 6:
 			var uState3 = action.state;
-			haxe_Log.trace(uState3,{ fileName : "src/reduce/AppService.hx", lineNumber : 84, className : "reduce.AppService", methodName : "reduce"});
+			haxe_Log.trace(uState3,{ fileName : "src/reduce/AppStore.hx", lineNumber : 80, className : "reduce.AppStore", methodName : "reduce"});
 			return react_ReactUtil.copy(state,{ user : uState3});
 		case 7:
 			var locale = action.locale;
@@ -5651,12 +5644,12 @@ reduce_AppService.prototype = {
 			break;
 		case 9:
 			var uState4 = action.state;
-			haxe_Log.trace(state.user,{ fileName : "src/reduce/AppService.hx", lineNumber : 130, className : "reduce.AppService", methodName : "reduce"});
+			haxe_Log.trace(state.user,{ fileName : "src/reduce/AppStore.hx", lineNumber : 126, className : "reduce.AppStore", methodName : "reduce"});
 			return react_ReactUtil.copy(state,{ user : react_ReactUtil.copy(state.user,{ first_name : uState4.first_name, last_name : uState4.last_name, email : uState4.email, last_login : uState4.last_login, pass : uState4.pass, new_pass : uState4.new_pass, new_pass_confirm : uState4.new_pass_confirm, waiting : uState4.waiting})});
 		}
 	}
 	,middleware: function(action,next) {
-		haxe_Log.trace(action,{ fileName : "src/reduce/AppService.hx", lineNumber : 142, className : "reduce.AppService", methodName : "middleware"});
+		haxe_Log.trace(action,{ fileName : "src/reduce/AppStore.hx", lineNumber : 138, className : "reduce.AppStore", methodName : "middleware"});
 		if(action._hx_index == 2) {
 			var state = action.state;
 			App.firstLoad = false;
@@ -5665,16 +5658,16 @@ reduce_AppService.prototype = {
 			return next();
 		}
 	}
-	,__class__: reduce_AppService
+	,__class__: reduce_AppStore
 };
-var reduce_LocationService = function() {
-	this.initState = { history : null};
-	haxe_Log.trace("ok",{ fileName : "src/reduce/LocationService.hx", lineNumber : 42, className : "reduce.LocationService", methodName : "new"});
+var reduce_LocationStore = function() {
+	this.initState = { history : null, location : null};
+	haxe_Log.trace("ok",{ fileName : "src/reduce/LocationStore.hx", lineNumber : 39, className : "reduce.LocationStore", methodName : "new"});
 };
-$hxClasses["reduce.LocationService"] = reduce_LocationService;
-reduce_LocationService.__name__ = ["reduce","LocationService"];
-reduce_LocationService.__interfaces__ = [redux_IMiddleware,redux_IReducer];
-reduce_LocationService.prototype = {
+$hxClasses["reduce.LocationStore"] = reduce_LocationStore;
+reduce_LocationStore.__name__ = ["reduce","LocationStore"];
+reduce_LocationStore.__interfaces__ = [redux_IMiddleware,redux_IReducer];
+reduce_LocationStore.prototype = {
 	initState: null
 	,store: null
 	,reduce: function(state,action) {
@@ -5684,33 +5677,34 @@ reduce_LocationService.prototype = {
 			return react_ReactUtil.copy(state,history);
 		case 6:
 			var location = action.location;
-			haxe_Log.trace(location.pathname,{ fileName : "src/reduce/LocationService.hx", lineNumber : 54, className : "reduce.LocationService", methodName : "reduce"});
+			haxe_Log.trace(location.pathname,{ fileName : "src/reduce/LocationStore.hx", lineNumber : 51, className : "reduce.LocationStore", methodName : "reduce"});
 			return react_ReactUtil.copy(state,location);
 		default:
 			return state;
 		}
 	}
 	,middleware: function(action,next) {
-		haxe_Log.trace(action,{ fileName : "src/reduce/LocationService.hx", lineNumber : 65, className : "reduce.LocationService", methodName : "middleware"});
+		haxe_Log.trace(action,{ fileName : "src/reduce/LocationStore.hx", lineNumber : 62, className : "reduce.LocationStore", methodName : "middleware"});
 		return next();
 	}
-	,__class__: reduce_LocationService
+	,__class__: reduce_LocationStore
 };
-var reduce_StatusBarService = function() {
+var reduce_StatusBarStore = function() {
 	this.initState = { pathname : window.location.pathname, date : new Date()};
-	haxe_Log.trace("ok",{ fileName : "src/reduce/StatusBarService.hx", lineNumber : 41, className : "reduce.StatusBarService", methodName : "new"});
+	haxe_Log.trace("ok",{ fileName : "src/reduce/StatusBarStore.hx", lineNumber : 41, className : "reduce.StatusBarStore", methodName : "new"});
 };
-$hxClasses["reduce.StatusBarService"] = reduce_StatusBarService;
-reduce_StatusBarService.__name__ = ["reduce","StatusBarService"];
-reduce_StatusBarService.__interfaces__ = [redux_IReducer];
-reduce_StatusBarService.prototype = {
+$hxClasses["reduce.StatusBarStore"] = reduce_StatusBarStore;
+reduce_StatusBarStore.__name__ = ["reduce","StatusBarStore"];
+reduce_StatusBarStore.__interfaces__ = [redux_IReducer];
+reduce_StatusBarStore.prototype = {
 	initState: null
 	,reduce: function(state,action) {
-		haxe_Log.trace(state,{ fileName : "src/reduce/StatusBarService.hx", lineNumber : 46, className : "reduce.StatusBarService", methodName : "reduce"});
+		haxe_Log.trace(state,{ fileName : "src/reduce/StatusBarStore.hx", lineNumber : 46, className : "reduce.StatusBarStore", methodName : "reduce"});
 		var date = action.date;
+		haxe_Log.trace(date,{ fileName : "src/reduce/StatusBarStore.hx", lineNumber : 50, className : "reduce.StatusBarStore", methodName : "reduce"});
 		return react_ReactUtil.copy(state,{ date : date});
 	}
-	,__class__: reduce_StatusBarService
+	,__class__: reduce_StatusBarStore
 };
 var redux_Redux = require("redux");
 var redux__$Redux_Action_$Impl_$ = {};
@@ -7238,7 +7232,9 @@ view_shared_io_BinaryLoader.prototype = {
 	,xhr: null
 	,url: null
 	,onLoaded: function(bytes) {
-		this.cB(bytes);
+		var u = new hxbit_Serializer();
+		var data = u.unserialize(bytes,shared_DbData);
+		this.cB(data);
 	}
 	,onProgress: function(cur,max) {
 	}
@@ -7281,7 +7277,7 @@ view_LoginForm.__name__ = ["view","LoginForm"];
 view_LoginForm.mapDispatchToProps = function(dispatch) {
 	haxe_Log.trace(dispatch,{ fileName : "src/view/LoginForm.hx", lineNumber : 54, className : "view.LoginForm", methodName : "mapDispatchToProps"});
 	return { submitLogin : function(lState) {
-		var tmp = action_async_AsyncUserAction.loginReq(lState);
+		var tmp = action_async_UserAction.loginReq(lState);
 		return dispatch(redux__$Redux_Action_$Impl_$.map(tmp));
 	}};
 };
@@ -7567,12 +7563,12 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 			var tmp6 = react__$ReactType_ReactType_$Impl_$.fromString("div");
 			var tmp7 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_RedirectBox), exact : true});
 			var tmp8 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/dashboard*", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_DashBoard)});
-			var tmp9 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2522.render)});
-			var tmp10 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts/edit/:id", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2524.render)});
-			var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2526.render)});
-			var tmp12 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2528.render)});
+			var tmp9 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader4082.render)});
+			var tmp10 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts/edit/:id", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader4084.render)});
+			var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader4086.render)});
+			var tmp12 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader4088.render)});
 			var tmp13 = react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route);
-			return React.createElement(tmp,tmp1,React.createElement(tmp2,{ },tmp3,tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { className : "tabComponent", children : [tmp7,tmp8,tmp9,tmp10,tmp11,tmp12,React.createElement(tmp13,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2530.render)})]}, key : null, ref : null}));
+			return React.createElement(tmp,tmp1,React.createElement(tmp2,{ },tmp3,tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { className : "tabComponent", children : [tmp7,tmp8,tmp9,tmp10,tmp11,tmp12,React.createElement(tmp13,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader4090.render)})]}, key : null, ref : null}));
 		}
 	}
 	,renderRedirect: function(p) {
@@ -7805,11 +7801,9 @@ view_dashboard_RolesForm.prototype = $extend(view_shared_BaseForm.prototype,{
 		} else {
 			_g3.h["contacts"] = value2;
 		}
-		tmp.push(haxe_ds_Either.Right(view_shared_io_BinaryLoader.create(b,{ user_name : b1, jwt : b2, className : "roles.Users", action : "list", filter : "active|TRUE", dataSource : haxe_Serializer.run(_g3)},function(dBytes) {
-			var u = new hxbit_Serializer();
-			var data = u.unserialize(dBytes,shared_DbData);
-			haxe_Log.trace(Reflect.fields(data),{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 177, className : "view.dashboard.RolesForm", methodName : "componentDidMount"});
-			haxe_Log.trace(data.dataRows[0].toString(),{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 179, className : "view.dashboard.RolesForm", methodName : "componentDidMount"});
+		tmp.push(haxe_ds_Either.Right(view_shared_io_BinaryLoader.create(b,{ user_name : b1, jwt : b2, className : "roles.Users", action : "list", filter : "active|TRUE", dataSource : haxe_Serializer.run(_g3)},function(data) {
+			haxe_Log.trace(Reflect.fields(data),{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 174, className : "view.dashboard.RolesForm", methodName : "componentDidMount"});
+			haxe_Log.trace(data.dataRows[0].toString(),{ fileName : "src/view/dashboard/RolesForm.hx", lineNumber : 176, className : "view.dashboard.RolesForm", methodName : "componentDidMount"});
 			_gthis.setState({ dataTable : data.dataRows, loading : false});
 		})));
 	}
@@ -8833,9 +8827,7 @@ view_shared_io_DB.prototype = $extend(view_shared_io_DataAccessForm.prototype,{
 	,showFieldList: function(_) {
 		var _gthis = this;
 		this.selectAllRows(true);
-		this.requests.push(haxe_ds_Either.Right(view_shared_io_BinaryLoader.create("" + Std.string(App.config.api),{ user_name : this.props.user_name, jwt : this.props.jwt, fields : "id,table_name,field_name,readonly,element,required,use_as_index", className : "tools.DB", action : "createFieldList"},function(dBytes) {
-			var u = new hxbit_Serializer();
-			var data = u.unserialize(dBytes,shared_DbData);
+		this.requests.push(haxe_ds_Either.Right(view_shared_io_BinaryLoader.create("" + Std.string(App.config.api),{ user_name : this.props.user_name, jwt : this.props.jwt, fields : "id,table_name,field_name,readonly,element,required,use_as_index", className : "tools.DB", action : "createFieldList"},function(data) {
 			if(data.dataRows.length == 0) {
 				var error = data.dataErrors;
 				var eK = error.keys();
@@ -8843,14 +8835,14 @@ view_shared_io_DB.prototype = $extend(view_shared_io_DataAccessForm.prototype,{
 				while(eK.hasNext()) {
 					hasError = true;
 					var key = eK.next();
-					haxe_Log.trace(Std.string(__map_reserved[key] != null ? error.getReserved(key) : error.h[key]),{ fileName : "src/view/shared/io/DB.hx", lineNumber : 190, className : "view.shared.io.DB", methodName : "showFieldList"});
+					haxe_Log.trace(Std.string(__map_reserved[key] != null ? error.getReserved(key) : error.h[key]),{ fileName : "src/view/shared/io/DB.hx", lineNumber : 187, className : "view.shared.io.DB", methodName : "showFieldList"});
 				}
 				if(!hasError) {
-					haxe_Log.trace("Keine Daten!",{ fileName : "src/view/shared/io/DB.hx", lineNumber : 193, className : "view.shared.io.DB", methodName : "showFieldList"});
+					haxe_Log.trace("Keine Daten!",{ fileName : "src/view/shared/io/DB.hx", lineNumber : 190, className : "view.shared.io.DB", methodName : "showFieldList"});
 				}
 				return;
 			}
-			haxe_Log.trace(data.dataRows,{ fileName : "src/view/shared/io/DB.hx", lineNumber : 197, className : "view.shared.io.DB", methodName : "showFieldList"});
+			haxe_Log.trace(data.dataRows,{ fileName : "src/view/shared/io/DB.hx", lineNumber : 194, className : "view.shared.io.DB", methodName : "showFieldList"});
 			_gthis.setState({ dataTable : data.dataRows});
 		})));
 	}
@@ -8954,9 +8946,9 @@ view_shared_io_DB.prototype = $extend(view_shared_io_DataAccessForm.prototype,{
 	}
 	,render: function() {
 		if(this.state.values != null) {
-			haxe_Log.trace(this.state.values.toString(),{ fileName : "src/view/shared/io/DB.hx", lineNumber : 258, className : "view.shared.io.DB", methodName : "render"});
+			haxe_Log.trace(this.state.values.toString(),{ fileName : "src/view/shared/io/DB.hx", lineNumber : 255, className : "view.shared.io.DB", methodName : "render"});
 		}
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "src/view/shared/io/DB.hx", lineNumber : 259, className : "view.shared.io.DB", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "src/view/shared/io/DB.hx", lineNumber : 256, className : "view.shared.io.DB", methodName : "render"});
 		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("form"), props : { className : "tabComponentForm", children : this.renderResults()}, key : null, ref : null};
 	}
 	,updateMenu: function(viewClassPath) {
@@ -9037,11 +9029,9 @@ view_shared_io_DBSync.prototype = $extend(view_shared_io_DataAccessForm.prototyp
 	}
 	,showUserList: function(_) {
 		var _gthis = this;
-		this.requests.push(haxe_ds_Either.Right(view_shared_io_BinaryLoader.create("" + Std.string(App.config.api),{ user_name : this.props.user_name, jwt : this.props.jwt, fields : "id,table_name,field_name,readonly,element,required,use_as_index", className : "admin.SyncExternal", action : "syncUserDetails"},function(dBytes) {
-			var u = new hxbit_Serializer();
-			var data = u.unserialize(dBytes,shared_DbData);
+		this.requests.push(haxe_ds_Either.Right(view_shared_io_BinaryLoader.create("" + Std.string(App.config.api),{ user_name : this.props.user_name, jwt : this.props.jwt, fields : "id,table_name,field_name,readonly,element,required,use_as_index", className : "admin.SyncExternal", action : "syncUserDetails"},function(data) {
 			var _this = data.dataRows[data.dataRows.length - 2];
-			haxe_Log.trace(__map_reserved["phone_data"] != null ? _this.getReserved("phone_data") : _this.h["phone_data"],{ fileName : "src/view/shared/io/DBSync.hx", lineNumber : 177, className : "view.shared.io.DBSync", methodName : "showUserList"});
+			haxe_Log.trace(__map_reserved["phone_data"] != null ? _this.getReserved("phone_data") : _this.h["phone_data"],{ fileName : "src/view/shared/io/DBSync.hx", lineNumber : 174, className : "view.shared.io.DBSync", methodName : "showUserList"});
 			_gthis.setState({ dataTable : data.dataRows});
 		})));
 	}
@@ -9124,7 +9114,7 @@ view_shared_io_DBSync.prototype = $extend(view_shared_io_DataAccessForm.prototyp
 		this.dataAccess = _g2;
 	}
 	,renderResults: function() {
-		haxe_Log.trace(this.props.match.params.section + ":" + Std.string(this.state.dataTable != null),{ fileName : "src/view/shared/io/DBSync.hx", lineNumber : 213, className : "view.shared.io.DBSync", methodName : "renderResults"});
+		haxe_Log.trace(this.props.match.params.section + ":" + Std.string(this.state.dataTable != null),{ fileName : "src/view/shared/io/DBSync.hx", lineNumber : 210, className : "view.shared.io.DBSync", methodName : "renderResults"});
 		if(this.state.dataTable != null) {
 			var _g = this.props.match.params.action;
 			switch(_g) {
@@ -9132,9 +9122,9 @@ view_shared_io_DBSync.prototype = $extend(view_shared_io_DataAccessForm.prototyp
 				return null;
 			case "showFieldList2":
 				var _this = this.dataDisplay;
-				haxe_Log.trace(__map_reserved["fieldsList"] != null ? _this.getReserved("fieldsList") : _this.h["fieldsList"],{ fileName : "src/view/shared/io/DBSync.hx", lineNumber : 225, className : "view.shared.io.DBSync", methodName : "renderResults"});
+				haxe_Log.trace(__map_reserved["fieldsList"] != null ? _this.getReserved("fieldsList") : _this.h["fieldsList"],{ fileName : "src/view/shared/io/DBSync.hx", lineNumber : 222, className : "view.shared.io.DBSync", methodName : "renderResults"});
 				var _this1 = this.state.dataTable[29];
-				haxe_Log.trace(Std.string(__map_reserved["id"] != null ? _this1.getReserved("id") : _this1.h["id"]) + "<<<",{ fileName : "src/view/shared/io/DBSync.hx", lineNumber : 226, className : "view.shared.io.DBSync", methodName : "renderResults"});
+				haxe_Log.trace(Std.string(__map_reserved["id"] != null ? _this1.getReserved("id") : _this1.h["id"]) + "<<<",{ fileName : "src/view/shared/io/DBSync.hx", lineNumber : 223, className : "view.shared.io.DBSync", methodName : "renderResults"});
 				var tmp = $$tre;
 				var tmp1 = react__$ReactType_ReactType_$Impl_$.fromComp(view_table_Table);
 				var tmp2 = this.props;
@@ -9158,9 +9148,9 @@ view_shared_io_DBSync.prototype = $extend(view_shared_io_DataAccessForm.prototyp
 	}
 	,render: function() {
 		if(this.state.dataTable != null) {
-			haxe_Log.trace(this.state.dataTable[0].toString(),{ fileName : "src/view/shared/io/DBSync.hx", lineNumber : 243, className : "view.shared.io.DBSync", methodName : "render"});
+			haxe_Log.trace(this.state.dataTable[0].toString(),{ fileName : "src/view/shared/io/DBSync.hx", lineNumber : 240, className : "view.shared.io.DBSync", methodName : "render"});
 		}
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "src/view/shared/io/DBSync.hx", lineNumber : 244, className : "view.shared.io.DBSync", methodName : "render"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "src/view/shared/io/DBSync.hx", lineNumber : 241, className : "view.shared.io.DBSync", methodName : "render"});
 		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("form"), props : { className : "tabComponentForm", children : this.renderResults()}, key : null, ref : null};
 	}
 	,updateMenu: function(viewClassPath) {
@@ -9486,7 +9476,7 @@ var view_shared_io_User = function(props) {
 	var sideMenu = this.state.sideMenu;
 	var _this = sideMenu.menuBlocks;
 	(__map_reserved["user"] != null ? _this.getReserved("user") : _this.h["user"]).items = this._menuItems;
-	haxe_Log.trace(this._menuItems,{ fileName : "src/view/shared/io/User.hx", lineNumber : 301, className : "view.shared.io.User", methodName : "new"});
+	haxe_Log.trace(this._menuItems,{ fileName : "src/view/shared/io/User.hx", lineNumber : 295, className : "view.shared.io.User", methodName : "new"});
 	this.state = react_ReactUtil.copy(this.state,{ sideMenu : sideMenu, viewClassPath : "edit"});
 };
 $hxClasses["view.shared.io.User"] = view_shared_io_User;
@@ -9500,13 +9490,10 @@ view_shared_io_User.prototype = $extend(view_shared_io_DataAccessForm.prototype,
 		var _gthis = this;
 		view_shared_io_DataAccessForm.prototype.componentDidMount.call(this);
 		var _this = this.dataAccess;
-		this.requests.push(haxe_ds_Either.Right(view_shared_io_BinaryLoader.create("" + Std.string(App.config.api),{ user_name : this.props.user_name, jwt : this.props.jwt, className : "auth.User", action : "edit", filter : "user_name|" + this.props.user_name, dataSource : haxe_Serializer.run((__map_reserved["edit"] != null ? _this.getReserved("edit") : _this.h["edit"]).source)},function(dBytes) {
-			haxe_Log.trace(dBytes.toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 71, className : "view.shared.io.User", methodName : "componentDidMount"});
-			var u = new hxbit_Serializer();
-			var data = u.unserialize(dBytes,shared_DbData);
-			haxe_Log.trace(Reflect.fields(data),{ fileName : "src/view/shared/io/User.hx", lineNumber : 74, className : "view.shared.io.User", methodName : "componentDidMount"});
-			haxe_Log.trace(data,{ fileName : "src/view/shared/io/User.hx", lineNumber : 75, className : "view.shared.io.User", methodName : "componentDidMount"});
-			haxe_Log.trace(Reflect.fields(data.dataRows[0]),{ fileName : "src/view/shared/io/User.hx", lineNumber : 76, className : "view.shared.io.User", methodName : "componentDidMount"});
+		this.requests.push(haxe_ds_Either.Right(view_shared_io_BinaryLoader.create("" + Std.string(App.config.api),{ user_name : this.props.user_name, jwt : this.props.jwt, className : "auth.User", action : "edit", filter : "user_name|" + this.props.user_name, dataSource : haxe_Serializer.run((__map_reserved["edit"] != null ? _this.getReserved("edit") : _this.h["edit"]).source)},function(data) {
+			haxe_Log.trace(Reflect.fields(data),{ fileName : "src/view/shared/io/User.hx", lineNumber : 71, className : "view.shared.io.User", methodName : "componentDidMount"});
+			haxe_Log.trace(data,{ fileName : "src/view/shared/io/User.hx", lineNumber : 72, className : "view.shared.io.User", methodName : "componentDidMount"});
+			haxe_Log.trace(Reflect.fields(data.dataRows[0]),{ fileName : "src/view/shared/io/User.hx", lineNumber : 73, className : "view.shared.io.User", methodName : "componentDidMount"});
 			var _this1 = data.dataRows[0];
 			if((__map_reserved["change_pass_required"] != null ? _this1.getReserved("change_pass_required") : _this1.h["change_pass_required"]) == "1") {
 				var data1 = data.dataRows[0];
@@ -9537,7 +9524,7 @@ view_shared_io_User.prototype = $extend(view_shared_io_DataAccessForm.prototype,
 				var b10 = _gthis.createStateValues(data4,b9.view);
 				_gthis.setState({ data : data3, action : "edit", fields : b8, values : b10, loading : false});
 				var _this10 = data.dataRows[0];
-				haxe_Log.trace(HxOverrides.strDate(__map_reserved["last_login"] != null ? _this10.getReserved("last_login") : _this10.h["last_login"]),{ fileName : "src/view/shared/io/User.hx", lineNumber : 100, className : "view.shared.io.User", methodName : "componentDidMount"});
+				haxe_Log.trace(HxOverrides.strDate(__map_reserved["last_login"] != null ? _this10.getReserved("last_login") : _this10.h["last_login"]),{ fileName : "src/view/shared/io/User.hx", lineNumber : 97, className : "view.shared.io.User", methodName : "componentDidMount"});
 				var b11 = App.store;
 				var _this11 = data.dataRows[0];
 				var b12 = __map_reserved["first_name"] != null ? _this11.getReserved("first_name") : _this11.h["first_name"];
@@ -9552,15 +9539,15 @@ view_shared_io_User.prototype = $extend(view_shared_io_DataAccessForm.prototype,
 		})));
 	}
 	,componentDidUpdate: function(prevProps,prevState) {
-		haxe_Log.trace(App.store.getState().appWare.user.first_name,{ fileName : "src/view/shared/io/User.hx", lineNumber : 120, className : "view.shared.io.User", methodName : "componentDidUpdate"});
+		haxe_Log.trace(App.store.getState().appWare.user.first_name,{ fileName : "src/view/shared/io/User.hx", lineNumber : 117, className : "view.shared.io.User", methodName : "componentDidUpdate"});
 		if(this.autoFocus != null) {
 			react__$ReactRef_ReactRef_$Impl_$.get_current(this.autoFocus).focus();
 		}
 	}
 	,changePassword: function(ev) {
 		var _gthis = this;
-		haxe_Log.trace(this.state.values.toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 128, className : "view.shared.io.User", methodName : "changePassword"});
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "src/view/shared/io/User.hx", lineNumber : 129, className : "view.shared.io.User", methodName : "changePassword"});
+		haxe_Log.trace(this.state.values.toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 125, className : "view.shared.io.User", methodName : "changePassword"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "src/view/shared/io/User.hx", lineNumber : 126, className : "view.shared.io.User", methodName : "changePassword"});
 		if(this.props.match.params.action != "changePassword") {
 			this.updateMenu("changePassword");
 			this.props.history.push(this.props.location.pathname + "/user/changePassword/" + App.user_name);
@@ -9626,7 +9613,7 @@ view_shared_io_User.prototype = $extend(view_shared_io_DataAccessForm.prototype,
 			this.setState({ errors : _g22});
 			return;
 		}
-		haxe_Log.trace(App.store.getState().appWare.user,{ fileName : "src/view/shared/io/User.hx", lineNumber : 145, className : "view.shared.io.User", methodName : "changePassword"});
+		haxe_Log.trace(App.store.getState().appWare.user,{ fileName : "src/view/shared/io/User.hx", lineNumber : 142, className : "view.shared.io.User", methodName : "changePassword"});
 		var tmp5 = this.requests;
 		var b = "" + Std.string(App.config.api);
 		var b1 = this.props.user_name;
@@ -9634,18 +9621,15 @@ view_shared_io_User.prototype = $extend(view_shared_io_DataAccessForm.prototype,
 		var _this8 = this.state.values;
 		var b3 = __map_reserved["new_pass"] != null ? _this8.getReserved("new_pass") : _this8.h["new_pass"];
 		var _this9 = this.state.values;
-		tmp5.push(haxe_ds_Either.Right(view_shared_io_BinaryLoader.create(b,{ user_name : b1, jwt : b2, className : "auth.User", action : "changePassword", new_pass : b3, pass : __map_reserved["pass"] != null ? _this9.getReserved("pass") : _this9.h["pass"]},function(dBytes) {
-			haxe_Log.trace(dBytes.toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 158, className : "view.shared.io.User", methodName : "changePassword"});
-			var u = new hxbit_Serializer();
-			var data = u.unserialize(dBytes,shared_DbData);
-			haxe_Log.trace(Reflect.fields(data),{ fileName : "src/view/shared/io/User.hx", lineNumber : 161, className : "view.shared.io.User", methodName : "changePassword"});
-			haxe_Log.trace(data,{ fileName : "src/view/shared/io/User.hx", lineNumber : 162, className : "view.shared.io.User", methodName : "changePassword"});
+		tmp5.push(haxe_ds_Either.Right(view_shared_io_BinaryLoader.create(b,{ user_name : b1, jwt : b2, className : "auth.User", action : "changePassword", new_pass : b3, pass : __map_reserved["pass"] != null ? _this9.getReserved("pass") : _this9.h["pass"]},function(data) {
+			haxe_Log.trace(Reflect.fields(data),{ fileName : "src/view/shared/io/User.hx", lineNumber : 155, className : "view.shared.io.User", methodName : "changePassword"});
+			haxe_Log.trace(data,{ fileName : "src/view/shared/io/User.hx", lineNumber : 156, className : "view.shared.io.User", methodName : "changePassword"});
 			if(data.dataErrors.keys().hasNext()) {
-				haxe_Log.trace(data.dataErrors.toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 165, className : "view.shared.io.User", methodName : "changePassword"});
+				haxe_Log.trace(data.dataErrors.toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 159, className : "view.shared.io.User", methodName : "changePassword"});
 			}
 			var _this10 = data.dataInfo;
 			if((__map_reserved["changePassword"] != null ? _this10.getReserved("changePassword") : _this10.h["changePassword"]) == "OK") {
-				haxe_Log.trace(shared_Utils.dynaMap(App.store.getState().appWare.user).toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 169, className : "view.shared.io.User", methodName : "changePassword"});
+				haxe_Log.trace(shared_Utils.dynaMap(App.store.getState().appWare.user).toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 163, className : "view.shared.io.User", methodName : "changePassword"});
 				var _this11 = _gthis.dataAccess;
 				var b4 = (__map_reserved["edit"] != null ? _this11.getReserved("edit") : _this11.h["edit"]).view;
 				var b5 = shared_Utils.dynaMap(App.store.getState().appWare.user);
@@ -9654,23 +9638,23 @@ view_shared_io_User.prototype = $extend(view_shared_io_DataAccessForm.prototype,
 				var b7 = _gthis.createStateValues(b5,b6.view);
 				_gthis.setState({ fields : b4, values : b7, loading : false});
 			} else {
-				haxe_Log.trace(data.dataErrors.toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 176, className : "view.shared.io.User", methodName : "changePassword"});
+				haxe_Log.trace(data.dataErrors.toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 170, className : "view.shared.io.User", methodName : "changePassword"});
 			}
 		})));
 	}
 	,edit: function(ev) {
 		var _gthis = this;
-		haxe_Log.trace("hi :)",{ fileName : "src/view/shared/io/User.hx", lineNumber : 183, className : "view.shared.io.User", methodName : "edit"});
+		haxe_Log.trace("hi :)",{ fileName : "src/view/shared/io/User.hx", lineNumber : 177, className : "view.shared.io.User", methodName : "edit"});
 		var _this = this.dataAccess;
 		this.requests.push(haxe_ds_Either.Left(view_shared_io_Loader.loadData("" + Std.string(App.config.api),{ user_name : this.props.user_name, jwt : this.props.jwt, className : "auth.User", action : "edit", filter : "user_name|" + this.props.user_name, dataSource : haxe_Serializer.run((__map_reserved["edit"] != null ? _this.getReserved("edit") : _this.h["edit"]).source)},function(data) {
-			haxe_Log.trace(data,{ fileName : "src/view/shared/io/User.hx", lineNumber : 196, className : "view.shared.io.User", methodName : "edit"});
+			haxe_Log.trace(data,{ fileName : "src/view/shared/io/User.hx", lineNumber : 190, className : "view.shared.io.User", methodName : "edit"});
 			if(data == null) {
 				return;
 			}
 			var _this1 = data[0];
 			if(__map_reserved["ERROR"] != null ? _this1.existsReserved("ERROR") : _this1.h.hasOwnProperty("ERROR")) {
 				var _this2 = data[0];
-				haxe_Log.trace(__map_reserved["ERROR"] != null ? _this2.getReserved("ERROR") : _this2.h["ERROR"],{ fileName : "src/view/shared/io/User.hx", lineNumber : 201, className : "view.shared.io.User", methodName : "edit"});
+				haxe_Log.trace(__map_reserved["ERROR"] != null ? _this2.getReserved("ERROR") : _this2.h["ERROR"],{ fileName : "src/view/shared/io/User.hx", lineNumber : 195, className : "view.shared.io.User", methodName : "edit"});
 				return;
 			}
 			var _this3 = _gthis.dataAccess;
@@ -9685,8 +9669,8 @@ view_shared_io_User.prototype = $extend(view_shared_io_DataAccessForm.prototype,
 	,save: function(evt) {
 		var _gthis = this;
 		evt.preventDefault();
-		haxe_Log.trace(this.state.data.toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 220, className : "view.shared.io.User", methodName : "save"});
-		haxe_Log.trace(this.state.values.toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 221, className : "view.shared.io.User", methodName : "save"});
+		haxe_Log.trace(this.state.data.toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 214, className : "view.shared.io.User", methodName : "save"});
+		haxe_Log.trace(this.state.values.toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 215, className : "view.shared.io.User", methodName : "save"});
 		var _this = this.dataAccess;
 		var skeys = (__map_reserved["edit"] != null ? _this.getReserved("edit") : _this.h["edit"]).view.keys().arr;
 		skeys = skeys.filter(function(k) {
@@ -9694,13 +9678,13 @@ view_shared_io_User.prototype = $extend(view_shared_io_DataAccessForm.prototype,
 			var _this2 = (__map_reserved["edit"] != null ? _this1.getReserved("edit") : _this1.h["edit"]).view;
 			return !(__map_reserved[k] != null ? _this2.getReserved(k) : _this2.h[k]).readonly;
 		});
-		haxe_Log.trace(this.filterMap(this.state.values,skeys).toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 224, className : "view.shared.io.User", methodName : "save"});
-		haxe_Log.trace(skeys.toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 230, className : "view.shared.io.User", methodName : "save"});
+		haxe_Log.trace(this.filterMap(this.state.values,skeys).toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 218, className : "view.shared.io.User", methodName : "save"});
+		haxe_Log.trace(skeys.toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 224, className : "view.shared.io.User", methodName : "save"});
 		var _this3 = this.dataAccess;
-		haxe_Log.trace((__map_reserved["edit"] != null ? _this3.getReserved("edit") : _this3.h["edit"]).source.toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 231, className : "view.shared.io.User", methodName : "save"});
+		haxe_Log.trace((__map_reserved["edit"] != null ? _this3.getReserved("edit") : _this3.h["edit"]).source.toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 225, className : "view.shared.io.User", methodName : "save"});
 		var _this4 = this.dataAccess;
 		this.requests.push(haxe_ds_Either.Left(view_shared_io_Loader.load("" + Std.string(App.config.api),{ user_name : this.props.user_name, jwt : this.props.jwt, className : "auth.User", action : "save", filter : "user_name|" + this.props.user_name, dataSource : haxe_Serializer.run((__map_reserved["edit"] != null ? _this4.getReserved("edit") : _this4.h["edit"]).source)},function(data) {
-			haxe_Log.trace(data,{ fileName : "src/view/shared/io/User.hx", lineNumber : 246, className : "view.shared.io.User", methodName : "save"});
+			haxe_Log.trace(data,{ fileName : "src/view/shared/io/User.hx", lineNumber : 240, className : "view.shared.io.User", methodName : "save"});
 		})));
 	}
 	,updateMenu: function(viewClassPath) {
@@ -9729,7 +9713,7 @@ view_shared_io_User.prototype = $extend(view_shared_io_DataAccessForm.prototype,
 		return sideMenu;
 	}
 	,renderContent: function() {
-		haxe_Log.trace(this.props.match.params.action,{ fileName : "src/view/shared/io/User.hx", lineNumber : 333, className : "view.shared.io.User", methodName : "renderContent"});
+		haxe_Log.trace(this.props.match.params.action,{ fileName : "src/view/shared/io/User.hx", lineNumber : 327, className : "view.shared.io.User", methodName : "renderContent"});
 		var _g = this.props.match.params.action;
 		switch(_g) {
 		case "changePassword":
@@ -9750,7 +9734,7 @@ view_shared_io_User.prototype = $extend(view_shared_io_DataAccessForm.prototype,
 	}
 	,renderErrors: function(name) {
 		var _this = this.state.errors;
-		haxe_Log.trace(name + ":" + Std.string(__map_reserved[name] != null ? _this.existsReserved(name) : _this.h.hasOwnProperty(name)),{ fileName : "src/view/shared/io/User.hx", lineNumber : 363, className : "view.shared.io.User", methodName : "renderErrors"});
+		haxe_Log.trace(name + ":" + Std.string(__map_reserved[name] != null ? _this.existsReserved(name) : _this.h.hasOwnProperty(name)),{ fileName : "src/view/shared/io/User.hx", lineNumber : 357, className : "view.shared.io.User", methodName : "renderErrors"});
 		var _this1 = this.state.errors;
 		if(__map_reserved[name] != null ? _this1.existsReserved(name) : _this1.h.hasOwnProperty(name)) {
 			var tmp = $$tre;
@@ -9762,7 +9746,7 @@ view_shared_io_User.prototype = $extend(view_shared_io_DataAccessForm.prototype,
 	}
 	,render: function() {
 		if(this.state.values != null) {
-			haxe_Log.trace(this.state.values.toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 376, className : "view.shared.io.User", methodName : "render"});
+			haxe_Log.trace(this.state.values.toString(),{ fileName : "src/view/shared/io/User.hx", lineNumber : 370, className : "view.shared.io.User", methodName : "render"});
 		}
 		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabComponentForm", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("form"), props : { className : "form60", children : this.renderContent()}, key : null, ref : null}}, key : null, ref : null};
 	}
