@@ -58,20 +58,18 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 		state = {hasError:false};
 		trace('location.pathname:${props.history.location.pathname} match.url: ${props.match.url}');
 		super(props);
-		if (App.firstLoad && props.match.url == '/dashboard')
+		if (props.match.url == '/dashboard')
 		{
 			props.history.push('/dashboard/settings');
-			trace('pushed2/dashboard/settings');
+			trace('pushed2: /dashboard/settings');
 		}
-		//trace(untyped this.state.history);
-		//trace(props);
 	}
 	
 	override public function componentDidMount():Void 
 	{
 		mounted = true;
-		trace(mounted);
-		trace(props.history.listen);
+		//trace(mounted);
+		//trace(props.history.listen);
 		//this.addComponent();
 	}
 	
@@ -92,7 +90,7 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 	
 	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
     {
-		trace(dispatch + ':' + (dispatch == App.store.dispatch? 'Y':'N'));
+		//trace(dispatch + ':' + (dispatch == App.store.dispatch? 'Y':'N'));
         return {
 			setThemeColor: function() dispatch(AppAction.SetTheme('violet'))//,
 			//initChildren: function() dispatch()

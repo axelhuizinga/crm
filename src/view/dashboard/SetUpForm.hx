@@ -67,7 +67,7 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 		return function(aState:model.AppState) 
 		{
 			var uState = aState.appWare.user;
-			trace(uState);		
+			//trace(uState);		
 			return {
 				//appConfig:aState.appWare.config,
 				user_name:uState.user_name,

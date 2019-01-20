@@ -56,7 +56,7 @@ class ApplicationStore
 	
 	static public function startHistoryListener(store:Store<model.AppState>, history:History):TUnlisten
 	{
-		trace(store);
+		//trace(store);
 		store.dispatch(InitHistory(history));
 	
 		return history.listen( function(location:Location, action:history.Action){

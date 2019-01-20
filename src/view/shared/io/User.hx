@@ -17,7 +17,8 @@ import shared.DbData;
 import view.shared.BaseForm.*;
 import view.shared.BaseForm.FormState;
 import view.shared.SMenu;
-import view.shared.io.DataAccessForm;
+import view.shared.io.DataAccessContainer;
+//import view.shared.io.DataAccessForm;
 import view.shared.io.DataAccess.DataSource;
 import view.table.Table;
 
@@ -36,7 +37,8 @@ typedef UserModel = DataSource;
 
 typedef UserFilter = Dynamic;
 
-class User extends DataAccessForm
+@:wrap(DataAccessContainer)
+class User extends ReactComponentOf<DataFormProps,FormState>
 {
 	static var _instance:User;
 
@@ -69,7 +71,7 @@ class User extends DataAccessForm
 			function(data:DbData)
 			{
 				trace(Reflect.fields(data));
-				trace(data);
+				//trace(data);
 				trace(Reflect.fields(data.dataRows[0]));
 				if (data.dataRows[0]['change_pass_required'] == '1')
 				{
@@ -80,7 +82,7 @@ class User extends DataAccessForm
 					App.store.dispatch(AppAction.User({
 						first_name:data.dataRows[0]['first_name'],
 						last_name:data.dataRows[0]['last_name'],
-						user_name:App.user_name,
+						user_name:props.user_name,
 						email:data.dataRows[0]['email'],
 						pass:'',
 						new_pass:'',
@@ -98,7 +100,7 @@ class User extends DataAccessForm
 					App.store.dispatch(AppAction.User({
 						first_name:data.dataRows[0]['first_name'],
 						last_name:data.dataRows[0]['last_name'],
-						user_name:App.user_name,
+						user_name:props.user_name,
 						email:data.dataRows[0]['email'],
 						pass:'',
 						waiting:false,
@@ -127,7 +129,7 @@ class User extends DataAccessForm
 		if(props.match.params.action!='changePassword')
 		{
 			updateMenu('changePassword');
-			props.history.push(props.location.pathname + '/user/changePassword/' + App.user_name);
+			props.history.push(props.location.pathname + '/user/changePassword/${props.user.user_name}');
 			return setState({action:'changePassword'});
 		}
 		else {

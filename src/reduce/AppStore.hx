@@ -33,6 +33,7 @@ class AppStore
 
 	public var initState:GlobalAppState = {
 		config:App.config,
+		firstLoad:true,
 		history:BrowserHistory.create({basename:"/", getUserConfirmation:CState.confirmTransition}),
 		themeColor: 'green',
 		locale: 'de',
@@ -42,12 +43,12 @@ class AppStore
 		user:{
 			first_name:'',
 			last_name:'',
-			user_name:App.user_name,
+			user_name:(Cookie.get('user.user_name')==null?'':Cookie.get('user.user_name')),
 			email:'',
 			pass:'',
 			waiting:true,
 			last_login:null,
-			jwt:App.jwt
+			jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt'))
 		}
 	};
 		
@@ -93,7 +94,7 @@ class AppStore
 				copy(state, {waiting:true});
 				
 			case LoginComplete(uState):
-				trace(uState);
+				trace(uState.user_name);
 				uState.loginError = null;
 				copy(state, //uState.change_pass_required?:
 				{
@@ -147,7 +148,7 @@ class AppStore
 				trace(n);
 				n;*/
 			case LoginComplete(state):
-				App.firstLoad = false;	
+				//App.firstLoad = false;	
 				next();		
 			default: next();
 		}

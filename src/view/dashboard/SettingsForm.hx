@@ -12,7 +12,7 @@ import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactComponent.ReactFragment;
 import react.ReactUtil;
-import view.dashboard.model.SettingsFormModel;
+//import view.dashboard.model.SettingsFormModel;
 import view.shared.io.DataAccessForm.DataFormProps;
 import view.shared.io.Design;
 import view.shared.BaseForm;
@@ -36,13 +36,6 @@ class SettingsForm extends BaseForm
 		childFormProps = ReactUtil.copy(props, 
 			{fullWidth: true, setStateFromChild:setStateFromChild});
 		
-		if (props.jwt == null)
-		{
-			trace(props);
-		}
-		else{
-			//trace(props.jwt);
-		}	
 		state = {
 			clean:true,
 			hasError:false,
@@ -102,14 +95,12 @@ class SettingsForm extends BaseForm
 
 		
 	static function mapStateToProps(aState:AppState) {
-		return function(aState:model.AppState) 
+		return function(aState:AppState) 
 		{
 			var uState = aState.appWare.user;
 			//trace(uState);		
 			return {
-				user_name:uState.user_name,
-				jwt:uState.jwt,
-				first_name:uState.first_name
+				user:uState
 			};
 		};
 	}	
@@ -125,12 +116,12 @@ class SettingsForm extends BaseForm
 		{
 			case "user":
 				jsx('
-					<User ${...childFormProps} sideMenu=${state.sideMenu}
+					<User ${...props} sideMenu=${state.sideMenu}
 					handleChange={true} handleSubmit={true} fullWidth={true}/>
 				');	
 			case "bookmarks"|null:
 				jsx('
-					<Bookmarks ${...childFormProps} sideMenu=${state.sideMenu}
+					<Bookmarks ${...props} sideMenu=${state.sideMenu}
 					handleChange={true} handleSubmit={true} fullWidth={true}/>
 				');
 			default:		

@@ -56,7 +56,7 @@ class DateTime extends ReactComponentOfProps<IntlProps>
             hour:props.hour,
             minute:props.minute
         });
-        trace(now);
+        //trace(now);
         now = now.replace(',', '');
         return jsx('
         <span   className="column flex-end" >

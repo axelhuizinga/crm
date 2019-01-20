@@ -10,8 +10,8 @@ import shared.DBMetaData;
 
 
 import haxe.ds.StringMap;
-import view.shared.BaseForm.FormElement;
-import view.shared.io.DataAccessForm;
+import view.shared.FormElement;
+//import view.shared.io.DataAccessForm;
 import view.table.Table.DataColumn;
 import view.table.Table.DataState;
 

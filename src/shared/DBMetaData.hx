@@ -1,7 +1,7 @@
 package shared;
 
 import shared.FieldFormat;
-import view.shared.BaseForm.FormElement;
+import view.shared.FormElement;
 import haxe.ds.IntMap;
 import haxe.ds.Map;
 import hxbit.Schema;

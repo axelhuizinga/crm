@@ -110,8 +110,8 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 	{
 		//trace(prevState);
 		//trace(prevProps);
-		trace(App.firstLoad); 
-		App.firstLoad = false;
+		//trace(App.firstLoad); 
+		//App.firstLoad = false;
 	}
 
 	var tabList:Array<Dynamic> = [];

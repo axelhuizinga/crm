@@ -45,7 +45,7 @@ class UserAction
 				jwt:props.jwt,
 				className:'auth.User',
 				action:'login',
-				filter:'user_name|${App.user_name}',
+				filter:'user_name|${props.user_name}',
 				dataSource:Serializer.run([
 					"users" => ["alias" => 'us',
 						"fields" => 'user_name,last_login'],

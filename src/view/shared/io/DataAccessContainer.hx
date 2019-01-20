@@ -24,13 +24,14 @@ import js.html.XMLHttpRequest;
 import macrotools.AbstractEnumTools;
 import react.ReactDOM;
 import view.shared.BaseForm;
-import view.shared.BaseForm.FormElement;
+import view.shared.FormElement;
 import view.shared.BaseForm.FormField;
 import view.shared.BaseForm.FormState;
 import view.shared.BaseForm.FormProps;
 import view.shared.BaseForm.OneOf;
 import view.shared.SMenu.SMenuProps;
 import view.shared.SMenu.SMItem;
+import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess.DataView;
 import view.table.Table.DataState;
 import react.PureComponent.PureComponentOf;
@@ -55,15 +56,9 @@ using Lambda;
  * @author axel@cunity.me
  */
 
-typedef DataFormProps =
-{
-	>FormProps,
-	?fullWidth:Bool,
-	?setStateFromChild:FormState->Void,
-	model:String
-}
 
-class DataAccessForm extends ReactComponentOf<DataFormProps,FormState>
+
+class DataAccessContainer extends ReactComponentOf<DataFormProps,FormState>
 {
 	var mounted:Bool;
 	var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;	
@@ -214,13 +209,14 @@ class DataAccessForm extends ReactComponentOf<DataFormProps,FormState>
 		if(state.action != null)
 		{
 			var fun:Function = Reflect.field(this,state.action);
+			trace(fun);
 			if(fun != null)
 			{
 				Reflect.callMethod(this, fun, null);
 			}
 		}
 		mounted = true;
-		//trace(mounted);
+		trace(Type.getClassName(Type.getClass(this)).split('.').pop() + 'state.action');
 	}
 	
 	override public function componentWillUnmount()

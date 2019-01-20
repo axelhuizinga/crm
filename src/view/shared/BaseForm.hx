@@ -21,95 +21,21 @@ import react.router.Route.RouteRenderProps;
 import redux.Redux.Dispatch;
 import redux.Store;
 import view.dashboard.model.RolesFormModel;
-import view.shared.io.DataAccessForm;
+//import view.shared.io.DataAccessForm;
 
 import view.table.Table.DataState;
+import view.shared.FormElement;
 import view.shared.RouteTabProps;
 import view.shared.SMenu.InteractionState;
 import view.shared.SMenu.SMenuBlock;
 import view.shared.SMenu.SMenuProps;
-
-@:enum
-abstract FormElement(String)
-{
-	var Button = 'Button';
-	var Hidden = 'Hidden';
-	var Input = 'Input';
-	var Password = 'Password';
-	var Checkbox = 'Checkbox';
-	var Radio = 'Radio';
-	var Select = 'Select';
-	var TextArea = 'TextArea';
-}
 
 /**
  * ...
  * @author axel@cunity.me
  */
 
-typedef FormField =
-{
-	?className:String,
-	?primaryId:String,
-	?name:String,
-	?label:String,
-	?value:Dynamic,
-	?dataBase:String, 
-	?dataTable:String,
-	?dataField:String,
-	?displayFormat:Function,
-	?type:FormElement,
-	?primary:Bool,
-	?readonly:Bool,
-	?required:Bool,
-	?handleChange:InputEvent->Void,
-	?placeholder:String,
-	?validate:String->Bool
-}
- 
- typedef FormProps =
- {
-	>RouteTabProps,
-	//?dataClassPath:String,
-	?elements:Map<String,FormField>,
-	//?data:Dynamic,
-	//?store:Store<AppState>,
-	?isConnected:Bool,
-	?handleChange:Bool,
-	?handleSubmit:Bool,
-	?handleChangeByParent:InputEvent->Void,
-	?handleSubmitByParent:InputEvent->Void,
-	?name:String,
-	?sideMenu:SMenuProps,
-	?submit:FormState->Dispatch
- }
 
-typedef FormState =
-{
-	?action:String,
-	?dataClassPath:String,
-	//?viewClassPath:String,
-	?data:Map<String,Dynamic>,
-	?dataForm:DataAccessForm,
-	?dataTable:Array<Map<String,Dynamic>>,
-	?clean:Bool,
-	?selectedRows:Array<TableRowElement>,
-	?handleChange:InputEvent->Void,
-	?handleSubmit:Dynamic->Void,	
-	?hasError:Bool,
-	?isConnected:Bool,
-	?loading:Bool,
-	?initialState:Dynamic,
-	?model:String,
-	?fields:Map<String,FormField>,//VIEW FORMFIELDS
-	?valuesArray:Array<Map<String,Dynamic>>,//FORMATTED DISPLAY VALUES
-	?values:Map<String,Dynamic>,//FORMATTED DISPLAY VALUES
-	?section:String,
-	?sideMenu:SMenuProps,
-	?submitted:Bool,
-	?errors:Map<String,String>,
-	?title:String
-}
 
 abstract OneOf<A, B>(Either<A, B>) from Either<A, B> to Either<A, B> {
   @:from inline static function fromA<A, B>(a:A):OneOf<A, B> {
@@ -135,8 +61,7 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 	var mounted:Bool;
 	var requests:Array<OneOf<HttpJs,XMLHttpRequest>>;	
 	//var sideMenu:SMenuProps;
-	var dataDisplay:Map<String,DataState>;//TODO: CHECK4INTEGRATION INTO state or props
-	
+	var dataDisplay:Map<String,DataState>;//TODO: CHECK4INTEGRATION INTO state or props	
 	
 	public function new(?props:FormProps) 
 	{
@@ -236,7 +161,6 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 	
 	public function switchContent(reactEventSource:Dynamic)
 	{
-		//Out.dumpObject(reactEventSource);
 		//trace(props.history.location);
 		//trace(props.location);
 		//trace(props.match.params);
@@ -253,7 +177,8 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 			sM.section = section;
 			setState({
 				//viewClassPath:viewClassPath,
-				sideMenu: sM
+				sideMenu: sM,
+				section:section
 			});
 			var basePath:String = props.match.path.split('/:')[0];
 			trace(props.location.pathname);

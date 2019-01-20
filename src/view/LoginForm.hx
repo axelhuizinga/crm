@@ -51,7 +51,6 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 	}
 
 	static function mapDispatchToProps(dispatch:Dispatch) {
-		trace(dispatch);
 		return {
 			submitLogin: function(lState:LoginState) return dispatch(UserAction.loginReq(lState))
 		};
@@ -106,7 +105,7 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 	dynamic function handleSubmit(e:InputEvent)
 	{
 		e.preventDefault();
-		trace(props.submitLogin); //return;
+		//trace(state); //return;
 		//this.setState({waiting:true});
 		//props.dispatch(AppAction.Login("{user_name:state.user_name,pass:state.pass}"));
 		//trace(props.dispatch);

@@ -22,7 +22,8 @@ import view.dashboard.model.DBFormsModel;
 import view.shared.BaseForm.FormField;
 import view.shared.SMenu;
 import view.shared.SMenu.SMItem;
-import view.shared.io.DataAccessForm;
+//import view.shared.io.DataAccessForm;
+import view.shared.io.DataAccessContainer;
 import view.shared.io.Loader;
 import view.table.Table;
 
@@ -31,7 +32,8 @@ import view.table.Table;
  * ...
  * @author axel@cunity.me
  */
-class DB extends DataAccessForm 
+@:wrap(DataAccessContainer)
+class DB extends ReactComponentOf<DataFormProps,FormState> 
 {
 
 	static var _instance:DB;

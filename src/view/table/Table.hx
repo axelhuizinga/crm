@@ -26,7 +26,6 @@ import shared.Utils;
 import view.shared.BaseForm;
 import view.shared.BaseForm.FormState;
 import view.shared.BaseForm.OneOf;
-import view.shared.io.DataAccessForm;
 using Lambda;
 
 /**
@@ -120,7 +119,7 @@ typedef TableProps =
 	?onPageChange:SortProps->Void,
 	?onSort:Int->Void,
 	?pageButtonLimit:Int,
-	?parentForm:DataAccessForm,
+	//?parentForm:DataAccessForm,
 	?primary:String,//defaults to 'id'
 	?sortable:EitherType<Bool, Array<EitherType<String,Dynamic>>>,
 	//?setStateFromChild:FormState->Void,
@@ -307,7 +306,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 			var id:String = (dR.exists(primary)? '${dR.get(primary)}':'');
 			if (row == 1)
 			{
-				trace(dR);
+				//trace(dR);
 				trace('<tr data-id=${id}< ke..');
 			}
 				
@@ -344,7 +343,7 @@ class Table extends ReactComponentOf<TableProps, TableState>
 				selRows.push(cast r);
 		}
 		setState({selectedRows:selRows});
-		props.parentForm.setStateFromChild({selectedRows:selRows});
+		//props.parentForm.setStateFromChild({selectedRows:selRows});
 	}
 	
 	function selectAltGroup(altGroupPos:Int, cRow:TableRowElement):Void

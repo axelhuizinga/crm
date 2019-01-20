@@ -33,13 +33,11 @@ using Lambda;
 
 @:connect
 class RolesForm extends BaseForm
-{		
-	
+{			
 	public function new(?props:FormProps) 
 	{
 		super(props);
-		dataDisplay = RolesFormModel.dataDisplay;
-		
+		dataDisplay = RolesFormModel.dataDisplay;		
 		state = {
 			clean:true,
 			//viewClassPath:"userList",

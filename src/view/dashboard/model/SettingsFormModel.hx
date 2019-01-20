@@ -1,7 +1,7 @@
 package view.dashboard.model;
 import haxe.ds.StringMap;
 import view.shared.BaseForm.FormProps;
-import view.shared.BaseForm.FormElement;
+import view.shared.FormElement;
 import view.shared.BaseForm.FormField;
 
 /**

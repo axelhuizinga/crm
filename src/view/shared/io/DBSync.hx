@@ -23,7 +23,7 @@ import view.dashboard.model.DBSyncModel;
 import view.shared.BaseForm.FormField;
 import view.shared.SMenu;
 import view.shared.SMenu.SMItem;
-import view.shared.io.DataAccessForm;
+import view.shared.io.DataAccessContainer;
 import view.shared.io.Loader;
 import view.table.Table;
 
@@ -32,7 +32,9 @@ import view.table.Table;
  * ...
  * @author axel@cunity.me
  */
-class DBSync extends DataAccessForm 
+
+@:wrap(DataAccessContainer)
+class DBSync extends ReactComponentOf<DataFormProps,FormState>
 {
 
 	static var _instance:DBSync;
@@ -49,26 +51,9 @@ class DBSync extends DataAccessForm
 		super(props);
 
 		dataDisplay = DBSyncModel.dataDisplay;
-		_instance = this;		
-		/*_menuItems = [];menuItems.map(function (mI:SMItem){
-			var h:Event->Void = Reflect.field(this, mI.action);
-			trace(h);
-			mI.handler = h;
-			switch(mI.action)
-			{
-				case 'editTableFields':
-					mI.disabled = state.selectedRows.length==0;
-				case 'save':
-					mI.disabled = state.clean;
-				default:
-
-			}
-			return mI;
-
-		});*/
-
+		_instance = this;
 		var sideMenu =  updateMenu('DBSync');//state.sideMenu;
-		//trace(sideMenu);
+		trace(sideMenu.section);
 		//sideMenu.menuBlocks['DBSync'].items = _menuItems;
 		state = ReactUtil.copy(state, {sideMenu:sideMenu});		
 	}
@@ -178,9 +163,7 @@ class DBSync extends DataAccessForm
 	}
 	
 	override public function componentDidMount():Void 
-	{
-		super.componentDidMount();
-	
+	{	
 		dataAccess = [
 			'editTableFields' =>{
 				source:[
@@ -203,6 +186,8 @@ class DBSync extends DataAccessForm
 				view:null
 			}
 		];			
+		super.componentDidMount();
+		trace('yeah');
 	}
 	
 	function renderResults():ReactFragment
@@ -236,8 +221,7 @@ class DBSync extends DataAccessForm
 	
 	override function render():ReactFragment
 	{
-		if(state.dataTable != null)
-			trace(state.dataTable[0]);
+		//if(state.dataTable != null)	trace(state.dataTable[0]);
 		trace(props.match.params.section);		
 		//return null;<form className="form60"></form>	
 		return jsx('

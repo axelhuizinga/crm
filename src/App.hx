@@ -73,11 +73,11 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 
 	public static var config:Dynamic = Webpack.require('../bin/config.js').config;
 	public static var sprintf:Function = Webpack.require('sprintf-js').sprintf;
-	public static var user_name:String = Cookie.get('user.user_name');
-	public static var jwt:String = Cookie.get('user.jwt');
+	//public static var user_name:String = Cookie.get('user.user_name');
+	//public static var jwt:String = Cookie.get('user.jwt');
 	public static var modalBox:ReactRef<DivElement> = React.createRef();
 	public static var onResizeComponents:List<Dynamic> = new List();
-	public static var firstLoad:Bool;
+	//public static var firstLoad:Bool;
 
     public function new(?props:AppProps) 
 	{
@@ -85,7 +85,6 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		//trace(rt);
 		ReactIntl.addLocaleData({locale:'de'});
 		_app = this;
-		firstLoad = true;
 		var ti:Timer = null;
 		Browser.window.onresize = function ()
 		{
@@ -103,21 +102,21 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 			},250);
 		}
 		trace(modalBox);
-		trace('user_name:$user_name jwt:$jwt ' + (!(App.user_name == '' || App.jwt == '')?'Y':'N' ));
+		//trace('user_name:$user_name jwt:$jwt ' + (!(App.user_name == '' || App.jwt == '')?'Y':'N' ));
 		store = model.ApplicationStore.create();
 		state = store.getState();
 		CState.init(store);		
-		if (!(App.user_name == '' || App.jwt == ''))
+		if (!(state.appWare.user.user_name == '' || state.appWare.user.jwt == ''))
 		{			
 			trace('clientVerify');
 			var bL:XMLHttpRequest = BinaryLoader.create(
-			'${App.config.api}', 
+			'${state.appWare.config.api}', 
 			{				
-				user_name:user_name,
-				jwt:jwt,
+				user_name:state.appWare.user.user_name,
+				jwt:state.appWare.user.jwt,
 				className:'auth.User',
 				action:'clientVerify',
-				filter:'user_name|${App.user_name}',
+				filter:'user_name|${state.appWare.user.user_name}',
 				dataSource:Serializer.run([
 					"users" => ["alias" => 'us',
 						"fields" => 'user_name,last_login'],
@@ -126,51 +125,30 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 						"fields" => 'first_name,last_name,email',
 						"jCond"=>'contact=co.id']
 				])
-			},
-			//function(dBytes:Bytes)
+			},			
 			function(data:DbData)
 			{
 				//trace(dBytes.toString());
-
-				trace(data.dataInfo);
+				//trace(data.dataInfo);
 				if (data.dataErrors.keys().hasNext())
 				{
 					trace(data.dataErrors);
 					return store.dispatch(AppAction.LoginError(
-						{user_name:App.user_name, loginError:data.dataErrors.iterator().next()}));
+						{user_name:state.appWare.user.user_name, loginError:data.dataErrors.iterator().next()}));
 				}	
 				var uState:UserProps = data.dataInfo['user_data'];
 				uState.waiting = false;
 				return store.dispatch(AppAction.LoginComplete(uState));			
-			});
-			
-			/*var aj:HttpJs = AjaxLoader.loadData(App.config.api,
-			{jwt:App.jwt, user_name:App.user_name, className:'auth.User', action:'clientVerify'}, 
-			function(verifyData:Dynamic){
-				trace(verifyData);
-				if (verifyData.error != null && verifyData.error !='')
-				{
-					App.jwt = null;
-					store.dispatch(AppAction.LoginRequired({jwt:'',loginError:verifyData.error,user_name:App.user_name,waiting:false}));
-				}
-				else if (verifyData.content != null && verifyData.content == 'OK')
-				{
-					trace('verifyData:{verifyData.content}');
-					var uState:UserProps = {loggedIn: true, jwt:App.jwt, user_name:App.user_name, waiting: false};
-					store.dispatch(AppAction.LoginComplete(uState));
-					//setState({appware:{user:uState}});
-					//_app.props = { waiting:false}; 
-				}		
-			});*/
+			});					
 		}
 		else
 		{// WE HAVE EITHER NO VALID JWT OR user_name
-			store.dispatch(AppAction.LoginRequired({jwt:App.jwt,user_name:App.user_name,waiting:false}));
+			store.dispatch(AppAction.LoginRequired(state.appWare.user));
 			//props = { waiting:false};
 		}
 		//trace(App.config);
 		//trace(props);
-		trace(state.appWare.user);
+		trace(state.appWare.user.jwt);
 		
 		//state.appWare.history.listen(CState.historyChange);
 		trace(Reflect.fields(state));
@@ -179,6 +157,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
     override function componentDidMount()
 	{
 		//trace(state.appWare.history);
+		trace('yeah');
     }
 
 	override function   componentDidCatch(error, info) {
@@ -190,15 +169,15 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	
 	override function componentDidUpdate(prevProps:Dynamic, prevState:Dynamic)
 	{
-		trace(firstLoad); 
-		firstLoad = false;
+		trace('...'); 
+		//firstLoad = false;
 	}
 	// Use trace from props
 	public static function edump(el:Dynamic){Out.dumpObject(el); return 'OK'; };
 
     override function render() {
 		//trace(state.appWare.history.location.pathname);	store={store}		
-		trace('OK');
+		//trace('OK');
         return jsx('
 		<>
 			<Provider store={store}><IntlProvider locale="de"><UiView/></IntlProvider></Provider>
@@ -232,17 +211,9 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 	public static function logOut()
 	{
 		Cookie.set('user.jwt', '', -10, '/');
-		trace(Cookie.get('user.jwt')); 
+		//trace(Cookie.get('user.jwt')); 
 		trace(Cookie.all());
-		store.dispatch(AppAction.LogOut({user_name:user_name, jwt:''}));
-		//_app.forceUpdate();
-	}
-	
-	public static function logIn()
-	{
-		trace(user_name);
-		//_app.forceUpdate();
-		//return user_name;
+		store.dispatch(AppAction.LogOut({jwt:'', user_name: store.getState().appWare.user.user_name }));
 	}
 
 	public static function queryString2(params:Dynamic)

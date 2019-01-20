@@ -7,6 +7,7 @@ import model.LocationState;
 typedef GlobalAppState = 
 {
 	config:Dynamic,
+	firstLoad:Bool,
 	?hasError:Bool,
 	history:History,
 	?locale:String,

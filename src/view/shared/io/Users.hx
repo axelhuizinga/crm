@@ -3,10 +3,10 @@ package view.shared.io;
 import js.html.Event;
 import react.ReactMacro.jsx;
 
-import view.shared.io.DataAccessForm.DataFormProps;
+import view.shared.io.DataFormProps;
 import view.shared.SMenu.SMItem;
 
-class Users extends view.shared.io.DataAccessForm
+class Users extends ReactComponentOf<DataFormProps,FormState>
 {
     public static var menuItems:Array<SMItem> = [
 		{label:'Neu',action:'create'},

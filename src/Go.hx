@@ -14,12 +14,12 @@ class Go
 		Log.trace = Out._trace;
 		trace('hi :) ${Out.suspended}');
 		//App.config = Webpack.require('../bin/config.js').config;
-		App.user_name = Cookie.get('user.user_name');
+		/*App.user_name = Cookie.get('user.user_name');
 		App.jwt = Cookie.get('user.jwt');
 
 
 		if (App.user_name == null || App.user_name == 'undefined' ) App.user_name = '';
-		if (App.jwt == null || App.jwt == 'undefined') App.jwt = '';
+		if (App.jwt == null || App.jwt == 'undefined') App.jwt = '';*/
 		
 		//store = model.ApplicationStore.create();
 		//state = store.getState();

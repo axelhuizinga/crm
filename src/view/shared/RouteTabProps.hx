@@ -1,4 +1,5 @@
 package view.shared;
+import model.UserState;
 import react.router.Route.RouteComponentProps;
 import redux.Redux.Dispatch;
 
@@ -11,6 +12,7 @@ typedef RouteTabProps =
 	>RouteComponentProps,
 	?appConfig:Dynamic,
 	?dispatch:Dispatch,
+	user: UserState,
 	?user_name:String,
 	?contact:Int,
 	?first_name:String,
