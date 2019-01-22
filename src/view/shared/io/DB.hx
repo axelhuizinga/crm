@@ -19,11 +19,11 @@ import react.ReactUtil;
 import shared.DbData;
 import shared.DBMetaData;
 import view.dashboard.model.DBFormsModel;
-import view.shared.BaseForm.FormField;
+import view.shared.FormField;
 import view.shared.SMenu;
-import view.shared.SMenu.SMItem;
+import view.shared.SMItem;
 //import view.shared.io.DataAccessForm;
-import view.shared.io.DataAccessContainer;
+import view.shared.io.FormContainer;
 import view.shared.io.Loader;
 import view.table.Table;
 
@@ -32,7 +32,7 @@ import view.table.Table;
  * ...
  * @author axel@cunity.me
  */
-@:wrap(DataAccessContainer)
+@:wrap(FormContainer)
 class DB extends ReactComponentOf<DataFormProps,FormState> 
 {
 

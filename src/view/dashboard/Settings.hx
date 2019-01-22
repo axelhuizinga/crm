@@ -7,15 +7,15 @@ import me.cunity.debug.Out;
 import model.AppState;
 import model.AjaxLoader;
 import react.React;
-import react.ReactComponent.ReactComponentOfProps;
+import react.ReactComponent.ReactComponentOf;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactComponent.ReactFragment;
 import react.ReactUtil;
 //import view.dashboard.model.SettingsFormModel;
-import view.shared.io.DataAccessForm.DataFormProps;
+import view.shared.io.DataFormProps;
 import view.shared.io.Design;
-import view.shared.BaseForm;
+import view.shared.io.FormContainer;
 import view.shared.SMenu;
 import view.shared.io.Bookmarks;
 import view.shared.io.User;
@@ -26,7 +26,7 @@ import view.shared.io.User;
  */
 
 @:connect
-class SettingsForm extends BaseForm
+class Settings extends ReactComponentOf<DataFormProps,FormState>
 {
 	var childFormProps:DataFormProps;	
 	
@@ -110,9 +110,8 @@ class SettingsForm extends BaseForm
 	}
 
 	override public function renderContent() {
-		var match:RouterMatch = getRouterMatch();
-		trace(match.params);
-		return switch(match.params.section)
+		trace(props.match.params);
+		return switch(props.match.params.section)
 		{
 			case "user":
 				jsx('

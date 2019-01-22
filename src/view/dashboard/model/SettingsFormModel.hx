@@ -1,14 +1,14 @@
 package view.dashboard.model;
 import haxe.ds.StringMap;
-import view.shared.BaseForm.FormProps;
+import view.shared.FormProps;
 import view.shared.FormElement;
-import view.shared.BaseForm.FormField;
+import view.shared.FormField;
 
 /**
  * @author axel@cunity.me
  */
 
-import view.shared.BaseForm.FormState;
+import view.shared.FormState;
 
 typedef FormRelation =
 {

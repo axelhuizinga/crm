@@ -1,20 +1,23 @@
 package view.shared;
 import js.html.InputEvent;
 import js.html.TableRowElement;
+import react.ReactType;
+import react.ReactComponent;
+import view.shared.SMenuProps;
 
 typedef FormState =
 {
 	?action:String,
+	?activeComponent:ReactComponent,
 	?dataClassPath:String,
-	//?viewClassPath:String,
 	?data:Map<String,Dynamic>,
-	//?dataForm:DataAccessForm,
 	?dataTable:Array<Map<String,Dynamic>>,
 	?clean:Bool,
 	?selectedRows:Array<TableRowElement>,
 	?handleChange:InputEvent->Void,
 	?handleSubmit:Dynamic->Void,	
-	?hasError:Bool,
+	hasError:Bool,
+	mounted:Bool,
 	?isConnected:Bool,
 	?loading:Bool,
 	?initialState:Dynamic,

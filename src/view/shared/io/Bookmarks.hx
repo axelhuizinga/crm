@@ -22,7 +22,7 @@ import react.table.ReactTable.CellInfo;*/
 import shared.DbData;
 import view.shared.SMenu;
 //import view.shared.io.DataAccessForm;
-import view.shared.io.DataAccessForm.DataFormProps;
+import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess.DataSource;
 
 
@@ -35,7 +35,7 @@ typedef BookmarksModel = DataSource;
 
 //typedef UserFilter = Dynamic;
 @:connect
-class Bookmarks extends DataAccessForm
+class Bookmarks extends ReactComponentOf<DataFormProps,FormState>
 {
 	
 	//public var menuItems:Array<SMItem>;// = [];

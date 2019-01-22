@@ -4,7 +4,7 @@ import js.html.Event;
 import react.ReactMacro.jsx;
 
 import view.shared.io.DataFormProps;
-import view.shared.SMenu.SMItem;
+import view.shared.SMItem;
 
 class Users extends ReactComponentOf<DataFormProps,FormState>
 {

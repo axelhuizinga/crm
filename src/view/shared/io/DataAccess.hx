@@ -6,8 +6,8 @@ package view.shared.io;
  */
 
 import haxe.ds.Map;
-import view.shared.BaseForm;
-import view.shared.BaseForm.*;
+
+import view.shared.FormField;
 
 /**
    dataClassPath=><action>=>[?'alias',?'fields',?'jCond'] each=>String

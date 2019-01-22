@@ -18,10 +18,12 @@ import redux.Redux.Dispatch;
 import redux.thunk.Thunk;
 import shared.DbData;
 import view.LoginForm.LoginState;
-import view.shared.BaseForm.FormState;
-import view.shared.BaseForm.OneOf;
+import view.shared.FormState;
+import view.shared.OneOf;
 import view.shared.io.BinaryLoader;
-import view.shared.io.User.UserProps;
+import model.UserState;
+
+typedef UserProps = UserState;
 /**
  * ...
  * @author axel@cunity.me

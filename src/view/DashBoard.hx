@@ -4,50 +4,36 @@ import view.shared.io.User;
 import action.AppAction;
 import bulma_components.Tabs;
 import model.LocationState;
-import view.shared.io.User.UserProps;
+//import view.shared.io.UserState;
 import react.Partial;
 import react.ReactComponent;
-import react.ReactComponent.*;
-import react.ReactPropTypes;
+//import react.ReactComponent.*;
+//import react.ReactPropTypes;
 import react.ReactMacro.jsx;
 import redux.Redux.Dispatch;
 import react.router.Route;
 import react.router.Redirect;
-import react.router.Route.RouteRenderProps;
-import react.router.Switch;
+//import react.router.Route.RouteRenderProps;
+//import react.router.Switch;
 import react.router.NavLink;
-import view.shared.BaseForm;
+import view.shared.io.FormContainer;
 import view.shared.RouteTabProps;
-import view.shared.RouteBox;
+import view.shared.CompState;
 import view.LoginForm;
-import react.redux.form.Control.ControlProps;
-import react.redux.form.Control;
+//import react.redux.form.Control.ControlProps;
+//import react.redux.form.Control;
 import redux.Redux;
 
-import Webpack.*;
+//import Webpack.*;
 import model.AppState;
-import view.dashboard.RolesForm;
-import view.dashboard.SettingsForm;
-import view.dashboard.SetUpForm;
+import view.dashboard.Roles;
+import view.dashboard.Settings;
+import view.dashboard.Setup;
 
 using model.CState;
 
-typedef DashBoardProps = 
-{
-	>RouteTabProps,
-	?setThemeColor:Void->Dispatch,
-	?isMounted:Bool,
-	?connectChild:String->Void
-}
-
-typedef DashBoardState =
-{
-	hasError:Bool
-}
-
-//@:expose('default')
-@:connect
-class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
+//@:connect
+class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 {
 	static var user = {first_name:'dummy'};
 	var mounted:Bool = false;
@@ -55,7 +41,7 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 	var renderCount:Int = 0;
 	public function new(?props:Dynamic)
 	{
-		state = {hasError:false};
+		state = {hasError:false,mounted:false};
 		trace('location.pathname:${props.history.location.pathname} match.url: ${props.match.url}');
 		super(props);
 		if (props.match.url == '/dashboard')
@@ -140,16 +126,15 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 				</Tabs>
 			</div>
             <div className="tabContent2" >
-				<Route path="/dashboard/roles"  {...props} component={RolesForm}/>
-				<Route path="/dashboard/settings/:section?/:action?/:id?"  {...props} component={SettingsForm}/>
-				<Route path="/dashboard/setup/:section?/:action?"  {...props} component={SetUpForm}/>					
+				<Route path="/dashboard/roles"  {...props}  component={Roles}/>
+				<Route path="/dashboard/settings/:section?/:action?/:id?"  {...props}  component={Settings}/>
+				<Route path="/dashboard/setup/:section?/:action?"  {...props}  component={Setup}/>					
             </div>
 			<StatusBar {...props}/>
 		</>
 			');			
     }
 	
-	//function internalRedirect()
 	function internalRedirect(path:String = '/dashboard/settings')
 	{
 		props.history.push(path);
@@ -158,7 +143,6 @@ class DashBoard extends ReactComponentOf<DashBoardProps,DashBoardState>
 	
 	function TabLink(rprops)
 	{
-		//trace(rprops);<Route path="/dashboard/roles"  {...props} component=${RolesForm} />
 		//trace(Reflect.fields(rprops));
 		//trace(rprops.children);
 		return jsx('

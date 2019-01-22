@@ -20,10 +20,11 @@ import react.ReactUtil;
 import shared.DbData;
 import shared.DBMetaData;
 import view.dashboard.model.DBSyncModel;
-import view.shared.BaseForm.FormField;
+import view.shared.FormField;
 import view.shared.SMenu;
-import view.shared.SMenu.SMItem;
-import view.shared.io.DataAccessContainer;
+import view.shared.SMItem;
+import view.shared.io.FormContainer;
+import view.shared.io.DataFormProps;
 import view.shared.io.Loader;
 import view.table.Table;
 
@@ -33,7 +34,6 @@ import view.table.Table;
  * @author axel@cunity.me
  */
 
-@:wrap(DataAccessContainer)
 class DBSync extends ReactComponentOf<DataFormProps,FormState>
 {
 
@@ -49,7 +49,6 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	public function new(?props) 
 	{
 		super(props);
-
 		dataDisplay = DBSyncModel.dataDisplay;
 		_instance = this;
 		var sideMenu =  updateMenu('DBSync');//state.sideMenu;

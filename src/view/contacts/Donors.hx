@@ -4,7 +4,7 @@ import model.AppState;
 import react.ReactComponent.ReactFragment;
 import react.ReactComponent;
 import shared.DbData;
-import view.shared.BaseForm;
+
 import view.shared.io.BinaryLoader;
 import react.ReactComponent.ReactComponentOfProps;
 import react.ReactEvent;
@@ -12,7 +12,7 @@ import react.ReactMacro.jsx;
 import react.ReactUtil;
 import redux.Redux.Dispatch;
 import view.dashboard.model.RolesFormModel;
-import view.shared.BaseForm.FormProps;
+import view.shared.FormProps;
 import view.shared.SMenu;
 using Lambda;
 /**

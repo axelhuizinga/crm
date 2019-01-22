@@ -4,21 +4,24 @@ import action.AppAction;
 import tink.core.Error.Stack;
 import haxe.Serializer;
 import haxe.ds.StringMap;
+import haxe.http.HttpJs;
 import haxe.io.Bytes;
 import js.html.Event;
 import js.html.InputEvent;
+import js.html.XMLHttpRequest;
 import model.AjaxLoader;
+import model.UserState;
 import react.ReactComponent;
 import react.ReactComponent.ReactFragment;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
 import shared.DbData;
-import view.shared.BaseForm.*;
-import view.shared.BaseForm.FormState;
+
+import view.shared.FormState;
 import view.shared.SMenu;
-import view.shared.io.DataAccessContainer;
-//import view.shared.io.DataAccessForm;
+import view.shared.io.FormContainer;
+import view.shared.io.DataAccess;
 import view.shared.io.DataAccess.DataSource;
 import view.table.Table;
 
@@ -30,27 +33,78 @@ using shared.Utils;
  * @author axel@cunity.me
  */
 
-typedef UserProps = model.UserState;
+typedef UserProps = UserState;
 
 
 typedef UserModel = DataSource;
 
 typedef UserFilter = Dynamic;
 
-@:wrap(DataAccessContainer)
 class User extends ReactComponentOf<DataFormProps,FormState>
 {
 	static var _instance:User;
+	public static var menuItems:Array<SMItem> = [
+		{label:'Neu',action:'create'},
+		{label:'Bearbeiten',action:'edit'},
+		{label:'Speichern', action:'save'},
+		{label:'Löschen',action:'delete'}
+	];
+	var dataAccess:DataAccess;
+	var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;
 
-	/*public static function menuItems():Array<SMItem>
+	public function new(?props:DataFormProps)
 	{
-		return _instance == null? [] : _instance._menuItems;
-	}*/
-		
-	override function handleSubmit(e:InputEvent)
-	{
-		e.preventDefault();
+		super(props);
+		requests = [];
+		dataAccess = [
+			'changePassword' =>
+			{
+				source:[
+					"users" => [
+						"fields" => 'user_name,change_pass_required,password']
+				],
+				view:[
+					'user_name' => {type:Hidden},
+					'pass' => {type:Password},
+					'new_pass' => {type:Password}
+				]
+			},
+			'edit' =>{
+				source:[
+					"users" => ["alias" => 'us',
+						"fields" => 'user_name,last_login,change_pass_required,password'],
+					"contacts" => [
+						"alias" => 'co',
+						"fields" => 'first_name,last_name,email',
+						"jCond"=>'contact=co.id']
+				],
+				view:[
+					'user_name'=>{label:'UserID',readonly:true, type:Hidden},
+					'pass'=>{label:'Passwort', type:Hidden},
+					'first_name'=>{label:'Vorname'},
+					'last_name'=>{label:'Name'},
+					'email' => {label:'Email'},
+					'last_login'=>{label:'Letze Anmeldung',readonly:true, displayFormat:FormContainer.localDate}
+				]
+			},
+			'save' => {
+				source:null,
+				view:null
+			}
+		];
+		//_instance = this;		
+		//trace(props);
+		_menuItems = [
+			//{handler:edit, label:'Bearbeiten', section:'edit'},
+			{handler:save, label:'Speichern', disabled:state.clean},
+			{handler:changePassword, label:'Passwort ändern'},
+		];
+		var sideMenu = state.sideMenu;
+		sideMenu.menuBlocks['user'].items = _menuItems;
+		trace(_menuItems);
+		state = ReactUtil.copy(state,{sideMenu:sideMenu,viewClassPath:"edit",});
 	}
+
 	
 	override public function componentDidMount():Void 
 	{
@@ -206,8 +260,6 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 					dataAccess['edit'].view), loading:false});					
 			}
 		));
-		//setState({viewClassPath:"shared.io.User.edit"});
-		//setState({viewClassPath:"auth.User.edit"});
 	}
 	
 	public function save(evt:Event)
@@ -218,11 +270,6 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		var skeys:Array<String> = untyped dataAccess['edit'].view.keys().arr;
 		skeys = skeys.filter(function(k) return !dataAccess['edit'].view[k].readonly);
 		trace(filterMap(state.values, skeys));
-		/*var vKeys:Iterator<String> = dataAccess['edit'].view.keys();
-		while (vKeys.hasNext() )
-		{
-			skeys.push(vKeys.next());
-		}*/
 		trace(skeys.toString());
 		trace(dataAccess['edit'].source);
 		//return;,
@@ -240,72 +287,14 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 			function(data:Array<Map<String,String>>)
 			{
 				trace(data);
+				//TODO: ADD SAVED ACTION
 				//props.parentForm.setStateFromChild({dataTable:data, loading:false});
 				//setState({dataTable:[data], loading:false});					
 			}
 		));
 	}
 	
-	public function new(?props:DataFormProps)
-	{
-		super(props);
-		dataAccess = [
-			'changePassword' =>
-			{
-				source:[
-					"users" => [
-						"fields" => 'user_name,change_pass_required,password']
-				],
-				view:[
-					'user_name' => {type:Hidden},
-					'pass' => {type:Password},
-					'new_pass' => {type:Password}
-				]
-			},
-			'edit' =>{
-				source:[
-					"users" => ["alias" => 'us',
-						"fields" => 'user_name,last_login,change_pass_required,password'],
-					"contacts" => [
-						"alias" => 'co',
-						"fields" => 'first_name,last_name,email',
-						"jCond"=>'contact=co.id']
-				],
-				view:[
-					'user_name'=>{label:'UserID',readonly:true, type:Hidden},
-					'pass'=>{label:'Passwort', type:Hidden},
-					'first_name'=>{label:'Vorname'},
-					'last_name'=>{label:'Name'},
-					'email' => {label:'Email'},
-					'last_login'=>{label:'Letze Anmeldung',readonly:true, displayFormat:DataAccessForm.localDate}
-				]
-			},
-			'save' => {
-				source:null,
-				view:null
-			}
-		];
-		//_instance = this;		
-		//trace(props);
-		_menuItems = [
-			//{handler:edit, label:'Bearbeiten', section:'edit'},
-			{handler:save, label:'Speichern', disabled:state.clean},
-			{handler:changePassword, label:'Passwort ändern'},
-		];
-		var sideMenu = state.sideMenu;
-		sideMenu.menuBlocks['user'].items = _menuItems;
-		trace(_menuItems);
-		state = ReactUtil.copy(state,{sideMenu:sideMenu,viewClassPath:"edit",});
-	}
-
-	public static var menuItems:Array<SMItem> = [
-		{label:'Neu',action:'create'},
-		{label:'Bearbeiten',action:'edit'},
-		{label:'Speichern', action:'save'},
-		{label:'Löschen',action:'delete'}
-	];
-	
-	override function updateMenu(?viewClassPath:String):SMenuProps
+	function updateMenu(?viewClassPath:String):SMenuProps
 	{
 		var sideMenu = state.sideMenu;
 		sideMenu.menuBlocks['users'].isActive = true;

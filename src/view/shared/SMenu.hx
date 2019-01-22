@@ -7,21 +7,23 @@ import me.cunity.debug.Out;
 //import view.shared.io.DataAccessForm;
 import js.Browser;
 import js.html.DivElement;
-import griddle.components.Components.Filter;
 import haxe.ds.StringMap;
 import haxe.Constraints.Function;
 import haxe.Timer;
 import js.html.InputElement;
 
-import react.PureComponent.PureComponentOf;
 import react.ReactComponent;
-import react.ReactComponent.ReactComponentOf;
-import react.ReactComponent.ReactFragment;
+//import react.ReactComponent.ReactComponentOf;
+//import react.ReactComponent.ReactFragment;
 import react.React;
 import react.ReactType;
 import react.ReactMacro.jsx;
 import bulma_components.Button;
 import react.ReactRef;
+import view.shared.SMItem;
+import view.shared.SMenuBlock;
+import view.shared.SMenuProps;
+import view.shared.SMenuState;
 
 using Lambda;
 
@@ -30,62 +32,7 @@ using Lambda;
  * @author axel@cunity.me
  */
 
-typedef SMenuBlock =
-{
-	?dataClassPath:String,
-	?disabled:Bool,
-	//?viewClassPath:String,
-	?className:String,
-	//?handlerInstance:DataAccessForm,
-	?onActivate:Function,
-	?img:String,
-	?info:String,
-	?isActive:Bool,
-	?items:Array<SMItem>,
-	?label:String,	
-	?section:String
-}
-
-typedef SMItem =
-{
-	?action:String,
-	?className:String,
-	?component:Dynamic,
-	?dataClassPath:String,
-	?disabled:Bool,	
-	?handler:Function,
-	?img:String,
-	?info:String,
-	?label:String,	
-}
- 
-typedef SMenuProps =
-{
-	?activeInstance:Dynamic,
-	?className:String,
-	?basePath:String,
-	?hidden:Bool,
-	?menuBlocks:Map<String,SMenuBlock>,
-	?section:String,
-	?items:Array<SMItem>,
-	?itemHandler:Event->Void,
-	?right:Bool,
-	?sameWidth:Bool
-}
-
-typedef SMenuState =
-{
-	?hidden:Bool,
-	?disabled:Bool,
-	?sameWidth:Int,
-	?interactionStates:Map<String,InteractionState>
-}
-
-typedef  InteractionState =
-{
-	var disables:Array<String>;
-	var enables:Array<String>;
-}
+ typedef Filter = ReactType;
 
 @:connect
 class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
@@ -178,7 +125,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 		{
 			return switch(item.component)
 			{
-				case Filter: jsx('<$Filter  key=${i++}/>');
+				//case Filter: jsx('<$Filter  key=${i++}/>');
 				default:jsx('<Button key=${i++} onClick=${props.itemHandler} data-action=${item.action}
 				disabled=${item.disabled}>${item.label}</Button>');
 			}

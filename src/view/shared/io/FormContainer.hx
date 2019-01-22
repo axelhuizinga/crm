@@ -1,6 +1,5 @@
 package view.shared.io;
 
-import haxe.macro.Type.Ref;
 import react.ReactEvent;
 import react.router.ReactRouter;
 import react.router.Route.RouteMatchProps;
@@ -23,23 +22,23 @@ import js.html.TableRowElement;
 import js.html.XMLHttpRequest;
 import macrotools.AbstractEnumTools;
 import react.ReactDOM;
-import view.shared.BaseForm;
+
 import view.shared.FormElement;
-import view.shared.BaseForm.FormField;
-import view.shared.BaseForm.FormState;
-import view.shared.BaseForm.FormProps;
-import view.shared.BaseForm.OneOf;
-import view.shared.SMenu.SMenuProps;
-import view.shared.SMenu.SMItem;
+import view.shared.FormField;
+import view.shared.FormState;
+import view.shared.FormProps;
+import view.shared.OneOf;
+import view.shared.SMenuProps;
+import view.shared.SMItem;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess.DataView;
 import view.table.Table.DataState;
-import react.PureComponent.PureComponentOf;
 import react.ReactComponent;
 import react.ReactComponent.ReactFragment;
 import react.ReactMacro.jsx;
 import react.React;
 import react.ReactRef;
+import react.ReactType;
 import react.ReactUtil;
 import react.redux.form.LocalForm;
 import react.redux.form.Control;
@@ -56,11 +55,8 @@ using Lambda;
  * @author axel@cunity.me
  */
 
-
-
-class DataAccessContainer extends ReactComponentOf<DataFormProps,FormState>
+class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 {
-	var mounted:Bool;
 	var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;	
 	var dataAccess:DataAccess;
 	var dbData:DbData;
@@ -74,27 +70,26 @@ class DataAccessContainer extends ReactComponentOf<DataFormProps,FormState>
 	var autoFocus:ReactRef<InputElement>;
 	var initialState:Dynamic;
 	var section:String;
-
 	
 	public function new(?props:DataFormProps) 
 	{
 		super(props);
-		mounted = false;
 		requests = [];
 		if(props != null)
 		//trace(props.match);
-		section = Type.getClassName(Type.getClass(this)).split('.').pop();
-		trace(section);
+		
 		props.sideMenu.itemHandler = itemHandler;
 		//trace(props.sideMenu.itemHandler);
 		state = {
 			action:props.match.params.action,
+			activeComponent:cast(this,FormContainer),
 			data:new StringMap(),
 			clean:true,
 			errors:new StringMap(),
 			hasError:false,
 			handleChange:setChangeHandler(),
 			handleSubmit:setSubmitHandler(),
+			mounted:false,
 			sideMenu: props.sideMenu,
 			selectedRows:new Array()
 		};
@@ -215,13 +210,13 @@ class DataAccessContainer extends ReactComponentOf<DataFormProps,FormState>
 				Reflect.callMethod(this, fun, null);
 			}
 		}
-		mounted = true;
+		setState({mounted: true});
 		trace(Type.getClassName(Type.getClass(this)).split('.').pop() + 'state.action');
 	}
 	
 	override public function componentWillUnmount()
 	{
-		mounted=false;
+		setState({mounted: false});
 		for (r in requests)
 		{
 			switch(r)
@@ -290,7 +285,12 @@ class DataAccessContainer extends ReactComponentOf<DataFormProps,FormState>
 	
 	override function render()
 	{
-		return null;		
+		return jsx('
+			<div className="columns">
+				${props.children(this)}
+				<$SMenu className="menu" props=${...state.sideMenu} />
+			</div>			
+		');
 	}
 	
 	function renderField(name:String, k:Int):ReactFragment
@@ -310,16 +310,16 @@ class DataAccessContainer extends ReactComponentOf<DataFormProps,FormState>
 		return formField.type == Hidden? field:[jsx('<label key=${Utils.genKey(k++)}>${formField.label}</label>'), field];
 	}
 	
-	function renderElements():ReactFragment
+	function renderElements(cstate:FormState):ReactFragment
 	{
-		if(state.data.empty())
+		if(cstate.data.empty())
 			return null;
-		var fields:Iterator<String> = state.fields.keys();
+		var fields:Iterator<String> = cstate.fields.keys();
 		var elements:Array<ReactFragment> = [];
 		var k:Int = 0;
 		for (field in fields)
 		{
-			elements.push(jsx('<div key=${Utils.genKey(k++)} className=${state.fields[field].type==Hidden?null:"formField"} >${renderField(field, k)}</div>'));
+			elements.push(jsx('<div key=${Utils.genKey(k++)} className=${cstate.fields[field].type==Hidden?null:"formField"} >${renderField(field, k)}</div>'));
 		}
 		return elements;
 	}
@@ -434,7 +434,7 @@ class DataAccessContainer extends ReactComponentOf<DataFormProps,FormState>
 			case Hidden:
 				fF.primary ? null:
 				jsx('<$Control key=${Utils.genKey(k++)} model=${model}  controlProps=${{readOnly:fF.readonly,type:"hidden"}}/>');
-			case BaseForm.FormElement.Select:
+			case FormElement.Select:
 				jsx('
 				<$ControlSelect model=${model}  >
 				${renderSelectOptions(fF.value)}
@@ -524,7 +524,7 @@ class DataAccessContainer extends ReactComponentOf<DataFormProps,FormState>
 					${renderModalFormBodyHeader()}
 					<div className="modal-card-body"  ref=${modalFormTableBody}>					
 					<!-- Content ... -->
-						${_fstate.data.empty()? createElementsArray():renderElements()}
+						${_fstate.data.empty()? createElementsArray():renderElements(_fstate)}
 					</div>
 					<footer className="modal-card-foot">
 					<ControlButton controlProps=${{className:"button is-success", type:"submit"}} model=${fState.model} >Speichern</ControlButton>

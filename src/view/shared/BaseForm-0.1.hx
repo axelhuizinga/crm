@@ -22,38 +22,18 @@ import redux.Redux.Dispatch;
 import redux.Store;
 import view.dashboard.model.RolesFormModel;
 //import view.shared.io.DataAccessForm;
+import view.shared.OneOf;
 
 import view.table.Table.DataState;
 import view.shared.FormElement;
 import view.shared.RouteTabProps;
-import view.shared.SMenu.InteractionState;
-import view.shared.SMenu.SMenuBlock;
-import view.shared.SMenu.SMenuProps;
+import view.shared.SMenuBlock;
+import view.shared.SMenuProps;
 
 /**
  * ...
  * @author axel@cunity.me
  */
-
-
-
-abstract OneOf<A, B>(Either<A, B>) from Either<A, B> to Either<A, B> {
-  @:from inline static function fromA<A, B>(a:A):OneOf<A, B> {
-    return Left(a);
-  }
-  @:from inline static function fromB<A, B>(b:B):OneOf<A, B> {
-    return Right(b);  
-  } 
-    
-  @:to inline function toA():Null<A> return switch(this) {
-    case Left(a): a; 
-    default: null;
-  }
-  @:to inline function toB():Null<B> return switch(this) {
-    case Right(b): b;
-    default: null;
-  }
-}
 
 //@:connect
 class BaseForm extends ReactComponentOf<FormProps, FormState> 
@@ -129,11 +109,6 @@ class BaseForm extends ReactComponentOf<FormProps, FormState>
 		var rmp:RouteMatchProps = cast props.match;
 		return ReactRouter.matchPath(props.history.location.pathname, rmp);		
 	}
-
-    /*override function render() {
-		trace('You should override me :)');
-        return null;
-    }*/
 	
 	public function renderContent() {
 		trace('You should override me :)');

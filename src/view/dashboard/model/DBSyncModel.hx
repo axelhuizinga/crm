@@ -1,7 +1,7 @@
 package view.dashboard.model;
 
 import haxe.ds.Map;
-import view.shared.BaseForm.FormState;
+import view.shared.FormState;
 import shared.DBMetaData;
 /**
  * ...

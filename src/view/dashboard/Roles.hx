@@ -11,7 +11,7 @@ import model.AppState;
 import react.ReactComponent.ReactFragment;
 import react.ReactComponent;
 import shared.DbData;
-import view.shared.BaseForm;
+
 import view.shared.io.BinaryLoader;
 import view.table.Table;
 //import view.grid.Grid.DataCell;
@@ -22,7 +22,9 @@ import react.ReactMacro.jsx;
 import react.ReactUtil;
 import redux.Redux.Dispatch;
 import view.dashboard.model.RolesFormModel;
-import view.shared.BaseForm.FormProps;
+import view.shared.io.DataFormProps;
+import view.shared.io.FormContainer;
+import view.shared.FormState;
 import view.shared.SMenu;
 import view.shared.io.Users;
 using Lambda;
@@ -32,7 +34,7 @@ using Lambda;
  */
 
 @:connect
-class RolesForm extends BaseForm
+class Roles extends ReactComponentOf<DataFormProps,FormState>
 {			
 	public function new(?props:FormProps) 
 	{
@@ -197,12 +199,12 @@ class RolesForm extends BaseForm
     }	*/	
 	
 	override public function render() {
-		return super.render();
+		return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} children=${renderContent}>');
 	}
 
-	override function renderContent():ReactFragment
+	override function renderContent(container:FormContainer):ReactFragment
 	{
-		//return switch(state.viewClassPath)
+		//return switch(state.viewClassPath)//componentContainer=${container} 
 		return switch(props.match.params.action)
 		{
 			case "userList":

@@ -11,12 +11,15 @@ import js.html.XMLHttpRequest;
 import me.cunity.debug.Out;
 import model.AppState;
 import react.Fragment;
-import react.ReactComponent.ReactFragment;
+import react.ReactComponent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
+import react.ReactType;
 import model.AjaxLoader;
-import view.shared.BaseForm;
-import view.shared.BaseForm.FormProps;
+
+import view.shared.io.DataFormProps;
+import view.shared.io.FormContainer;
+import view.shared.FormState;
 import view.shared.SMenu;
 import view.shared.io.DB;
 import view.shared.io.DBSync;
@@ -29,9 +32,8 @@ import view.table.Table;
 
 //@:expose('default')
 @:connect
-class SetUpForm extends BaseForm //<FormProps, FormState>
+class Setup extends ReactComponentOf<DataFormProps,FormState>
 {
-	
 	public function new(?props:FormProps) 
 	{
 		super(props);	
@@ -101,7 +103,6 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 				trace(data); 
 				if (data != null && data.length > 0)
 				{
-					//trace(Json.parse(data)); 
 					var sData:StringMap<Dynamic> = state.data;
 					sData.set('historyTrigger', Json.parse(data).data.rows);
 					setState(ReactUtil.copy(state, {data:sData}));				
@@ -110,25 +111,23 @@ class SetUpForm extends BaseForm //<FormProps, FormState>
 	}
 	
 	override public function render() {
-		return super.render();
+		return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} children=${renderContent}>');
 	}
 
-	override public function renderContent()
+	public function renderContent(container:FormContainer):ReactFragment
 	{
-		//trace(state.sideMenu);
-		var match:RouterMatch = getRouterMatch();
+		//var match:RouterMatch = getRouterMatch();
 		//trace(match.params);
-//			sM.menuBlocks[]
-		return switch(match.params.section)
+		return switch(props.match.params.section)
 		{
 			case "DBSync":
 				jsx('
-					<$DBSync ${...props} sideMenu=${state.sideMenu}
+					<$DBSync ${...props} componentContainer=${container}
 					handleChange={false} handleSubmit={false} fullWidth={true}/>
 				');					
 			case "DB"|null:
 				jsx('
-					<$DB ${...props} sideMenu=${state.sideMenu}
+					<$DB ${...props} componentContainer=${container}
 					handleChange={false} handleSubmit={false} fullWidth={true}/>
 				');				
 			default:

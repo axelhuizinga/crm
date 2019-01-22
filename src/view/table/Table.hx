@@ -23,9 +23,9 @@ import react.ReactComponent;
 import react.ReactComponent.*;
 import react.ReactMacro.jsx;
 import shared.Utils;
-import view.shared.BaseForm;
-import view.shared.BaseForm.FormState;
-import view.shared.BaseForm.OneOf;
+
+import view.shared.FormState;
+import view.shared.OneOf;
 using Lambda;
 
 /**
@@ -358,6 +358,21 @@ class Table extends ReactComponentOf<TableProps, TableState>
 				row.classList.toggle('is-selected');
 		}
 		
+	}
+
+	function selectedRowsMap():Array<Map<String,String>>
+	{
+		return [for (r in state.selectedRows) selectedRowMap(r)];
+	}
+	
+	function selectedRowMap(row:TableRowElement):Map<String,String>
+	{
+		var rM:Map<String,String> = [
+			for (c in row.cells)
+				c.dataset.name => c.innerHTML
+		];
+		rM['id'] = row.dataset.id;
+		return rM;
 	}
 
 	public function layOut():Void
