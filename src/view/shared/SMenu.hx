@@ -134,9 +134,11 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 	
 	override public function render()
 	{
+		if(props.menuBlocks == null)
+		return null;
 		menuRef = React.createRef();
 		var style:Dynamic = null;
-		if(false&&props.sameWidth && state.sameWidth == null)//sameWidth
+		if(true&&props.sameWidth && state.sameWidth == null)//sameWidth
 		{
 			style = {
 				visibility: 'hidden'

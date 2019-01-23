@@ -3,7 +3,6 @@ import react.ReactType;
 
 typedef CompState =
 {
-	activeView:ReactType,
 	hasError:Bool,
-	?isMounted:Bool
+	?mounted:Bool
 }

@@ -6,8 +6,9 @@ import model.AjaxLoader;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
+import view.shared.FormState;
 import view.shared.SMenu;
-//import view.shared.io.DataAccessForm;
+import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess.DataSource;
 
 /**
@@ -17,7 +18,7 @@ import view.shared.io.DataAccess.DataSource;
 
 
 
-class Design extends DataAccessForm
+class Design extends ReactComponentOf<DataFormProps,FormState>
 {
 	
 	public static var menuItems:Array<SMItem> = [

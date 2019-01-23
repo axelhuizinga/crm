@@ -11,8 +11,6 @@ import js.html.FormData;
 import js.html.FormDataIterator;
 import js.html.HTMLCollection;
 import me.cunity.debug.Out;
-//import org.msgpack.Decoder;
-//import org.msgpack.MsgPack;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
@@ -25,6 +23,7 @@ import view.shared.SMenu;
 import view.shared.SMItem;
 import view.shared.io.FormContainer;
 import view.shared.io.DataFormProps;
+import view.shared.io.DataAccess;
 import view.shared.io.Loader;
 import view.table.Table;
 
@@ -46,6 +45,8 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Löschen',action:'delete'}
 	];
 	
+	var dataDisplay:Map<String,DataState>;
+	var dataAccess:DataAccess;	
 	public function new(?props) 
 	{
 		super(props);

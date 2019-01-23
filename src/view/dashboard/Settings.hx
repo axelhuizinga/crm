@@ -3,6 +3,8 @@ package view.dashboard;
 import react.router.RouterMatch;
 import haxe.Json;
 import haxe.Serializer;
+import haxe.http.HttpJs;
+import js.html.XMLHttpRequest;
 import me.cunity.debug.Out;
 import model.AppState;
 import model.AjaxLoader;
@@ -16,6 +18,8 @@ import react.ReactUtil;
 import view.shared.io.DataFormProps;
 import view.shared.io.Design;
 import view.shared.io.FormContainer;
+import view.shared.FormState;
+import view.shared.OneOf;
 import view.shared.SMenu;
 import view.shared.io.Bookmarks;
 import view.shared.io.User;
@@ -25,22 +29,21 @@ import view.shared.io.User;
  * @author axel@cunity.me
  */
 
-@:connect
+//@:connect
 class Settings extends ReactComponentOf<DataFormProps,FormState>
 {
-	var childFormProps:DataFormProps;	
-	
-	public function new(?props:FormProps) 
+	//var childFormProps:DataFormProps;	
+	public function new(?props:DataFormProps) 
 	{
 		super(props);	
-		childFormProps = ReactUtil.copy(props, 
-			{fullWidth: true, setStateFromChild:setStateFromChild});
+		/*childFormProps = ReactUtil.copy(props, 
+			{fullWidth: true, setStateFromChild:setStateFromChild});*/
 		
 		state = {
 			clean:true,
 			hasError:false,
 			loading:true,
-			sideMenu:initSideMenu(
+			sideMenu:{}/*initSideMenu(
 				[
 					{
 						dataClassPath:'auth.User',
@@ -62,7 +65,7 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 					},										
 				],
 				{section: 'bookmarks',	sameWidth: true}
-			)
+			)*/
 		};
 		if(props.match.params.section!=null)
 		{
@@ -72,18 +75,12 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 
 		}
 		trace('${props.match.params.section} ${props.match.params.action}');
-		requests = [];		
 	}
 	
 	override public function componentDidMount():Void 
 	{
 		super.componentDidMount();
 		trace(state.loading);	
-		if (props.jwt == null)
-		{
-			trace(props);
-			return;
-		}
 		trace(Reflect.fields(props));
 		trace(props.match.params);				
 	}
@@ -91,7 +88,7 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 	/*override public function switchContent(reactEventSource:Dynamic)
 	{
 		super.switchContent(reactEventSource);
-	}*/
+	}
 
 		
 	static function mapStateToProps(aState:AppState) {
@@ -103,24 +100,24 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 				user:uState
 			};
 		};
-	}	
+	}	*/
 	
 	override public function render() {
-		return super.render();
+		return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} children=${renderContent}/>');
 	}
 
-	override public function renderContent() {
+	public function renderContent(container:FormContainer) {
 		trace(props.match.params);
 		return switch(props.match.params.section)
 		{
 			case "user":
 				jsx('
-					<User ${...props} sideMenu=${state.sideMenu}
+					<User ${...props} sideMenu=${state.sideMenu}  formContainer=${container}
 					handleChange={true} handleSubmit={true} fullWidth={true}/>
 				');	
 			case "bookmarks"|null:
 				jsx('
-					<Bookmarks ${...props} sideMenu=${state.sideMenu}
+					<Bookmarks ${...props} sideMenu=${state.sideMenu}  formContainer=${container}
 					handleChange={true} handleSubmit={true} fullWidth={true}/>
 				');
 			default:		

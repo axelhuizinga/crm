@@ -4,6 +4,7 @@ import js.html.InputElement;
 import js.html.InputEvent;
 import js.html.XMLHttpRequest;
 import model.AppState;
+import model.UserState;
 import react.ReactComponent.ReactComponentOf;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
@@ -24,8 +25,18 @@ typedef LoginState =
 typedef LoginProps =
 {
 	>RouteTabProps,
-	submitLogin:LoginState-> Dispatch,
-	api:String
+	submitLogin:LoginState->Dispatch,
+	user:UserState,
+	api:String,
+	pass:String,
+	jwt:String,
+	loggedIn:Bool,
+	loginError:String,
+	last_login:String,
+	first_name:String,
+	user_name:String,
+	redirectAfterLogin:String,
+	waiting:Bool
 }
 
 /**
@@ -95,8 +106,8 @@ class LoginForm extends ReactComponentOf<LoginProps, LoginState>
 		trace(t.value);
 		//t.className = 'input';
 		Reflect.setField(s, t.name, t.value);
-		trace(props.dispatch + '==' + App.store.dispatch);
-		trace(props.dispatch == App.store.dispatch);
+		//trace(props.dispatch + '==' + App.store.dispatch);
+		//trace(props.dispatch == App.store.dispatch);
 		//App.store.dispatch(AppAction.LoginChange(s));
 		this.setState(s);
 		//trace(this.state);

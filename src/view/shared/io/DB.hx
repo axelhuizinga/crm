@@ -5,13 +5,13 @@ import haxe.Json;
 import haxe.Unserializer;
 import haxe.ds.Map;
 import haxe.io.Bytes;
+import haxe.http.HttpJs;
+import js.html.XMLHttpRequest;
 import hxbit.Serializer;
 import js.html.FormData;
 import js.html.FormDataIterator;
 import js.html.HTMLCollection;
 import me.cunity.debug.Out;
-//import org.msgpack.Decoder;
-//import org.msgpack.MsgPack;
 import react.ReactComponent;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
@@ -20,40 +20,32 @@ import shared.DbData;
 import shared.DBMetaData;
 import view.dashboard.model.DBFormsModel;
 import view.shared.FormField;
+import view.shared.OneOf;
 import view.shared.SMenu;
 import view.shared.SMItem;
-//import view.shared.io.DataAccessForm;
+import view.shared.io.DataAccess;
 import view.shared.io.FormContainer;
 import view.shared.io.Loader;
 import view.table.Table;
+import view.table.Table.DataState;
 
 
 /**
  * ...
  * @author axel@cunity.me
  */
-@:wrap(FormContainer)
+
 class DB extends ReactComponentOf<DataFormProps,FormState> 
 {
-
-	static var _instance:DB;
-	
+	var dataDisplay:Map<String,DataState>;
+	var dataAccess:DataAccess;
 	public function new(?props) 
 	{
 		super(props);
 
 		dataDisplay = DBFormsModel.dataDisplay;
-		_instance = this;		
-		/*_menuItems = [];
-			{handler:createFieldList, label:'Create Fields Table', action:'createFieldList'},
-			{handler:showFieldList, label:'Table Fields', action:'showFieldList'},
-			{handler:editTableFields, label:'Bearbeiten', disabled:state.selectedRows.length==0},
-			//{handler:save, label:'Speichern', disabled:state.clean},
-		];*/
-		var sideMenu = updateMenu('DB'); //state.sideMenu;
-		//trace(sideMenu);
-		//sideMenu.menuBlocks['DB'].items =  _menuItems;
-		state = ReactUtil.copy(state, {sideMenu:sideMenu});		
+		//var sideMenu = updateMenu('DB'); //state.sideMenu;
+		state = ReactUtil.copy(state, {sideMenu:updateMenu('DB')});		
 	}
 	
 	public static var menuItems:Array<SMItem> = [
@@ -67,7 +59,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	public function createFieldList(ev:ReactEvent):Void
 	{
 		trace('hi :)');
-		requests.push(Loader.load(	
+		props.formContainer.requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
 				user_name:props.user_name,
@@ -95,11 +87,11 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	public function editTableFields(ev:ReactEvent):Void
 	{
 		trace(state.selectedRows.length);
-		var data = selectedRowsMap();
+		var data = props.formContainer.selectedRowsMap();
 		var view:Map<String,FormField> = dataAccess['editTableFields'].view.copy();
 		trace(dataAccess['editTableFields'].view['table_name']);
 		trace(data[0]['id']+'<');
-		renderModalForm({
+		props.formContainer.renderModalForm({
 			data:new Map(),
 			dataTable:data,
 			handleSubmit: saveTableFields,
@@ -108,7 +100,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 			model:'tableFields',
 			//viewClassPath:'shared.io.DB.editTableFields',			
 			fields:view,
-			valuesArray:createStateValuesArray(data, dataAccess['editTableFields'].view), 
+			valuesArray:props.formContainer.reateStateValuesArray(data, dataAccess['editTableFields'].view), 
 			loading:false,
 			title:'Tabellenfelder Eigenschaften'
 		});	
@@ -141,7 +133,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace(vA);
 		//Out.dumpObject(vA);
-		dbMetaData = new  DBMetaData();
+		/*dbMetaData = new  DBMetaData();
 		dbMetaData.dataFields = dbMetaData.stateToDataParams(vA);
 		trace(dbMetaData.dataFields.get(111));
 		var s:hxbit.Serializer = new hxbit.Serializer();
@@ -161,13 +153,13 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 			{				
 				trace(data);
 			}
-		));
+		));*/
 	}
 	
 	public function showFieldList(_):Void
 	{
-		selectAllRows(true);
-		requests.push( BinaryLoader.create(
+		props.formContainer.selectAllRows(true);
+		props.formContainer.requests.push( BinaryLoader.create(
 			'${App.config.api}', 
 			{
 				user_name:props.user_name,

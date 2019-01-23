@@ -62,7 +62,7 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 	var dbData:DbData;
 	var dbMetaData:DBMetaData;
 	var formColElements:Map<String,Array<FormField>>;
-	var dataDisplay:Map<String,DataState>;
+	//var dataDisplay:Map<String,DataState>;
 	var _menuItems:Array<SMItem>;
 	var _fstate:FormState;
 	var modalFormTableHeader:ReactRef<DivElement>;
@@ -76,8 +76,11 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		requests = [];
 		if(props != null)
-		//trace(props.match);
-		
+		trace(props.match.params.section);
+		if(props.registerFormContainer != null)
+		{
+			props.registerFormContainer(this);
+		}
 		props.sideMenu.itemHandler = itemHandler;
 		//trace(props.sideMenu.itemHandler);
 		state = {
@@ -101,12 +104,12 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 
-	function createStateValuesArray(data:Array<Map<String,String>>, view:DataView):Array<Map<String,Dynamic>>
+	public function createStateValuesArray(data:Array<Map<String,String>>, view:DataView):Array<Map<String,Dynamic>>
 	{
 		return [ for (r in data) createStateValues(r, view) ];
 	}
 	
-	function createStateValues(data:Map<String,Dynamic>, view:DataView):Map<String,Dynamic>
+	public function createStateValues(data:Map<String,Dynamic>, view:DataView):Map<String,Dynamic>
 	{
 		var vState:Map<String,String> = new Map();
 		trace(data.keys());
@@ -235,7 +238,7 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 		return ReactRouter.matchPath(props.history.location.pathname, rmp);		
 	}
 
-	function handleChange(e:InputEvent)
+	public function handleChange(e:InputEvent)
 	{
 		var t:InputElement = cast e.target;
 		//trace('${t.name} ${t.value}');
@@ -252,7 +255,7 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 		//trace(this.state);
 	}
 	
-	function selectAllRows(unselect:Bool = false)
+	public function selectAllRows(unselect:Bool = false)
 	{
 		for (r in state.selectedRows)
 		{
@@ -263,13 +266,13 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 	
-	function updateMenu(?viewClassPath:String):SMenuProps
+	public function updateMenu(?viewClassPath:String):SMenuProps
 	{
 		trace('subclass task');
 		return null;
 	}
 	
-	function handleSubmit(e:InputEvent)
+	public function handleSubmit(e:InputEvent)
 	{
 		e.preventDefault();
 		//trace(props.dispatch); //return;
@@ -310,7 +313,7 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 		return formField.type == Hidden? field:[jsx('<label key=${Utils.genKey(k++)}>${formField.label}</label>'), field];
 	}
 	
-	function renderElements(cstate:FormState):ReactFragment
+	public function renderElements(cstate:FormState):ReactFragment
 	{
 		if(cstate.data.empty())
 			return null;
@@ -324,7 +327,7 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 		return elements;
 	}
 	
-	function createElementsArray():ReactFragment
+	public function createElementsArray():ReactFragment
 	{
 		if(_fstate.dataTable.empty())
 			return null;
@@ -467,7 +470,7 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 		return elements;
 	}
 	
-	function renderSelectOptions(fel:FormElement):ReactFragment
+	public function renderSelectOptions(fel:FormElement):ReactFragment
 	{
 		var sel:String = cast fel;
 		var opts:Array<String> = AbstractEnumTools.getValues(FormElement).map(function(fE:FormElement) return cast fE);
@@ -495,7 +498,7 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 	}
 	
 
-	function renderModalForm(fState:FormState):ReactFragment
+	public function renderModalForm(fState:FormState):ReactFragment
 	{
 		_fstate = fState;
 		trace(_fstate); 
@@ -582,8 +585,53 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 			//trace('${"set child" + i + "to:" + child.offsetWidth + "=>"}'+ headerCols[i-1].offsetWidth);
 		}
 	}
+
+	public function switchContent(reactEventSource:Dynamic)
+	{
+		//trace(props.history.location);
+		//trace(props.location);
+		//trace(props.match.params);
+		trace(props.history == App.store.getState().appWare.history);
+		//var viewClassPath:String = reactEventSource.target.getAttribute('data-classpath');
+		var section:String = reactEventSource.target.getAttribute('data-section');
+		//trace( 'state.viewClassPath:${state.viewClassPath} viewClassPath:$viewClassPath');
+		trace( 'state.section:${state.section} section:$section');
+		//if (state.viewClassPath != viewClassPath)
+		if (section != state.sideMenu.section)
+		{
+			//var menuBlocks:
+			var sM:SMenuProps = state.sideMenu;
+			sM.section = section;
+			setState({
+				//viewClassPath:viewClassPath,
+				sideMenu: sM,
+				section:section
+			});
+			var basePath:String = props.match.path.split('/:')[0];
+			trace(props.location.pathname);
+			props.history.push('$basePath/$section');
+			trace(props.history.location.pathname);
+			//props.history.push(props.match.url + '/' + viewClassPath);
+		}
+	}
 	
-	static function localDate(d:String):String
+	function initSideMenu(sMa:Array<SMenuBlock>, sM:SMenuProps):SMenuProps
+	{
+		var sma:SMenuBlock = {};
+		for (smi in 0...sMa.length)
+		{
+			sMa[smi].onActivate = switchContent;
+			//trace(sMa[smi].label);
+		}
+
+		sM.menuBlocks = [
+			for (sma in sMa)
+			sma.section => sma
+		];
+		return sM;
+	}
+	
+	public static function localDate(d:String):String
 	{
 		trace(d);
 		trace(Syntax.code("Date.parse({0})",d));
@@ -591,7 +639,7 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 		return DateTools.format(Date.fromString(d), "%d.%m.%Y %H:%M");
 	}
 	
-	function obj2map(obj:Dynamic, ?fields:Array<String>):Map<String,Dynamic>
+	public function obj2map(obj:Dynamic, ?fields:Array<String>):Map<String,Dynamic>
 	{
 		var m:Map<String,Dynamic> = new Map();
 		if (fields == null)
@@ -603,7 +651,7 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 		return m;
 	}
 	
-	function filterMap(m:Map<String,Dynamic>, keys:Array<String>):Map<String,Dynamic>
+	public function filterMap(m:Map<String,Dynamic>, keys:Array<String>):Map<String,Dynamic>
 	{
 		var r:Map<String,Dynamic> = new Map();
 		for (k in keys)

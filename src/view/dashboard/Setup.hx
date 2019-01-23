@@ -1,13 +1,15 @@
 package view.dashboard;
 
 import react.router.RouterMatch;
-import react.router.Route.RouteMatchProps;
+//import react.router.Route.RouteMatchProps;
+//import react.router.RouteRenderProps;
 import react.router.ReactRouter;
 import comments.StringTransform;
 import haxe.Serializer;
 import haxe.ds.StringMap;
 import haxe.Json;
 import js.html.XMLHttpRequest;
+import haxe.http.HttpJs;
 import me.cunity.debug.Out;
 import model.AppState;
 import react.Fragment;
@@ -20,7 +22,9 @@ import model.AjaxLoader;
 import view.shared.io.DataFormProps;
 import view.shared.io.FormContainer;
 import view.shared.FormState;
+import view.shared.OneOf;
 import view.shared.SMenu;
+import view.shared.SMenuProps;
 import view.shared.io.DB;
 import view.shared.io.DBSync;
 import view.table.Table;
@@ -30,18 +34,22 @@ import view.table.Table;
  * @author axel@cunity.me
  */
 
-//@:expose('default')
-@:connect
+
 class Setup extends ReactComponentOf<DataFormProps,FormState>
 {
-	public function new(?props:FormProps) 
+	//var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;
+	public function new(?props:DataFormProps) 
 	{
 		super(props);	
 		//trace('ok');
 		trace(props.match.params.section);
 		//trace(getRouterMatch().params);
-		state = ReactUtil.copy(state, {
-			sideMenu:initSideMenu(
+		state = {
+			clean:true,
+			hasError:false,
+			mounted:false,
+			loading:true,
+			sideMenu:{}/*initSideMenu(
 				[
 					{
 						dataClassPath:'model.tools.DB',
@@ -55,16 +63,14 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 						section: 'DBSync',
 						items: DBSync.menuItems
 					}
-				],{section: 'DBSync', sameWidth: true}					
+				]
+				,{section: 'DBSync', sameWidth: true}					
 
-			),
-			loading:true
-		});
-		//trace(state);
-		requests = [];			
+			)*/
+		};		
 	}
 	
-	static function mapStateToProps() {
+	/*static function mapStateToProps() {
 
 		return function(aState:model.AppState) 
 		{
@@ -77,25 +83,25 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 				first_name:uState.first_name
 			};
 		};
-	}	
+	}	*/
 	
 	override function componentDidCatch(error, info) {
 		// Display fallback UI
-		if(mounted)
+		if(state.mounted)
 		this.setState({ hasError: true });
 		trace(info);
 	}	
 	
 	override public function componentDidMount():Void 
 	{
-		super.componentDidMount();
-
+		//super.componentDidMount();
+		setState({mounted:true});
 		trace('ok');
-		return;
-		AjaxLoader.loadData('${App.config.api}', 
+		//TODO: AUTOMATE CREATE HISTORY TRIGGER
+		/*AjaxLoader.loadData('${App.config.api}', 
 			{
-				user_name:props.user_name,
-				jwt:props.jwt,
+				user_name:props.user.user_name,
+				jwt:props.user.jwt,
 				className:'admin.CreateHistoryTrigger',
 				action:'run'				
 			}, 
@@ -107,27 +113,36 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 					sData.set('historyTrigger', Json.parse(data).data.rows);
 					setState(ReactUtil.copy(state, {data:sData}));				
 				}
-			});			
+			});	
+			*/		
+	}
+
+	function registerFormContainer(fc:FormContainer)
+	{
+		setState({formContainer:fc});
+		trace(fc);
 	}
 	
 	override public function render() {
-		return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} children=${renderContent}>');
+		return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} registerFormContainer=${registerFormContainer}
+		 render=${renderContent()}/>');
 	}
 
-	public function renderContent(container:FormContainer):ReactFragment
+	public function renderContent():ReactFragment
 	{
 		//var match:RouterMatch = getRouterMatch();
 		//trace(match.params);
+		trace(state.formContainer);
 		return switch(props.match.params.section)
 		{
 			case "DBSync":
 				jsx('
-					<$DBSync ${...props} componentContainer=${container}
+					<$DBSync ${...props} formContainer=${state.formContainer}
 					handleChange={false} handleSubmit={false} fullWidth={true}/>
 				');					
 			case "DB"|null:
 				jsx('
-					<$DB ${...props} componentContainer=${container}
+					<$DB ${...props} formContainer=${state.formContainer}
 					handleChange={false} handleSubmit={false} fullWidth={true}/>
 				');				
 			default:

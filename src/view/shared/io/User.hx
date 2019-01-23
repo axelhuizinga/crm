@@ -7,23 +7,28 @@ import haxe.ds.StringMap;
 import haxe.http.HttpJs;
 import haxe.io.Bytes;
 import js.html.Event;
+import js.html.InputElement;
 import js.html.InputEvent;
 import js.html.XMLHttpRequest;
 import model.AjaxLoader;
 import model.UserState;
 import react.ReactComponent;
+import react.ReactComponent.ReactComponentOf;
 import react.ReactComponent.ReactFragment;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
+import react.ReactRef;
 import shared.DbData;
-
 import view.shared.FormState;
+import view.shared.OneOf;
 import view.shared.SMenu;
 import view.shared.io.FormContainer;
 import view.shared.io.DataAccess;
+import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess.DataSource;
 import view.table.Table;
+
 
 using Lambda;
 using shared.Utils;
@@ -50,12 +55,15 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Löschen',action:'delete'}
 	];
 	var dataAccess:DataAccess;
-	var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;
+	//var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;
+	var autoFocus:ReactRef<InputElement>;
+	var dataDisplay:Map<String,DataState>;
 
 	public function new(?props:DataFormProps)
 	{
 		super(props);
-		requests = [];
+		
+		//requests = [];
 		dataAccess = [
 			'changePassword' =>
 			{
@@ -94,7 +102,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		];
 		//_instance = this;		
 		//trace(props);
-		_menuItems = [
+		/*_menuItems = [
 			//{handler:edit, label:'Bearbeiten', section:'edit'},
 			{handler:save, label:'Speichern', disabled:state.clean},
 			{handler:changePassword, label:'Passwort ändern'},
@@ -102,7 +110,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		var sideMenu = state.sideMenu;
 		sideMenu.menuBlocks['user'].items = _menuItems;
 		trace(_menuItems);
-		state = ReactUtil.copy(state,{sideMenu:sideMenu,viewClassPath:"edit",});
+		state = ReactUtil.copy(state,{sideMenu:sideMenu,viewClassPath:"edit",});*/
 	}
 
 	
@@ -115,11 +123,11 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		requests.push(BinaryLoader.create(
 			'${App.config.api}', 
 			{				
-				user_name:props.user_name,
-				jwt:props.jwt,
+				user_name:props.user.user_name,
+				jwt:props.user.jwt,
 				className:'auth.User',
 				action:'edit',
-				filter:'user_name|${props.user_name}',
+				filter:'user_name|${props.user.user_name}',
 				dataSource:Serializer.run(dataAccess['edit'].source)			
 			},
 			function(data:DbData)
@@ -131,12 +139,12 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 				{
 					setState({data:data.dataRows[0], action:'changePassword',
 					fields:dataAccess['changePassword'].view,
-					values:createStateValues(data.dataRows[0], 
+					values:props.formContainer.createStateValues(data.dataRows[0], 
 					dataAccess['changePassword'].view), loading:false});	
 					App.store.dispatch(AppAction.User({
 						first_name:data.dataRows[0]['first_name'],
 						last_name:data.dataRows[0]['last_name'],
-						user_name:props.user_name,
+						user_name:props.user.user_name,
 						email:data.dataRows[0]['email'],
 						pass:'',
 						new_pass:'',
@@ -148,13 +156,13 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 				else{
 					setState({data:data.dataRows[0], action:'edit',
 					fields:dataAccess['edit'].view,
-					values:createStateValues(data.dataRows[0], 
+					values:props.formContainer.createStateValues(data.dataRows[0], 
 					dataAccess['edit'].view), loading:false});	
 					trace(Date.fromString(data.dataRows[0]['last_login']));
 					App.store.dispatch(AppAction.User({
 						first_name:data.dataRows[0]['first_name'],
 						last_name:data.dataRows[0]['last_name'],
-						user_name:props.user_name,
+						user_name:props.user.user_name,
 						email:data.dataRows[0]['email'],
 						pass:'',
 						waiting:false,
@@ -199,8 +207,8 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		requests.push(BinaryLoader.create(
 			'${App.config.api}', 
 			{				
-				user_name:props.user_name, 
-				jwt:props.jwt,
+				user_name:props.user.user_name, 
+				jwt:props.user.jwt,
 				className:'auth.User',
 				action:'changePassword',
 				new_pass:state.values['new_pass'],
@@ -220,7 +228,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 					setState({
 						//viewClassPath:'edit',
 						fields:dataAccess['edit'].view,
-						values:createStateValues(App.store.getState().appWare.user.dynaMap(), dataAccess['edit'].view),
+						values:props.formContainer.createStateValues(App.store.getState().appWare.user.dynaMap(), dataAccess['edit'].view),
 					 	loading:false});
 				}
 				else trace(data.dataErrors);				
@@ -234,11 +242,11 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		requests.push(Loader.loadData(	
 			'${App.config.api}', 
 			{
-				user_name:props.user_name,
-				jwt:props.jwt,
+				user_name:props.user.user_name,
+				jwt:props.user.jwt,
 				className:'auth.User',
 				action:'edit',
-				filter:'user_name|${props.user_name}',
+				filter:'user_name|${props.user.user_name}',
 				dataSource:Serializer.run(dataAccess['edit'].source)
 			},
 			function(data:Array<Map<String,String>>)
@@ -256,7 +264,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 				setState({
 					//data:data[0],
 					fields:dataAccess['edit'].view,
-					values:createStateValues(data[0], 
+					values:props.formContainer.createStateValues(data[0], 
 					dataAccess['edit'].view), loading:false});					
 			}
 		));
@@ -269,18 +277,18 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		trace(state.values);
 		var skeys:Array<String> = untyped dataAccess['edit'].view.keys().arr;
 		skeys = skeys.filter(function(k) return !dataAccess['edit'].view[k].readonly);
-		trace(filterMap(state.values, skeys));
+		trace(props.formContainer.filterMap(state.values, skeys));
 		trace(skeys.toString());
 		trace(dataAccess['edit'].source);
 		//return;,
 		requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
-				user_name:props.user_name,
-				jwt:props.jwt,
+				user_name:props.user.user_name,
+				jwt:props.user.jwt,
 				className:'auth.User',
 				action:'save',
-				filter:'user_name|${props.user_name}',
+				filter:'user_name|${props.user.user_name}',
 				dataSource:Serializer.run(dataAccess['edit'].source)
 				//dataSource:Serializer.run(filterMap(state.values, skeys))
 			},
@@ -319,7 +327,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		return switch(props.match.params.action)
 		{
 			case "edit":		
-				renderElements();
+				props.formContainer.renderElements(state);
 			case "changePassword":
 				jsx('
 				<>

@@ -36,7 +36,7 @@ using Lambda;
 @:connect
 class Roles extends ReactComponentOf<DataFormProps,FormState>
 {			
-	public function new(?props:FormProps) 
+	public function new(?props:DataFormProps) 
 	{
 		super(props);
 		dataDisplay = RolesFormModel.dataDisplay;		
@@ -202,9 +202,9 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 		return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} children=${renderContent}>');
 	}
 
-	override function renderContent(container:FormContainer):ReactFragment
+	override function renderContent(_):ReactFragment
 	{
-		//return switch(state.viewClassPath)//componentContainer=${container} 
+		//return switch(state.viewClassPath)//formContainer=${container} 
 		return switch(props.match.params.action)
 		{
 			case "userList":
