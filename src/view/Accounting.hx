@@ -75,13 +75,8 @@ class Accounting extends ReactComponentOfProps<RouteTabProps>
 		};
 	}	
 	
-    override function render() {
-		if (props.waiting || props.user_name == '' || props.jwt == null || props.jwt == '')
-		{
-			// WE NEED TO LOGIN FIRST
-			return jsx('<LoginForm {...props}/>');
-		}
-		else
+    override function render() 
+	{
 		return jsx('
 		<>
             <div className="tabContent2">

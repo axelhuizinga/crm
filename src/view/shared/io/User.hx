@@ -120,7 +120,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 
 		super.componentDidMount();
 			
-		requests.push(BinaryLoader.create(
+		props.formContainer.requests.push(BinaryLoader.create(
 			'${App.config.api}', 
 			{				
 				user_name:props.user.user_name,
@@ -204,7 +204,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		if (state.values['new_pass'] == state.values['pass'] && state.values['new_pass']!='' && state.values['new_pass']!=null)
 			return setState({errors:['changePassword'=>'Das Passwort muss geändert werden!']});
 		trace(App.store.getState().appWare.user);
-		requests.push(BinaryLoader.create(
+		props.formContainer.requests.push(BinaryLoader.create(
 			'${App.config.api}', 
 			{				
 				user_name:props.user.user_name, 
@@ -239,7 +239,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 	public function edit(ev:ReactEvent):Void
 	{
 		trace('hi :)');
-		requests.push(Loader.loadData(	
+		props.formContainer.requests.push(Loader.loadData(	
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,
@@ -281,7 +281,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 		trace(skeys.toString());
 		trace(dataAccess['edit'].source);
 		//return;,
-		requests.push(Loader.load(	
+		props.formContainer.requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,

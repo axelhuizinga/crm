@@ -42,6 +42,7 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 		state = {
 			clean:true,
 			hasError:false,
+			mounted:false,
 			loading:true,
 			sideMenu:{}/*initSideMenu(
 				[
@@ -82,7 +83,9 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 		super.componentDidMount();
 		trace(state.loading);	
 		trace(Reflect.fields(props));
-		trace(props.match.params);				
+		trace(props.match.params.section);				
+		trace(props.formContainer);				
+		//setState{sideMenu:}
 	}
 	
 	/*override public function switchContent(reactEventSource:Dynamic)
@@ -103,22 +106,22 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 	}	*/
 	
 	override public function render() {
-		return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} children=${renderContent}/>');
+		return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} render=${renderContent}/>');
 	}
 
-	public function renderContent(container:FormContainer) {
+	public function renderContent(cState:FormState) {
 		trace(props.match.params);
 		return switch(props.match.params.section)
 		{
 			case "user":
 				jsx('
-					<User ${...props} sideMenu=${state.sideMenu}  formContainer=${container}
-					handleChange={true} handleSubmit={true} fullWidth={true}/>
+					<User ${...props} sideMenu=${state.sideMenu}  formContainer=${cState.formContainer}
+					 fullWidth={true}/>
 				');	
 			case "bookmarks"|null:
 				jsx('
-					<Bookmarks ${...props} sideMenu=${state.sideMenu}  formContainer=${container}
-					handleChange={true} handleSubmit={true} fullWidth={true}/>
+					<Bookmarks ${...props} sideMenu=${state.sideMenu}  formContainer=${cState.formContainer}
+					 fullWidth={true}/>
 				');
 			default:		
 				null;		

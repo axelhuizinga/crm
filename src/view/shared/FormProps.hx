@@ -9,11 +9,7 @@ import view.shared.SMenuProps;
  typedef FormProps =
  {
 	>RouteTabProps,
-	?activeComponent:ReactComponent,
-	//?dataClassPath:String,
 	?elements:Map<String,FormField>,
-	//?data:Dynamic,
-	//?store:Store<AppState>,
 	?isConnected:Bool,
 	?handleChange:Bool,
 	?handleSubmit:Bool,

@@ -1,8 +1,11 @@
 package view.shared.io;
 
+import model.AppState;
+import redux.Redux.Dispatch;
 import react.ReactEvent;
 import react.router.ReactRouter;
 import react.router.Route.RouteMatchProps;
+import react.router.Route.RouteRenderProps;
 import react.router.RouterMatch;
 import shared.Utils;
 import js.Syntax;
@@ -21,12 +24,12 @@ import js.html.InputEvent;
 import js.html.TableRowElement;
 import js.html.XMLHttpRequest;
 import macrotools.AbstractEnumTools;
+import model.UserState;
 import react.ReactDOM;
 
 import view.shared.FormElement;
 import view.shared.FormField;
 import view.shared.FormState;
-import view.shared.FormProps;
 import view.shared.OneOf;
 import view.shared.SMenuProps;
 import view.shared.SMItem;
@@ -57,7 +60,7 @@ using Lambda;
 
 class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 {
-	var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;	
+	public var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;	
 	var dataAccess:DataAccess;
 	var dbData:DbData;
 	var dbMetaData:DBMetaData;
@@ -85,13 +88,13 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 		//trace(props.sideMenu.itemHandler);
 		state = {
 			action:props.match.params.action,
-			activeComponent:cast(this,FormContainer),
 			data:new StringMap(),
 			clean:true,
 			errors:new StringMap(),
+			formContainer:this,
 			hasError:false,
-			handleChange:setChangeHandler(),
-			handleSubmit:setSubmitHandler(),
+			//handleChange:setChangeHandler(),
+			//handleSubmit:setSubmitHandler(),
 			mounted:false,
 			sideMenu: props.sideMenu,
 			selectedRows:new Array()
@@ -103,6 +106,21 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 			Reflect.callMethod(this, Reflect.field(this, props.match.params.action),null);
 		}
 	}
+
+	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
+    {
+		trace(dispatch + ':' + (dispatch == App.store.dispatch? 'Y':'N'));
+        return {};
+    }
+
+	static function mapStateToProps(aState:AppState) {
+		var uState:UserState = aState.appWare.user;
+		trace(uState.last_login);
+		//trace(' ${aState.appWare.history.location.pathname + (aState.appWare.compState.exists('dashboard') && aState.appWare.compState.get('dashboard').isMounted ? "Y":"N")}');
+		
+		return {};
+		
+	}	
 
 	public function createStateValuesArray(data:Array<Map<String,String>>, view:DataView):Array<Map<String,Dynamic>>
 	{
@@ -125,7 +143,7 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 		return vState;
 	}
 		
-	function selectedRowsMap():Array<Map<String,String>>
+	public function selectedRowsMap():Array<Map<String,String>>
 	{
 		return [for (r in state.selectedRows) selectedRowMap(r)];
 	}
@@ -140,7 +158,7 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 		return rM;
 	}
 	
-	function setChangeHandler():InputEvent->Void
+	/*function setChangeHandler():InputEvent->Void
 	{
 		if (props.handleChange)
 		{
@@ -160,7 +178,7 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 			return handleSubmit;
 		}
 		return null;
-	}
+	}*/
 	
 	public function setStateFromChild(newState:FormState)
 	{
@@ -193,13 +211,15 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 
 	override public function shouldComponentUpdate(nextProps:DataFormProps,nextState:FormState)
 	{
-		trace(props.match.params.action + ':' +nextProps.match.params.action + ':' + state.action);
+		//trace(props.match.params.action + ':' +nextProps.match.params.section + ':');
+		trace(Reflect.fields(nextState));
 		if(props.match.params.action!=nextProps.match.params.action)
 		{
 			callMethod(nextProps.match.params.action);
 			return false;
 		}
 		return true;
+		return state.mounted? false: true;
 	}
 
 	override public function componentDidMount():Void 
@@ -242,7 +262,7 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 	{
 		var t:InputElement = cast e.target;
 		//trace('${t.name} ${t.value}');
-		var vs = state.values;
+		/*var vs = state.values;
 		//trace(vs.toString());
 		vs[t.name] = t.value;
 		trace(vs.toString());
@@ -252,7 +272,7 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 		//App.store.dispatch(AppAction.LoginChange(s));validate
 		setState({clean:false, sideMenu:updateMenu(),values:vs});
 		//props.setStateFromChild({clean:false});
-		//trace(this.state);
+		//trace(this.state);*/
 	}
 	
 	public function selectAllRows(unselect:Bool = false)
@@ -265,12 +285,29 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 				r.classList.add('is-selected');
 		}
 	}
-	
+
 	public function updateMenu(?viewClassPath:String):SMenuProps
 	{
-		trace('subclass task');
-		return null;
-	}
+		var sideMenu = state.sideMenu;
+		if(viewClassPath==null)
+			return sideMenu;
+		sideMenu.menuBlocks['bookmarks'].isActive = true;
+		sideMenu.menuBlocks['bookmarks'].label='Lesezeichen';
+		for(mI in sideMenu.menuBlocks['bookmarks'].items)
+		{
+			switch(mI.action)
+			{		
+				case 'edit':
+					mI.disabled = state.selectedRows.length==0;
+				case 'save':
+					mI.disabled = state.clean;
+				default:
+
+			}			
+		}		
+		//trace(sideMenu.menuBlocks['user'].items);	
+		return sideMenu;
+	}	
 	
 	public function handleSubmit(e:InputEvent)
 	{
@@ -288,10 +325,11 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 	
 	override function render()
 	{
+		var sM:SMenuProps = props.sideMenu;
 		return jsx('
 			<div className="columns">
-				${props.children(this)}
-				<$SMenu className="menu" props=${...state.sideMenu} />
+				${props.render(this.state)}
+				<$SMenu className="menu" {...sM} />
 			</div>			
 		');
 	}

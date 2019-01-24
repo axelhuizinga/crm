@@ -1,4 +1,6 @@
 package view.shared;
+import history.History;
+import history.Location;
 import js.html.InputEvent;
 import js.html.TableRowElement;
 import react.ReactType;
@@ -9,7 +11,6 @@ import view.shared.io.FormContainer;
 typedef FormState =
 {
 	?action:String,
-	?activeComponent:ReactComponent,
 	?dataClassPath:String,
 	?data:Map<String,Dynamic>,
 	?dataTable:Array<Map<String,Dynamic>>,
@@ -19,7 +20,7 @@ typedef FormState =
 	?handleChange:InputEvent->Void,
 	?handleSubmit:Dynamic->Void,	
 	hasError:Bool,
-	mounted:Bool,
+	?mounted:Bool,
 	?isConnected:Bool,
 	?loading:Bool,
 	?initialState:Dynamic,

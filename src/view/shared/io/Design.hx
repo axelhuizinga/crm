@@ -31,14 +31,14 @@ class Design extends ReactComponentOf<DataFormProps,FormState>
 	public function edit(ev:ReactEvent):Void
 	{
 		trace('hi :)');
-		requests.push(AjaxLoader.load(	
+		props.formContainer.requests.push(AjaxLoader.load(	
 			'${App.config.api}', 
 			{
-				user_name:props.user_name,
-				jwt:props.jwt,
+				user_name:props.user.user_name,
+				jwt:props.user.jwt,
 				className:'auth.User',
 				action:'edit',
-				filter:'user_name|${props.user_name}',
+				filter:'user_name|${props.user.user_name}',
 				//dataSource:Serializer.run(view.shared.io.User.userModel)
 			},
 			function(data:Dynamic )
@@ -59,7 +59,16 @@ class Design extends ReactComponentOf<DataFormProps,FormState>
 	{
 		super(props);
 		//menuItems = [{handler:edit, label:'Bearbeiten', section:'edit'}];
-		_menuItems = menuItems.map(function (mI:SMItem){
+		//sideMenu.menuBlocks['bookmarks'].items = function() return _menuItems;
+		//trace(sideMenu.menuBlocks['bookmarks'].items());
+		state = {
+			clean:true,
+			hasError:false,
+			mounted:false,
+			loading:true,
+			sideMenu:{}, 
+		};
+		/*_menuItems = menuItems.map(function (mI:SMItem){
 			var h:Event->Void = Reflect.field(this, mI.action);
 			trace(h);
 			mI.handler = h;
@@ -74,7 +83,7 @@ class Design extends ReactComponentOf<DataFormProps,FormState>
 			}
 			return mI;
 
-		});
+		});*/
 		//this.state = state;
 		//super(props, state);
 		//trace(props);

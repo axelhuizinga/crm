@@ -70,13 +70,7 @@ class QC extends ReactComponentOf<RouteTabProps, Dynamic>
 	}	
 	
     override function render() {
-		trace(props);
-		if (props.waiting || props.user_name == '' || props.jwt == null || props.jwt == '')
-		{
-			// WE NEED TO LOGIN FIRST
-			return jsx('<LoginForm {...props}/>');
-		}
-		else		
+		trace(props);	
         return jsx('
 		<>
             <div className="tabComponent">

@@ -20,6 +20,7 @@ import react.ReactComponent.ReactComponentOfProps;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
+import react.ReactType;
 import redux.Redux.Dispatch;
 import view.dashboard.model.RolesFormModel;
 import view.shared.io.DataFormProps;
@@ -39,13 +40,14 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 	public function new(?props:DataFormProps) 
 	{
 		super(props);
-		dataDisplay = RolesFormModel.dataDisplay;		
+		//dataDisplay = RolesFormModel.dataDisplay;		
 		state = {
 			clean:true,
 			//viewClassPath:"userList",
 			hasError:false,
+			mounted:false,
 			loading:true,
-			sideMenu:initSideMenu(
+			sideMenu:{}/*initSideMenu(
 				[
 					{
 						dataClassPath:'roles.User',
@@ -67,9 +69,8 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 					},										
 				],
 				{section: 'users',	sameWidth: true}
-			)
+			)*/
 		};
-		requests = [];
 		trace(Reflect.fields(props));
 	}
 	
@@ -115,12 +116,12 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 	public function importExternalUsers(ev:ReactEvent):Void
 	{
 		trace(ev.currentTarget);
-		requests.push(AjaxLoader.load(
+		props.formContainer.requests.push(AjaxLoader.load(
 			'${App.config.api}', 
 			{
-				user_name:props.user_name,
-				jwt:props.jwt,
-				first_name:props.first_name,
+				user_name:props.user.user_name,
+				jwt:props.user.jwt,
+				first_name:props.user.first_name,
 				className:'admin.CreateUsers',
 				action:'importExternal'
 			},
@@ -148,11 +149,11 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 		super.componentDidMount();
 		trace(state.loading);
 		
-		requests.push(BinaryLoader.create(
+		props.formContainer.requests.push(BinaryLoader.create(
 			'${App.config.api}', 
 			{
-				user_name:props.user_name,
-				jwt:props.jwt,
+				user_name:props.user.user_name,
+				jwt:props.user.jwt,
 				className:'roles.Users',
 				action:'list',
 				filter:'active|TRUE',
@@ -199,19 +200,16 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
     }	*/	
 	
 	override public function render() {
-		return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} children=${renderContent}>');
+		return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} render=${renderContent}/>');
 	}
 
-	override function renderContent(_):ReactFragment
+	function renderContent(cState:FormState):ReactFragment
 	{
-		//return switch(state.viewClassPath)//formContainer=${container} 
 		return switch(props.match.params.action)
 		{
 			case "userList":
 				jsx('
-					<$Table id="userList" data=${state.dataTable == null? null:state.dataTable}
-					${...props} dataState = ${dataDisplay["userList"]} 
-					className = "is-striped is-hoverable" fullWidth={true}/>				
+					<$Users	${...props} fullWidth={true}  />				
 				');				
 			default:
 				null;
@@ -220,7 +218,7 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 	
 }
 
-/**
+/**formContainer=${cState.formContainer}
  * 							autoSize = {true} 
 							headerClassName = "table tablesorter is-striped is-fullwidth is-hoverable"
 							headerColumns=${displayUsers}

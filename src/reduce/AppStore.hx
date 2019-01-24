@@ -46,7 +46,7 @@ class AppStore
 			user_name:(Cookie.get('user.user_name')==null?'':Cookie.get('user.user_name')),
 			email:'',
 			pass:'',
-			waiting:true,
+			waiting:false,
 			last_login:null,
 			jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt'))
 		}

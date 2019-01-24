@@ -25,6 +25,7 @@ import react.ReactMacro.jsx;
 import shared.Utils;
 
 import view.shared.FormState;
+import view.shared.io.FormContainer;
 import view.shared.OneOf;
 using Lambda;
 
@@ -58,7 +59,7 @@ typedef DataColumn =
 	@:optional var show:Bool;
 	@:optional var style:Dynamic;
 }
-//
+
 typedef DataCellPos =
 {
 	column:Int,
@@ -106,6 +107,7 @@ typedef TableProps =
 	data:Array<Map<String,Dynamic>>,
 	dataState:DataState,
 	?disableHeader:Bool,
+	?formContainer:FormContainer,
 	?oddClassName: String,
     ?evenClassName:String,	
 	?defaultSort:Dynamic,

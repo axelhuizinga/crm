@@ -84,24 +84,24 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
     }
 
 	static function mapStateToProps(aState:AppState) {
-			var uState:UserProps = aState.appWare.user;
-			//trace(aState.appWare.compState);
-			//trace(' ${aState.appWare.history.location.pathname + (aState.appWare.compState.exists('dashboard') && aState.appWare.compState.get('dashboard').isMounted ? "Y":"N")}');
-			
-			return {
-				appConfig:aState.appWare.config,
-				user_name:uState.user_name,
-				pass:uState.pass,
-				jwt:uState.jwt,
-			//	isMounted:mounted,
-				loggedIn:uState.loggedIn,
-				loginError:uState.loginError,
-				last_login:uState.last_login,
-				first_name:uState.first_name,
-				redirectAfterLogin:aState.appWare.redirectAfterLogin,
-				//locationHistory:aState.appWare.history,
-				waiting:uState.waiting
-			};		
+		var uState:UserProps = aState.appWare.user;
+		//trace(aState.appWare.compState);
+		//trace(' ${aState.appWare.history.location.pathname + (aState.appWare.compState.exists('dashboard') && aState.appWare.compState.get('dashboard').isMounted ? "Y":"N")}');
+		
+		return {
+			appConfig:aState.appWare.config,
+			user_name:uState.user_name,
+			pass:uState.pass,
+			jwt:uState.jwt,
+		//	isMounted:mounted,
+			loggedIn:uState.loggedIn,
+			loginError:uState.loginError,
+			last_login:uState.last_login,
+			first_name:uState.first_name,
+			redirectAfterLogin:aState.appWare.redirectAfterLogin,
+			//locationHistory:aState.appWare.history,
+			waiting:uState.waiting
+		};		
 	}		
 	
     override function render() 

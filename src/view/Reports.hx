@@ -69,13 +69,6 @@ class Reports extends ReactComponentOfProps<RouteTabProps>
 	}	
 	
     override function render() {
-		//trace(props);
-		if (props.waiting || props.user_name == '' || props.jwt == null || props.jwt == '')
-		{
-			// WE NEED TO LOGIN FIRST
-			return jsx('<LoginForm {...props}/>');
-		}
-		else
         return jsx('
 		<>
             <div className="tabComponent">

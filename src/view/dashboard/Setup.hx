@@ -96,7 +96,7 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 	{
 		//super.componentDidMount();
 		setState({mounted:true});
-		trace('ok');
+		trace('${}');
 		//TODO: AUTOMATE CREATE HISTORY TRIGGER
 		/*AjaxLoader.loadData('${App.config.api}', 
 			{
@@ -117,33 +117,33 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 			*/		
 	}
 
-	function registerFormContainer(fc:FormContainer)
+	function registerFormContainer(fc:FormContainer)//
 	{
 		setState({formContainer:fc});
-		trace(fc);
+		trace(fc.props.match.params.section);
 	}
 	
 	override public function render() {
-		return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} registerFormContainer=${registerFormContainer}
-		 render=${renderContent()}/>');
+		return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} registerFormContainer=${registerFormContainer} render=${renderContent}/>');
 	}
 
-	public function renderContent():ReactFragment
+	public function renderContent(cState:FormState):ReactFragment
 	{
 		//var match:RouterMatch = getRouterMatch();
 		//trace(match.params);
-		trace(state.formContainer);
+		if(state.formContainer!=null)
+		trace(state.formContainer.props.match.params.section);
 		return switch(props.match.params.section)
 		{
 			case "DBSync":
 				jsx('
-					<$DBSync ${...props} formContainer=${state.formContainer}
-					handleChange={false} handleSubmit={false} fullWidth={true}/>
+					<$DBSync ${...props} formContainer=${cState.formContainer}
+					 fullWidth={true}/>
 				');					
 			case "DB"|null:
 				jsx('
 					<$DB ${...props} formContainer=${state.formContainer}
-					handleChange={false} handleSubmit={false} fullWidth={true}/>
+					 fullWidth={true}/>
 				');				
 			default:
 				null;					

@@ -70,17 +70,10 @@ class Contacts extends ReactComponentOfProps<RouteTabProps>
 	}	
 	
     override function render() {
-		trace(props.match);
+		trace(props.match.params.section);
 		trace(props.history.location.pathname);
 		//Out.dumpObjectTree(props);
-		trace(Reflect.fields(props));
-		trace('${props.user_name} => ${props.jwt}' + (( props.jwt == null )?' should Login' : ' Login OK' ));
-		if (props.waiting || props.user_name == null || props.jwt == null || props.jwt == '')
-		{
-			// WE NEED TO LOGIN FIRST
-			return jsx('<LoginForm  {...props}/>');
-		}
-		else		
+		trace(Reflect.fields(props));		
         return jsx('
 		<>
             <div className="tabComponent">

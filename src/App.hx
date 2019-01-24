@@ -143,6 +143,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		}
 		else
 		{// WE HAVE EITHER NO VALID JWT OR user_name
+			trace('LOGIN required');
 			store.dispatch(AppAction.LoginRequired(state.appWare.user));
 			//props = { waiting:false};
 		}

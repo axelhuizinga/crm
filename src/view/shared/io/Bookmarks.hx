@@ -14,16 +14,12 @@ import react.ReactComponent.ReactFragment;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
-/*import react.table.ReactTable;
-import react.table.ReactTable.Column;
-import react.table.ReactTable.ColumnRenderProps;
-import react.table.ReactTable.TableCellRenderer;
-import react.table.ReactTable.CellInfo;*/
 import shared.DbData;
 import view.shared.SMenu;
 //import view.shared.io.DataAccessForm;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess.DataSource;
+import view.table.Table.*;
 
 
 /**
@@ -38,7 +34,7 @@ typedef BookmarksModel = DataSource;
 class Bookmarks extends ReactComponentOf<DataFormProps,FormState>
 {
 	
-	//public var menuItems:Array<SMItem>;// = [];
+
 	
 	public function add(ev:Event):Void
 	{
@@ -53,14 +49,14 @@ class Bookmarks extends ReactComponentOf<DataFormProps,FormState>
 	public function edit(ev:Event):Void
 	{
 		trace('hi :)');
-		requests.push(AjaxLoader.load(	
+		props.formContainer.requests.push(AjaxLoader.load(	
 			'${App.config.api}', 
 			{
-				user_name:props.user_name,
-				jwt:props.jwt,
+				user_name:props.user.user_name,
+				jwt:props.user.jwt,
 				className:'auth.User',
 				action:'edit',
-				filter:'user_name|${props.user_name}',
+				filter:'user_name|${props.user.user_name}',
 				dataSource:Serializer.run(null)
 			},
 			function(data:Dynamic )
@@ -90,17 +86,23 @@ class Bookmarks extends ReactComponentOf<DataFormProps,FormState>
 	public function new(props:DataFormProps)
 	{
 		super(props);
-		dataAccess = [
+		/*dataAccess = [
 			'edit' =>{
 				source:new Map(),
 				view:new Map()
 			}
-		];		
+		];*/
 		//_menuItems = [];//{handler:edit, label:'Bearbeiten', action:'edit'}];
 		var sideMenu = updateMenu('bookmarks');
 		//sideMenu.menuBlocks['bookmarks'].items = function() return _menuItems;
 		//trace(sideMenu.menuBlocks['bookmarks'].items());
-		state = ReactUtil.copy(state,{sideMenu:sideMenu,viewClassPath:"edit"});
+		state = {
+			clean:true,
+			hasError:false,
+			mounted:false,
+			loading:true,
+			sideMenu:sideMenu, 
+		};
 		//trace(this.props);
 	}
 	
@@ -115,12 +117,7 @@ class Bookmarks extends ReactComponentOf<DataFormProps,FormState>
 		//trace(Reflect.fields(GriddleComponent));
 		//trace(data);
 		trace(props.match.params.section);
-		var match:RouterMatch = getRouterMatch();
-		trace(match.params);
-		var section:String = (match.params.section == null?state.sideMenu.section:match.params.section);
-		var style:Dynamic = {
-            //height: "auto" // This will force the table body to overflow and scroll, since there is not enough room
-    	};		  
+		
 		return jsx('
 			<div className="tabComponentForm"  >
 				dummy	
@@ -135,7 +132,7 @@ class Bookmarks extends ReactComponentOf<DataFormProps,FormState>
 		{label:'Löschen',action:'delete'},
 	];
 
-	override function updateMenu(?viewClassPath:String):SMenuProps
+	function updateMenu(?viewClassPath:String):SMenuProps
 	{
 		var sideMenu = state.sideMenu;
 		sideMenu.menuBlocks['bookmarks'].isActive = true;

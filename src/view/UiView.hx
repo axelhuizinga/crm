@@ -69,15 +69,12 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 	var mounted:Bool;
 	//static var _me:UiView;
 
-	static function mapStateToProps(aState:AppState) {
-			//trace(aState.appWare.user);
-			var p:Dynamic = {
-				user:aState.appWare.user
-			};
-			//trace(p);
-			return {
-				user:aState.appWare.user
-			};
+	static function mapStateToProps(aState:AppState) 
+	{
+		trace(aState.appWare.user);
+		return {
+			user:aState.appWare.user
+		};
 	}
 	
 	public function new(props:Dynamic) {
@@ -135,7 +132,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 
 	override function render()
 	{
-		//trace(props.user.jwt);
+		trace(props.user.jwt);
 		if (state.hasError) {
 		  return jsx('<h1>Something went wrong.</h1>');
 		}

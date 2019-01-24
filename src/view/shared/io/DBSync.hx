@@ -47,6 +47,8 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	
 	var dataDisplay:Map<String,DataState>;
 	var dataAccess:DataAccess;	
+	var dbData: shared.DbData;
+	var dbMetaData:shared.DBMetaData;
 	public function new(?props) 
 	{
 		super(props);
@@ -64,11 +66,11 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	{
 		trace('hi :)');
 		return;
-		requests.push(Loader.load(	
+		props.formContainer.requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
-				user_name:props.user_name,
-				jwt:props.jwt,
+				user_name:props.user.user_name,
+				jwt:props.user.jwt,
 				className:'tools.DB',
 				action:'createFieldList',
 				update:'1'
@@ -126,11 +128,11 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		var s:hxbit.Serializer = new hxbit.Serializer();
 		
 		return;
-		requests.push( BinaryLoader.create(
+		props.formContainer.requests.push( BinaryLoader.create(
 			'${App.config.api}', 
 			{
-				user_name:props.user_name,
-				jwt:props.jwt,
+				user_name:props.user.user_name,
+				jwt:props.user.jwt,
 				fields:'readonly:readonly,element=:element,required=:required,use_as_index=:use_as_index',
 				className:'tools.DB',
 				action:'saveTableFields',
@@ -145,11 +147,11 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	
 	public function showUserList(_):Void
 	{
-		requests.push( BinaryLoader.create(
+		props.formContainer.requests.push( BinaryLoader.create(
 			'${App.config.api}', 
 			{
-				user_name:props.user_name,
-				jwt:props.jwt,
+				user_name:props.user.user_name,
+				jwt:props.user.jwt,
 				fields:'id,table_name,field_name,readonly,element,required,use_as_index',
 				className:'admin.SyncExternal',
 				action:'syncUserDetails'
@@ -200,7 +202,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			case 'showUserList':
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["userList"]} parentForm=${this} 
+					${...props} dataState = ${dataDisplay["userList"]} formContainer=${props.formContainer} 
 					className = "is-striped is-hoverable" fullWidth=${true}/>
 				');
 			case 'showFieldList2':
@@ -208,7 +210,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				trace(state.dataTable[29]['id']+'<<<');
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["fieldsList"]} parentForm=${this} 
+					${...props} dataState = ${dataDisplay["fieldsList"]} formContainer=${props.formContainer}  
 					className = "is-striped is-hoverable" fullWidth=${true}/>				
 				');	
 			case 'shared.io.DB.editTableFields':
@@ -231,7 +233,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		');		
 	}
 	
-	override function updateMenu(?viewClassPath:String):SMenuProps
+	function updateMenu(?viewClassPath:String):SMenuProps
 	{
 		var sideMenu = state.sideMenu;
 		//sideMenu.menuBlocks['DBSync'].handlerInstance = this;

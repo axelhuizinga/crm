@@ -45,7 +45,8 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 
 		dataDisplay = DBFormsModel.dataDisplay;
 		//var sideMenu = updateMenu('DB'); //state.sideMenu;
-		state = ReactUtil.copy(state, {sideMenu:updateMenu('DB')});		
+		//state = {hasError:false, sideMenu:updateMenu('DB')};		
+		state = {hasError:false, sideMenu:{}};		
 	}
 	
 	public static var menuItems:Array<SMItem> = [
@@ -62,8 +63,8 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		props.formContainer.requests.push(Loader.load(	
 			'${App.config.api}', 
 			{
-				user_name:props.user_name,
-				jwt:props.jwt,
+				user_name:props.user.user_name,
+				jwt:props.user.jwt,
 				className:'tools.DB',
 				action:'createFieldList',
 				update:'1'
@@ -95,12 +96,13 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 			data:new Map(),
 			dataTable:data,
 			handleSubmit: saveTableFields,
+			hasError:false,
 			isConnected:true,
 			initialState: initStateFromDataTable(data),
 			model:'tableFields',
 			//viewClassPath:'shared.io.DB.editTableFields',			
 			fields:view,
-			valuesArray:props.formContainer.reateStateValuesArray(data, dataAccess['editTableFields'].view), 
+			valuesArray:props.formContainer.createStateValuesArray(data, dataAccess['editTableFields'].view), 
 			loading:false,
 			title:'Tabellenfelder Eigenschaften'
 		});	
@@ -162,8 +164,8 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		props.formContainer.requests.push( BinaryLoader.create(
 			'${App.config.api}', 
 			{
-				user_name:props.user_name,
-				jwt:props.jwt,
+				user_name:props.user.user_name,
+				jwt:props.user.jwt,
 				fields:'id,table_name,field_name,readonly,element,required,use_as_index',
 				className:'tools.DB',
 				action:'createFieldList'
@@ -197,7 +199,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	override public function componentDidMount():Void 
 	{
 		super.componentDidMount();
-	
+		trace('Ok');
 		dataAccess = [
 			'editTableFields' =>{
 				source:[
@@ -221,6 +223,12 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 			}
 		];			
 	}
+
+	/*override public function componentWillUnmount()
+	{
+		mounted=false;
+		props.formContainer.removeRequest(this)
+	}*/
 	
 	function renderResults():ReactFragment
 	{
@@ -232,7 +240,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 				//trace(state.dataTable[29]['id']+'<<<');
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
-					${...props} dataState = ${dataDisplay["fieldsList"]} parentForm=${this} 
+					${...props} dataState = ${dataDisplay["fieldsList"]} formContainer=${props.formContainer}
 					className = "is-striped is-hoverable" fullWidth=${true}/>				
 				');	
 			case 'editTableFields':
@@ -256,7 +264,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 		');		
 	}
 	
-	override function updateMenu(?viewClassPath:String):SMenuProps
+	function updateMenu(?viewClassPath:String):SMenuProps
 	{
 		//trace('${Type.getClassName(Type.getClass(this))} task');
 		var sideMenu = state.sideMenu;
