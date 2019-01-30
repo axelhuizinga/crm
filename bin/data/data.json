@@ -1,9 +1,0 @@
-{
-	"items":
-	[
-		{"text":"Item 1", "done":true},
-		{"text":"Item 2", "done":true},
-		{"text":"Item 3", "done":false},
-		{"text":"Item 4", "done":false}
-	]
-}

@@ -32,7 +32,15 @@ import view.shared.io.User;
 //@:connect
 class Settings extends ReactComponentOf<DataFormProps,FormState>
 {
-	//var childFormProps:DataFormProps;	
+	override function componentDidCatch(error, info) {
+		// Display fallback UI
+		trace(Reflect.fields(state));
+		if(state.mounted)
+		this.setState({ hasError: true });
+		trace(error);
+		trace(info);
+	}
+
 	public function new(?props:DataFormProps) 
 	{
 		super(props);	
@@ -72,15 +80,17 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 		{
 			trace(props.match.params.section);
 			//state.viewClassPath = state.sideMenu.menuBlocks[props.match.params.section].viewClassPath;
-			state.sideMenu.menuBlocks[props.match.params.section].isActive=true;
+			//state.sideMenu.menuBlocks[props.match.params.section].isActive=true;
 
 		}
 		trace('${props.match.params.section} ${props.match.params.action}');
+		trace(Reflect.fields(state));
 	}
 	
 	override public function componentDidMount():Void 
 	{
-		super.componentDidMount();
+		//super.componentDidMount();
+		trace(Reflect.fields(state));
 		trace(state.loading);	
 		trace(Reflect.fields(props));
 		trace(props.match.params.section);				
@@ -88,10 +98,7 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 		//setState{sideMenu:}
 	}
 	
-	/*override public function switchContent(reactEventSource:Dynamic)
-	{
-		super.switchContent(reactEventSource);
-	}
+	/*
 
 		
 	static function mapStateToProps(aState:AppState) {
@@ -106,6 +113,8 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 	}	*/
 	
 	override public function render() {
+		trace(Reflect.fields(state));
+		return null;
 		return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} render=${renderContent}/>');
 	}
 

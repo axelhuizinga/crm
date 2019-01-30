@@ -34,7 +34,13 @@ typedef BookmarksModel = DataSource;
 class Bookmarks extends ReactComponentOf<DataFormProps,FormState>
 {
 	
-
+	override function componentDidCatch(error, info) {
+		// Display fallback UI
+		if(state.mounted)
+		this.setState({ hasError: true });
+		trace(error);
+		trace(info);
+	}
 	
 	public function add(ev:Event):Void
 	{
@@ -109,12 +115,8 @@ class Bookmarks extends ReactComponentOf<DataFormProps,FormState>
 	override function render()
 	{
 
-		var iState:Dynamic = {istate:state, updateMenu:updateMenu};
-		//trace(iState);
-		//var NewLayoutInstance = React.createElement(NewLayout);
-		//trace(griddle.components.NewLayout);
-		//trace(Reflect.fields(untyped Griddle.childContextTypes));
-		//trace(Reflect.fields(GriddleComponent));
+		trace(state);
+		//var NewLayoutInstance = React.createElement(NewLayout);;
 		//trace(data);
 		trace(props.match.params.section);
 		
@@ -134,6 +136,11 @@ class Bookmarks extends ReactComponentOf<DataFormProps,FormState>
 
 	function updateMenu(?viewClassPath:String):SMenuProps
 	{
+		if(state==null)
+		{
+			trace(state);
+			return null;
+		}
 		var sideMenu = state.sideMenu;
 		sideMenu.menuBlocks['bookmarks'].isActive = true;
 		sideMenu.menuBlocks['bookmarks'].label='Lesezeichen';

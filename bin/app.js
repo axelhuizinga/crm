@@ -351,7 +351,7 @@ Go.createRoot = function() {
 };
 Go.render = function(root) {
 	var app = ReactDOM.render({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(App), props : { }, key : null, ref : null},root);
-	haxe_Log.trace("GO",{ fileName : "src/Go.hx", lineNumber : 48, className : "Go", methodName : "render"});
+	haxe_Log.trace("GO",{ fileName : "src/Go.hx", lineNumber : 47, className : "Go", methodName : "render"});
 };
 var HxOverrides = function() { };
 $hxClasses["HxOverrides"] = HxOverrides;
@@ -5418,50 +5418,50 @@ var react_router_ReactRouter = require("react-router");
 var react_router_Redirect = require("react-router").Redirect;
 var react_router_Route = require("react-router").Route;
 var react_router_Router = require("react-router").Router;
-var react_router_bundle_BundleLoader492 = function() { };
-$hxClasses["react.router.bundle.BundleLoader492"] = react_router_bundle_BundleLoader492;
-react_router_bundle_BundleLoader492.__name__ = ["react","router","bundle","BundleLoader492"];
-react_router_bundle_BundleLoader492.render = function(props) {
+var react_router_bundle_BundleLoader622 = function() { };
+$hxClasses["react.router.bundle.BundleLoader622"] = react_router_bundle_BundleLoader622;
+react_router_bundle_BundleLoader622.__name__ = ["react","router","bundle","BundleLoader622"];
+react_router_bundle_BundleLoader622.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Accounting" */ "!haxe-loader?null/view_Accounting!").then(function(exports) {
 		view_Accounting = $s.view_Accounting;
 		var _ = view_Accounting;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader494 = function() { };
-$hxClasses["react.router.bundle.BundleLoader494"] = react_router_bundle_BundleLoader494;
-react_router_bundle_BundleLoader494.__name__ = ["react","router","bundle","BundleLoader494"];
-react_router_bundle_BundleLoader494.render = function(props) {
+var react_router_bundle_BundleLoader624 = function() { };
+$hxClasses["react.router.bundle.BundleLoader624"] = react_router_bundle_BundleLoader624;
+react_router_bundle_BundleLoader624.__name__ = ["react","router","bundle","BundleLoader624"];
+react_router_bundle_BundleLoader624.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Contacts" */ "!haxe-loader?null/view_Contacts!").then(function(exports) {
 		view_Contacts = $s.view_Contacts;
 		var _ = view_Contacts;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader496 = function() { };
-$hxClasses["react.router.bundle.BundleLoader496"] = react_router_bundle_BundleLoader496;
-react_router_bundle_BundleLoader496.__name__ = ["react","router","bundle","BundleLoader496"];
-react_router_bundle_BundleLoader496.render = function(props) {
+var react_router_bundle_BundleLoader626 = function() { };
+$hxClasses["react.router.bundle.BundleLoader626"] = react_router_bundle_BundleLoader626;
+react_router_bundle_BundleLoader626.__name__ = ["react","router","bundle","BundleLoader626"];
+react_router_bundle_BundleLoader626.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Contacts" */ "!haxe-loader?null/view_Contacts!").then(function(exports) {
 		view_Contacts = $s.view_Contacts;
 		var _ = view_Contacts;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader498 = function() { };
-$hxClasses["react.router.bundle.BundleLoader498"] = react_router_bundle_BundleLoader498;
-react_router_bundle_BundleLoader498.__name__ = ["react","router","bundle","BundleLoader498"];
-react_router_bundle_BundleLoader498.render = function(props) {
+var react_router_bundle_BundleLoader628 = function() { };
+$hxClasses["react.router.bundle.BundleLoader628"] = react_router_bundle_BundleLoader628;
+react_router_bundle_BundleLoader628.__name__ = ["react","router","bundle","BundleLoader628"];
+react_router_bundle_BundleLoader628.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_QC" */ "!haxe-loader?null/view_QC!").then(function(exports) {
 		view_QC = $s.view_QC;
 		var _ = view_QC;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader500 = function() { };
-$hxClasses["react.router.bundle.BundleLoader500"] = react_router_bundle_BundleLoader500;
-react_router_bundle_BundleLoader500.__name__ = ["react","router","bundle","BundleLoader500"];
-react_router_bundle_BundleLoader500.render = function(props) {
+var react_router_bundle_BundleLoader630 = function() { };
+$hxClasses["react.router.bundle.BundleLoader630"] = react_router_bundle_BundleLoader630;
+react_router_bundle_BundleLoader630.__name__ = ["react","router","bundle","BundleLoader630"];
+react_router_bundle_BundleLoader630.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Reports" */ "!haxe-loader?null/view_Reports!").then(function(exports) {
 		view_Reports = $s.view_Reports;
 		var _ = view_Reports;
@@ -7522,12 +7522,12 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 			var tmp6 = react__$ReactType_ReactType_$Impl_$.fromString("div");
 			var tmp7 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_RedirectBox), exact : true});
 			var tmp8 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/dashboard*", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_DashBoard)});
-			var tmp9 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader492.render)});
-			var tmp10 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts/edit/:id", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader494.render)});
-			var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader496.render)});
-			var tmp12 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader498.render)});
+			var tmp9 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader622.render)});
+			var tmp10 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts/edit/:id", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader624.render)});
+			var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader626.render)});
+			var tmp12 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader628.render)});
 			var tmp13 = react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route);
-			return React.createElement(tmp,tmp1,React.createElement(tmp2,{ },tmp3,tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { className : "tabComponent", children : [tmp7,tmp8,tmp9,tmp10,tmp11,tmp12,React.createElement(tmp13,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader500.render)})]}, key : null, ref : null}));
+			return React.createElement(tmp,tmp1,React.createElement(tmp2,{ },tmp3,tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { className : "tabComponent", children : [tmp7,tmp8,tmp9,tmp10,tmp11,tmp12,React.createElement(tmp13,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader630.render)})]}, key : null, ref : null}));
 		}
 	}
 	,renderRedirect: function(p) {
@@ -7734,7 +7734,9 @@ view_dashboard_Setup.prototype = $extend(React_Component.prototype,{
 		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_io_FormContainer), props : Object.assign({ },this.props,{ sideMenu : this.state.sideMenu, registerFormContainer : $bind(this,this.registerFormContainer), render : $bind(this,this.renderContent)}), key : null, ref : null};
 	}
 	,renderContent: function(cState) {
-		haxe_Log.trace(this.state.formContainer.props.match.params.section,{ fileName : "src/view/dashboard/Setup.hx", lineNumber : 134, className : "view.dashboard.Setup", methodName : "renderContent"});
+		if(this.state.formContainer != null) {
+			haxe_Log.trace(this.state.formContainer.props.match.params.section,{ fileName : "src/view/dashboard/Setup.hx", lineNumber : 135, className : "view.dashboard.Setup", methodName : "renderContent"});
+		}
 		var _g = this.props.match.params.section;
 		if(_g == null) {
 			return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_io_DB), props : Object.assign({ },this.props,{ formContainer : this.state.formContainer, fullWidth : true}), key : null, ref : null};
@@ -7961,12 +7963,15 @@ view_shared_io_Bookmarks.prototype = $extend(React_Component.prototype,{
 	,no: function(ev) {
 	}
 	,render: function() {
-		var iState_istate = this.state;
-		var iState_updateMenu = $bind(this,this.updateMenu);
+		haxe_Log.trace(this.state,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 113, className : "view.shared.io.Bookmarks", methodName : "render"});
 		haxe_Log.trace(this.props.match.params.section,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 119, className : "view.shared.io.Bookmarks", methodName : "render"});
 		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "tabComponentForm", children : "dummy"}, key : null, ref : null};
 	}
 	,updateMenu: function(viewClassPath) {
+		if(this.state == null) {
+			haxe_Log.trace(this.state,{ fileName : "src/view/shared/io/Bookmarks.hx", lineNumber : 139, className : "view.shared.io.Bookmarks", methodName : "updateMenu"});
+			return null;
+		}
 		var sideMenu = this.state.sideMenu;
 		var _this = sideMenu.menuBlocks;
 		(__map_reserved["bookmarks"] != null ? _this.getReserved("bookmarks") : _this.h["bookmarks"]).isActive = true;
@@ -9917,7 +9922,7 @@ var DataView = $global.DataView || js_html_compat_DataView;
 var Uint8Array = $global.Uint8Array || js_html_compat_Uint8Array._new;
 App.fa = require("./node_modules/font-awesome/css/font-awesome.min.css");
 App.STYLES = require("App.scss");
-App.config = require("./bin/config.js").config;
+App.config = require("./httpdocs/config.js").config;
 App.sprintf = require("sprintf-js").sprintf;
 App.modalBox = React.createRef();
 App.onResizeComponents = new haxe_ds_List();

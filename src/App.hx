@@ -71,7 +71,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 
 	public static var store:Store<AppState>;
 
-	public static var config:Dynamic = Webpack.require('../bin/config.js').config;
+	public static var config:Dynamic = Webpack.require('../httpdocs/config.js').config;
 	public static var sprintf:Function = Webpack.require('sprintf-js').sprintf;
 	//public static var user_name:String = Cookie.get('user.user_name');
 	//public static var jwt:String = Cookie.get('user.jwt');

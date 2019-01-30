@@ -23,7 +23,9 @@ const haxeTransformer = require('haxe-loader/errorTransformer');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 // Options
 const debugMode = buildMode !== 'production';
-const dist = __dirname + '/bin/';
+//const dist = __dirname + '/httpdocs/';
+const dir = 'D:\\d\\shared\\dev\\crm-connect'
+const dist = dir + '\\httpdocs';
 
 // Sourcemaps: https://webpack.js.org/configuration/devtool/
 // - 'eval-source-map': fast, but JS bundle is somewhat obfuscated
@@ -50,7 +52,7 @@ module.exports = {
     },
     // Module resolution options (alias, default paths,...)
     resolve: {
-	modules: [path.resolve(__dirname, 'res/scss'), 'node_modules'],
+	modules: [path.resolve(dir, 'res/scss'), 'node_modules'],
         extensions: ['.js', '.json']
     },
     // Sourcemaps option for development
@@ -74,9 +76,9 @@ module.exports = {
 		aggregateTimeout:1500
 	},	    
 	historyApiFallback: {
-	      index: 'index.html',
+	      index: 'crm.html',
 		rewrites:[
-		{from: /./, to: '/index.html'}
+		{from: '/', to: '/crm.html'}
 		]
 	}
     },
@@ -128,7 +130,7 @@ module.exports = {
 		  'css-loader',
 		  'sass-loader',
 		]
-	    },
+	    },    
 	   {
 		test: /\.styl$/,
 		use: [
@@ -162,9 +164,9 @@ module.exports = {
 
         // Like generating the HTML page with links the generated JS files
         new HtmlWebpackPlugin({
-		filename: dist + './crm.php',
-		template: __dirname + '/src/crm.php',
-		title: 'Xpress CRM'
+		filename:  'crm.html',
+		template:  'src/crm.html',
+		title: 'Xpress CRM-2.0'
         })
         // You may want to also:
         // - minify/uglify the output using UglifyJSPlugin,
