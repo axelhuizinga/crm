@@ -44,10 +44,10 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 		state = {hasError:false,mounted:false};
 		trace('location.pathname:${props.history.location.pathname} match.url: ${props.match.url}');
 		super(props);
-		if (props.match.url == '/dashboard')
+		if (props.match.url == '/DashBoard')
 		{
-			props.history.push('/dashboard/settings');
-			trace('pushed2: /dashboard/settings');
+			props.history.push('/DashBoard/Settings');
+			trace('pushed2: /DashBoard/Settings');
 		}
 	}
 	
@@ -119,23 +119,23 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 			<div className="tabNav2" >
 				<Tabs  boxed={true} >
 					<ul>
-						<TabLink to="/dashboard/roles" ${...props}>Benutzer</TabLink>
-						<TabLink to="/dashboard/settings" ${...props}>Meine Einstellungen</TabLink>
-						<TabLink to="/dashboard/setup" ${...props}>Setup</TabLink>
+						<TabLink to="/DashBoard/Roles" ${...props}>Benutzer</TabLink>
+						<TabLink to="/DashBoard/Settings" ${...props}>Meine Einstellungen</TabLink>
+						<TabLink to="/DashBoard/Setup" ${...props}>Setup</TabLink>
 					</ul>
 				</Tabs>
 			</div>
             <div className="tabContent2" >
-				<Route path="/dashboard/roles"  {...props}  component={Roles}/>
-				<Route path="/dashboard/settings/:section?/:action?/:id?"  {...props}  component={Settings}/>
-				<Route path="/dashboard/setup/:section?/:action?"  {...props}  component={Setup}/>					
+				<Route path="/DashBoard/Roles"  {...props}  component={Roles}/>
+				<Route path="/DashBoard/Settings/:section?/:action?/:id?"  {...props}  component={Settings}/>
+				<Route path="/DashBoard/Setup/:section?/:action?"  {...props}  component={Setup}/>					
             </div>
 			<StatusBar {...props}/>
 		</>
 			');			
     }
 	
-	function internalRedirect(path:String = '/dashboard/settings')
+	function internalRedirect(path:String = '/DashBoard/Settings')
 	{
 		props.history.push(path);
 		return null;

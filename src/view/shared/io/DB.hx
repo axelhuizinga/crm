@@ -198,7 +198,7 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 	
 	override public function componentDidMount():Void 
 	{
-		super.componentDidMount();
+		
 		trace('Ok');
 		dataAccess = [
 			'editTableFields' =>{

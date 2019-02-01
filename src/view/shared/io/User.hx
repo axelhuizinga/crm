@@ -62,8 +62,6 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 	public function new(?props:DataFormProps)
 	{
 		super(props);
-		
-		//requests = [];
 		dataAccess = [
 			'changePassword' =>
 			{
@@ -100,25 +98,13 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 				view:null
 			}
 		];
-		//_instance = this;		
-		//trace(props);
-		/*_menuItems = [
-			//{handler:edit, label:'Bearbeiten', section:'edit'},
-			{handler:save, label:'Speichern', disabled:state.clean},
-			{handler:changePassword, label:'Passwort ändern'},
-		];
-		var sideMenu = state.sideMenu;
-		sideMenu.menuBlocks['user'].items = _menuItems;
-		trace(_menuItems);
-		state = ReactUtil.copy(state,{sideMenu:sideMenu,viewClassPath:"edit",});*/
 	}
-
 	
 	override public function componentDidMount():Void 
 	{
 			
 
-		super.componentDidMount();
+		
 			
 		props.formContainer.requests.push(BinaryLoader.create(
 			'${App.config.api}', 

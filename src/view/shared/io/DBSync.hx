@@ -54,10 +54,12 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		dataDisplay = DBSyncModel.dataDisplay;
 		_instance = this;
-		var sideMenu =  updateMenu('DBSync');//state.sideMenu;
-		trace(sideMenu.section);
+		trace('...');
+		state =  App.initEState();		
+		trace(state);
+		//var sideMenu =  updateMenu('DBSync');//state.sideMenu;
+		//trace(sideMenu.section);
 		//sideMenu.menuBlocks['DBSync'].items = _menuItems;
-		state = ReactUtil.copy(state, {sideMenu:sideMenu});		
 	}
 	
 	//override public function save(ev:ReactEvent):Void{}
@@ -188,7 +190,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				view:null
 			}
 		];			
-		super.componentDidMount();
+		//
 		trace('yeah');
 	}
 	
@@ -236,6 +238,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	function updateMenu(?viewClassPath:String):SMenuProps
 	{
 		var sideMenu = state.sideMenu;
+		trace(sideMenu.section);
 		//sideMenu.menuBlocks['DBSync'].handlerInstance = this;
 		for(mI in sideMenu.menuBlocks['DBSync'].items)
 		{

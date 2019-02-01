@@ -1,3 +1,5 @@
+import view.shared.FormState;
+import view.shared.SMenuProps;
 import react.intl.DateTimeFormatOptions.NumericFormat;
 import haxe.Serializer;
 import js.html.BodyElement;
@@ -201,6 +203,25 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 		},delay);
 		trace(max);
 		return  ti;
+	}
+
+	public static function initEState(?e:Dynamic)
+	{
+		var fS:FormState =
+		{
+			clean: true,
+			hasError: false,
+			mounted: false,
+			sideMenu: {}
+		};
+		if(e != null)
+		{
+			for(f in Reflect.fields(e))
+			{
+				Reflect.setField(fS, f, Reflect.field(e, f));
+			}
+		}
+		return fS;
 	}
 
 	public static function jsxDump(el:Dynamic):String

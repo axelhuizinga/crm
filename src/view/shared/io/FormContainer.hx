@@ -669,8 +669,12 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 		return sM;
 	}
 	
-	public static function localDate(d:String):String
+	public static function localDate(?d:String):String
 	{
+		if(d==null)
+		{
+			d = Date.now().toString();
+		}
 		trace(d);
 		trace(Syntax.code("Date.parse({0})",d));
 		return DateTools.format(Date.fromTime(Syntax.code("Date.parse({0})",d)), "%d.%m.%Y %H:%M");

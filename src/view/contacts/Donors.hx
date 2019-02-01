@@ -125,7 +125,7 @@ class Donors extends BaseForm
 	
 	override public function componentDidMount():Void 
 	{
-		super.componentDidMount();
+		
 		trace(state.loading);
 		//trace(App.config);
 		/*requests.push(AjaxLoader.load(

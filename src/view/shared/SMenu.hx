@@ -134,6 +134,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 	
 	override public function render()
 	{
+		trace(Reflect.fields(props));
 		if(props.menuBlocks == null)
 		return null;
 		menuRef = React.createRef();

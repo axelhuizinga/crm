@@ -60,7 +60,7 @@ class NavTabs extends ReactComponentOfProps<NavProps>
 		return jsx('
 		<>
 			<ul>
-				<TabLink to="/dashboard" ${...props}>DashBoard</TabLink> 
+				<TabLink to="/DashBoard" ${...props}>DashBoard</TabLink> 
 				<TabLink to="/contacts" ${...props}>Kontakte</TabLink>
 				<TabLink to="/qc" ${...props}>QC</TabLink>
 				<TabLink to="/accounting" ${...props}>Buchhaltung</TabLink>

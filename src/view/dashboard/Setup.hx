@@ -94,7 +94,7 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 	
 	override public function componentDidMount():Void 
 	{
-		//super.componentDidMount();
+		//
 		setState({mounted:true});
 		trace('${}');
 		//TODO: AUTOMATE CREATE HISTORY TRIGGER
@@ -124,7 +124,8 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 	}
 	
 	override public function render() {
-		return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} registerFormContainer=${registerFormContainer} render=${renderContent}/>');
+		return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} registerFormContainer=${registerFormContainer} 
+		render=${renderContent}/>');
 	}
 
 	public function renderContent(cState:FormState):ReactFragment

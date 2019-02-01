@@ -146,7 +146,7 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 	
 	override public function componentDidMount():Void 
 	{
-		super.componentDidMount();
+		
 		trace(state.loading);
 		
 		props.formContainer.requests.push(BinaryLoader.create(

@@ -112,7 +112,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 	}
 
 	var tabList:Array<Dynamic> = [];
-	/*	{ 'key': 1, 'component': DashBoard, 'label': 'DashBoard', 'url': '/dashboard' },
+	/*	{ 'key': 1, 'component': DashBoard, 'label': 'DashBoard', 'url': '/DashBoard' },
 		{ 'key': 2, 'component': Contacts, 'label': 'Contacts', 'url': '/contacts' },
 		{ 'key': 3, 'component': QC, 'label': 'QC', 'url': '/qc' },
 		{ 'key': 4, 'component': Accounting, 'label': 'Buchhaltung', 'url': '/accounting' },
@@ -161,7 +161,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 			<>
 				<div className="modal" ref=${App.modalBox}/>
 				<div className="topNav">
-					<$Route path="/dashboard" {...props} component=${NavTabs}/>
+					<$Route path="/DashBoard" {...props} component=${NavTabs}/>
 					<$Route path="/accounting" {...props} component=${NavTabs}/>
 					<$Route path="/contacts" {...props} component=${NavTabs}/>
 					<$Route path="/qc" {...props} component=${NavTabs}/>
@@ -170,7 +170,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 				<div className="tabComponent">
 					<$Route path="/"  component={RedirectBox} exact={true}/>				
 					
-					<$Route path="/dashboard*" component=${DashBoard}/>
+					<$Route path="/DashBoard*" component=${DashBoard}/>
 					<$Route path="/accounting" component=${Bundle.load(Accounting)}/>
 					<$Route path="/contacts/edit/:id" component=${Bundle.load(Contacts)}/>
 					<$Route path="/contacts" component=${Bundle.load(Contacts)}/>
@@ -189,10 +189,10 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 		return jsx('<RedirectBox {...p}/>');
 	}
 	/*<Route exact={true} path="/" render=${routeBox(props)} />a="1"
-	 * <Redirect path="/dashboard" to="/dashboard/roles" exact={true}/>
+	 * <Redirect path="/DashBoard" to="/DashBoard/Roles" exact={true}/>
 	 * 				<div className="tabComponent">
 				<Route path="/"  component={RedirectBox} exact={true}/>
-				<Route path="/dashboard" component=${Bundle.load(DashBoardBox)}/>
+				<Route path="/DashBoard" component=${Bundle.load(DashBoardBox)}/>
 				<Route path="/accounting" component=${Bundle.load(AccountingBox)}/>
 				<Route path="/contacts/edit/:id" component=${Bundle.load(ContactsBox)}/>
 				<Route path="/contacts" component=${Bundle.load(ContactsBox)}/>
@@ -201,7 +201,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 				</div>
 								<div className="tabComponent">
 				<Route path="/"  component={RedirectBox} exact={true}/>
-				<Route path="/dashboard" component=${DashBoardBox}/>
+				<Route path="/DashBoard" component=${DashBoardBox}/>
 				<Route path="/accounting" component=${AccountingBox}/>
 				<Route path="/contacts/edit/:id" component=${ContactsBox}/>
 				<Route path="/contacts" component=${ContactsBox}/>
@@ -209,11 +209,11 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 				<Route path="/reports" component=${ReportsBox}/>
 				</div>
 	 * 
-	 *<Redirect from="/" to="/dashboard" exact={true}/><Route path="/dasboard" component=${Bundle.load(DashBoard)} exact={true}/>
+	 *<Redirect from="/" to="/DashBoard" exact={true}/><Route path="/dasboard" component=${Bundle.load(DashBoard)} exact={true}/>
 				<Route path="/" component=${DashBoardBox} exact={true}/>
-				<$Route path="/dashboard" component=${Bundle.load(DashBoard)} exact={true}/>
+				<$Route path="/DashBoard" component=${Bundle.load(DashBoard)} exact={true}/>
 	 * <section>
-					<$Route path="/dashboard" {...props} component=${NavTabs}/>
+					<$Route path="/DashBoard" {...props} component=${NavTabs}/>
 					<$Route path="/qc" {...props} component=${NavTabs}/>
 					<$Route path="/contacts" {...props} component=${NavTabs}/>
 					<$Route path="/accounting" {...props} component=${NavTabs}/>

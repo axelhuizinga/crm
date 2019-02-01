@@ -20,7 +20,7 @@ class RedirectBox extends ReactComponentOfProps<Dynamic>
 	override public function render()
 	{
 		trace(props);
-		return jsx('<Redirect to="/dashboard/roles"/>');
+		return jsx('<Redirect to="/DashBoard/Roles"/>');
 	}
 	
 }

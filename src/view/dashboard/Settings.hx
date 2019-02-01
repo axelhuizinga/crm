@@ -89,7 +89,7 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 	
 	override public function componentDidMount():Void 
 	{
-		//super.componentDidMount();
+		//
 		trace(Reflect.fields(state));
 		trace(state.loading);	
 		trace(Reflect.fields(props));
@@ -122,12 +122,12 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 		trace(props.match.params);
 		return switch(props.match.params.section)
 		{
-			case "user":
+			case "User":
 				jsx('
 					<User ${...props} sideMenu=${state.sideMenu}  formContainer=${cState.formContainer}
 					 fullWidth={true}/>
 				');	
-			case "bookmarks"|null:
+			case "Bookmarks"|null:
 				jsx('
 					<Bookmarks ${...props} sideMenu=${state.sideMenu}  formContainer=${cState.formContainer}
 					 fullWidth={true}/>
