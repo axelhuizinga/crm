@@ -86,6 +86,12 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 		trace('${props.match.params.section} ${props.match.params.action}');
 		trace(Reflect.fields(state));
 	}
+
+	function registerFormContainer(fc:FormContainer)//
+	{
+		setState({formContainer:fc});
+		trace(fc.props.match.params.section);
+	}
 	
 	override public function componentDidMount():Void 
 	{

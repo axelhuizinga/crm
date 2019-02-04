@@ -79,7 +79,8 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		requests = [];
 		if(props != null)
-		trace(props.match.params.section);
+		trace(props.match);
+		//trace(props.match.params.section);
 		if(props.registerFormContainer != null)
 		{
 			props.registerFormContainer(this);
@@ -88,6 +89,7 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 		//trace(props.sideMenu.itemHandler);
 		state = {
 			action:props.match.params.action,
+			section:props.match.params.section,
 			data:new StringMap(),
 			clean:true,
 			errors:new StringMap(),
@@ -105,21 +107,6 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 		{
 			Reflect.callMethod(this, Reflect.field(this, props.match.params.action),null);
 		}
-	}
-
-	static function mapDispatchToProps(dispatch:Dispatch):Dynamic
-    {
-		trace(dispatch + ':' + (dispatch == App.store.dispatch? 'Y':'N'));
-        return {};
-    }
-
-	static function mapStateToProps(aState:AppState) {
-		var uState:UserState = aState.appWare.user;
-		trace(uState.last_login);
-		//trace(' ${aState.appWare.history.location.pathname + (aState.appWare.compState.exists('dashboard') && aState.appWare.compState.get('dashboard').isMounted ? "Y":"N")}');
-		
-		return {};
-		
 	}	
 
 	public function createStateValuesArray(data:Array<Map<String,String>>, view:DataView):Array<Map<String,Dynamic>>
@@ -158,28 +145,6 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 		return rM;
 	}
 	
-	/*function setChangeHandler():InputEvent->Void
-	{
-		if (props.handleChange)
-		{
-			if (props.handleChangeByParent != null)
-				return props.handleChangeByParent;
-			return handleChange;
-		}
-		return null;
-	}
-
-	function setSubmitHandler():InputEvent->Void
-	{
-		if (props.handleSubmit)
-		{
-			if (props.handleSubmitByParent != null)
-				return props.handleSubmitByParent;
-			return handleSubmit;
-		}
-		return null;
-	}*/
-	
 	public function setStateFromChild(newState:FormState)
 	{
 		newState = ReactUtil.copy(newState, {sideMenu:updateMenu()});
@@ -211,7 +176,8 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 
 	override public function shouldComponentUpdate(nextProps:DataFormProps,nextState:FormState)
 	{
-		//trace(props.match.params.action + ':' +nextProps.match.params.section + ':');
+		//trace(props.match.params.section + ':' + nextProps.match.params.section + ':');
+		//trace(state.sideMenu.menuBlocks. +'=>' + nextState.sideMenu.menuBlocks);
 		trace(Reflect.fields(nextState));
 		if(props.match.params.action!=nextProps.match.params.action)
 		{
@@ -261,7 +227,7 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 	public function handleChange(e:InputEvent)
 	{
 		var t:InputElement = cast e.target;
-		//trace('${t.name} ${t.value}');
+		trace('${t.name} ${t.value}');
 		/*var vs = state.values;
 		//trace(vs.toString());
 		vs[t.name] = t.value;
@@ -325,7 +291,9 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 	
 	override function render()
 	{
-		var sM:SMenuProps = props.sideMenu;
+		var sM:SMenuProps = state.sideMenu;
+		if(sM.menuBlocks != null)
+			trace(sM.menuBlocks.keys().next());
 		return jsx('
 			<div className="columns">
 				${props.render(this.state)}
@@ -653,7 +621,7 @@ class FormContainer extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 	
-	function initSideMenu(sMa:Array<SMenuBlock>, sM:SMenuProps):SMenuProps
+	public function initSideMenu(sMa:Array<SMenuBlock>, sM:SMenuProps):SMenuProps
 	{
 		var sma:SMenuBlock = {};
 		for (smi in 0...sMa.length)

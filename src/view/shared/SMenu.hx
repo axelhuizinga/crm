@@ -43,6 +43,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 	public function new(props:SMenuProps) 
 	{
 		super(props);
+		trace(props.menuBlocks);
 		state = {
 			hidden:props.hidden||false
 		};
@@ -137,6 +138,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 		trace(Reflect.fields(props));
 		if(props.menuBlocks == null)
 		return null;
+		trace(props.menuBlocks.keys().next);
 		menuRef = React.createRef();
 		var style:Dynamic = null;
 		if(true&&props.sameWidth && state.sameWidth == null)//sameWidth

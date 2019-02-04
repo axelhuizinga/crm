@@ -5439,50 +5439,50 @@ var react_router_ReactRouter = require("react-router");
 var react_router_Redirect = require("react-router").Redirect;
 var react_router_Route = require("react-router").Route;
 var react_router_Router = require("react-router").Router;
-var react_router_bundle_BundleLoader1512 = function() { };
-$hxClasses["react.router.bundle.BundleLoader1512"] = react_router_bundle_BundleLoader1512;
-react_router_bundle_BundleLoader1512.__name__ = ["react","router","bundle","BundleLoader1512"];
-react_router_bundle_BundleLoader1512.render = function(props) {
+var react_router_bundle_BundleLoader2372 = function() { };
+$hxClasses["react.router.bundle.BundleLoader2372"] = react_router_bundle_BundleLoader2372;
+react_router_bundle_BundleLoader2372.__name__ = ["react","router","bundle","BundleLoader2372"];
+react_router_bundle_BundleLoader2372.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Accounting" */ "!haxe-loader?null/view_Accounting!").then(function(exports) {
 		view_Accounting = $s.view_Accounting;
 		var _ = view_Accounting;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader1514 = function() { };
-$hxClasses["react.router.bundle.BundleLoader1514"] = react_router_bundle_BundleLoader1514;
-react_router_bundle_BundleLoader1514.__name__ = ["react","router","bundle","BundleLoader1514"];
-react_router_bundle_BundleLoader1514.render = function(props) {
+var react_router_bundle_BundleLoader2374 = function() { };
+$hxClasses["react.router.bundle.BundleLoader2374"] = react_router_bundle_BundleLoader2374;
+react_router_bundle_BundleLoader2374.__name__ = ["react","router","bundle","BundleLoader2374"];
+react_router_bundle_BundleLoader2374.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Contacts" */ "!haxe-loader?null/view_Contacts!").then(function(exports) {
 		view_Contacts = $s.view_Contacts;
 		var _ = view_Contacts;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader1516 = function() { };
-$hxClasses["react.router.bundle.BundleLoader1516"] = react_router_bundle_BundleLoader1516;
-react_router_bundle_BundleLoader1516.__name__ = ["react","router","bundle","BundleLoader1516"];
-react_router_bundle_BundleLoader1516.render = function(props) {
+var react_router_bundle_BundleLoader2376 = function() { };
+$hxClasses["react.router.bundle.BundleLoader2376"] = react_router_bundle_BundleLoader2376;
+react_router_bundle_BundleLoader2376.__name__ = ["react","router","bundle","BundleLoader2376"];
+react_router_bundle_BundleLoader2376.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Contacts" */ "!haxe-loader?null/view_Contacts!").then(function(exports) {
 		view_Contacts = $s.view_Contacts;
 		var _ = view_Contacts;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader1518 = function() { };
-$hxClasses["react.router.bundle.BundleLoader1518"] = react_router_bundle_BundleLoader1518;
-react_router_bundle_BundleLoader1518.__name__ = ["react","router","bundle","BundleLoader1518"];
-react_router_bundle_BundleLoader1518.render = function(props) {
+var react_router_bundle_BundleLoader2378 = function() { };
+$hxClasses["react.router.bundle.BundleLoader2378"] = react_router_bundle_BundleLoader2378;
+react_router_bundle_BundleLoader2378.__name__ = ["react","router","bundle","BundleLoader2378"];
+react_router_bundle_BundleLoader2378.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_QC" */ "!haxe-loader?null/view_QC!").then(function(exports) {
 		view_QC = $s.view_QC;
 		var _ = view_QC;
 		return exports;
 	})}));
 };
-var react_router_bundle_BundleLoader1520 = function() { };
-$hxClasses["react.router.bundle.BundleLoader1520"] = react_router_bundle_BundleLoader1520;
-react_router_bundle_BundleLoader1520.__name__ = ["react","router","bundle","BundleLoader1520"];
-react_router_bundle_BundleLoader1520.render = function(props) {
+var react_router_bundle_BundleLoader2380 = function() { };
+$hxClasses["react.router.bundle.BundleLoader2380"] = react_router_bundle_BundleLoader2380;
+react_router_bundle_BundleLoader2380.__name__ = ["react","router","bundle","BundleLoader2380"];
+react_router_bundle_BundleLoader2380.render = function(props) {
 	return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_bundle_BundleWrapper),react_ReactUtil.copy(props,{ loader : import(/* webpackChunkName: "view_Reports" */ "!haxe-loader?null/view_Reports!").then(function(exports) {
 		view_Reports = $s.view_Reports;
 		var _ = view_Reports;
@@ -7543,12 +7543,12 @@ view_UiView.prototype = $extend(React_Component.prototype,{
 			var tmp6 = react__$ReactType_ReactType_$Impl_$.fromString("div");
 			var tmp7 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_RedirectBox), exact : true});
 			var tmp8 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/DashBoard*", component : react__$ReactType_ReactType_$Impl_$.fromComp(view_DashBoard)});
-			var tmp9 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader1512.render)});
-			var tmp10 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts/edit/:id", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader1514.render)});
-			var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader1516.render)});
-			var tmp12 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader1518.render)});
+			var tmp9 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/accounting", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2372.render)});
+			var tmp10 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts/edit/:id", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2374.render)});
+			var tmp11 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/contacts", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2376.render)});
+			var tmp12 = React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route),{ path : "/qc", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2378.render)});
 			var tmp13 = react__$ReactType_ReactType_$Impl_$.fromComp(react_router_Route);
-			return React.createElement(tmp,tmp1,React.createElement(tmp2,{ },tmp3,tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { className : "tabComponent", children : [tmp7,tmp8,tmp9,tmp10,tmp11,tmp12,React.createElement(tmp13,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader1520.render)})]}, key : null, ref : null}));
+			return React.createElement(tmp,tmp1,React.createElement(tmp2,{ },tmp3,tmp4,{ "$$typeof" : tmp5, type : tmp6, props : { className : "tabComponent", children : [tmp7,tmp8,tmp9,tmp10,tmp11,tmp12,React.createElement(tmp13,{ path : "/reports", component : react__$ReactType_ReactType_$Impl_$.fromFunctionWithProps(react_router_bundle_BundleLoader2380.render)})]}, key : null, ref : null}));
 		}
 	}
 	,renderRedirect: function(p) {
@@ -7705,19 +7705,23 @@ view_dashboard_Settings.prototype = $extend(React_Component.prototype,{
 		haxe_Log.trace(error,{ fileName : "src/view/dashboard/Settings.hx", lineNumber : 40, className : "view.dashboard.Settings", methodName : "componentDidCatch"});
 		haxe_Log.trace(info,{ fileName : "src/view/dashboard/Settings.hx", lineNumber : 41, className : "view.dashboard.Settings", methodName : "componentDidCatch"});
 	}
+	,registerFormContainer: function(fc) {
+		this.setState({ formContainer : fc});
+		haxe_Log.trace(fc.props.match.params.section,{ fileName : "src/view/dashboard/Settings.hx", lineNumber : 93, className : "view.dashboard.Settings", methodName : "registerFormContainer"});
+	}
 	,componentDidMount: function() {
-		haxe_Log.trace(Reflect.fields(this.state),{ fileName : "src/view/dashboard/Settings.hx", lineNumber : 93, className : "view.dashboard.Settings", methodName : "componentDidMount"});
-		haxe_Log.trace(this.state.loading,{ fileName : "src/view/dashboard/Settings.hx", lineNumber : 94, className : "view.dashboard.Settings", methodName : "componentDidMount"});
-		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/Settings.hx", lineNumber : 95, className : "view.dashboard.Settings", methodName : "componentDidMount"});
-		haxe_Log.trace(this.props.match.params.section,{ fileName : "src/view/dashboard/Settings.hx", lineNumber : 96, className : "view.dashboard.Settings", methodName : "componentDidMount"});
-		haxe_Log.trace(this.props.formContainer,{ fileName : "src/view/dashboard/Settings.hx", lineNumber : 97, className : "view.dashboard.Settings", methodName : "componentDidMount"});
+		haxe_Log.trace(Reflect.fields(this.state),{ fileName : "src/view/dashboard/Settings.hx", lineNumber : 99, className : "view.dashboard.Settings", methodName : "componentDidMount"});
+		haxe_Log.trace(this.state.loading,{ fileName : "src/view/dashboard/Settings.hx", lineNumber : 100, className : "view.dashboard.Settings", methodName : "componentDidMount"});
+		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/dashboard/Settings.hx", lineNumber : 101, className : "view.dashboard.Settings", methodName : "componentDidMount"});
+		haxe_Log.trace(this.props.match.params.section,{ fileName : "src/view/dashboard/Settings.hx", lineNumber : 102, className : "view.dashboard.Settings", methodName : "componentDidMount"});
+		haxe_Log.trace(this.props.formContainer,{ fileName : "src/view/dashboard/Settings.hx", lineNumber : 103, className : "view.dashboard.Settings", methodName : "componentDidMount"});
 	}
 	,render: function() {
-		haxe_Log.trace(Reflect.fields(this.state),{ fileName : "src/view/dashboard/Settings.hx", lineNumber : 116, className : "view.dashboard.Settings", methodName : "render"});
+		haxe_Log.trace(Reflect.fields(this.state),{ fileName : "src/view/dashboard/Settings.hx", lineNumber : 122, className : "view.dashboard.Settings", methodName : "render"});
 		return null;
 	}
 	,renderContent: function(cState) {
-		haxe_Log.trace(this.props.match.params,{ fileName : "src/view/dashboard/Settings.hx", lineNumber : 122, className : "view.dashboard.Settings", methodName : "renderContent"});
+		haxe_Log.trace(this.props.match.params,{ fileName : "src/view/dashboard/Settings.hx", lineNumber : 128, className : "view.dashboard.Settings", methodName : "renderContent"});
 		var _g = this.props.match.params.section;
 		if(_g == null) {
 			return { "$$typeof" : $$tre, type : view_shared_io_Bookmarks._connected, props : Object.assign({ },this.props,{ sideMenu : this.state.sideMenu, formContainer : cState.formContainer, fullWidth : true}), key : null, ref : null};
@@ -7747,22 +7751,28 @@ view_dashboard_Setup.prototype = $extend(React_Component.prototype,{
 		if(this.state.mounted) {
 			this.setState({ hasError : true});
 		}
-		haxe_Log.trace(info,{ fileName : "src/view/dashboard/Setup.hx", lineNumber : 92, className : "view.dashboard.Setup", methodName : "componentDidCatch"});
+		haxe_Log.trace(error,{ fileName : "src/view/dashboard/Setup.hx", lineNumber : 75, className : "view.dashboard.Setup", methodName : "componentDidCatch"});
 	}
 	,componentDidMount: function() {
 		this.setState({ mounted : true});
-		haxe_Log.trace("",{ fileName : "src/view/dashboard/Setup.hx", lineNumber : 99, className : "view.dashboard.Setup", methodName : "componentDidMount"});
+		haxe_Log.trace("",{ fileName : "src/view/dashboard/Setup.hx", lineNumber : 82, className : "view.dashboard.Setup", methodName : "componentDidMount"});
 	}
-	,registerFormContainer: function(fc) {
-		this.setState({ formContainer : fc});
-		haxe_Log.trace(fc.props.match.params.section,{ fileName : "src/view/dashboard/Setup.hx", lineNumber : 123, className : "view.dashboard.Setup", methodName : "registerFormContainer"});
+	,registerFormContainer: function(fC) {
+		this.setState({ formContainer : fC, sideMenu : fC.initSideMenu([{ dataClassPath : "model.tools.DB", label : "DB Design", section : "DB", items : view_shared_io_DB.menuItems},{ dataClassPath : "model.admin.SyncExternal", label : "DB Abgleich", section : "DBSync", items : view_shared_io_DBSync.menuItems}],{ section : "DBSync", sameWidth : true})});
+		haxe_Log.trace(fC.props.match.params.section,{ fileName : "src/view/dashboard/Setup.hx", lineNumber : 122, className : "view.dashboard.Setup", methodName : "registerFormContainer"});
 	}
 	,render: function() {
+		if(this.state.sideMenu != { }) {
+			if(this.state.sideMenu.menuBlocks != null) {
+				haxe_Log.trace(($_=this.state.sideMenu.menuBlocks.keys(),$bind($_,$_.next)),{ fileName : "src/view/dashboard/Setup.hx", lineNumber : 132, className : "view.dashboard.Setup", methodName : "render"});
+			}
+		}
 		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromComp(view_shared_io_FormContainer), props : Object.assign({ },this.props,{ sideMenu : this.state.sideMenu, registerFormContainer : $bind(this,this.registerFormContainer), render : $bind(this,this.renderContent)}), key : null, ref : null};
 	}
 	,renderContent: function(cState) {
+		haxe_Log.trace(cState.formContainer.props.match.url,{ fileName : "src/view/dashboard/Setup.hx", lineNumber : 144, className : "view.dashboard.Setup", methodName : "renderContent"});
 		if(this.state.formContainer != null) {
-			haxe_Log.trace(this.state.formContainer.props.match.params.section,{ fileName : "src/view/dashboard/Setup.hx", lineNumber : 136, className : "view.dashboard.Setup", methodName : "renderContent"});
+			haxe_Log.trace(this.props.match.params.section,{ fileName : "src/view/dashboard/Setup.hx", lineNumber : 146, className : "view.dashboard.Setup", methodName : "renderContent"});
 		}
 		var _g = this.props.match.params.section;
 		if(_g == null) {
@@ -7847,6 +7857,7 @@ view_shared_SLink.prototype = $extend(React_Component.prototype,{
 });
 var view_shared_SMenu = function(props) {
 	React_Component.call(this,props);
+	haxe_Log.trace(props.menuBlocks.toString(),{ fileName : "src/view/shared/SMenu.hx", lineNumber : 46, className : "view.shared.SMenu", methodName : "new"});
 	this.state = { hidden : props.hidden};
 };
 $hxClasses["view.shared.SMenu"] = view_shared_SMenu;
@@ -7919,10 +7930,11 @@ view_shared_SMenu.prototype = $extend(React_Component.prototype,{
 		}));
 	}
 	,render: function() {
-		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/shared/SMenu.hx", lineNumber : 137, className : "view.shared.SMenu", methodName : "render"});
+		haxe_Log.trace(Reflect.fields(this.props),{ fileName : "src/view/shared/SMenu.hx", lineNumber : 138, className : "view.shared.SMenu", methodName : "render"});
 		if(this.props.menuBlocks == null) {
 			return null;
 		}
+		haxe_Log.trace(($_=this.props.menuBlocks.keys(),$bind($_,$_.next)),{ fileName : "src/view/shared/SMenu.hx", lineNumber : 141, className : "view.shared.SMenu", methodName : "render"});
 		this.menuRef = React.createRef();
 		var style = null;
 		if(this.props.sameWidth && this.state.sameWidth == null) {
@@ -7934,18 +7946,18 @@ view_shared_SMenu.prototype = $extend(React_Component.prototype,{
 		var i = 0;
 		var activePanel = null;
 		this.aW = react__$ReactRef_ReactRef_$Impl_$.get_current(this.menuRef).getElementsByClassName("panel").item(0).offsetWidth;
-		haxe_Log.trace(this.aW,{ fileName : "src/view/shared/SMenu.hx", lineNumber : 163, className : "view.shared.SMenu", methodName : "layout"});
+		haxe_Log.trace(this.aW,{ fileName : "src/view/shared/SMenu.hx", lineNumber : 165, className : "view.shared.SMenu", methodName : "layout"});
 		if(this.state.sameWidth == null) {
 			this.setState({ sameWidth : this.aW},function() {
-				haxe_Log.trace("what's up?",{ fileName : "src/view/shared/SMenu.hx", lineNumber : 166, className : "view.shared.SMenu", methodName : "layout"});
+				haxe_Log.trace("what's up?",{ fileName : "src/view/shared/SMenu.hx", lineNumber : 168, className : "view.shared.SMenu", methodName : "layout"});
 			});
 		}
 	}
 	,componentDidMount: function() {
 		if(this.props.sameWidth && this.state.sameWidth == null) {
-			haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.menuRef).offsetWidth,{ fileName : "src/view/shared/SMenu.hx", lineNumber : 175, className : "view.shared.SMenu", methodName : "componentDidMount"});
-			this.layout();
 			haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.menuRef).offsetWidth,{ fileName : "src/view/shared/SMenu.hx", lineNumber : 177, className : "view.shared.SMenu", methodName : "componentDidMount"});
+			this.layout();
+			haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.menuRef).offsetWidth,{ fileName : "src/view/shared/SMenu.hx", lineNumber : 179, className : "view.shared.SMenu", methodName : "componentDidMount"});
 		}
 	}
 	,componentDidUpdate: function(prevProps,prevState) {
@@ -8502,32 +8514,23 @@ var view_shared_io_FormContainer = function(props) {
 	React_Component.call(this,props);
 	this.requests = [];
 	if(props != null) {
-		haxe_Log.trace(props.match.params.section,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 82, className : "view.shared.io.FormContainer", methodName : "new"});
+		haxe_Log.trace(props.match,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 82, className : "view.shared.io.FormContainer", methodName : "new"});
 	}
 	if(props.registerFormContainer != null) {
 		props.registerFormContainer(this);
 	}
 	props.sideMenu.itemHandler = $bind(this,this.itemHandler);
-	this.state = { action : props.match.params.action, data : new haxe_ds_StringMap(), clean : true, errors : new haxe_ds_StringMap(), formContainer : this, hasError : false, mounted : false, sideMenu : props.sideMenu, selectedRows : []};
+	this.state = { action : props.match.params.action, section : props.match.params.section, data : new haxe_ds_StringMap(), clean : true, errors : new haxe_ds_StringMap(), formContainer : this, hasError : false, mounted : false, sideMenu : props.sideMenu, selectedRows : []};
 	this.dbData = new shared_DbData();
 };
 $hxClasses["view.shared.io.FormContainer"] = view_shared_io_FormContainer;
 view_shared_io_FormContainer.__name__ = ["view","shared","io","FormContainer"];
-view_shared_io_FormContainer.mapDispatchToProps = function(dispatch) {
-	haxe_Log.trace(Std.string(dispatch) + ":" + (dispatch == ($_=App.store,$bind($_,$_.dispatch)) ? "Y" : "N"),{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 112, className : "view.shared.io.FormContainer", methodName : "mapDispatchToProps"});
-	return { };
-};
-view_shared_io_FormContainer.mapStateToProps = function(aState) {
-	var uState = aState.appWare.user;
-	haxe_Log.trace(uState.last_login,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 118, className : "view.shared.io.FormContainer", methodName : "mapStateToProps"});
-	return { };
-};
 view_shared_io_FormContainer.localDate = function(d) {
 	if(d == null) {
 		d = HxOverrides.dateStr(new Date());
 	}
-	haxe_Log.trace(d,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 678, className : "view.shared.io.FormContainer", methodName : "localDate"});
-	haxe_Log.trace(Date.parse(d),{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 679, className : "view.shared.io.FormContainer", methodName : "localDate"});
+	haxe_Log.trace(d,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 646, className : "view.shared.io.FormContainer", methodName : "localDate"});
+	haxe_Log.trace(Date.parse(d),{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 647, className : "view.shared.io.FormContainer", methodName : "localDate"});
 	return DateTools.format(new Date(Date.parse(d)),"%d.%m.%Y %H:%M");
 };
 view_shared_io_FormContainer.__super__ = React_Component;
@@ -8556,8 +8559,8 @@ view_shared_io_FormContainer.prototype = $extend(React_Component.prototype,{
 	}
 	,createStateValues: function(data,view1) {
 		var vState = new haxe_ds_StringMap();
-		haxe_Log.trace(data.keys(),{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 133, className : "view.shared.io.FormContainer", methodName : "createStateValues"});
-		haxe_Log.trace(view1.keys(),{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 134, className : "view.shared.io.FormContainer", methodName : "createStateValues"});
+		haxe_Log.trace(data.keys(),{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 120, className : "view.shared.io.FormContainer", methodName : "createStateValues"});
+		haxe_Log.trace(view1.keys(),{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 121, className : "view.shared.io.FormContainer", methodName : "createStateValues"});
 		var k = data.keys();
 		while(k.hasNext()) {
 			var k1 = k.next();
@@ -8570,7 +8573,7 @@ view_shared_io_FormContainer.prototype = $extend(React_Component.prototype,{
 				}
 			}
 		}
-		haxe_Log.trace(vState.toString(),{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 142, className : "view.shared.io.FormContainer", methodName : "createStateValues"});
+		haxe_Log.trace(vState.toString(),{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 129, className : "view.shared.io.FormContainer", methodName : "createStateValues"});
 		return vState;
 	}
 	,selectedRowsMap: function() {
@@ -8613,10 +8616,10 @@ view_shared_io_FormContainer.prototype = $extend(React_Component.prototype,{
 		this.setState(newState);
 	}
 	,itemHandler: function(e) {
-		haxe_Log.trace((js_Boot.__cast(e.target , HTMLButtonElement)).getAttribute("data-action"),{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 192, className : "view.shared.io.FormContainer", methodName : "itemHandler"});
+		haxe_Log.trace((js_Boot.__cast(e.target , HTMLButtonElement)).getAttribute("data-action"),{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 157, className : "view.shared.io.FormContainer", methodName : "itemHandler"});
 		var but = js_Boot.__cast(e.target , HTMLButtonElement);
-		haxe_Log.trace("" + this.section + "/" + but.getAttribute("data-action"),{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 194, className : "view.shared.io.FormContainer", methodName : "itemHandler"});
-		haxe_Log.trace(this.props.history.location.pathname + ":" + this.props.match.params.section,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 195, className : "view.shared.io.FormContainer", methodName : "itemHandler"});
+		haxe_Log.trace("" + this.section + "/" + but.getAttribute("data-action"),{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 159, className : "view.shared.io.FormContainer", methodName : "itemHandler"});
+		haxe_Log.trace(this.props.history.location.pathname + ":" + this.props.match.params.section,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 160, className : "view.shared.io.FormContainer", methodName : "itemHandler"});
 		var basePath = this.props.match.path.split("/:")[0];
 		var tmp = this.props.history;
 		var tmp1 = "" + basePath + "/" + this.section + "/" + but.getAttribute("data-action");
@@ -8631,7 +8634,8 @@ view_shared_io_FormContainer.prototype = $extend(React_Component.prototype,{
 		return false;
 	}
 	,shouldComponentUpdate: function(nextProps,nextState) {
-		haxe_Log.trace(Reflect.fields(nextState),{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 215, className : "view.shared.io.FormContainer", methodName : "shouldComponentUpdate"});
+		haxe_Log.trace(this.state.sideMenu.menuBlocks.toString() + "=>" + nextState.sideMenu.menuBlocks.toString(),{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 180, className : "view.shared.io.FormContainer", methodName : "shouldComponentUpdate"});
+		haxe_Log.trace(Reflect.fields(nextState),{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 181, className : "view.shared.io.FormContainer", methodName : "shouldComponentUpdate"});
 		if(this.props.match.params.action != nextProps.match.params.action) {
 			this.callMethod(nextProps.match.params.action);
 			return false;
@@ -8641,13 +8645,13 @@ view_shared_io_FormContainer.prototype = $extend(React_Component.prototype,{
 	,componentDidMount: function() {
 		if(this.state.action != null) {
 			var fun = Reflect.field(this,this.state.action);
-			haxe_Log.trace(fun,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 230, className : "view.shared.io.FormContainer", methodName : "componentDidMount"});
+			haxe_Log.trace(fun,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 196, className : "view.shared.io.FormContainer", methodName : "componentDidMount"});
 			if(fun != null) {
 				fun.apply(this,null);
 			}
 		}
 		this.setState({ mounted : true});
-		haxe_Log.trace(Type.getClassName(js_Boot.getClass(this)).split(".").pop() + "state.action",{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 237, className : "view.shared.io.FormContainer", methodName : "componentDidMount"});
+		haxe_Log.trace(Type.getClassName(js_Boot.getClass(this)).split(".").pop() + "state.action",{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 203, className : "view.shared.io.FormContainer", methodName : "componentDidMount"});
 	}
 	,componentWillUnmount: function() {
 		this.setState({ mounted : false});
@@ -8674,6 +8678,7 @@ view_shared_io_FormContainer.prototype = $extend(React_Component.prototype,{
 	}
 	,handleChange: function(e) {
 		var t = e.target;
+		haxe_Log.trace("" + t.name + " " + t.value,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 230, className : "view.shared.io.FormContainer", methodName : "handleChange"});
 	}
 	,selectAllRows: function(unselect) {
 		if(unselect == null) {
@@ -8726,14 +8731,17 @@ view_shared_io_FormContainer.prototype = $extend(React_Component.prototype,{
 		this.setState({ submitted : true});
 	}
 	,render: function() {
-		var sM = this.props.sideMenu;
+		var sM = this.state.sideMenu;
+		if(sM.menuBlocks != null) {
+			haxe_Log.trace(sM.menuBlocks.keys().next(),{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 296, className : "view.shared.io.FormContainer", methodName : "render"});
+		}
 		return { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "columns", children : [this.props.render(this.state),{ "$$typeof" : $$tre, type : view_shared_SMenu._connected, props : Object.assign({ },sM,{ className : "menu"}), key : null, ref : null}]}, key : null, ref : null};
 	}
 	,renderField: function(name,k) {
 		var _this = this.state.fields;
 		var formField = __map_reserved[name] != null ? _this.getReserved(name) : _this.h[name];
 		if(k == 0) {
-			haxe_Log.trace(this.state.handleChange,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 341, className : "view.shared.io.FormContainer", methodName : "renderField"});
+			haxe_Log.trace(this.state.handleChange,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 309, className : "view.shared.io.FormContainer", methodName : "renderField"});
 		}
 		var field;
 		var _g = formField.type;
@@ -8741,22 +8749,22 @@ view_shared_io_FormContainer.prototype = $extend(React_Component.prototype,{
 			var field1 = $$tre;
 			var field2 = react__$ReactType_ReactType_$Impl_$.fromString("input");
 			var _this1 = this.state.values;
-			field = { "$$typeof" : field1, type : field2, props : { name : name, defaultValue : __map_reserved[name] != null ? _this1.getReserved(name) : _this1.h[name], onChange : formField.readonly ? null : this.state.handleChange, readOnly : formField.readonly}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 348, className : "view.shared.io.FormContainer", methodName : "renderField"}), ref : null};
+			field = { "$$typeof" : field1, type : field2, props : { name : name, defaultValue : __map_reserved[name] != null ? _this1.getReserved(name) : _this1.h[name], onChange : formField.readonly ? null : this.state.handleChange, readOnly : formField.readonly}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 316, className : "view.shared.io.FormContainer", methodName : "renderField"}), ref : null};
 		} else if(_g == "Hidden") {
 			var field3 = $$tre;
 			var field4 = react__$ReactType_ReactType_$Impl_$.fromString("input");
 			var _this2 = this.state.values;
-			field = { "$$typeof" : field3, type : field4, props : { name : name, type : "hidden", defaultValue : __map_reserved[name] != null ? _this2.getReserved(name) : _this2.h[name], readOnly : formField.readonly}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 346, className : "view.shared.io.FormContainer", methodName : "renderField"}), ref : null};
+			field = { "$$typeof" : field3, type : field4, props : { name : name, type : "hidden", defaultValue : __map_reserved[name] != null ? _this2.getReserved(name) : _this2.h[name], readOnly : formField.readonly}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 314, className : "view.shared.io.FormContainer", methodName : "renderField"}), ref : null};
 		} else {
 			var field5 = $$tre;
 			var field6 = react__$ReactType_ReactType_$Impl_$.fromString("input");
 			var _this3 = this.state.values;
-			field = { "$$typeof" : field5, type : field6, props : { name : name, defaultValue : __map_reserved[name] != null ? _this3.getReserved(name) : _this3.h[name], onChange : formField.readonly ? null : this.state.handleChange, readOnly : formField.readonly}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 348, className : "view.shared.io.FormContainer", methodName : "renderField"}), ref : null};
+			field = { "$$typeof" : field5, type : field6, props : { name : name, defaultValue : __map_reserved[name] != null ? _this3.getReserved(name) : _this3.h[name], onChange : formField.readonly ? null : this.state.handleChange, readOnly : formField.readonly}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 316, className : "view.shared.io.FormContainer", methodName : "renderField"}), ref : null};
 		}
 		if(formField.type == "Hidden") {
 			return field;
 		} else {
-			return [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("label"), props : { children : formField.label}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 351, className : "view.shared.io.FormContainer", methodName : "renderField"}), ref : null},field];
+			return [{ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("label"), props : { children : formField.label}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 319, className : "view.shared.io.FormContainer", methodName : "renderField"}), ref : null},field];
 		}
 	}
 	,renderElements: function(cstate) {
@@ -8772,7 +8780,7 @@ view_shared_io_FormContainer.prototype = $extend(React_Component.prototype,{
 			var tmp = $$tre;
 			var tmp1 = react__$ReactType_ReactType_$Impl_$.fromString("div");
 			var _this = cstate.fields;
-			elements.push({ "$$typeof" : tmp, type : tmp1, props : { className : (__map_reserved[field1] != null ? _this.getReserved(field1) : _this.h[field1]).type == "Hidden" ? null : "formField", children : this.renderField(field1,k++)}, key : shared_Utils.genKey(k - 1,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 363, className : "view.shared.io.FormContainer", methodName : "renderElements"}), ref : null});
+			elements.push({ "$$typeof" : tmp, type : tmp1, props : { className : (__map_reserved[field1] != null ? _this.getReserved(field1) : _this.h[field1]).type == "Hidden" ? null : "formField", children : this.renderField(field1,k++)}, key : shared_Utils.genKey(k - 1,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 331, className : "view.shared.io.FormContainer", methodName : "renderElements"}), ref : null});
 		}
 		return elements;
 	}
@@ -8847,7 +8855,7 @@ view_shared_io_FormContainer.prototype = $extend(React_Component.prototype,{
 		var name = fields;
 		while(name.hasNext()) {
 			var name1 = name.next();
-			cols.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "col", 'data-name' : name1, children : this.renderRows(name1)}, key : shared_Utils.genKey(name1 + "_" + col++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 440, className : "view.shared.io.FormContainer", methodName : "renderColumns"}), ref : null});
+			cols.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "col", 'data-name' : name1, children : this.renderRows(name1)}, key : shared_Utils.genKey(name1 + "_" + col++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 408, className : "view.shared.io.FormContainer", methodName : "renderColumns"}), ref : null});
 		}
 		return cols;
 	}
@@ -8864,7 +8872,7 @@ view_shared_io_FormContainer.prototype = $extend(React_Component.prototype,{
 			}
 			var _this1 = this._fstate.fields;
 			var formField = __map_reserved[name1] != null ? _this1.getReserved(name1) : _this1.h[name1];
-			cols.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "col", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "form-table-cell", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "header", 'data-name' : name1, children : formField.label}, key : null, ref : null}}, key : null, ref : null}}, key : shared_Utils.genKey(c++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 456, className : "view.shared.io.FormContainer", methodName : "renderColumnHeaders"}), ref : null});
+			cols.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "col", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "form-table-cell", children : { "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "header", 'data-name' : name1, children : formField.label}, key : null, ref : null}}, key : null, ref : null}}, key : shared_Utils.genKey(c++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 424, className : "view.shared.io.FormContainer", methodName : "renderColumnHeaders"}), ref : null});
 		}
 		return cols;
 	}
@@ -8872,23 +8880,23 @@ view_shared_io_FormContainer.prototype = $extend(React_Component.prototype,{
 		var model = "." + fF.primaryId + "." + fF.name;
 		var _g = fF.type;
 		if(_g == null) {
-			return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_Control),{ key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 485, className : "view.shared.io.FormContainer", methodName : "renderRowCell"}), model : model, controlProps : { readOnly : fF.readonly, type : "hidden", onChange : fF.readonly ? null : fF.handleChange}});
+			return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_Control),{ key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 453, className : "view.shared.io.FormContainer", methodName : "renderRowCell"}), model : model, controlProps : { readOnly : fF.readonly, type : "hidden", onChange : fF.readonly ? null : fF.handleChange}});
 		} else {
 			switch(_g) {
 			case "Checkbox":
-				haxe_Log.trace(fF.value,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 473, className : "view.shared.io.FormContainer", methodName : "renderRowCell"});
-				return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlCheckbox),{ key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 474, className : "view.shared.io.FormContainer", methodName : "renderRowCell"}), model : model, controlProps : { readOnly : fF.readonly}});
+				haxe_Log.trace(fF.value,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 441, className : "view.shared.io.FormContainer", methodName : "renderRowCell"});
+				return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlCheckbox),{ key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 442, className : "view.shared.io.FormContainer", methodName : "renderRowCell"}), model : model, controlProps : { readOnly : fF.readonly}});
 			case "Hidden":
 				if(fF.primary) {
 					return null;
 				} else {
-					return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_Control),{ key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 477, className : "view.shared.io.FormContainer", methodName : "renderRowCell"}), model : model, controlProps : { readOnly : fF.readonly, type : "hidden"}});
+					return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_Control),{ key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 445, className : "view.shared.io.FormContainer", methodName : "renderRowCell"}), model : model, controlProps : { readOnly : fF.readonly, type : "hidden"}});
 				}
 				break;
 			case "Select":
 				return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlSelect),{ model : model},this.renderSelectOptions(fF.value));
 			default:
-				return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_Control),{ key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 485, className : "view.shared.io.FormContainer", methodName : "renderRowCell"}), model : model, controlProps : { readOnly : fF.readonly, type : "hidden", onChange : fF.readonly ? null : fF.handleChange}});
+				return React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_Control),{ key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 453, className : "view.shared.io.FormContainer", methodName : "renderRowCell"}), model : model, controlProps : { readOnly : fF.readonly, type : "hidden", onChange : fF.readonly ? null : fF.handleChange}});
 			}
 		}
 	}
@@ -8901,14 +8909,14 @@ view_shared_io_FormContainer.prototype = $extend(React_Component.prototype,{
 		var tmp3 = react__$ReactType_ReactType_$Impl_$.fromString("div");
 		var _this = this._fstate.fields;
 		var tmp4 = __map_reserved[name] != null ? _this.getReserved(name) : _this.h[name];
-		elements.push({ "$$typeof" : tmp, type : tmp1, props : { className : "form-table-cell", style : { minHeight : "0px", height : "0px", overflow : "hidden", padding : "0px 0.3rem"}, children : { "$$typeof" : tmp2, type : tmp3, props : { className : "header", 'data-name' : name, children : tmp4.label}, key : null, ref : null}}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 496, className : "view.shared.io.FormContainer", methodName : "renderRows"}), ref : null});
+		elements.push({ "$$typeof" : tmp, type : tmp1, props : { className : "form-table-cell", style : { minHeight : "0px", height : "0px", overflow : "hidden", padding : "0px 0.3rem"}, children : { "$$typeof" : tmp2, type : tmp3, props : { className : "header", 'data-name' : name, children : tmp4.label}, key : null, ref : null}}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 464, className : "view.shared.io.FormContainer", methodName : "renderRows"}), ref : null});
 		var _g = 0;
 		var _this1 = this.formColElements;
 		var _g1 = __map_reserved[name] != null ? _this1.getReserved(name) : _this1.h[name];
 		while(_g < _g1.length) {
 			var fF = _g1[_g];
 			++_g;
-			elements.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "form-table-cell", children : this.renderRowCell(fF,k++)}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 505, className : "view.shared.io.FormContainer", methodName : "renderRows"}), ref : null});
+			elements.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("div"), props : { className : "form-table-cell", children : this.renderRowCell(fF,k++)}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 473, className : "view.shared.io.FormContainer", methodName : "renderRows"}), ref : null});
 		}
 		return elements;
 	}
@@ -8923,7 +8931,7 @@ view_shared_io_FormContainer.prototype = $extend(React_Component.prototype,{
 		while(_g < opts.length) {
 			var opt = opts[_g];
 			++_g;
-			rOpts.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("option"), props : { children : opt}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 520, className : "view.shared.io.FormContainer", methodName : "renderSelectOptions"}), ref : null});
+			rOpts.push({ "$$typeof" : $$tre, type : react__$ReactType_ReactType_$Impl_$.fromString("option"), props : { children : opt}, key : shared_Utils.genKey(k++,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 488, className : "view.shared.io.FormContainer", methodName : "renderSelectOptions"}), ref : null});
 		}
 		return rOpts;
 	}
@@ -8937,15 +8945,15 @@ view_shared_io_FormContainer.prototype = $extend(React_Component.prototype,{
 	,renderModalForm: function(fState) {
 		var _gthis = this;
 		this._fstate = fState;
-		haxe_Log.trace(this._fstate,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 542, className : "view.shared.io.FormContainer", methodName : "renderModalForm"});
-		haxe_Log.trace(App.modalBox,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 543, className : "view.shared.io.FormContainer", methodName : "renderModalForm"});
+		haxe_Log.trace(this._fstate,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 510, className : "view.shared.io.FormContainer", methodName : "renderModalForm"});
+		haxe_Log.trace(App.modalBox,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 511, className : "view.shared.io.FormContainer", methodName : "renderModalForm"});
 		this.modalFormTableBody = React.createRef();
 		react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox).classList.toggle("is-active");
 		var click = function(_) {
 			react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox).classList.toggle("is-active");
 		};
 		var submit = function(tfd,ev) {
-			haxe_Log.trace(tfd,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 548, className : "view.shared.io.FormContainer", methodName : "renderModalForm"});
+			haxe_Log.trace(tfd,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 516, className : "view.shared.io.FormContainer", methodName : "renderModalForm"});
 			if(_gthis._fstate.handleSubmit != null) {
 				_gthis._fstate.handleSubmit(tfd);
 			}
@@ -8965,7 +8973,7 @@ view_shared_io_FormContainer.prototype = $extend(React_Component.prototype,{
 		return ReactDOM.render(React.createElement(tmp,{ },tmp1,{ "$$typeof" : tmp2, type : tmp3, props : { className : "modal-card", children : React.createElement(tmp4,tmp5,tmp6,tmp7,tmp8,{ "$$typeof" : tmp9, type : tmp10, props : { className : "modal-card-foot", children : [tmp11,React.createElement(react__$ReactType_ReactType_$Impl_$.fromComp(react_redux_form_ControlReset),{ controlProps : { className : "button"}, model : fState.model},"Reset")]}, key : null, ref : null})}, key : null, ref : null}),react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox),$bind(this,this.adjustModalFormColumns));
 	}
 	,renderModalScreen: function(content) {
-		haxe_Log.trace(App.modalBox,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 582, className : "view.shared.io.FormContainer", methodName : "renderModalScreen"});
+		haxe_Log.trace(App.modalBox,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 550, className : "view.shared.io.FormContainer", methodName : "renderModalScreen"});
 		this.modalFormTableBody = React.createRef();
 		react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox).classList.toggle("is-active");
 		var click = function(_) {
@@ -8979,11 +8987,11 @@ view_shared_io_FormContainer.prototype = $extend(React_Component.prototype,{
 		return ReactDOM.render(React.createElement(tmp,{ },tmp1,{ "$$typeof" : tmp2, type : tmp3, props : { className : "modal-card", children : [tmp4,React.createElement(react__$ReactType_ReactType_$Impl_$.fromString("div"),{ ref : this.modalFormTableBody, className : "modal-card-body"},content)]}, key : null, ref : null}),react__$ReactRef_ReactRef_$Impl_$.get_current(App.modalBox));
 	}
 	,adjustModalFormColumns: function() {
-		haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.modalFormTableHeader),{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 609, className : "view.shared.io.FormContainer", methodName : "adjustModalFormColumns"});
-		haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.modalFormTableBody).children,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 611, className : "view.shared.io.FormContainer", methodName : "adjustModalFormColumns"});
+		haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.modalFormTableHeader),{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 577, className : "view.shared.io.FormContainer", methodName : "adjustModalFormColumns"});
+		haxe_Log.trace(react__$ReactRef_ReactRef_$Impl_$.get_current(this.modalFormTableBody).children,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 579, className : "view.shared.io.FormContainer", methodName : "adjustModalFormColumns"});
 		var bodyCols = react__$ReactRef_ReactRef_$Impl_$.get_current(this.modalFormTableBody).children;
 		var headerCols = react__$ReactRef_ReactRef_$Impl_$.get_current(this.modalFormTableHeader).children;
-		haxe_Log.trace(bodyCols,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 614, className : "view.shared.io.FormContainer", methodName : "adjustModalFormColumns"});
+		haxe_Log.trace(bodyCols,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 582, className : "view.shared.io.FormContainer", methodName : "adjustModalFormColumns"});
 		if(bodyCols == null) {
 			return;
 		}
@@ -8996,17 +9004,17 @@ view_shared_io_FormContainer.prototype = $extend(React_Component.prototype,{
 		}
 	}
 	,switchContent: function(reactEventSource) {
-		haxe_Log.trace(this.props.history == App.store.getState().appWare.history,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 632, className : "view.shared.io.FormContainer", methodName : "switchContent"});
+		haxe_Log.trace(this.props.history == App.store.getState().appWare.history,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 600, className : "view.shared.io.FormContainer", methodName : "switchContent"});
 		var section = reactEventSource.target.getAttribute("data-section");
-		haxe_Log.trace("state.section:" + this.state.section + " section:" + section,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 636, className : "view.shared.io.FormContainer", methodName : "switchContent"});
+		haxe_Log.trace("state.section:" + this.state.section + " section:" + section,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 604, className : "view.shared.io.FormContainer", methodName : "switchContent"});
 		if(section != this.state.sideMenu.section) {
 			var sM = this.state.sideMenu;
 			sM.section = section;
 			this.setState({ sideMenu : sM, section : section});
 			var basePath = this.props.match.path.split("/:")[0];
-			haxe_Log.trace(this.props.location.pathname,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 649, className : "view.shared.io.FormContainer", methodName : "switchContent"});
+			haxe_Log.trace(this.props.location.pathname,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 617, className : "view.shared.io.FormContainer", methodName : "switchContent"});
 			this.props.history.push("" + basePath + "/" + section);
-			haxe_Log.trace(this.props.history.location.pathname,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 651, className : "view.shared.io.FormContainer", methodName : "switchContent"});
+			haxe_Log.trace(this.props.history.location.pathname,{ fileName : "src/view/shared/io/FormContainer.hx", lineNumber : 619, className : "view.shared.io.FormContainer", methodName : "switchContent"});
 		}
 	}
 	,initSideMenu: function(sMa,sM) {

@@ -49,24 +49,7 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 			hasError:false,
 			mounted:false,
 			loading:true,
-			sideMenu:{}/*initSideMenu(
-				[
-					{
-						dataClassPath:'model.tools.DB',
-						label:'DB Design',
-						section: 'DB',
-						items: DB.menuItems
-					},
-					{
-						dataClassPath:'model.admin.SyncExternal',
-						label:'DB Abgleich',
-						section: 'DBSync',
-						items: DBSync.menuItems
-					}
-				]
-				,{section: 'DBSync', sameWidth: true}					
-
-			)*/
+			sideMenu:{}/**/
 		};		
 	}
 	
@@ -89,7 +72,7 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 		// Display fallback UI
 		if(state.mounted)
 		this.setState({ hasError: true });
-		trace(info);
+		trace(error);
 	}	
 	
 	override public function componentDidMount():Void 
@@ -117,23 +100,50 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 			*/		
 	}
 
-	function registerFormContainer(fc:FormContainer)//
+	function registerFormContainer(fC:FormContainer)//
 	{
-		setState({formContainer:fc});
-		trace(fc.props.match.params.section);
+		setState({formContainer:fC, sideMenu:fC.initSideMenu(
+				[
+					{
+						dataClassPath:'model.tools.DB',
+						label:'DB Design',
+						section: 'DB',
+						items: DB.menuItems
+					},
+					{
+						dataClassPath:'model.admin.SyncExternal',
+						label:'DB Abgleich',
+						section: 'DBSync',
+						items: DBSync.menuItems
+					}
+				]
+				,{section: 'DBSync', sameWidth: true}					
+		)});
+		trace(fC.props.match.params.section);
+		
 	}
 	
 	override public function render() {
+		if(state.sideMenu != {})
+		{
+			//trace(state.sideMenu);
+			if(state.sideMenu.menuBlocks!=null)
+			{
+				trace(state.sideMenu.menuBlocks.keys().next);
+			}
+		}	
+		
 		return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} registerFormContainer=${registerFormContainer} 
-		render=${renderContent}/>');
+		render=${renderContent} />');
 	}
 
 	public function renderContent(cState:FormState):ReactFragment
 	{
 		//var match:RouterMatch = getRouterMatch();
-		//trace(match.params);
+		//trace(state.formContainer);
+		trace(cState.formContainer.props.match.url);
 		if(state.formContainer!=null)
-		trace(state.formContainer.props.match.params.section);
+			trace(props.match.params.section);
 		return switch(props.match.params.section)
 		{
 			case "DBSync":

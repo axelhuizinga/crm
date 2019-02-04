@@ -6,7 +6,7 @@ const buildTarget = process.env.TARGET || 'web';
 const isProd = buildMode === 'production';
 
 const sourcemapsMode = isProd ? 'hidden-source-map':'eval-source-map' ;
-
+console.log(__dirname);
 // Plugins
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -25,8 +25,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const debugMode = buildMode !== 'production';
 //const dist = __dirname + '/httpdocs/';
 const dir = 'D:\\d\\shared\\dev\\crm-connect'
-const dist = dir + '\\httpdocs';
-
+//const dist = dir + '\\httpdocs';
+const dist = __dirname + "/httpdocs/";
 // Sourcemaps: https://webpack.js.org/configuration/devtool/
 // - 'eval-source-map': fast, but JS bundle is somewhat obfuscated
 // - 'source-map': slow, but JS bundle is readable
@@ -118,7 +118,7 @@ module.exports = {
 	    },
 	    {
                 test:  /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, 
-		loader: "url-loader?limit=10000&mimetype=application/font-woff" 
+		    loader: "url-loader?limit=10000&mimetype=application/font-woff" 
 	    },	    
             // CSS processor/loader
             // - this is where you can add sass/less processing,
@@ -166,7 +166,7 @@ module.exports = {
         new HtmlWebpackPlugin({
 		filename:  'crm.html',
 		template:  'src/crm.html',
-		title: 'Xpress CRM-2.0'
+		title: 'Xpress CRM 2.0'
         })
         // You may want to also:
         // - minify/uglify the output using UglifyJSPlugin,
