@@ -20,7 +20,7 @@ import react.ReactType;
 import model.AjaxLoader;
 
 import view.shared.io.DataFormProps;
-import view.shared.io.FormContainer;
+import view.shared.io.FormFunctions;
 import view.shared.FormState;
 import view.shared.OneOf;
 import view.shared.SMenu;
@@ -33,7 +33,6 @@ import view.table.Table;
  * ...
  * @author axel@cunity.me
  */
-
 
 class Setup extends ReactComponentOf<DataFormProps,FormState>
 {
@@ -49,7 +48,23 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 			hasError:false,
 			mounted:false,
 			loading:true,
-			sideMenu:{}/**/
+			sideMenu:FormFunctions.initSideMenu(
+				[
+					{
+						dataClassPath:'model.tools.DB',
+						label:'DB Design',
+						section: 'DB',
+						items: DB.menuItems
+					},
+					{
+						dataClassPath:'model.admin.SyncExternal',
+						label:'DB Abgleich',
+						section: 'DBSync',
+						items: DBSync.menuItems
+					}
+				]
+				,{section: 'DBSync', sameWidth: true}					
+			)
 		};		
 	}
 	
@@ -99,29 +114,6 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 			});	
 			*/		
 	}
-
-	function registerFormContainer(fC:FormContainer)//
-	{
-		setState({formContainer:fC, sideMenu:fC.initSideMenu(
-				[
-					{
-						dataClassPath:'model.tools.DB',
-						label:'DB Design',
-						section: 'DB',
-						items: DB.menuItems
-					},
-					{
-						dataClassPath:'model.admin.SyncExternal',
-						label:'DB Abgleich',
-						section: 'DBSync',
-						items: DBSync.menuItems
-					}
-				]
-				,{section: 'DBSync', sameWidth: true}					
-		)});
-		trace(fC.props.match.params.section);
-		
-	}
 	
 	override public function render() {
 		if(state.sideMenu != {})
@@ -137,24 +129,22 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 		render=${renderContent} />');
 	}
 
-	public function renderContent(cState:FormState):ReactFragment
+	public function renderContent():ReactFragment
 	{
 		//var match:RouterMatch = getRouterMatch();
 		//trace(state.formContainer);
-		trace(cState.formContainer.props.match.url);
-		if(state.formContainer!=null)
-			trace(props.match.params.section);
+		//trace(cState.formContainer.props.match.url);
+		//if(state.formContainer!=null)
+		trace(props.match.params.section);
 		return switch(props.match.params.section)
 		{
 			case "DBSync":
 				jsx('
-					<$DBSync ${...props} formContainer=${cState.formContainer}
-					 fullWidth={true}/>
+					<$DBSync ${...props} fullWidth={true}/>
 				');					
 			case "DB"|null:
 				jsx('
-					<$DB ${...props} formContainer=${state.formContainer}
-					 fullWidth={true}/>
+					<$DB ${...props} fullWidth={true}/>
 				');				
 			default:
 				null;					

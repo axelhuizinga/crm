@@ -74,7 +74,7 @@ class FormFunctions
 	static var initialState:Dynamic;
 	static var section:String;
 	
-	public static function init(?props:DataFormProps) 
+	public static function init(_this:ReactComponent,?props:DataFormProps) 
 	{
 		super(props);
 		requests = [];
@@ -105,7 +105,7 @@ class FormFunctions
 		//trace('>>>${props.match.params.action}<<<');
 		if(false && props.match.params.action != null)
 		{
-			Reflect.callMethod(this, Reflect.field(this, props.match.params.action),null);
+			Reflect.callMethod(this, Reflect.field(_this, props.match.params.action),null);
 		}
 	}	
 
@@ -163,9 +163,9 @@ class FormFunctions
 		//trace(props.menuBlocks.toString());
 	}
 
-	static function callMethod(method:String):Bool
+	public static function callMethod(_this:ReactComponent, method:String):Bool
 	{
-		static var fun:Function = Reflect.field(this,method);
+		static var fun:Function = Reflect.field(_this,method);
 		if(Reflect.isFunction(fun))
 		{
 			Reflect.callMethod(this,fun,null);
@@ -174,21 +174,21 @@ class FormFunctions
 		return false;
 	}
 
-	override public static function shouldComponentUpdate(nextProps:DataFormProps,nextState:FormState)
+	public static function shouldComponentUpdate(nextProps:DataFormProps,nextState:FormState)
 	{
 		//trace(props.match.params.section + ':' + nextProps.match.params.section + ':');
 		//trace(state.sideMenu.menuBlocks. +'=>' + nextState.sideMenu.menuBlocks);
-		trace(Reflect.fields(nextState));
+		/*trace(Reflect.fields(nextState));
 		if(props.match.params.action!=nextProps.match.params.action)
 		{
 			callMethod(nextProps.match.params.action);
 			return false;
 		}
 		return true;
-		return state.mounted? false: true;
+		return state.mounted? false: true;*/
 	}
 
-	override public function componentDidMount():Void 
+	public static function componentDidMount():Void 
 	{
 		if(state.action != null)
 		{
@@ -203,7 +203,7 @@ class FormFunctions
 		trace(Type.getClassName(Type.getClass(this)).split('.').pop() + 'state.action');
 	}
 	
-	override public function componentWillUnmount()
+	public static function componentWillUnmount()
 	{
 		setState({mounted: false});
 		for (r in requests)
@@ -289,7 +289,7 @@ class FormFunctions
 	}	
 
 	
-	override static function render()
+	public static function render()
 	{
 		static var sM:SMenuProps = state.sideMenu;
 		if(sM.menuBlocks != null)

@@ -1,4 +1,5 @@
 bin/
+httpdocs/
 node_modules/
 yarn-error.log
 .temp/
