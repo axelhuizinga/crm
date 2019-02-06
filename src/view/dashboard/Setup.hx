@@ -48,7 +48,7 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 			hasError:false,
 			mounted:false,
 			loading:true,
-			sideMenu:FormFunctions.initSideMenu(
+			sideMenu:FormFunctions.initSideMenu( this,
 				[
 					{
 						dataClassPath:'model.tools.DB',
@@ -63,7 +63,9 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 						items: DBSync.menuItems
 					}
 				]
-				,{section: 'DBSync', sameWidth: true}					
+				,{	
+					section: props.match.params.section==null? 'DBSync':props.match.params.section, 
+					sameWidth: true}					
 			)
 		};		
 	}
@@ -121,12 +123,11 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 			//trace(state.sideMenu);
 			if(state.sideMenu.menuBlocks!=null)
 			{
-				trace(state.sideMenu.menuBlocks.keys().next);
+				trace(state.sideMenu.menuBlocks.keys().next +':' + state.sideMenu.section);
 			}
 		}	
 		
-		return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} registerFormContainer=${registerFormContainer} 
-		render=${renderContent} />');
+		return FormFunctions.render(this);
 	}
 
 	public function renderContent():ReactFragment
@@ -148,6 +149,30 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 				');				
 			default:
 				null;					
+		}
+	}
+
+	public function switchContent(_this, reactEventSource:Dynamic)
+	{
+		//trace(props.history.location);
+		trace(_this);
+		//trace(props.match.params);
+		//trace(props.history == App.store.getState().appWare.history);
+		//var viewClassPath:String = reactEventSource.target.getAttribute('data-classpath');
+		var section:String = reactEventSource.target.getAttribute('data-section');
+		trace(section);
+		//trace( 'state.section:${props.match.params.section} section:$section');
+		//if (state.viewClassPath != viewClassPath)
+		if (section != _this.props.match.params.section)
+		{
+			var basePath:String = _this.props.match.path.split('/:')[0];
+			_this.props.history.push('$basePath/$section');
+			trace(_this.props.history.location.pathname);
+			var sM:SMenuProps = state.sideMenu;
+			sM.section = section;
+			_this.setState({sideMenu:sM});
+			trace('setting state.sideMenu.section to:$section');
+			//props.history.push(props.match.url + '/' + viewClassPath);
 		}
 	}
 	
