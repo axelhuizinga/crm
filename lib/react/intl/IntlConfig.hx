@@ -1,6 +1,6 @@
 package react.intl;
 
-import react.React.CreateElementType;
+import react.ReactType;
 
 typedef IntlConfig = {
 	@:optional var locale:String;
@@ -8,6 +8,6 @@ typedef IntlConfig = {
 	@:optional var messages:Dynamic<String>;
 	@:optional var defaultLocale:String;
 	@:optional var defaultFormats:{}; // TODO: more precise type?
-	@:optional var textComponent:CreateElementType;
+	@:optional var textComponent:ReactType;
 }
 

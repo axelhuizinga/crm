@@ -15,7 +15,7 @@
 -cp ..\lib
 -cp lib
 -cp src
--js bin\app.js
+-js httpdocs\app.js
 -dce full
 #--no-traces
 -main Go

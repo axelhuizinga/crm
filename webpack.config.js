@@ -16,8 +16,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const useFriendly = true;
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
-const haxeFormatter = require('haxe-loader/errorFormatter');
-const haxeTransformer = require('haxe-loader/errorTransformer');
+//const haxeFormatter = require('haxe-loader/errorFormatter');
+//const haxeTransformer = require('haxe-loader/errorTransformer');
 
 //const  = new ExtractTextPlugin('app.css');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -180,8 +180,8 @@ module.exports = {
 					`Your application is running here: https://localhost:${9000}`
 				]
 			},
-			additionalTransformers: [haxeTransformer],
-			additionalFormatters: [haxeFormatter]
+			//additionalTransformers: [haxeTransformer],
+			//additionalFormatters: [haxeFormatter]
 		})
 	] : [])
 	//.concat(isProd ? [extractCSS] : []),

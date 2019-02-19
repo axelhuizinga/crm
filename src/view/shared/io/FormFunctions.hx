@@ -76,21 +76,24 @@ class FormFunctions
 	static var section:String;
 	//static var state:FormState;
 	
-	public static function init(_this:ReactComponent,?props:DataFormProps) 
+	public static function init(_this:ReactComponent,?props:DataFormProps):DbData
 	{
 		requests = [];
 		if(props != null)
 		trace(props.match);
 		//trace(props.match.params.section);
-		props.sideMenu.itemHandler = itemHandler;
+		//props.sideMenu.itemHandler = itemHandler;
 		//trace(props.sideMenu.itemHandler);
 
 		dbData = new DbData();
 		//trace('>>>${props.match.params.action}<<<');
-		if(false && props.match.params.action != null)
+		if(true && props.match.params.action != null)
 		{
+            trace('going 2 call ${Type.getClassName(Type.getClass(_this))} ${props.match.params.action}');
 			callMethod(_this, props.match.params.action);
 		}
+        trace(dbData);
+        return dbData;
 	}	
 
 	public static function createStateValuesArray(data:Array<Map<String,String>>, view:DataView):Array<Map<String,Dynamic>>
@@ -563,7 +566,7 @@ class FormFunctions
 		for (smi in 0...sMa.length)
 		{
 			sMa[smi].onActivate = function(reactEventSource:Dynamic){
-                comp.switchContent(comp, reactEventSource);
+                comp.switchContent(reactEventSource);
             };
 			//trace(sMa[smi].label);
 		}

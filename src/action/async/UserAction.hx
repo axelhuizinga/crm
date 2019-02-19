@@ -68,10 +68,9 @@ class UserAction
 				Cookie.set('user.user_name', props.user_name, null, '/');
 				Cookie.set('user.jwt',uState.jwt, null, '/');
 				trace(Cookie.get('user.jwt'));
-				uState.waiting = false;
+				uState.loggedIn = true;
 				return dispatch(AppAction.LoginComplete(uState));
 				//return dispatch(AppAction.LoginComplete(
-				//	{change_pass_required: data.dataInfo['change_pass_required']==true, user_name:props.user_name, jwt:data.dataInfo['jwt'], waiting:false}));				
 			});
 			if (requests != null)
 			{
@@ -102,7 +101,7 @@ class UserAction
 					Cookie.set('user.user_name', props.user_name);
 					Cookie.set('user.jwt', jRes.jwt);
 					trace(Cookie.get('user.jwt'));
-					return dispatch(AppAction.LoginComplete({user_name:props.user_name, jwt:jRes.jwt, waiting:false}));
+					return dispatch(AppAction.LoginComplete({user_name:props.user_name, jwt:jRes.jwt, loggedIn:false}));
 				} else {
 					  // Otherwise reject with the status text
 					  // which will hopefully be a meaningful error

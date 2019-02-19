@@ -1,5 +1,6 @@
 package view.shared.io;
 
+import haxe.Constraints.Function;
 import js.html.AreaElement;
 import haxe.Json;
 import haxe.Unserializer;
@@ -21,7 +22,7 @@ import view.dashboard.model.DBSyncModel;
 import view.shared.FormField;
 import view.shared.SMenu;
 import view.shared.SMItem;
-import view.shared.io.FormContainer;
+import view.shared.io.FormFunctions;
 import view.shared.io.DataFormProps;
 import view.shared.io.DataAccess;
 import view.shared.io.Loader;
@@ -54,7 +55,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 		super(props);
 		dataDisplay = DBSyncModel.dataDisplay;
 		_instance = this;
-		trace('...');
+		trace('...' + Reflect.fields(props));
 		state =  App.initEState();		
 		trace(state);
 		//var sideMenu =  updateMenu('DBSync');//state.sideMenu;
@@ -149,7 +150,8 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 	
 	public function showUserList(_):Void
 	{
-		props.formContainer.requests.push( BinaryLoader.create(
+		//FormFunctions.requests.push( 
+		BinaryLoader.create(
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,
@@ -163,7 +165,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				trace(data.dataRows[data.dataRows.length-2]['phone_data']);
 				setState({dataTable:data.dataRows});
 			}
-		));
+		);
 	}
 	
 	override public function componentDidMount():Void 
@@ -191,7 +193,18 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 			}
 		];			
 		//
-		trace('yeah');
+		if(props.user != null)
+		trace('yeah: ${props.user.first_name}');
+		//dbData = FormFunctions.init(this, props);
+		if(props.match.params.action != null)
+		{
+			var fun:Function = Reflect.field(this,props.match.params.action);
+			if(Reflect.isFunction(fun))
+			{
+				Reflect.callMethod(this,fun,null);
+			}
+		}
+		
 	}
 	
 	function renderResults():ReactFragment
@@ -205,7 +218,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["userList"]} formContainer=${props.formContainer} 
-					className = "is-striped is-hoverable" fullWidth=${true}/>
+					className="is-striped is-hoverable" fullWidth=${true}/>
 				');
 			case 'showFieldList2':
 				trace(dataDisplay["fieldsList"]);
@@ -213,7 +226,7 @@ class DBSync extends ReactComponentOf<DataFormProps,FormState>
 				jsx('
 					<Table id="fieldsList" data=${state.dataTable}
 					${...props} dataState = ${dataDisplay["fieldsList"]} formContainer=${props.formContainer}  
-					className = "is-striped is-hoverable" fullWidth=${true}/>				
+					className="is-striped is-hoverable" fullWidth=${true}/>				
 				');	
 			case 'shared.io.DB.editTableFields':
 				null;

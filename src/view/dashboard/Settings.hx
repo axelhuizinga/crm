@@ -84,7 +84,7 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 
 		}
 		trace('${props.match.params.section} ${props.match.params.action}');
-		trace(Reflect.fields(state));
+		trace(Reflect.fields(props));
 	}
 
 	function registerFormContainer(fc:FormContainer)//
@@ -141,28 +141,6 @@ class Settings extends ReactComponentOf<DataFormProps,FormState>
 			default:		
 				null;		
 		}				
-    }	
-	/*
-    override public function render() {
-        return jsx('		
-				<div className="columns">
-					<div className="tabComponentForm" children={renderContent()} />
-					<SMenu className="menu" menuBlocks={state.sideMenu.menuBlocks} />					
-				</div>		
-        ');
-    }	
-	
-	function renderContent():ReactFragment
-	{
-		return switch(state.viewClassPath)
-		{
-			case "shared.io.User":
-				jsx('
-					<User ${...childFormProps} handleChange={true} handleSubmit={true} fullWidth={true}/>				
-				');				
-			default:
-				null;
-		}
-	}*/
+  }	
 	
 }

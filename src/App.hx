@@ -3,7 +3,7 @@ import view.shared.SMenuProps;
 import react.intl.DateTimeFormatOptions.NumericFormat;
 import haxe.Serializer;
 import js.html.BodyElement;
-import js.html.svg.Document;
+//import js.html.svg.Document;
 import haxe.Constraints.Function;
 import js.html.TimeElement;
 import haxe.Timer;
@@ -118,7 +118,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 				jwt:state.appWare.user.jwt,
 				className:'auth.User',
 				action:'clientVerify',
-				filter:'user_name|${state.appWare.user.user_name}',
+				filter:'user_name|${state.appWare.user.user_name}',//LOGIN NAME
 				dataSource:Serializer.run([
 					"users" => ["alias" => 'us',
 						"fields" => 'user_name,last_login'],

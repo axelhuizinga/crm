@@ -43,7 +43,7 @@ class SMenu extends ReactComponentOf<SMenuProps,SMenuState>
 	public function new(props:SMenuProps) 
 	{
 		super(props);
-		trace(props.menuBlocks);
+		//trace(props.menuBlocks);
 		state = {
 			hidden:props.hidden||false
 		};

@@ -1,11 +1,11 @@
 package view.dashboard;
 
-import gigatables_react.Reactables.ReactableSettings;
+//import gigatables_react.Reactables.ReactableSettings;
 import haxe.Serializer;
 import haxe.ds.StringMap;
-import haxe.Json;
-import haxe.http.HttpJs;
-import haxe.io.Bytes;
+//import haxe.Json;
+//import haxe.http.HttpJs;
+//import haxe.io.Bytes;
 import model.AjaxLoader;
 import model.AppState;
 import react.ReactComponent.ReactFragment;
@@ -14,9 +14,7 @@ import shared.DbData;
 
 import view.shared.io.BinaryLoader;
 import view.table.Table;
-//import view.grid.Grid.DataCell;
-//import view.grid.Grid.SortDirection;
-import react.ReactComponent.ReactComponentOfProps;
+//import react.ReactComponent.ReactComponentOfProps;
 import react.ReactEvent;
 import react.ReactMacro.jsx;
 import react.ReactUtil;
@@ -24,9 +22,10 @@ import react.ReactType;
 import redux.Redux.Dispatch;
 import view.dashboard.model.RolesFormModel;
 import view.shared.io.DataFormProps;
-import view.shared.io.FormContainer;
+import view.shared.io.FormFunctions;
 import view.shared.FormState;
 import view.shared.SMenu;
+import view.shared.SMenuProps;
 import view.shared.io.Users;
 using Lambda;
 /**
@@ -43,22 +42,21 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 		//dataDisplay = RolesFormModel.dataDisplay;		
 		state = {
 			clean:true,
-			//viewClassPath:"userList",
 			hasError:false,
 			mounted:false,
 			loading:true,
-			sideMenu:{}/*initSideMenu(
+			sideMenu:FormFunctions.initSideMenu( this,
 				[
 					{
 						dataClassPath:'roles.User',
 						label:'Benutzer',
-						section: 'users',
+						section: 'Users',
 						items: Users.menuItems
 					},
 					{
 						dataClassPath:'settings.Bookmarks',
 						label:'Benutzergruppen',
-						section: 'userGroups',
+						section: 'Bookmarks',
 						items: []//Bookmarks.menuItems
 					},
 					{
@@ -68,8 +66,8 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 						items: []//Design.menuItems
 					},										
 				],
-				{section: 'users',	sameWidth: true}
-			)*/
+				{section: 'Users',	sameWidth: true}
+			)
 		};
 		trace(Reflect.fields(props));
 	}
@@ -137,9 +135,7 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 			var uState = aState.appWare.user;
 			trace(uState);		
 			return {
-				user_name:uState.user_name,
-				jwt:uState.jwt,
-				first_name:uState.first_name
+				user:uState
 			};
 		};
 	}	
@@ -149,7 +145,8 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 		
 		trace(state.loading);
 		
-		props.formContainer.requests.push(BinaryLoader.create(
+		//props.formContainer.requests.push(
+			BinaryLoader.create(
 			'${App.config.api}', 
 			{
 				user_name:props.user.user_name,
@@ -178,7 +175,7 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
 				setState({dataTable:data.dataRows, loading:false});					
 				//setState({data:['userList'=>data.dataRows], loading:false});					
 			}
-		));
+		);
 	}
 	
 	/*override public function componentWillUnmount()
@@ -200,11 +197,21 @@ class Roles extends ReactComponentOf<DataFormProps,FormState>
     }	*/	
 	
 	override public function render() {
-		return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} render=${renderContent}/>');
+		var sM:SMenuProps = state.sideMenu;
+		if(sM.menuBlocks != null)
+			trace(sM.menuBlocks.keys().next() + ':' + props.match.params.section);
+		return jsx('
+			<div className="columns">
+				${renderContent()}
+				<$SMenu className="menu" {...sM} />
+			</div>			
+		');		
+		//return jsx('<FormContainer ${...props} sideMenu=${state.sideMenu} render=${renderContent}/>');
 	}
 
-	function renderContent(cState:FormState):ReactFragment
+	function renderContent():ReactFragment
 	{
+		trace(props.match.params.action);
 		return switch(props.match.params.action)
 		{
 			case "userList":

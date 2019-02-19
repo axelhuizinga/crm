@@ -46,9 +46,10 @@ class AppStore
 			user_name:(Cookie.get('user.user_name')==null?'':Cookie.get('user.user_name')),
 			email:'',
 			pass:'',
-			waiting:false,
+			loggedIn:false,
 			last_login:null,
-			jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt'))
+			jwt:(Cookie.get('user.jwt')==null?'':Cookie.get('user.jwt')),
+			waiting: true
 		}
 	};
 		
@@ -86,7 +87,7 @@ class AppStore
 			case LoginError(err):
 				trace(err);
 				//if(err.user_name==state.user.user_name)
-				copy(state, {user:{loginError:err.loginError}});
+				copy(state, {user:{loginError:err.loginError, waiting:false}});
 				//else
 					///state;
 					
@@ -94,8 +95,9 @@ class AppStore
 				copy(state, {waiting:true});
 				
 			case LoginComplete(uState):
-				trace(uState.user_name);
+				trace(uState.user_name + ':' + uState.loggedIn);
 				uState.loginError = null;
+				uState.loggedIn = true;
 				copy(state, //uState.change_pass_required?:
 				{
 					user:copy(state.user,uState)
@@ -150,6 +152,9 @@ class AppStore
 			case LoginComplete(state):
 				//App.firstLoad = false;	
 				next();		
+			case LoginError(err):
+				trace(err);
+				store.dispatch(AppAction.LoginRequired(store.getState().appWare.user));
 			default: next();
 		}
 	}

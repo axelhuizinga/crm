@@ -62,15 +62,15 @@ class Accounting extends ReactComponentOfProps<RouteTabProps>
 			
 			return {
 				appConfig:aState.appWare.config,
-				pass:uState.pass,
+				user:uState,
+				/*pass:uState.pass,
 				jwt:uState.jwt,
 				loggedIn:uState.loggedIn,
 				loginError:uState.loginError,
 				last_login:uState.last_login,
 				first_name:uState.first_name,
-				user_name:uState.user_name,
-				redirectAfterLogin:aState.appWare.redirectAfterLogin,
-				waiting:uState.waiting
+				user_name:uState.user_name,*/
+				redirectAfterLogin:aState.appWare.redirectAfterLogin
 			};
 		};
 	}	

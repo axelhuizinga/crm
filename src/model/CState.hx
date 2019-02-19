@@ -8,7 +8,6 @@ import react.ReactComponent;
 import react.ReactUtil.copy;
 import redux.Store;
 import js.Promise;
-import js.Promise.PromiseCallback;
 
 /**
  * ...

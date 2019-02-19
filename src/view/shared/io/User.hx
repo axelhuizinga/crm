@@ -136,6 +136,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 						new_pass:'',
 						new_pass_confirm:'',
 						waiting:false,
+						loggedIn: true,
 						last_login:Date.fromString(data.dataRows[0]['last_login']),
 					}));				
 				}
@@ -152,6 +153,7 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 						email:data.dataRows[0]['email'],
 						pass:'',
 						waiting:false,
+						loggedIn:false,
 						last_login:Date.fromString(data.dataRows[0]['last_login']),
 					}));
 				} 				

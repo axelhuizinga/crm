@@ -56,6 +56,8 @@ class QC extends ReactComponentOf<RouteTabProps, Dynamic>
 			
 			return {
 				appConfig:aState.appWare.config,
+				redirectAfterLogin:aState.appWare.redirectAfterLogin,
+				user:uState/*
 				user_name:uState.user_name,
 				pass:uState.pass,
 				jwt:uState.jwt,
@@ -63,8 +65,7 @@ class QC extends ReactComponentOf<RouteTabProps, Dynamic>
 				loginError:uState.loginError,
 				last_login:uState.last_login,
 				first_name:uState.first_name,
-				redirectAfterLogin:aState.appWare.redirectAfterLogin,
-				waiting:uState.waiting
+				waiting:uState.waiting*/
 			};
 		};
 	}	

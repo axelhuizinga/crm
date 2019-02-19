@@ -1,4 +1,6 @@
 package view;
+import model.UserState;
+import react.ReactType;
 import view.shared.io.User;
 
 import action.AppAction;
@@ -6,6 +8,7 @@ import bulma_components.Tabs;
 import model.LocationState;
 //import view.shared.io.UserState;
 import react.Partial;
+import react.React;
 import react.ReactComponent;
 //import react.ReactComponent.*;
 //import react.ReactPropTypes;
@@ -32,17 +35,17 @@ import view.dashboard.Setup;
 
 using model.CState;
 
-//@:connect
+@:connect
 class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 {
-	static var user = {first_name:'dummy'};
+	//static var user = {first_name:'dummy'};
 	var mounted:Bool = false;
 	var rendered:Bool = false;
 	var renderCount:Int = 0;
 	public function new(?props:Dynamic)
 	{
 		state = {hasError:false,mounted:false};
-		trace('location.pathname:${props.history.location.pathname} match.url: ${props.match.url}');
+		trace('location.pathname:${props.history.location.pathname} match.url: ${props.match.url} user:${props.user}');
 		super(props);
 		if (props.match.url == '/DashBoard')
 		{
@@ -85,11 +88,13 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 
 	static function mapStateToProps(aState:AppState) {
 		var uState:UserProps = aState.appWare.user;
-		//trace(aState.appWare.compState);
+		trace(uState.first_name);
 		//trace(' ${aState.appWare.history.location.pathname + (aState.appWare.compState.exists('dashboard') && aState.appWare.compState.get('dashboard').isMounted ? "Y":"N")}');
 		
 		return {
 			appConfig:aState.appWare.config,
+			redirectAfterLogin:aState.appWare.redirectAfterLogin,
+			user:uState/*
 			user_name:uState.user_name,
 			pass:uState.pass,
 			jwt:uState.jwt,
@@ -98,9 +103,8 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 			loginError:uState.loginError,
 			last_login:uState.last_login,
 			first_name:uState.first_name,
-			redirectAfterLogin:aState.appWare.redirectAfterLogin,
 			//locationHistory:aState.appWare.history,
-			waiting:uState.waiting
+			waiting:uState.waiting*/
 		};		
 	}		
 	
@@ -110,10 +114,11 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 		//trace(this.state);
 		
 		//trace(props.history.location.pathname);
-		//trace(props.match);
+		trace(props.user);
 		if (state.hasError)
 			return jsx('<h1>Fehler in ${Type.getClassName(Type.getClass(this))}.</h1>');
-
+		trace(Reflect.fields(props));
+		trace(Reflect.fields(state));
 		return jsx('
 		<>
 			<div className="tabNav2" >
@@ -126,14 +131,35 @@ class DashBoard extends ReactComponentOf<RouteTabProps,CompState>
 				</Tabs>
 			</div>
             <div className="tabContent2" >
-				<Route path="/DashBoard/Roles"  {...props}  component={Roles}/>
-				<Route path="/DashBoard/Settings/:section?/:action?/:id?"  {...props}  component={Settings}/>
-				<Route path="/DashBoard/Setup/:section?/:action?"  {...props}  component={Setup}/>					
+				<Route path="/DashBoard/Roles/:section?/:action?/:id?"  component={Roles}/>
+				<Route path="/DashBoard/Settings/:section?/:action?/:id?"  ${...props}  component={Settings}/>
+				<Route path="/DashBoard/Setup/:section?/:action?"  
+					render=${function(p:RouteRenderProps){return renderComponent(Setup,p,props.user);}}/>					
             </div>
-			<StatusBar {...props}/>
+			<StatusBar ${...props}/>
 		</>
 			');			
     }
+
+	/***
+	 render=${function(p:RouteRenderProps){return renderComponent(Setup,p,props.user);}}
+	**/
+
+	function renderComponent(Comp:Dynamic,props:Dynamic, user:UserState):ReactFragment
+	{
+		trace(user.first_name);
+		props.user = user;
+		//return React.createElement(Comp,props);
+		return switch(Comp)
+		{	
+			case Roles:
+				jsx('<$Roles  user=${this.props.user} ${...props}/>');			
+			case Setup:
+				jsx('<$Setup  user=${this.props.user} ${...props}/>');
+			default:
+				null;
+		}
+	}
 	
 	function internalRedirect(path:String = '/DashBoard/Settings')
 	{

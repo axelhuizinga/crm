@@ -94,7 +94,7 @@ class StatusBar extends ReactComponentOf<StatusBarProps,Dynamic>
 	static function mapStateToProps(state:AppState) {
 
 		//return function(state:model.AppState) {
-			//trace(state.appWare.history);
+			trace(state.appWare.user.first_name);
 			return {
 				/*date:state.statusBar.date,*/
 				userList:state.appWare.userList,

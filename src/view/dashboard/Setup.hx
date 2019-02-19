@@ -39,8 +39,8 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 	//var requests:Array<OneOf<HttpJs, XMLHttpRequest>>;
 	public function new(?props:DataFormProps) 
 	{
+		trace(props.user);
 		super(props);	
-		//trace('ok');
 		trace(props.match.params.section);
 		//trace(getRouterMatch().params);
 		state = {
@@ -67,7 +67,8 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 					section: props.match.params.section==null? 'DBSync':props.match.params.section, 
 					sameWidth: true}					
 			)
-		};		
+		};
+		trace(Reflect.fields(props));		
 	}
 	
 	/*static function mapStateToProps() {
@@ -96,8 +97,16 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 	{
 		//
 		setState({mounted:true});
+		if (props.match.params.section == null)
+		{
+			var basePath:String = props.match.url;
+			props.history.push('$basePath/DB');
+			trace(props.history.location.pathname);
+			trace('setting section to:DB');
+			//props.history.push(props.match.url + '/' + viewClassPath);
+		}		
 		trace('${}');
-		//TODO: AUTOMATE CREATE HISTORY TRIGGER
+		//TODO: AUTOMATE CREATE HISTORY TRIGGER IF DB TABLES CHANGED
 		/*AjaxLoader.loadData('${App.config.api}', 
 			{
 				user_name:props.user.user_name,
@@ -143,7 +152,7 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 				jsx('
 					<$DBSync ${...props} fullWidth={true}/>
 				');					
-			case "DB"|null:
+			case "DB":
 				jsx('
 					<$DB ${...props} fullWidth={true}/>
 				');				
@@ -152,10 +161,10 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 		}
 	}
 
-	public function switchContent(_this, reactEventSource:Dynamic)
+	public function switchContent( reactEventSource:Dynamic)
 	{
 		//trace(props.history.location);
-		trace(_this);
+		trace(this.state);
 		//trace(props.match.params);
 		//trace(props.history == App.store.getState().appWare.history);
 		//var viewClassPath:String = reactEventSource.target.getAttribute('data-classpath');
@@ -163,14 +172,14 @@ class Setup extends ReactComponentOf<DataFormProps,FormState>
 		trace(section);
 		//trace( 'state.section:${props.match.params.section} section:$section');
 		//if (state.viewClassPath != viewClassPath)
-		if (section != _this.props.match.params.section)
+		if (section != props.match.params.section)
 		{
-			var basePath:String = _this.props.match.path.split('/:')[0];
-			_this.props.history.push('$basePath/$section');
-			trace(_this.props.history.location.pathname);
+			var basePath:String = props.match.path.split('/:')[0];
+			props.history.push('$basePath/$section');
+			trace(props.history.location.pathname);
 			var sM:SMenuProps = state.sideMenu;
 			sM.section = section;
-			_this.setState({sideMenu:sM});
+			setState({sideMenu:sM});
 			trace('setting state.sideMenu.section to:$section');
 			//props.history.push(props.match.url + '/' + viewClassPath);
 		}

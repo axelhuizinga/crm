@@ -11,7 +11,7 @@ import redux.Redux.Dispatch;
 typedef RouteTabProps =
 {
 	>RouteComponentProps,
-	?appConfig:Dynamic
+	?appConfig:Dynamic,
 	//?dispatch:Dispatch,
-	//user: UserState,
+	user: UserState,
 }

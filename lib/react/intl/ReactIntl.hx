@@ -1,7 +1,7 @@
 package react.intl;
 
 import haxe.extern.EitherType;
-import react.React.CreateElementType;
+import react.ReactType;
 import react.intl.DateTimeFormatOptions;
 import react.intl.NumberFormatOptions;
 import react.intl.RelativeTimeFormatOptions;
@@ -44,7 +44,7 @@ extern class ReactIntl {
 		`options.intlPropName`. The value of the prop will be of type
 		`IntlShape`.
 	**/
-	static function injectIntl(wrappedComponent:CreateElementType, ?options:InjectIntlOptions):CreateElementType;
+	static function injectIntl(wrappedComponent:ReactType, ?options:InjectIntlOptions):ReactType;
 
 	/**
 		This function will return a formatted date string. It expects a `value`
