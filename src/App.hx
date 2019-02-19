@@ -72,7 +72,7 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
     static var STYLES = require('App.scss');
 
 	public static var store:Store<AppState>;
-
+	public static var devIP = Webpack.require('../webpack.local.js').ip;
 	public static var config:Dynamic = Webpack.require('../httpdocs/config.js').config;
 	public static var sprintf:Function = Webpack.require('sprintf-js').sprintf;
 	//public static var user_name:String = Cookie.get('user.user_name');
@@ -126,7 +126,8 @@ class App  extends react.ReactComponentOf<AppProps, AppState>
 						"alias" => 'co',
 						"fields" => 'first_name,last_name,email',
 						"jCond"=>'contact=co.id']
-				])
+				]),
+				devIP:devIP
 			},			
 			function(data:DbData)
 			{

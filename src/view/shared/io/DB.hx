@@ -149,7 +149,8 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 				fields:'readonly:readonly,element=:element,required=:required,use_as_index=:use_as_index',
 				className:'tools.DB',
 				action:'saveTableFields',
-				dbData:s.serialize(dbData)
+				dbData:s.serialize(dbData),
+				devIP:App.devIP
 			},
 			function(data:DbData)
 			{				
@@ -168,7 +169,8 @@ class DB extends ReactComponentOf<DataFormProps,FormState>
 				jwt:props.user.jwt,
 				fields:'id,table_name,field_name,readonly,element,required,use_as_index',
 				className:'tools.DB',
-				action:'createFieldList'
+				action:'createFieldList',
+				devIP:App.devIP
 			},
 			function(data:DbData)
 			{

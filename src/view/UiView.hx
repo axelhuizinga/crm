@@ -132,7 +132,7 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 
 	override function render()
 	{
-		trace(props.user.jwt);
+		trace(props.user.jwt + ':' + props.user.waiting );
 		if (state.hasError) {
 		  return jsx('<h1>Something went wrong.</h1>');
 		}
@@ -188,40 +188,5 @@ class UiView extends ReactComponentOf<UIProps, Dynamic>
 	{
 		return jsx('<RedirectBox {...p}/>');
 	}
-	/*<Route exact={true} path="/" render=${routeBox(props)} />a="1"
-	 * <Redirect path="/DashBoard" to="/DashBoard/Roles" exact={true}/>
-	 * 				<div className="tabComponent">
-				<Route path="/"  component={RedirectBox} exact={true}/>
-				<Route path="/DashBoard" component=${Bundle.load(DashBoardBox)}/>
-				<Route path="/accounting" component=${Bundle.load(AccountingBox)}/>
-				<Route path="/contacts/edit/:id" component=${Bundle.load(ContactsBox)}/>
-				<Route path="/contacts" component=${Bundle.load(ContactsBox)}/>
-				<Route path="/qc" component=${Bundle.load(QCBox)}/>
-				<Route path="/reports" component=${Bundle.load(ReportsBox)}/>
-				</div>
-								<div className="tabComponent">
-				<Route path="/"  component={RedirectBox} exact={true}/>
-				<Route path="/DashBoard" component=${DashBoardBox}/>
-				<Route path="/accounting" component=${AccountingBox}/>
-				<Route path="/contacts/edit/:id" component=${ContactsBox}/>
-				<Route path="/contacts" component=${ContactsBox}/>
-				<Route path="/qc" component=${QCBox}/>
-				<Route path="/reports" component=${ReportsBox}/>
-				</div>
-	 * 
-	 *<Redirect from="/" to="/DashBoard" exact={true}/><Route path="/dasboard" component=${Bundle.load(DashBoard)} exact={true}/>
-				<Route path="/" component=${DashBoardBox} exact={true}/>
-				<$Route path="/DashBoard" component=${Bundle.load(DashBoard)} exact={true}/>
-	 * <section>
-					<$Route path="/DashBoard" {...props} component=${NavTabs}/>
-					<$Route path="/qc" {...props} component=${NavTabs}/>
-					<$Route path="/contacts" {...props} component=${NavTabs}/>
-					<$Route path="/accounting" {...props} component=${NavTabs}/>
-					<$Route path="/reports" {...props} component=${NavTabs}/>
-				</section>
-	 * 				<$Route path="/contacts/:contactid" component=${ContactsBox} exact={true}/>
-				<$Route path="/contacts" component=${ContactsBox} exact={true}/>
-				<$Route path="/accounting" component=${AccountingBox}/>
-				<$Route path="/reports" component=${Reports}/><Route path="/" component=${Bundle.load(DashBoardBox)} exact={true}/>
-	 * */
+	
 }

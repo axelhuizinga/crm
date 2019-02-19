@@ -21,6 +21,7 @@ class DbData implements Serializable
 	{
 		dataErrors = new Map();
 		dataInfo = new Map();
+		dataParams = new Map();
 		dataRows = new Array();		
 	}
 

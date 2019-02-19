@@ -20,6 +20,16 @@
                 "$haxe-error",
                 "$haxe-trace"
             ]
+        },
+        {
+            "type": "npm",
+            "script": "build",
+            "group": "build"
+        },
+        {
+            "type": "npm",
+            "script": "start",
+            "group": "build"
         }
     ]
 }

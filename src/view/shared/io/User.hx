@@ -114,7 +114,8 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 				className:'auth.User',
 				action:'edit',
 				filter:'user_name|${props.user.user_name}',
-				dataSource:Serializer.run(dataAccess['edit'].source)			
+				dataSource:Serializer.run(dataAccess['edit'].source),
+				devIP:App.devIP	
 			},
 			function(data:DbData)
 			{
@@ -200,7 +201,8 @@ class User extends ReactComponentOf<DataFormProps,FormState>
 				className:'auth.User',
 				action:'changePassword',
 				new_pass:state.values['new_pass'],
-				pass:state.values['pass']
+				pass:state.values['pass'],
+				devIP:App.devIP
 			},
 			function(data:DbData)
 			{

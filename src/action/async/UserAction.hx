@@ -56,10 +56,12 @@ class UserAction
 						"fields" => 'first_name,last_name,email',
 						"jCond"=>'contact=co.id']
 				]),
-				pass:props.pass
+				pass:props.pass,
+				devIP:App.devIP
 			},
 			function(data:DbData)
 			{				
+				trace(data);
 				if (data.dataErrors.keys().hasNext())
 				{
 					return dispatch(AppAction.LoginError({user_name:props.user_name, loginError:data.dataErrors.iterator().next()}));

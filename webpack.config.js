@@ -1,3 +1,6 @@
+const localConf = require('./webpack.local');
+const devHost= localConf.ip;
+//const devHost='192.168.178.49';
 const path = require('path');
 
 const buildMode = process.env.NODE_ENV || 'development';
@@ -6,7 +9,7 @@ const buildTarget = process.env.TARGET || 'web';
 const isProd = buildMode === 'production';
 
 const sourcemapsMode = isProd ? 'hidden-source-map':'eval-source-map' ;
-console.log(__dirname);
+
 // Plugins
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -23,10 +26,13 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 // Options
 const debugMode = buildMode !== 'production';
-//const dist = __dirname + '/httpdocs/';
-const dir = 'D:\\d\\shared\\dev\\crm-connect'
+const dir = __dirname;
+//const dir = 'C:\\devel\\crm-connect';
+//const dir = 'D:\\d\\shared\\dev\\crm-connect'
 //const dist = dir + '\\httpdocs';
+//s
 const dist = __dirname + "/httpdocs/";
+console.log(dist);
 // Sourcemaps: https://webpack.js.org/configuration/devtool/
 // - 'eval-source-map': fast, but JS bundle is somewhat obfuscated
 // - 'source-map': slow, but JS bundle is readable
@@ -61,16 +67,16 @@ module.exports = {
     devServer: {
         contentBase: dist,
         compress: true,
-	host:  '192.168.178.56',
+	host:  devHost,
 	https: true,
         port: 9000,
         overlay: true,
         hot: true,  
-	inline: true,
-	headers: {
-		"Access-Control-Allow-Origin": "https://pitverwaltung.de",
-		"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-		"Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+        inline: true,
+        headers: {
+            "Access-Control-Allow-Origin": "https://pitverwaltung.de",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+            "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
 		},	    
 	watchOptions:{
 		aggregateTimeout:1500
@@ -177,7 +183,7 @@ module.exports = {
 		new FriendlyErrorsWebpackPlugin({
 			compilationSuccessInfo: {
 				messages: [
-					`Your application is running here: https://localhost:${9000}`
+					`Your application is running here: https://${devHost}:${9000}`
 				]
 			},
 			//additionalTransformers: [haxeTransformer],
