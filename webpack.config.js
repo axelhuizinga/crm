@@ -1,5 +1,5 @@
 const localConf = require('./webpack.local');
-const devHost= localConf.ip;
+const devHost = localConf.ip;
 //const devHost='192.168.178.49';
 const path = require('path');
 

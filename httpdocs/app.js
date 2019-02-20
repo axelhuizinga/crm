@@ -4708,11 +4708,10 @@ js_html__$ArrayBuffer_ArrayBufferCompat.sliceImpl = function(begin,end) {
 	resultArray.set(u);
 	return resultArray.buffer;
 };
-var me_cunity_debug_DebugOutput = $hxEnums["me.cunity.debug.DebugOutput"] = { __ename__ : "me.cunity.debug.DebugOutput", __constructs__ : ["CONSOLE","HAXE","NATIVE","LOG"]
+var me_cunity_debug_DebugOutput = $hxEnums["me.cunity.debug.DebugOutput"] = { __ename__ : "me.cunity.debug.DebugOutput", __constructs__ : ["CONSOLE","HAXE","NATIVE"]
 	,CONSOLE: {_hx_index:0,__enum__:"me.cunity.debug.DebugOutput",toString:$estr}
 	,HAXE: {_hx_index:1,__enum__:"me.cunity.debug.DebugOutput",toString:$estr}
 	,NATIVE: {_hx_index:2,__enum__:"me.cunity.debug.DebugOutput",toString:$estr}
-	,LOG: {_hx_index:3,__enum__:"me.cunity.debug.DebugOutput",toString:$estr}
 };
 var me_cunity_debug_Out = $hx_exports["Out"] = function() { };
 $hxClasses["me.cunity.debug.Out"] = me_cunity_debug_Out;
@@ -4745,8 +4744,6 @@ me_cunity_debug_Out._trace = function(v,i) {
 	case 2:
 		console.log(msg);
 		break;
-	case 3:
-		break;
 	}
 };
 me_cunity_debug_Out.log2 = function(v,i) {
@@ -4757,7 +4754,7 @@ me_cunity_debug_Out.log2 = function(v,i) {
 	http.async = true;
 	http.onData = function(data) {
 		if(data != "OK") {
-			haxe_Log.trace(data,{ fileName : "..\\lib/me/cunity/debug/Out.hx", lineNumber : 202, className : "me.cunity.debug.Out", methodName : "log2"});
+			haxe_Log.trace(data,{ fileName : "..\\lib/me/cunity/debug/Out.hx", lineNumber : 203, className : "me.cunity.debug.Out", methodName : "log2"});
 		}
 	};
 	http.request(true);
@@ -4817,7 +4814,7 @@ me_cunity_debug_Out._dumpObjectTree = function(root,parent,recursive,i) {
 		while(_g < fields.length) {
 			var f = fields[_g];
 			++_g;
-			haxe_Log.trace(f,{ fileName : "..\\lib/me/cunity/debug/Out.hx", lineNumber : 290, className : "me.cunity.debug.Out", methodName : "_dumpObjectTree", customParams : [i]});
+			haxe_Log.trace(f,{ fileName : "..\\lib/me/cunity/debug/Out.hx", lineNumber : 309, className : "me.cunity.debug.Out", methodName : "_dumpObjectTree", customParams : [i]});
 			if(recursive) {
 				if(me_cunity_debug_Out.dumpedObjects.length > 1000) {
 					me_cunity_debug_Out._trace(me_cunity_debug_Out.dumpedObjects.toString(),i);
@@ -4831,7 +4828,7 @@ me_cunity_debug_Out._dumpObjectTree = function(root,parent,recursive,i) {
 			}
 		}
 	} catch( ex ) {
-		haxe_Log.trace(((ex) instanceof js__$Boot_HaxeError) ? ex.val : ex,{ fileName : "..\\lib/me/cunity/debug/Out.hx", lineNumber : 314, className : "me.cunity.debug.Out", methodName : "_dumpObjectTree"});
+		haxe_Log.trace(((ex) instanceof js__$Boot_HaxeError) ? ex.val : ex,{ fileName : "..\\lib/me/cunity/debug/Out.hx", lineNumber : 333, className : "me.cunity.debug.Out", methodName : "_dumpObjectTree"});
 	}
 };
 me_cunity_debug_Out.dumpObject = function(ob,i) {
@@ -4887,7 +4884,7 @@ me_cunity_debug_Out.dumpStack = function(sA,i) {
 		me_cunity_debug_Out.itemToString(item,b);
 		b.b += "\n";
 	}
-	haxe_Log.trace(b.b,{ fileName : "..\\lib/me/cunity/debug/Out.hx", lineNumber : 382, className : "me.cunity.debug.Out", methodName : "dumpStack", customParams : [i]});
+	haxe_Log.trace(b.b,{ fileName : "..\\lib/me/cunity/debug/Out.hx", lineNumber : 401, className : "me.cunity.debug.Out", methodName : "dumpStack", customParams : [i]});
 };
 me_cunity_debug_Out.itemToString = function(s,b) {
 	switch(s._hx_index) {
@@ -6318,7 +6315,7 @@ shared_DbData.prototype = {
 					}
 					__ctx.out.add(b);
 				}
-				__ctx.addDynamic(a.get(k));
+				__ctx.addDynamic(__map_reserved[k] != null ? a.getReserved(k) : a.h[k]);
 			}
 		}
 		var a1 = this.dataInfo;
@@ -6353,7 +6350,7 @@ shared_DbData.prototype = {
 					}
 					__ctx.out.add(b1);
 				}
-				__ctx.addDynamic(a1.get(k1));
+				__ctx.addDynamic(__map_reserved[k1] != null ? a1.getReserved(k1) : a1.h[k1]);
 			}
 		}
 		var a2 = this.dataParams;
@@ -6388,7 +6385,7 @@ shared_DbData.prototype = {
 					}
 					__ctx.out.add(b2);
 				}
-				var v6 = a2.get(k2);
+				var v6 = __map_reserved[k2] != null ? a2.getReserved(k2) : a2.h[k2];
 				if(v6 == null) {
 					__ctx.out.addByte(0);
 				} else {
@@ -6439,22 +6436,22 @@ shared_DbData.prototype = {
 			}
 			var _g4 = 0;
 			while(_g4 < a3.length) {
-				var v11 = a3[_g4];
+				var v10 = a3[_g4];
 				++_g4;
-				if(v11 == null) {
+				if(v10 == null) {
 					__ctx.out.addByte(0);
 				} else {
 					var keys4 = Lambda.array({ iterator : (function(_e4) {
 						return function() {
 							return _e4[0].keys();
 						};
-					})([v11])});
-					var v10 = keys4.length + 1;
-					if(v10 >= 0 && v10 < 128) {
-						__ctx.out.addByte(v10);
+					})([v10])});
+					var v11 = keys4.length + 1;
+					if(v11 >= 0 && v11 < 128) {
+						__ctx.out.addByte(v11);
 					} else {
 						__ctx.out.addByte(128);
-						__ctx.out.addInt32(v10);
+						__ctx.out.addInt32(v11);
 					}
 					var _g5 = 0;
 					while(_g5 < keys4.length) {
@@ -6473,7 +6470,7 @@ shared_DbData.prototype = {
 							}
 							__ctx.out.add(b4);
 						}
-						__ctx.addDynamic(__map_reserved[k4] != null ? v11.getReserved(k4) : v11.h[k4]);
+						__ctx.addDynamic(__map_reserved[k4] != null ? v10.getReserved(k4) : v10.h[k4]);
 					}
 				}
 			}
@@ -9637,7 +9634,7 @@ if(ArrayBuffer.prototype.slice == null) {
 }
 App.fa = require("./node_modules/font-awesome/css/font-awesome.min.css");
 App.STYLES = require("App.scss");
-App.devIP = require("webpack.local.js").ip;
+App.devIP = require("./webpack.local.js").ip;
 App.config = require("./httpdocs/config.js").config;
 App.sprintf = require("sprintf-js").sprintf;
 App.modalBox = React.createRef();
