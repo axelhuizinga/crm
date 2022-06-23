@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "dependencies": {
-    "ajv": "^6.0.0",
+    "ajv": "^6.12.3",
     "bulma": "^0.7.1",
     "bulma-extensions": "^2.2.1",
     "csp-webpack-plugin": "^1.0.2",
